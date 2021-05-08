@@ -43,6 +43,7 @@ android {
         applicationId "com.elfor.rentool"
         minSdkVersion 20
         targetSdkVersion 30
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
