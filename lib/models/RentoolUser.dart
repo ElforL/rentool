@@ -1,12 +1,12 @@
-import 'package:rentool/models/rentool_sdk.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RentoolUser {
   final String uid;
   String name;
   double rating;
-  List<UserReview> reviews;
-  List<Tool> tools;
-  List<ToolRequest> requests;
+  CollectionReference reviews;
+  CollectionReference tools;
+  CollectionReference requests;
 
   RentoolUser(
     this.uid,
@@ -26,9 +26,12 @@ class RentoolUser {
       json['uid'],
       json['name'],
       json['rating'],
-      (json['reviews'] as List).map((e) => UserReview.fromJson(e)).toList(),
-      (json['tools'] as List).map((e) => Tool.fromJson(e)).toList(),
-      (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList(),
+      json['reviews'],
+      json['tools'],
+      json['requests'],
+      // (json['reviews'] as List).map((e) => UserReview.fromJson(e)).toList(),
+      // (json['tools'] as List).map((e) => Tool.fromJson(e)).toList(),
+      // (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList(),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:rentool/models/rentool_sdk.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Tool {
   final String id;
@@ -10,7 +10,7 @@ class Tool {
   List<String> media;
   String location;
   bool isAvailable;
-  List<ToolRequest> requests;
+  CollectionReference requests;
   String? acceptedRequestID;
 
   Tool(
@@ -38,7 +38,8 @@ class Tool {
       json['media'],
       json['location'],
       json['isAvailable'],
-      (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList(),
+      json['requests'],
+      // (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList(),
       json['acceptedRequestID'],
     );
   }
