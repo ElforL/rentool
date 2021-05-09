@@ -49,16 +49,17 @@ class AuthServices {
   // The following method was imported from Flutterfire documentaion
   // https://firebase.flutter.dev/docs/auth/social#facebook [accessed at 9th May 21]
 
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final AccessToken result = await FacebookAuth.instance.login();
+  // TODO implement facebook sign-in
+  // Future<UserCredential> signInWithFacebook() async {
+  //   // Trigger the sign-in flow
+  //   final AccessToken result = await FacebookAuth.instance.login();
 
-    // Create a credential from the access token
-    final facebookAuthCredential = FacebookAuthProvider.credential(result.token);
+  //   // Create a credential from the access token
+  //   final facebookAuthCredential = FacebookAuthProvider.credential(result.token);
 
-    // Once signed in, return the UserCredential
-    return await auth.signInWithCredential(facebookAuthCredential);
-  }
+  //   // Once signed in, return the UserCredential
+  //   return await auth.signInWithCredential(facebookAuthCredential);
+  // }
 
   /* ------------------ for Apple Sign in ------------------ */
   // The following three methods were imported from Flutterfire documentaion

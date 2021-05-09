@@ -57,12 +57,11 @@ class LoginScreen extends StatelessWidget {
   }
 
   void googleSignin() {
-    print('Google');
     _auth.signInWithGoogle();
   }
 
   void facebookSignin() {
-    _auth.signInWithFacebook();
+    // _auth.signInWithFacebook();
   }
 
   void appleSignin() {
@@ -72,6 +71,7 @@ class LoginScreen extends StatelessWidget {
   void microsoftSignin() {
     //
   }
+
   void emailSignin() {
     //
   }
