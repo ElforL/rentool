@@ -11,7 +11,7 @@ class Tool {
   String location;
   bool isAvailable;
   CollectionReference requests;
-  String? acceptedRequestID;
+  String acceptedRequestID;
 
   Tool(
     this.id,

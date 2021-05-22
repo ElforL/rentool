@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
 }
 
 class FirstScreen extends StatefulWidget {
-  FirstScreen({Key? key, required this.title}) : super(key: key);
+  FirstScreen({Key key, this.title}) : super(key: key);
 
   final String title;
 

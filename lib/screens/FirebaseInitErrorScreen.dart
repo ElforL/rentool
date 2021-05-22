@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FirebaseInitErrorScreen extends StatefulWidget {
-  final Object? error;
+  final Object error;
 
-  const FirebaseInitErrorScreen({Key? key, this.error}) : super(key: key);
+  const FirebaseInitErrorScreen({Key key, this.error}) : super(key: key);
 
   @override
   _FirebaseInitErrorScreenState createState() => _FirebaseInitErrorScreenState();

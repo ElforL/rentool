@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -11,7 +10,7 @@ class AuthServices {
   FirebaseAuth auth;
 
   AuthServices() : auth = FirebaseAuth.instance {
-    auth.authStateChanges().listen((User? user) {
+    auth.authStateChanges().listen((User user) {
       if (user == null) {
         print('User is currently signed out!');
       } else {
@@ -25,13 +24,7 @@ class AuthServices {
 
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if (googleUser == null) {
-      throw Exception(
-        'Couldn not sign in to google. signIn method returned null. The method\'s documentaion says it returns null if the process was aborted',
-      );
-    }
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -43,23 +36,13 @@ class AuthServices {
     );
 
     // Once signed in, return the UserCredential
-    return await auth.signInWithCredential(credential);
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   // The following method was imported from Flutterfire documentaion
   // https://firebase.flutter.dev/docs/auth/social#facebook [accessed at 9th May 21]
 
   // TODO implement facebook sign-in
-  // Future<UserCredential> signInWithFacebook() async {
-  //   // Trigger the sign-in flow
-  //   final AccessToken result = await FacebookAuth.instance.login();
-
-  //   // Create a credential from the access token
-  //   final facebookAuthCredential = FacebookAuthProvider.credential(result.token);
-
-  //   // Once signed in, return the UserCredential
-  //   return await auth.signInWithCredential(facebookAuthCredential);
-  // }
 
   /* ------------------ for Apple Sign in ------------------ */
   // The following three methods were imported from Flutterfire documentaion
@@ -106,5 +89,5 @@ class AuthServices {
     return await auth.signInWithCredential(oauthCredential);
   }
 
-  /* ------------------ End of Apple Sign in ------------------ */
+  /* ------------------ End of Apple Sign in methods ------------------ */
 }
