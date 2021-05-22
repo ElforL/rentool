@@ -1,53 +1,76 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:rentool/services/auth.dart';
 
 class LoginScreen extends StatelessWidget {
-  AuthServices _auth = AuthServices();
+  final AuthServices _auth = AuthServices();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          width: 250,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Sign-in to your Rentool Account',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ),
               for (var option in signInOptions.entries)
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: option.value['backgroundColor'] == null
-                        ? null
-                        : MaterialStateProperty.all<Color>(option.value['backgroundColor']!),
-                    foregroundColor: option.value['foregroundColor'] == null
-                        ? null
-                        : MaterialStateProperty.all<Color>(option.value['foregroundColor']!),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 250),
+                  // width: 250,
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(EdgeInsets.all(kIsWeb ? 17 : 10)),
+                      backgroundColor: option.value['backgroundColor'] == null
+                          ? null
+                          : MaterialStateProperty.all<Color>(option.value['backgroundColor'] as Color),
+                      foregroundColor: option.value['foregroundColor'] == null
+                          ? null
+                          : MaterialStateProperty.all<Color>(option.value['foregroundColor'] as Color),
+                    ),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: option.value['icon'] == null
+                              ? Icon(Icons.error)
+                              : option.value['icon'] as Widget, //Icon(Icons.email),
+                        ),
+                        Text(
+                          'Sign in in with ${option.key}',
+                        ),
+                      ],
+                    ),
+                    onPressed: () {
+                      switch (option.key) {
+                        case 'Google':
+                          googleSignin();
+                          break;
+                        case 'Facebook':
+                          facebookSignin();
+                          break;
+                        case 'Apple':
+                          appleSignin();
+                          break;
+                        case 'Microsoft':
+                          microsoftSignin();
+                          break;
+                        case 'Email':
+                          emailSignin();
+                          break;
+                        default:
+                          print('Could not find assigned method for sign-in button. ${option.key}');
+                      }
+                    },
                   ),
-                  child: Text(
-                    'Sign in in with ${option.key}',
-                  ),
-                  onPressed: () {
-                    switch (option.key) {
-                      case 'Google':
-                        googleSignin();
-                        break;
-                      case 'Facebook':
-                        facebookSignin();
-                        break;
-                      case 'Apple':
-                        appleSignin();
-                        break;
-                      case 'Microsoft':
-                        microsoftSignin();
-                        break;
-                      case 'Email':
-                        emailSignin();
-                        break;
-                      default:
-                        print('Could not find assigned method for sign-in button. ${option.key}');
-                    }
-                  },
                 ),
             ],
           ),
@@ -81,17 +104,20 @@ var signInOptions = {
   'Google': {
     'backgroundColor': Colors.white,
     'foregroundColor': Colors.black,
+    'icon': Icon(AntDesign.google),
   },
-  'Facebook': {
-    'backgroundColor': Colors.blue.shade800,
-  },
+  // 'Facebook': {
+  //   'backgroundColor': Colors.blue.shade800,
+  // },
   'Apple': {
     'backgroundColor': Colors.black,
+    'icon': Icon(FontAwesome.apple),
   },
-  'Microsoft': {
-    'backgroundColor': Colors.grey.shade800,
-  },
+  // 'Microsoft': {
+  //   'backgroundColor': Colors.grey.shade800,
+  // },
   'Email': {
     'backgroundColor': Colors.red,
+    'icon': Icon(Icons.email),
   },
 };
