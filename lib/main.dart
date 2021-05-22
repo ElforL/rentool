@@ -19,15 +19,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FirstScreen(title: 'Flutter Demo Home Page'),
+      home: FirstScreen(),
     );
   }
 }
 
 class FirstScreen extends StatefulWidget {
-  FirstScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
+  FirstScreen({Key key}) : super(key: key);
 
   @override
   _FirstScreenState createState() => _FirstScreenState();
