@@ -1,10 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:rentool/screens/EmailSignScreen.dart';
 import 'package:rentool/services/auth.dart';
 
 class LoginScreen extends StatelessWidget {
-  final AuthServices _auth = AuthServices();
+  final AuthServices _auth;
+
+  const LoginScreen(this._auth, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +24,7 @@ class LoginScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ),
+              EmailSignScreen(_auth),
               for (var option in signInOptions.entries)
                 Container(
                   constraints: BoxConstraints(maxWidth: 250),
@@ -63,9 +67,6 @@ class LoginScreen extends StatelessWidget {
                         case 'Microsoft':
                           microsoftSignin();
                           break;
-                        case 'Email':
-                          emailSignin();
-                          break;
                         default:
                           print('Could not find assigned method for sign-in button. ${option.key}');
                       }
@@ -94,10 +95,6 @@ class LoginScreen extends StatelessWidget {
   void microsoftSignin() {
     //
   }
-
-  void emailSignin() {
-    //
-  }
 }
 
 var signInOptions = {
@@ -106,18 +103,16 @@ var signInOptions = {
     'foregroundColor': Colors.black,
     'icon': Icon(AntDesign.google),
   },
-  // 'Facebook': {
-  //   'backgroundColor': Colors.blue.shade800,
-  // },
+  'Facebook': {
+    'backgroundColor': Colors.blue.shade800,
+    'icon': Icon(FontAwesome.facebook_square),
+  },
   'Apple': {
     'backgroundColor': Colors.black,
     'icon': Icon(FontAwesome.apple),
   },
-  // 'Microsoft': {
-  //   'backgroundColor': Colors.grey.shade800,
-  // },
-  'Email': {
-    'backgroundColor': Colors.red,
-    'icon': Icon(Icons.email),
+  'Microsoft': {
+    'backgroundColor': Colors.grey.shade800,
+    'icon': Icon(MaterialCommunityIcons.microsoft),
   },
 };

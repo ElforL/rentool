@@ -11,13 +11,42 @@ class AuthServices {
   FirebaseAuth auth;
 
   AuthServices() : auth = FirebaseAuth.instance {
-    auth.authStateChanges().listen((User user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
+    authStateChanges.listen((user) {
+      if (user != null) {
+        print('email verfication = ${user.emailVerified}');
+        if (!user.emailVerified) {
+          print('email not verified. sending verfication email');
+          user.sendEmailVerification();
+        }
       }
     });
+  }
+
+  bool get isSignedIn => auth.currentUser != null;
+
+  Stream<User> get authStateChanges => auth.authStateChanges();
+
+  void signOut() async {
+    await auth.signOut();
+    try {
+      await GoogleSignIn().signOut();
+    } catch (e) {}
+  }
+
+  /* ------------------ for Email Sign in ------------------ */
+
+  Future<UserCredential> createUserWithEmailAndPassword(String inEmail, String inPassword) async {
+    return await auth.createUserWithEmailAndPassword(
+      email: inEmail,
+      password: inPassword,
+    );
+  }
+
+  Future<UserCredential> signInWithEmailAndPassword(String inEmail, String inPassword) async {
+    return await auth.signInWithEmailAndPassword(
+      email: inEmail,
+      password: inPassword,
+    );
   }
 
   /* ------------------ for Google Sign in ------------------ */
@@ -37,7 +66,7 @@ class AuthServices {
     // Create a new provider
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
-    googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+    // googleProvider.addScope('https://www.googleapis.com/auth/');
     googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
     // Once signed in, return the UserCredential

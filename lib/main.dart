@@ -5,13 +5,21 @@ import 'package:rentool/screens/FirebaseInitErrorScreen.dart';
 import 'package:rentool/screens/HomePage.dart';
 import 'package:rentool/screens/LoadingScreen.dart';
 import 'package:rentool/screens/LoginScreen.dart';
+import 'package:rentool/services/auth.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  await Firebase.initializeApp();
+  final AuthServices _auth = AuthServices();
+
+  runApp(MyApp(_auth));
 }
 
 class MyApp extends StatelessWidget {
+  final AuthServices _auth;
+
+  const MyApp(this._auth);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,41 +27,30 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FirstScreen(),
+      home: FirstScreen(_auth),
     );
   }
 }
 
-class FirstScreen extends StatefulWidget {
-  FirstScreen({Key key}) : super(key: key);
-
-  @override
-  _FirstScreenState createState() => _FirstScreenState();
-}
-
-class _FirstScreenState extends State<FirstScreen> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+class FirstScreen extends StatelessWidget {
+  final AuthServices _auth;
+  FirstScreen(this._auth, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return StreamBuilder(
       // Initialize FlutterFire:
-      future: _initialization,
+      stream: _auth.authStateChanges,
       builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          return FirebaseInitErrorScreen(error: snapshot.error);
-        }
+        if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error);
 
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          // temporary
-          return LoginScreen();
-          return HomePage();
+        if (!_auth.isSignedIn) {
+          print('user signed out');
+          return LoginScreen(_auth);
+        } else {
+          print('user signed in');
+          return HomePage(_auth);
         }
-
-        // Otherwise, show something whilst waiting for initialization to complete
-        return LoadingScreen();
       },
     );
   }
