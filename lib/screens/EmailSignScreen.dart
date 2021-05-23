@@ -98,10 +98,43 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
             _isLogin = true;
           });
         } else {
-          // TODO show dialog
           setState(() {
-            emailError = "The email address doesn't have a password.\nIt uses login with $list";
+            emailError = "This email address doesn't have a password.\nIt uses login with $list";
           });
+          showMyAlert(
+            context,
+            Text('Sign in Error'),
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "This email address is registerd but doesn't have a password. This means it was used by other sign-in methods (e.g., Google or Facebook).",
+                  ),
+                  Text(
+                    "The provider${list.length > 1 ? 's' : ''} associated with this email ${list.length > 1 ? 'are' : 'is'} ${list.length > 1 ? list : list.first}. So try signing in with ${list.length > 1 ? 'one of them' : 'it'}",
+                  ),
+                  SizedBox(height: 10),
+                  Text('Or we can send you an email to reset/set your password'),
+                ],
+              ),
+            ),
+            [
+              TextButton(
+                onPressed: () {
+                  sendPassResetEmail();
+                },
+                child: Text('SEND EMAIL'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
         }
       } else {
         // user doesn't exist
@@ -115,6 +148,30 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
           emailError = 'The email address is badly formatted';
         });
       }
+    }
+  }
+
+  void sendPassResetEmail() async {
+    try {
+      await _auth.auth.sendPasswordResetEmail(email: _emailContoller.text);
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email sent')));
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      if (e.code == 'invalid-email') {
+        showMyAlert(
+          context,
+          Text('Invalid Email'),
+          Text('the email address is not valid'),
+        );
+      } else if (e.code == 'user-not-found') {
+        showMyAlert(
+          context,
+          Text('User not found'),
+          Text('There is no user corresponding to the email address'),
+        );
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ERROR: Email not sent')));
     }
   }
 
@@ -186,6 +243,20 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
         ),
       ),
     );
+  }
+
+  Future showMyAlert(
+    BuildContext context,
+    Widget title,
+    Widget content, [
+    List<Widget> actions,
+  ]) async {
+    Widget k = AlertDialog(
+      title: title,
+      content: content,
+      actions: actions,
+    );
+    return await showDialog(context: context, builder: (context) => k);
   }
 
   Widget _buildTextField({
