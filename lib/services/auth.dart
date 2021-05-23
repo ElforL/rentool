@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -96,7 +97,37 @@ class AuthServices {
   // The following method was imported from Flutterfire documentaion
   // https://firebase.flutter.dev/docs/auth/social#facebook [accessed at 9th May 21]
 
-  // TODO implement facebook sign-in
+  Future<UserCredential> signInWithFacebook() async {
+    if (kIsWeb) {
+      return await signInWithFacebookWeb();
+    } else {
+      return await signInWithFacebookNative();
+    }
+  }
+
+  Future<UserCredential> signInWithFacebookNative() async {
+    // Trigger the sign-in flow
+    final AccessToken result = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    final facebookAuthCredential = FacebookAuthProvider.credential(result.token);
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
+
+  Future<UserCredential> signInWithFacebookWeb() async {
+    // Create a new provider
+    FacebookAuthProvider facebookProvider = FacebookAuthProvider();
+
+    // facebookProvider.addScope('email');
+    facebookProvider.setCustomParameters({
+      'display': 'popup',
+    });
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+  }
 
   /* ------------------ for Apple Sign in ------------------ */
   // The following three methods were imported from Flutterfire documentaion

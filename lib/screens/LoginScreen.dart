@@ -85,7 +85,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void facebookSignin() {
-    // _auth.signInWithFacebook();
+    _auth.signInWithFacebook();
   }
 
   void appleSignin() {
