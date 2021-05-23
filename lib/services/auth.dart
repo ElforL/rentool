@@ -1,12 +1,7 @@
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthServices {
   FirebaseAuth auth;
@@ -132,6 +127,7 @@ class AuthServices {
   /* ------------------ for Apple Sign in ------------------ */
   // The following three methods were imported from Flutterfire documentaion
   // https://firebase.flutter.dev/docs/auth/social#apple [accessed at 9th May 21]
+  /* 
   Future<UserCredential> signInWithApple() async {
     if (kIsWeb) {
       return await signInWithAppleWeb();
@@ -188,6 +184,7 @@ class AuthServices {
     final digest = sha256.convert(bytes);
     return digest.toString();
   }
+  */
 
   /* ------------------ End of Apple Sign in methods ------------------ */
 }

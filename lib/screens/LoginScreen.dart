@@ -89,7 +89,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void appleSignin() {
-    _auth.signInWithApple();
+    // _auth.signInWithApple();
   }
 
   void microsoftSignin() {
@@ -107,12 +107,14 @@ var signInOptions = {
     'backgroundColor': Colors.blue.shade800,
     'icon': Icon(FontAwesome.facebook_square),
   },
-  'Apple': {
-    'backgroundColor': Colors.black,
-    'icon': Icon(FontAwesome.apple),
-  },
-  'Microsoft': {
-    'backgroundColor': Colors.grey.shade800,
-    'icon': Icon(MaterialCommunityIcons.microsoft),
-  },
+  // // Needs an apple developer account which costs $99 🤷‍♂️
+  // 'Apple': {
+  //   'backgroundColor': Colors.black,
+  //   'icon': Icon(FontAwesome.apple),
+  // },
+  // // Azure subscription is free for only 12 months 🤔
+  // 'Microsoft': {
+  //   'backgroundColor': Colors.grey.shade800,
+  //   'icon': Icon(MaterialCommunityIcons.microsoft),
+  // },
 };
