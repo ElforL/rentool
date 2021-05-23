@@ -113,7 +113,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
                     "This email address is registerd but doesn't have a password. This means it was used by other sign-in methods (e.g., Google or Facebook).",
                   ),
                   Text(
-                    "The provider${list.length > 1 ? 's' : ''} associated with this email ${list.length > 1 ? 'are' : 'is'} ${list.length > 1 ? list : list.first}. So try signing in with ${list.length > 1 ? 'one of them' : 'it'}",
+                    "The provider${list.length > 1 ? 's' : ''} associated with this email address ${list.length > 1 ? 'are' : 'is'} ${list.length > 1 ? list : list.first}. So try signing in with ${list.length > 1 ? 'one of them' : 'it'}",
                   ),
                   SizedBox(height: 10),
                   Text('Or we can send you an email to reset/set your password'),

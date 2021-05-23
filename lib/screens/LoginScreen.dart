@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -8,6 +9,21 @@ class LoginScreen extends StatelessWidget {
   final AuthServices _auth;
 
   const LoginScreen(this._auth, {Key key}) : super(key: key);
+
+  /// shows an alert dialog
+  Future showMyAlert(
+    BuildContext context,
+    Widget title,
+    Widget content, [
+    List<Widget> actions,
+  ]) async {
+    Widget k = AlertDialog(
+      title: title,
+      content: content,
+      actions: actions,
+    );
+    return await showDialog(context: context, builder: (context) => k);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +72,10 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {
                       switch (option.key) {
                         case 'Google':
-                          googleSignin();
+                          googleSignin(context);
                           break;
                         case 'Facebook':
-                          facebookSignin();
+                          facebookSignin(context);
                           break;
                         case 'Apple':
                           appleSignin();
@@ -80,12 +96,109 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void googleSignin() {
-    _auth.signInWithGoogle();
+  void googleSignin(BuildContext context) async {
+    try {
+      await _auth.signInWithGoogle();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        showDiffCredsAlert(context, e.email);
+      } else {
+        rethrow;
+      }
+    }
   }
 
-  void facebookSignin() {
-    _auth.signInWithFacebook();
+  void facebookSignin(BuildContext context) async {
+    try {
+      await _auth.signInWithFacebook();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        showDiffCredsAlert(context, e.email);
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  showDiffCredsAlert(BuildContext context, String email) async {
+    var list = await _auth.auth.fetchSignInMethodsForEmail(email);
+    showMyAlert(
+      context,
+      Text('Sign in Error'),
+      SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "There already exists an account with the email address using other providers.",
+            ),
+            Text(
+              "The provider${list.length > 1 ? 's' : ''} associated with this email address ${list.length > 1 ? 'are' : 'is'} ${list.length > 1 ? list : list.first}. So you need to sign in with ${list.length > 1 ? 'one of them' : 'it'}",
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Or we can send you an email to reset/set your password. so you can login in with an email and password',
+            ),
+          ],
+        ),
+      ),
+      [
+        TextButton(
+          onPressed: () {
+            try {
+              sendPassResetEmail(context, email);
+            } on FirebaseAuthException catch (e) {
+              if (e.code == 'invalid-email') {
+                showMyAlert(
+                  context,
+                  Text('Invalid Email'),
+                  Text('the email address is not valid'),
+                );
+              } else if (e.code == 'user-not-found') {
+                showMyAlert(
+                  context,
+                  Text('User not found'),
+                  Text('There is no user corresponding to the email address'),
+                );
+              }
+            }
+          },
+          child: Text('SEND EMAIL'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('OK'),
+        ),
+      ],
+    );
+  }
+
+  void sendPassResetEmail(context, String email) async {
+    try {
+      await _auth.auth.sendPasswordResetEmail(email: email);
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email sent')));
+    } on FirebaseAuthException catch (e) {
+      print('cought');
+      Navigator.pop(context);
+      if (e.code == 'invalid-email') {
+        showMyAlert(
+          context,
+          Text('Invalid Email'),
+          Text('the email address is not valid'),
+        );
+      } else if (e.code == 'user-not-found') {
+        showMyAlert(
+          context,
+          Text('User not found'),
+          Text('There is no user corresponding to the email address'),
+        );
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ERROR: Email not sent')));
+    }
   }
 
   void appleSignin() {

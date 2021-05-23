@@ -9,7 +9,7 @@ class AuthServices {
   AuthServices() : auth = FirebaseAuth.instance {
     authStateChanges.listen((user) {
       if (user != null) {
-        print('email verfication = ${user.emailVerified}');
+        //
         if (!user.emailVerified) {
           print('email not verified. sending verfication email');
           user.sendEmailVerification();
