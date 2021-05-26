@@ -34,4 +34,15 @@ class RentoolUser {
       // (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uid': uid,
+      'name': name,
+      'rating': rating,
+      'reviews': reviews,
+      'tools': tools,
+      'requests': requests,
+    };
+  }
 }
