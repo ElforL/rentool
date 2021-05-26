@@ -4,25 +4,13 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthServices {
-  FirebaseAuth auth;
+  static FirebaseAuth auth = FirebaseAuth.instance;
 
-  AuthServices() : auth = FirebaseAuth.instance {
-    authStateChanges.listen((user) {
-      if (user != null) {
-        //
-        if (!user.emailVerified) {
-          print('email not verified. sending verfication email');
-          user.sendEmailVerification();
-        }
-      }
-    });
-  }
+  static bool get isSignedIn => auth.currentUser != null;
 
-  bool get isSignedIn => auth.currentUser != null;
+  static Stream<User> get authStateChanges => auth.authStateChanges();
 
-  Stream<User> get authStateChanges => auth.authStateChanges();
-
-  void signOut() async {
+  static void signOut() async {
     await auth.signOut();
     try {
       await GoogleSignIn().signOut();
@@ -31,14 +19,14 @@ class AuthServices {
 
   /* ------------------ for Email Sign in ------------------ */
 
-  Future<UserCredential> createUserWithEmailAndPassword(String inEmail, String inPassword) async {
+  static Future<UserCredential> createUserWithEmailAndPassword(String inEmail, String inPassword) async {
     return await auth.createUserWithEmailAndPassword(
       email: inEmail,
       password: inPassword,
     );
   }
 
-  Future<UserCredential> signInWithEmailAndPassword(String inEmail, String inPassword) async {
+  static Future<UserCredential> signInWithEmailAndPassword(String inEmail, String inPassword) async {
     return await auth.signInWithEmailAndPassword(
       email: inEmail,
       password: inPassword,
@@ -47,10 +35,7 @@ class AuthServices {
 
   /* ------------------ for Google Sign in ------------------ */
 
-  // The following methods was imported from Flutterfire documentaion
-  // https://firebase.flutter.dev/docs/auth/social#google [accessed at 9th May 21]
-
-  Future<UserCredential> signInWithGoogle() async {
+  static Future<UserCredential> signInWithGoogle() async {
     if (kIsWeb) {
       return await signInWithGoogleWeb();
     } else {
@@ -58,7 +43,10 @@ class AuthServices {
     }
   }
 
-  Future<UserCredential> signInWithGoogleWeb() async {
+  // The following two methods were imported from FlutterFire documentation
+  // https://firebase.flutter.dev/docs/auth/social#google [accessed at 9th May 2021]
+
+  static Future<UserCredential> signInWithGoogleWeb() async {
     // Create a new provider
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
@@ -66,13 +54,13 @@ class AuthServices {
     googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    return await auth.signInWithPopup(googleProvider);
 
     // Or use signInWithRedirect
-    // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    // return await auth.signInWithRedirect(googleProvider);
   }
 
-  Future<UserCredential> signInWithGoogleNative() async {
+  static Future<UserCredential> signInWithGoogleNative() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
@@ -86,13 +74,12 @@ class AuthServices {
     );
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    return await auth.signInWithCredential(credential);
   }
 
-  // The following method was imported from Flutterfire documentaion
-  // https://firebase.flutter.dev/docs/auth/social#facebook [accessed at 9th May 21]
+  /* ------------------ for Facebook Sign in ------------------ */
 
-  Future<UserCredential> signInWithFacebook() async {
+  static Future<UserCredential> signInWithFacebook() async {
     if (kIsWeb) {
       return await signInWithFacebookWeb();
     } else {
@@ -100,7 +87,10 @@ class AuthServices {
     }
   }
 
-  Future<UserCredential> signInWithFacebookNative() async {
+  // The following two methods were imported from FlutterFire documentation
+  // https://firebase.flutter.dev/docs/auth/social#facebook [accessed at 9th May 2021]
+
+  static Future<UserCredential> signInWithFacebookNative() async {
     // Trigger the sign-in flow
     final AccessToken result = await FacebookAuth.instance.login();
 
@@ -108,10 +98,10 @@ class AuthServices {
     final facebookAuthCredential = FacebookAuthProvider.credential(result.token);
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    return await auth.signInWithCredential(facebookAuthCredential);
   }
 
-  Future<UserCredential> signInWithFacebookWeb() async {
+  static Future<UserCredential> signInWithFacebookWeb() async {
     // Create a new provider
     FacebookAuthProvider facebookProvider = FacebookAuthProvider();
 
@@ -121,14 +111,13 @@ class AuthServices {
     });
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithPopup(facebookProvider);
+    return await auth.signInWithPopup(facebookProvider);
   }
 
   /* ------------------ for Apple Sign in ------------------ */
-  // The following three methods were imported from Flutterfire documentaion
-  // https://firebase.flutter.dev/docs/auth/social#apple [accessed at 9th May 21]
+
   /* 
-  Future<UserCredential> signInWithApple() async {
+  static Future<UserCredential> signInWithApple() async {
     if (kIsWeb) {
       return await signInWithAppleWeb();
     } else {
@@ -136,15 +125,18 @@ class AuthServices {
     }
   }
 
-  Future<UserCredential> signInWithAppleWeb() async {
+  // The following four methods were imported from Flutterfire documentaion
+  // https://firebase.flutter.dev/docs/auth/social#apple [accessed at 9th May 2021]
+
+  static Future<UserCredential> signInWithAppleWeb() async {
     // Create and configure an OAuthProvider for Sign In with Apple.
     final provider = OAuthProvider("apple.com")..addScope('email')..addScope('name');
 
     // Sign in the user with Firebase.
-    return await FirebaseAuth.instance.signInWithPopup(provider);
+    return await auth.signInWithPopup(provider);
   }
 
-  Future<UserCredential> signInWithAppleIOS() async {
+  static Future<UserCredential> signInWithAppleIOS() async {
     // To prevent replay attacks with the credential returned from Apple, we
     // include a nonce in the credential request. When signing in in with
     // Firebase, the nonce in the id token returned by Apple, is expected to
@@ -172,14 +164,14 @@ class AuthServices {
     return await auth.signInWithCredential(oauthCredential);
   }
 
-  String generateNonce([int length = 32]) {
+  static String generateNonce([int length = 32]) {
     final charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
     return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
   }
 
   /// Returns the sha256 hash of [input] in hex notation.
-  String sha256ofString(String input) {
+  static String sha256ofString(String input) {
     final bytes = utf8.encode(input);
     final digest = sha256.convert(bytes);
     return digest.toString();

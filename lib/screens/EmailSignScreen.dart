@@ -4,19 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:rentool/services/auth.dart';
 
 class EmailSignScreen extends StatefulWidget {
-  final AuthServices _auth;
-
-  const EmailSignScreen(this._auth, {Key key}) : super(key: key);
+  const EmailSignScreen({Key key}) : super(key: key);
 
   @override
-  _EmailSignScreenState createState() => _EmailSignScreenState(_auth);
+  _EmailSignScreenState createState() => _EmailSignScreenState();
 }
 
 class _EmailSignScreenState extends State<EmailSignScreen> {
-  _EmailSignScreenState(this._auth);
-
-  final AuthServices _auth;
-
   TextEditingController _emailContoller = TextEditingController();
   TextEditingController _passwordContoller = TextEditingController();
   TextEditingController _confirmPasswordContoller = TextEditingController();
@@ -45,7 +39,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
       print('isLogin value = $_isLogin');
       // login
       try {
-        await _auth.signInWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
+        await AuthServices.signInWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           setState(() {
@@ -69,7 +63,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
 
       // matched passwords
       try {
-        await _auth.createUserWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
+        await AuthServices.createUserWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           setState(() {
@@ -89,7 +83,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
 
   emailSubmit(String email) async {
     try {
-      var list = await _auth.auth.fetchSignInMethodsForEmail(email);
+      var list = await AuthServices.auth.fetchSignInMethodsForEmail(email);
       if (list.isNotEmpty) {
         // user exist
         if (list.contains('password')) {
@@ -153,7 +147,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
 
   void sendPassResetEmail() async {
     try {
-      await _auth.auth.sendPasswordResetEmail(email: _emailContoller.text);
+      await AuthServices.auth.sendPasswordResetEmail(email: _emailContoller.text);
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email sent')));
     } on FirebaseAuthException catch (e) {

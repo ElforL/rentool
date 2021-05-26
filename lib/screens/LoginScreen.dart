@@ -6,9 +6,7 @@ import 'package:rentool/screens/EmailSignScreen.dart';
 import 'package:rentool/services/auth.dart';
 
 class LoginScreen extends StatelessWidget {
-  final AuthServices _auth;
-
-  const LoginScreen(this._auth, {Key key}) : super(key: key);
+  const LoginScreen({Key key}) : super(key: key);
 
   /// shows an alert dialog
   Future showMyAlert(
@@ -40,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ),
-              EmailSignScreen(_auth),
+              EmailSignScreen(),
               for (var option in signInOptions.entries)
                 Container(
                   constraints: BoxConstraints(maxWidth: 250),
@@ -98,7 +96,7 @@ class LoginScreen extends StatelessWidget {
 
   void googleSignin(BuildContext context) async {
     try {
-      await _auth.signInWithGoogle();
+      await AuthServices.signInWithGoogle();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         showDiffCredsAlert(context, e.email);
@@ -110,7 +108,7 @@ class LoginScreen extends StatelessWidget {
 
   void facebookSignin(BuildContext context) async {
     try {
-      await _auth.signInWithFacebook();
+      await AuthServices.signInWithFacebook();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         showDiffCredsAlert(context, e.email);
@@ -121,7 +119,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   showDiffCredsAlert(BuildContext context, String email) async {
-    var list = await _auth.auth.fetchSignInMethodsForEmail(email);
+    var list = await AuthServices.auth.fetchSignInMethodsForEmail(email);
     showMyAlert(
       context,
       Text('Sign in Error'),
@@ -178,7 +176,7 @@ class LoginScreen extends StatelessWidget {
 
   void sendPassResetEmail(context, String email) async {
     try {
-      await _auth.auth.sendPasswordResetEmail(email: email);
+      await AuthServices.auth.sendPasswordResetEmail(email: email);
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email sent')));
     } on FirebaseAuthException catch (e) {

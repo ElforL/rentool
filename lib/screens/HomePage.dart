@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rentool/services/auth.dart';
 
 class HomePage extends StatefulWidget {
-  final AuthServices _auth;
-
-  const HomePage(this._auth, {Key key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -47,7 +45,7 @@ class _HomePageState extends State<HomePage> {
             splashRadius: 20,
             icon: CircleAvatar(),
             onPressed: () {
-              widget._auth.signOut();
+              AuthServices.signOut();
             },
           ),
           SizedBox(width: 20),
