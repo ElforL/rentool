@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rentool/models/RentoolUser.dart';
 import 'package:rentool/screens/FirebaseInitErrorScreen.dart';
 import 'package:rentool/screens/HomePage.dart';
 import 'package:rentool/screens/LoginScreen.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:rentool/services/firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,15 +39,16 @@ class FirstScreen extends StatelessWidget {
       stream: AuthServices.authStateChanges,
       builder: (context, AsyncSnapshot<User> snapshot) {
         if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error);
+        var user = snapshot.data;
 
-        if (!AuthServices.isSignedIn) {
+        if (user == null) {
           print('User signed out');
           return LoginScreen();
         } else {
-          print('User ${snapshot.data.displayName} signed in');
-          if (!snapshot.data.emailVerified) {
+          print('Signed in as ${user.displayName} ');
+          if (!user.emailVerified) {
             print('Email address not verified. sending a verfication email');
-            snapshot.data.sendEmailVerification();
+            user.sendEmailVerification();
           }
           return HomePage();
         }

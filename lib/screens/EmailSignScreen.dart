@@ -33,10 +33,8 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
     clearErrors();
     if (_isLogin == null) {
       // not determined if login or signup
-      print('isLogin value = $_isLogin');
       await emailSubmit(_emailContoller.text);
     } else if (_isLogin) {
-      print('isLogin value = $_isLogin');
       // login
       try {
         await AuthServices.signInWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
@@ -53,7 +51,6 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
         }
       }
     } else {
-      print('isLogin value = $_isLogin');
       // signup
       if (_passwordContoller.text != _confirmPasswordContoller.text)
         // unmatched passwords

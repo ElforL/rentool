@@ -11,11 +11,11 @@ class RentoolUser {
   RentoolUser(
     this.uid,
     this.name,
-    this.rating,
+    this.rating, {
     this.reviews,
     this.tools,
     this.requests,
-  ) {
+  }) {
     if (rating > 5 || rating < 0) {
       throw ArgumentError('User rating must be between 0 and 5 inclusive. Recived $rating');
     }
@@ -26,9 +26,9 @@ class RentoolUser {
       json['uid'],
       json['name'],
       json['rating'],
-      json['reviews'],
-      json['tools'],
-      json['requests'],
+      reviews: json['reviews'],
+      tools: json['tools'],
+      requests: json['requests'],
       // (json['reviews'] as List).map((e) => UserReview.fromJson(e)).toList(),
       // (json['tools'] as List).map((e) => Tool.fromJson(e)).toList(),
       // (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList(),
@@ -40,9 +40,9 @@ class RentoolUser {
       'uid': uid,
       'name': name,
       'rating': rating,
-      'reviews': reviews,
-      'tools': tools,
-      'requests': requests,
+      if (reviews != null) 'reviews': reviews,
+      if (tools != null) 'tools': tools,
+      if (requests != null) 'requests': requests,
     };
   }
 }
