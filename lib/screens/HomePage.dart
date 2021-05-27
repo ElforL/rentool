@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rentool/main.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -39,6 +40,14 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.language),
             onPressed: () {
               // ChangeLanguage
+
+              // get the index of the current locale
+              var crntLocale = Locale(AppLocalizations.of(context).localeName);
+              var localeIndex = AppLocalizations.supportedLocales.indexOf(crntLocale);
+
+              var next =
+                  AppLocalizations.supportedLocales[(localeIndex + 1) % AppLocalizations.supportedLocales.length];
+              MyApp.of(context).setLocale(next);
             },
           ),
           IconButton(
