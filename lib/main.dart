@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
         const Locale('ar', ''),
       ],
       title: 'Rentool',
+      onGenerateTitle: (_) => AppLocalizations.of(_).rentool,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
