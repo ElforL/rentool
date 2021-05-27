@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -51,12 +52,8 @@ class _HomePageState extends State<HomePage> {
           SizedBox(width: 20),
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text('${kIsWeb ? "web" : "notWeb"} $defaultTargetPlatform'),
-          );
-        },
+      body: Center(
+        child: Text(AppLocalizations.of(context).rentool),
       ),
     );
   }

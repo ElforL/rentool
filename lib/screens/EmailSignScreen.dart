@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EmailSignScreen extends StatefulWidget {
   const EmailSignScreen({Key key}) : super(key: key);
@@ -41,22 +42,22 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           setState(() {
-            emailError = 'No user found for that email.';
+            emailError = AppLocalizations.of(context).userNotFoundError;
             _isLogin = false;
           });
         } else if (e.code == 'wrong-password') {
           setState(() {
-            passwordError = 'Wrong password.';
+            passwordError = AppLocalizations.of(context).wrongPassword;
           });
         } else {
           showMyAlert(
             context,
-            Text('Login Error'),
-            Text('${e.code}\n${e.message}'),
+            Text(AppLocalizations.of(context).loginError),
+            Text(AppLocalizations.of(context).errorInfo + '\n${e.code}:${e.message}'),
             [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('OK'),
+                child: Text(AppLocalizations.of(context).ok),
               )
             ],
           );
@@ -68,7 +69,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
       if (_passwordContoller.text != _confirmPasswordContoller.text)
         // unmatched passwords
         setState(() {
-          confirmPasswordError = "Passwords don't match.";
+          confirmPasswordError = AppLocalizations.of(context).pass_not_match;
         });
 
       // matched passwords
@@ -77,22 +78,22 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           setState(() {
-            passwordError = 'The password provided is too weak.';
+            passwordError = AppLocalizations.of(context).weak_password;
           });
         } else if (e.code == 'email-already-in-use') {
           setState(() {
-            emailError = 'The account already exists for that email.';
+            emailError = AppLocalizations.of(context).email_already_in_use;
             _isLogin = true;
           });
         } else {
           showMyAlert(
             context,
-            Text('Sign up Error'),
-            Text(e.toString()),
+            Text(AppLocalizations.of(context).signUpError),
+            Text(AppLocalizations.of(context).errorInfo + '\n${e.code}:${e.message}'),
             [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('OK'),
+                child: Text(AppLocalizations.of(context).ok),
               )
             ],
           );
@@ -116,24 +117,31 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
           });
         } else {
           setState(() {
-            emailError = "This email address doesn't have a password.\nIt uses login with $list";
+            emailError = AppLocalizations.of(context).no_password_error(list);
           });
           showMyAlert(
             context,
-            Text('Sign in Error'),
+            Text(AppLocalizations.of(context).loginError),
             SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "This email address is registerd but doesn't have a password. This means it was used by other sign-in methods (e.g., Google or Facebook).",
+                    AppLocalizations.of(context).no_password_error_dialog1,
                   ),
                   Text(
-                    "The provider${list.length > 1 ? 's' : ''} associated with this email address ${list.length > 1 ? 'are' : 'is'} ${list.length > 1 ? list : list.first}. So try signing in with ${list.length > 1 ? 'one of them' : 'it'}",
+                    // TODO improve arabic text for plurals
+                    // cehck https://stackoverflow.com/a/59845992/12571630
+                    AppLocalizations.of(context).no_password_error_dialog2(
+                      list.length > 1 ? 's' : '',
+                      list.length > 1 ? 'are' : 'is',
+                      list.length > 1 ? list : list.first,
+                      list.length > 1 ? 'one of them' : 'it',
+                    ),
                   ),
                   SizedBox(height: 10),
-                  Text('Or we can send you an email to reset/set your password'),
+                  Text(AppLocalizations.of(context).no_password_error_dialog3),
                 ],
               ),
             ),
@@ -142,13 +150,13 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
                 onPressed: () {
                   sendPassResetEmail();
                 },
-                child: Text('SEND EMAIL'),
+                child: Text(AppLocalizations.of(context).send_email.toUpperCase()),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: Text(AppLocalizations.of(context).ok),
               ),
             ],
           );
@@ -162,7 +170,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
         setState(() {
-          emailError = 'The email address is badly formatted';
+          emailError = AppLocalizations.of(context).badEmail;
         });
       }
     }
@@ -172,23 +180,27 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
     try {
       await AuthServices.auth.sendPasswordResetEmail(email: _emailContoller.text);
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email sent')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context).emailSent),
+      ));
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       if (e.code == 'invalid-email') {
         showMyAlert(
           context,
-          Text('Invalid Email'),
-          Text('the email address is not valid'),
+          Text(AppLocalizations.of(context).error),
+          Text(AppLocalizations.of(context).badEmail),
         );
       } else if (e.code == 'user-not-found') {
         showMyAlert(
           context,
-          Text('User not found'),
-          Text('There is no user corresponding to the email address'),
+          Text(AppLocalizations.of(context).error),
+          Text(AppLocalizations.of(context).userNotFoundError),
         );
       }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ERROR: Email not sent')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${AppLocalizations.of(context).error}: ${AppLocalizations.of(context).emailNotSent}'),
+      ));
     }
   }
 
@@ -210,7 +222,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
             _buildTextField(
               controller: _emailContoller,
               onFieldSubmitted: (email) => submit(),
-              labelText: 'Email address',
+              labelText: AppLocalizations.of(context).emailAddress,
               errorText: emailError,
               autofocus: _isLogin == null,
               autofillHints: [AutofillHints.email],
@@ -227,7 +239,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
               _buildTextField(
                 controller: _passwordContoller,
                 onFieldSubmitted: (password) => submit(),
-                labelText: 'Password',
+                labelText: AppLocalizations.of(context).password,
                 errorText: passwordError,
                 autofocus: true,
                 isPassword: true,
@@ -237,7 +249,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
               _buildTextField(
                 controller: _confirmPasswordContoller,
                 onFieldSubmitted: (confirmPassword) => submit(),
-                labelText: 'Confirm Password',
+                labelText: AppLocalizations.of(context).form_confirm_password,
                 errorText: confirmPasswordError,
                 isPassword: true,
                 autofillHints: [AutofillHints.password],
@@ -248,10 +260,10 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
                 height: 35,
                 child: ElevatedButton(
                   child: Text(_isLogin == null
-                      ? 'Next'
+                      ? AppLocalizations.of(context).next
                       : _isLogin
-                          ? 'Log in'
-                          : 'Sign up'),
+                          ? AppLocalizations.of(context).login
+                          : AppLocalizations.of(context).signUp),
                   onPressed: () => submit(),
                 ),
               ),

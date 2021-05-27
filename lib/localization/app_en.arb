@@ -1,0 +1,70 @@
+{
+    "rentool": "Rentool",
+    "@rentool": {
+        "description": "The app/platform name"
+    },
+
+    "ok": "OK",
+    "next": "Next",
+    "error": "Error",
+
+    "userNotFoundError": "There is no user corresponding to the email address.",
+    "@userNotFoundError": {
+        "description": "error message for FirebaseAuthException/user-not-found"
+    },
+    
+    "wrongPassword": "Wrong password.",
+    "errorInfo": "Error information",
+    "loginError": "Login Error",
+    "signUpError": "Sign up Error",
+    "pass_not_match": "Passwords don't match.",
+    "weak_password": "The password provided is too weak.",
+    "email_already_in_use": "An account already exists for this email address.",
+    "no_password_error": "This email address doesn't have a password.\nIt uses login with {list}",
+    "@no_password_error": {
+        "placeholders": {
+            "list": {}
+        }
+    },
+    "no_password_error_dialog1": "This email address is registerd but doesn't have a password. This means it was used by other login methods (e.g., Google or Facebook).",
+    "no_password_error_dialog2": "The provider{s} associated with this email address {is_or_are} {elements}. So try loging in with {oneOf_or_it}",
+    "@no_password_error_dialog2": {
+        "type": "text",
+        "placeholders": {
+            "s": {"type": "String"},
+            "is_or_are": {"type": "String"},
+            "elements": {"type": "String"},
+            "oneOf_or_it": {"type": "String"}
+        }
+    },
+    "no_password_error_dialog3": "Or we can send you an email to reset your password",
+    "send_email": "Send Email",
+
+    "badEmail": "The email address is invalid.",
+    "emailSent": "Email Sent.",
+    "emailNotSent": "Email Not Sent.",
+
+    "emailAddress": "Email address",
+    "password": "Password",
+    "form_confirm_password": "Confirm password",
+
+    "login": "Log in",
+    "signUp": "Sign up",
+
+    "login_welcome": "Log in to your Rentool Account",
+    "sign_in_with": "Sign in with",
+
+    "diff_creds_error": "There already exists an account with this email address using other providers.",
+    "@diff_creds_error": {
+        "description": "message for FirebaseAuthException code: account-exists-with-different-credential"
+    },
+    
+
+    "someLocalizedString": "Localized part - {argument}",
+    "@someLocalizedString": {
+        "type": "text",
+        "placeholders": {
+            "argument": {}
+        }
+    }
+}

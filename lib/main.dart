@@ -2,12 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:rentool/models/RentoolUser.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rentool/screens/FirebaseInitErrorScreen.dart';
 import 'package:rentool/screens/HomePage.dart';
 import 'package:rentool/screens/LoginScreen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+        const Locale('ar', ''),
+      ],
+      title: 'Rentool',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:rentool/screens/EmailSignScreen.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key key}) : super(key: key);
@@ -34,7 +35,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Sign-in to your Rentool Account',
+                  AppLocalizations.of(context).login_welcome,
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ),
@@ -57,13 +58,13 @@ class LoginScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: option.value['icon'] == null
                               ? Icon(Icons.error)
                               : option.value['icon'] as Widget, //Icon(Icons.email),
                         ),
                         Text(
-                          'Sign in in with ${option.key}',
+                          '${AppLocalizations.of(context).sign_in_with} ${option.key}',
                         ),
                       ],
                     ),
@@ -122,21 +123,26 @@ class LoginScreen extends StatelessWidget {
     var list = await AuthServices.auth.fetchSignInMethodsForEmail(email);
     showMyAlert(
       context,
-      Text('Sign in Error'),
+      Text(AppLocalizations.of(context).loginError),
       SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "There already exists an account with the email address using other providers.",
+              AppLocalizations.of(context).diff_creds_error,
             ),
             Text(
-              "The provider${list.length > 1 ? 's' : ''} associated with this email address ${list.length > 1 ? 'are' : 'is'} ${list.length > 1 ? list : list.first}. So you need to sign in with ${list.length > 1 ? 'one of them' : 'it'}",
+              AppLocalizations.of(context).no_password_error_dialog2(
+                list.length > 1 ? 's' : '',
+                list.length > 1 ? 'are' : 'is',
+                list.length > 1 ? list : list.first,
+                list.length > 1 ? 'one of them' : 'it',
+              ),
             ),
             SizedBox(height: 10),
             Text(
-              'Or we can send you an email to reset/set your password. so you can login in with an email and password',
+              AppLocalizations.of(context).no_password_error_dialog3,
             ),
           ],
         ),
@@ -144,31 +150,15 @@ class LoginScreen extends StatelessWidget {
       [
         TextButton(
           onPressed: () {
-            try {
-              sendPassResetEmail(context, email);
-            } on FirebaseAuthException catch (e) {
-              if (e.code == 'invalid-email') {
-                showMyAlert(
-                  context,
-                  Text('Invalid Email'),
-                  Text('the email address is not valid'),
-                );
-              } else if (e.code == 'user-not-found') {
-                showMyAlert(
-                  context,
-                  Text('User not found'),
-                  Text('There is no user corresponding to the email address'),
-                );
-              }
-            }
+            sendPassResetEmail(context, email);
           },
-          child: Text('SEND EMAIL'),
+          child: Text(AppLocalizations.of(context).send_email),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('OK'),
+          child: Text(AppLocalizations.of(context).ok),
         ),
       ],
     );
@@ -178,24 +168,28 @@ class LoginScreen extends StatelessWidget {
     try {
       await AuthServices.auth.sendPasswordResetEmail(email: email);
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email sent')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context).emailSent),
+      ));
     } on FirebaseAuthException catch (e) {
       print('cought');
       Navigator.pop(context);
       if (e.code == 'invalid-email') {
         showMyAlert(
           context,
-          Text('Invalid Email'),
-          Text('the email address is not valid'),
+          Text(AppLocalizations.of(context).error),
+          Text(AppLocalizations.of(context).badEmail),
         );
       } else if (e.code == 'user-not-found') {
         showMyAlert(
           context,
-          Text('User not found'),
-          Text('There is no user corresponding to the email address'),
+          Text(AppLocalizations.of(context).error),
+          Text(AppLocalizations.of(context).userNotFoundError),
         );
       }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ERROR: Email not sent')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${AppLocalizations.of(context).error}: ${AppLocalizations.of(context).emailNotSent}'),
+      ));
     }
   }
 
