@@ -48,6 +48,19 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
           setState(() {
             passwordError = 'Wrong password.';
           });
+        } else {
+          showMyAlert(
+            context,
+            Text('Login Error'),
+            Text('${e.code}\n${e.message}'),
+            [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              )
+            ],
+          );
+          print(e.code);
         }
       }
     } else {
@@ -71,6 +84,19 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
             emailError = 'The account already exists for that email.';
             _isLogin = true;
           });
+        } else {
+          showMyAlert(
+            context,
+            Text('Sign up Error'),
+            Text(e.toString()),
+            [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              )
+            ],
+          );
+          print(e.code);
         }
       } catch (e) {
         print(e);
