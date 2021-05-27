@@ -50,6 +50,7 @@ class FirstScreen extends StatelessWidget {
             print('Email address not verified. sending a verfication email');
             user.sendEmailVerification();
           }
+          FirestoreServices.ensureUserExist(user);
           return HomePage();
         }
       },
