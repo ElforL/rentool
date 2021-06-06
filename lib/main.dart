@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:rentool/screens/FirebaseInitErrorScreen.dart';
 import 'package:rentool/screens/HomePage.dart';
 import 'package:rentool/screens/LoginScreen.dart';
+import 'package:rentool/screens/userScreen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -70,7 +71,8 @@ class FirstScreen extends StatelessWidget {
             user.sendEmailVerification();
           }
           FirestoreServices.ensureUserExist(user);
-          return HomePage();
+          return UserScreen();
+          // return HomePage();
         }
       },
     );

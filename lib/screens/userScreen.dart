@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('user screen: ${AuthServices.auth.currentUser.displayName}'),
+        title: Text('User Screen'),
       ),
       body: ListView(
         children: [
+          ListTile(
+            title: Text('Name:'),
+            trailing: Text(AuthServices.auth.currentUser.displayName),
+          ),
+          ListTile(
+            title: Text(AppLocalizations.of(context).emailAddress),
+            trailing: Text(AuthServices.auth.currentUser.email),
+          ),
+          Divider(),
           ListTile(
             trailing: OutlinedButton(
               child: Text('create post'),
@@ -33,6 +43,14 @@ class UserScreen extends StatelessWidget {
               child: Text('add credit card'),
               onPressed: () {
                 //
+              },
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              child: Text('Sign out'),
+              onPressed: () {
+                AuthServices.signOut();
               },
             ),
           ),
