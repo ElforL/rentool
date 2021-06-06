@@ -134,10 +134,8 @@ class LoginScreen extends StatelessWidget {
             ),
             Text(
               AppLocalizations.of(context).no_password_error_dialog2(
-                list.length > 1 ? 's' : '',
-                list.length > 1 ? 'are' : 'is',
-                list.length > 1 ? list : list.first,
-                list.length > 1 ? 'one of them' : 'it',
+                list.length,
+                list.length != 1 ? list : list.first,
               ),
             ),
             SizedBox(height: 10),

@@ -27,14 +27,12 @@
         }
     },
     "no_password_error_dialog1": "This email address is registerd but doesn't have a password. This means it was used by other login methods (e.g., Google or Facebook).",
-    "no_password_error_dialog2": "The provider{s} associated with this email address {is_or_are} {elements}. So try loging in with {oneOf_or_it}",
+    "no_password_error_dialog2": "{count, plural, =1 {The provider associated with this email address is {elements}. So try loging in with it} other{The providers associated with this email address are {elements}. So try loging in with one of them}}",
     "@no_password_error_dialog2": {
         "type": "text",
         "placeholders": {
-            "s": {"type": "String"},
-            "is_or_are": {"type": "String"},
-            "elements": {"type": "String"},
-            "oneOf_or_it": {"type": "String"}
+            "count": {"type": "number"},
+            "elements": {"type": "String"}
         }
     },
     "no_password_error_dialog3": "Or we can send you an email to reset your password",
