@@ -131,8 +131,6 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
                     AppLocalizations.of(context).no_password_error_dialog1,
                   ),
                   Text(
-                    // TODO improve arabic text for plurals
-                    // cehck https://stackoverflow.com/a/59845992/12571630
                     AppLocalizations.of(context).no_password_error_dialog2(
                       list.length,
                       list.length != 1 ? list.toString() : list.first,
