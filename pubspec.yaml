@@ -23,6 +23,7 @@ dependencies:
 
   google_sign_in: ^5.0.3
   flutter_facebook_auth: ^1.0.0
+  image_picker: ^0.8.0+1
   
   # // Needs an apple developer account which costs $99 🤷‍♂️
   # sign_in_with_apple: ^3.0.0
