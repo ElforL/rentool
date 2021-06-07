@@ -1,10 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rentool/models/RentoolUser.dart';
+import 'package:rentool/models/rentool_sdk.dart';
 
 class FirestoreServices {
+  /// Firestore instance
+  ///
+  /// equivelant to `FirebaseFirestore.instance`
   static FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  /// `CollectionReference` of the 'Users' collection in the database
   static CollectionReference _usersRef = _db.collection('Users');
+
+  /// `CollectionReference` of the 'Tools' collection in the database
+  static CollectionReference _toolsRef = _db.collection('Tools');
 
   /// returns true if the user has a document in the Firestore database.
   ///
