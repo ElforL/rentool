@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rentool/screens/NewPostScreen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,6 +26,7 @@ class UserScreen extends StatelessWidget {
               child: Text('create post'),
               onPressed: () {
                 //
+                Navigator.push(context, MaterialPageRoute(builder: (_) => NewPostScreen()));
               },
             ),
           ),
