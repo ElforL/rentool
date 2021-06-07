@@ -13,8 +13,9 @@ class FirestoreServices {
   static Future<bool> ensureUserExist(User user) async {
     var userExists = (await _usersRef.doc(user.uid).get()).exists;
     if (!userExists) {
-      addUser(RentoolUser(user.uid, user.displayName, 0));
+      return await addUser(RentoolUser(user.uid, user.displayName, 0));
     }
+    return true;
   }
 
   /// Creates a Document for [user] in the Firestore database.
