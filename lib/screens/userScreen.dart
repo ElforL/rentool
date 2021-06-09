@@ -14,7 +14,12 @@ class UserScreen extends StatelessWidget {
         children: [
           ListTile(
             title: Text('Name:'),
-            trailing: Text(AuthServices.auth.currentUser.displayName),
+            trailing: Text(
+              AuthServices.auth.currentUser.displayName ?? '[NONE]',
+              style: TextStyle(
+                color: AuthServices.auth.currentUser.displayName == null ? null : Colors.red,
+              ),
+            ),
           ),
           ListTile(
             title: Text(AppLocalizations.of(context).emailAddress),
