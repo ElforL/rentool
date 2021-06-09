@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -181,10 +182,15 @@ class _MediaTileState extends State<MediaTile> {
   Widget _buildImageHolder(File image) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: Image.file(
-        image,
-        fit: BoxFit.contain,
-      ),
+      child: kIsWeb
+          ? Image.network(
+              image.path,
+              fit: BoxFit.contain,
+            )
+          : Image.file(
+              image,
+              fit: BoxFit.contain,
+            ),
     );
   }
 }
