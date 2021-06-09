@@ -11,19 +11,38 @@ class AuthServices {
   static Stream<User> get authStateChanges => auth.authStateChanges();
 
   static void signOut() async {
+    /// a list of the user information for each authentication provider.
+    var providerData = auth.currentUser.providerData;
+
+    /// checks if the user has an authintication provider with the given [providerId].
+    bool _isProviderUsed(String providerId) {
+      return providerData.any((provider) => provider.providerId == providerId);
+    }
+
     await auth.signOut();
     try {
-      await GoogleSignIn().signOut();
-    } catch (e) {}
+      if (_isProviderUsed('google')) {
+        await GoogleSignIn().signOut();
+        print('G logout');
+      }
+      if (_isProviderUsed('facebook.com')) {
+        await FacebookAuth.instance.logOut();
+        print('FB logout');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   /* ------------------ for Email Sign in ------------------ */
 
   static Future<UserCredential> createUserWithEmailAndPassword(String inEmail, String inPassword) async {
-    return await auth.createUserWithEmailAndPassword(
+    var creds = await auth.createUserWithEmailAndPassword(
       email: inEmail,
       password: inPassword,
     );
+    if (creds.additionalUserInfo.isNewUser) auth.currentUser.sendEmailVerification();
+    return creds;
   }
 
   static Future<UserCredential> signInWithEmailAndPassword(String inEmail, String inPassword) async {
@@ -80,11 +99,14 @@ class AuthServices {
   /* ------------------ for Facebook Sign in ------------------ */
 
   static Future<UserCredential> signInWithFacebook() async {
+    UserCredential creds;
     if (kIsWeb) {
-      return await signInWithFacebookWeb();
+      creds = await signInWithFacebookWeb();
     } else {
-      return await signInWithFacebookNative();
+      creds = await signInWithFacebookNative();
     }
+    if (creds.additionalUserInfo.isNewUser) auth.currentUser.sendEmailVerification();
+    return creds;
   }
 
   // The following two methods were imported from FlutterFire documentation

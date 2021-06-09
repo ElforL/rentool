@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/screens/FirebaseInitErrorScreen.dart';
 import 'package:rentool/screens/HomePage.dart';
+import 'package:rentool/screens/LoadingScreen.dart';
 import 'package:rentool/screens/LoginScreen.dart';
 import 'package:rentool/screens/userScreen.dart';
 import 'package:rentool/services/auth.dart';
@@ -65,10 +66,9 @@ class FirstScreen extends StatelessWidget {
           print('User signed out');
           return LoginScreen();
         } else {
-          print('Signed in as ${user.displayName} ');
+          print('Signed in as ${user.displayName ?? '[Unser Name]'} ');
           if (!user.emailVerified) {
-            print('Email address not verified. sending a verfication email');
-            user.sendEmailVerification();
+            print('Email address not verified.');
           }
           FirestoreServices.ensureUserExist(user);
           return UserScreen();
