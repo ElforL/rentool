@@ -17,7 +17,7 @@ class UserScreen extends StatelessWidget {
             trailing: Text(
               AuthServices.auth.currentUser.displayName ?? '[NONE]',
               style: TextStyle(
-                color: AuthServices.auth.currentUser.displayName == null ? null : Colors.red,
+                color: AuthServices.auth.currentUser.displayName == null ? Colors.red : null,
               ),
             ),
           ),
