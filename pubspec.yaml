@@ -13,6 +13,10 @@ dependencies:
     sdk: flutter
   flutter_localizations: 
     sdk: flutter
+  
+  rentool_sdk:
+    git: git@github.com:ElforL/Rentool_sdk.git
+  
   intl: ^0.17.0 # Add this line
 
   firebase_core: ^1.2.0

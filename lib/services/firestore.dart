@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:rentool/models/RentoolUser.dart';
-import 'package:rentool/models/rentool_sdk.dart';
+import 'package:rentool_sdk/rentool_sdk.dart';
 
 class FirestoreServices {
   /// Firestore instance
@@ -14,6 +13,13 @@ class FirestoreServices {
 
   /// `CollectionReference` of the 'Tools' collection in the database
   static CollectionReference _toolsRef = _db.collection('Tools');
+
+  // ////////////////////////////// Tools //////////////////////////////
+  static createNewTool(Tool tool) {
+    _toolsRef.add('');
+  }
+
+  // ////////////////////////////// User //////////////////////////////
 
   /// returns true if the user has a document in the Firestore database.
   ///
