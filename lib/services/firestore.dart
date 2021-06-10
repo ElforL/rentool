@@ -26,7 +26,7 @@ class FirestoreServices {
     String location,
   ) async {
     // create a new document to get an ID
-    var ref = await _toolsRef.add(<String, dynamic>{});
+    var ref = await _toolsRef.add(<String, dynamic>{'ownerUID': AuthServices.auth.currentUser.uid});
     var tool = Tool(
       ref.id,
       AuthServices.auth.currentUser.uid,
@@ -43,7 +43,7 @@ class FirestoreServices {
 
   static Future<Tool> updateTool(Tool updatedTool) async {
     var ref = _toolsRef.doc(updatedTool.id);
-    await ref.set(updatedTool.toJson()..remove('id'));
+    await ref.update(updatedTool.toJson()..remove('id')..remove('requests'));
     return updatedTool;
   }
 
