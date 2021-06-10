@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rentool/services/firestore.dart';
 
 class NewPostScreen extends StatelessWidget {
   NewPostScreen({Key key}) : super(key: key);
@@ -69,12 +70,32 @@ class NewPostScreen extends StatelessWidget {
                 children: [
                   OutlinedButton(
                     child: Text('CANCEL'),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                   SizedBox(width: 20),
                   ElevatedButton(
                     child: Text('CREATE'),
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (_nameContoller.text.trim().isEmpty ||
+                          _descriptionContoller.text.trim().isEmpty ||
+                          _priceContoller.text.trim().isEmpty ||
+                          _insuranceContoller.text.trim().isEmpty ||
+                          _locationContoller.text.trim().isEmpty) {
+                        print('Missing fields');
+                        return;
+                      }
+                      await FirestoreServices.createNewTool(
+                        _nameContoller.text,
+                        _descriptionContoller.text,
+                        double.parse(_priceContoller.text.trim()),
+                        double.parse(_insuranceContoller.text.trim()),
+                        [],
+                        _locationContoller.text,
+                      );
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),
