@@ -114,10 +114,10 @@ class AuthServices {
 
   static Future<UserCredential> signInWithFacebookNative() async {
     // Trigger the sign-in flow
-    final AccessToken result = await FacebookAuth.instance.login();
+    final result = await FacebookAuth.instance.login();
 
     // Create a credential from the access token
-    final facebookAuthCredential = FacebookAuthProvider.credential(result.token);
+    final facebookAuthCredential = FacebookAuthProvider.credential(result.accessToken.token);
 
     // Once signed in, return the UserCredential
     return await auth.signInWithCredential(facebookAuthCredential);
