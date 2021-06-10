@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/PopupMenuWidget.dart';
+import 'package:video_player/video_player.dart';
 
 class NewPostScreen extends StatelessWidget {
   NewPostScreen({Key key}) : super(key: key);
@@ -138,18 +139,31 @@ class MediaTile extends StatefulWidget {
 
 class _MediaTileState extends State<MediaTile> {
   List _images = [];
+  List _vids = [];
   final picker = ImagePicker();
+  List<VideoPlayerController> _contollers = [];
 
   Future _getMedia(bool isImage, ImageSource source) async {
     final pickedFile = isImage ? await picker.getImage(source: source) : await picker.getVideo(source: source);
 
     setState(() {
       if (pickedFile != null) {
-        _images.add(File(pickedFile.path));
+        if (isImage)
+          _images.add(File(pickedFile.path));
+        else
+          _vids.add(File(pickedFile.path));
       } else {
         print('No image selected.');
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _contollers.forEach((controller) {
+      controller.dispose();
+    });
+    super.dispose();
   }
 
   @override
@@ -159,10 +173,11 @@ class _MediaTileState extends State<MediaTile> {
       height: 300,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: _images.length + 1,
+        itemCount: _images.length + _vids.length + 1,
         itemBuilder: (BuildContext context, int index) {
-          if (index == _images.length) return _buildAddTile();
-          return _buildImageHolder(_images[index]);
+          if (index == _images.length + _vids.length) return _buildAddTile();
+          if (index < _images.length) return _buildImageHolder(_images[index]);
+          return _buildVideoHolder(_vids[index - _images.length]);
         },
       ),
     );
@@ -186,7 +201,7 @@ class _MediaTileState extends State<MediaTile> {
                 IconButton(
                   icon: Icon(Icons.videocam),
                   tooltip: 'Video',
-                  onPressed: null, //TODO () => getMedia(false, ImageSource.camera),
+                  onPressed: () => _getMedia(false, ImageSource.gallery),
                 ),
                 IconButton(
                   icon: Icon(Icons.camera_alt_outlined),
@@ -201,18 +216,86 @@ class _MediaTileState extends State<MediaTile> {
     );
   }
 
+  Widget _buildVideoHolder(File video) {
+    var _controller = kIsWeb ? VideoPlayerController.network(video.path) : VideoPlayerController.file(video);
+    _contollers.add(_controller);
+
+    return FutureBuilder(
+      future: _controller.initialize(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          _buildLoadingTile();
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3),
+          child: AspectRatio(
+            aspectRatio: _controller.value.size.width / _controller.value.size.height,
+            child: Stack(
+              children: [
+                VideoPlayer(_controller),
+                Icon(
+                  Icons.videocam,
+                  color: Colors.white70,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildImageHolder(File image) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: kIsWeb
-          ? Image.network(
+      child: Stack(
+        children: [
+          if (kIsWeb)
+            Image.network(
               image.path,
               fit: BoxFit.contain,
+              loadingBuilder: (context, child, loadingProgress) =>
+                  loadingProgress == null ? child : _buildLoadingTile(loadingProgress),
             )
-          : Image.file(
+          else
+            Image.file(
               image,
               fit: BoxFit.contain,
             ),
+          Container(
+            margin: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  // color: Colors.,
+                  blurRadius: 5,
+                ),
+              ],
+            ),
+            child: Icon(
+              Icons.photo,
+              color: Colors.white70,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingTile([ImageChunkEvent loadingProgress]) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: Container(
+        color: Colors.black38,
+        width: 200,
+        child: Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress == null
+                ? null
+                : loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes,
+          ),
+        ),
+      ),
     );
   }
 }
