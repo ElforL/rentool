@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rentool/services/auth.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class FirestoreServices {
@@ -15,8 +16,35 @@ class FirestoreServices {
   static CollectionReference _toolsRef = _db.collection('Tools');
 
   // ////////////////////////////// Tools //////////////////////////////
-  static createNewTool(Tool tool) {
-    _toolsRef.add('');
+
+  static Future<Tool> createNewTool(
+    String name,
+    String description,
+    double rentPrice,
+    double insuranceAmount,
+    List<String> media,
+    String location,
+  ) async {
+    // create a new document to get an ID
+    var ref = await _toolsRef.add(<String, dynamic>{});
+    var tool = Tool(
+      ref.id,
+      AuthServices.auth.currentUser.uid,
+      name,
+      description,
+      rentPrice,
+      insuranceAmount,
+      media,
+      location,
+      true,
+    );
+    return await updateTool(tool);
+  }
+
+  static Future<Tool> updateTool(Tool updatedTool) async {
+    var ref = _toolsRef.doc(updatedTool.id);
+    await ref.set(updatedTool.toJson()..remove('id'));
+    return updatedTool;
   }
 
   // ////////////////////////////// User //////////////////////////////
