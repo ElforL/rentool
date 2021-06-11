@@ -18,6 +18,9 @@ class NewPostScreen extends StatelessWidget {
   final _insuranceContoller = TextEditingController();
   final _locationContoller = TextEditingController();
 
+  final List<File> images = [];
+  final List<File> vids = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +59,10 @@ class NewPostScreen extends StatelessWidget {
               isNumber: true,
             ),
             // media
-            MediaTile(),
+            MediaTile(
+              images: images,
+              vids: vids,
+            ),
 
             // location
             _buildTextField(
@@ -93,7 +99,7 @@ class NewPostScreen extends StatelessWidget {
                         _descriptionContoller.text,
                         double.parse(_priceContoller.text.trim()),
                         double.parse(_insuranceContoller.text.trim()),
-                        [],
+                        images + vids,
                         _locationContoller.text,
                       );
                       Navigator.pop(context);
@@ -131,15 +137,16 @@ class NewPostScreen extends StatelessWidget {
 }
 
 class MediaTile extends StatefulWidget {
-  const MediaTile({Key key}) : super(key: key);
+  const MediaTile({Key key, @required this.images, @required this.vids}) : super(key: key);
+
+  final List<File> images;
+  final List<File> vids;
 
   @override
   _MediaTileState createState() => _MediaTileState();
 }
 
 class _MediaTileState extends State<MediaTile> {
-  List _images = [];
-  List _vids = [];
   final picker = ImagePicker();
   List<VideoPlayerController> _contollers = [];
 
@@ -149,9 +156,9 @@ class _MediaTileState extends State<MediaTile> {
     setState(() {
       if (pickedFile != null) {
         if (isImage)
-          _images.add(File(pickedFile.path));
+          widget.images.add(File(pickedFile.path));
         else
-          _vids.add(File(pickedFile.path));
+          widget.vids.add(File(pickedFile.path));
       } else {
         print('No image selected.');
       }
@@ -173,11 +180,11 @@ class _MediaTileState extends State<MediaTile> {
       height: 300,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: _images.length + _vids.length + 1,
+        itemCount: widget.images.length + widget.vids.length + 1,
         itemBuilder: (BuildContext context, int index) {
-          if (index == _images.length + _vids.length) return _buildAddTile();
-          if (index < _images.length) return _buildImageHolder(_images[index]);
-          return _buildVideoHolder(_vids[index - _images.length]);
+          if (index == widget.images.length + widget.vids.length) return _buildAddTile();
+          if (index < widget.images.length) return _buildImageHolder(widget.images[index]);
+          return _buildVideoHolder(widget.vids[index - widget.images.length]);
         },
       ),
     );
