@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:rentool/services/StorageServices.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
@@ -22,11 +26,20 @@ class FirestoreServices {
     String description,
     double rentPrice,
     double insuranceAmount,
-    List<String> media,
+    List<File> media,
     String location,
   ) async {
     // create a new document to get an ID
+    // TODO add all the info not just the onwerUID then wait for media?
     var ref = await _toolsRef.add(<String, dynamic>{'ownerUID': AuthServices.auth.currentUser.uid});
+
+    List<String> mediaURLs;
+
+    if (media.isNotEmpty) {
+      mediaURLs = await StorageServices.uploadMediaOfTool(media, ref.id);
+    }
+
+    // create model and post
     var tool = Tool(
       ref.id,
       AuthServices.auth.currentUser.uid,
@@ -34,7 +47,7 @@ class FirestoreServices {
       description,
       rentPrice,
       insuranceAmount,
-      media,
+      mediaURLs,
       location,
       true,
     );
