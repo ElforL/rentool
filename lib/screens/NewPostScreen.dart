@@ -58,17 +58,17 @@ class NewPostScreen extends StatelessWidget {
               textInputAction: TextInputAction.next,
               isNumber: true,
             ),
-            // media
-            MediaTile(
-              images: images,
-              vids: vids,
-            ),
-
             // location
             _buildTextField(
               controller: _locationContoller,
               labelText: 'City/Location',
               textInputAction: TextInputAction.done,
+            ),
+
+            // media
+            MediaTile(
+              images: images,
+              vids: vids,
             ),
 
             Padding(
