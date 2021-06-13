@@ -151,16 +151,41 @@ class _MediaTileState extends State<MediaTile> {
   List<VideoPlayerController> _contollers = [];
 
   Future _getMedia(bool isImage, ImageSource source) async {
+    String mediaType = isImage ? 'Image' : 'Video';
+
     final pickedFile = isImage ? await picker.getImage(source: source) : await picker.getVideo(source: source);
 
     setState(() {
       if (pickedFile != null) {
+        var file = File(pickedFile.path);
         if (isImage)
-          widget.images.add(File(pickedFile.path));
+          widget.images.add(file);
         else
-          widget.vids.add(File(pickedFile.path));
+          widget.vids.add(file);
+        try {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('$mediaType added'),
+              action: SnackBarAction(
+                label: 'Undo',
+                onPressed: () => _undoAddMedia(isImage, file),
+              ),
+            ),
+          );
+        } catch (e) {}
       } else {
         print('No image selected.');
+      }
+    });
+  }
+
+  /// removes [file] from the images/vids list (depending on [isImage]) and rebuilds the tiles.
+  _undoAddMedia(isImage, file) {
+    setState(() {
+      if (isImage) {
+        widget.images.remove(file);
+      } else {
+        widget.vids.remove(file);
       }
     });
   }
