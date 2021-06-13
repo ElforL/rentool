@@ -208,12 +208,18 @@ class _MediaTileState extends State<MediaTile> {
                 IconButton(
                   icon: Icon(Icons.videocam),
                   tooltip: 'Video',
-                  onPressed: () => _getMedia(false, ImageSource.gallery),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _getMedia(false, ImageSource.gallery);
+                  },
                 ),
                 IconButton(
                   icon: Icon(Icons.camera_alt_outlined),
                   tooltip: 'Photo',
-                  onPressed: () => _getMedia(true, ImageSource.gallery),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _getMedia(true, ImageSource.gallery);
+                  },
                 ),
               ],
             ),
