@@ -181,8 +181,9 @@ class _MediaTileState extends State<MediaTile> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: widget.images.length + widget.vids.length + 1,
-        itemBuilder: (BuildContext context, int index) {
-          if (index == widget.images.length + widget.vids.length) return _buildAddTile();
+        itemBuilder: (BuildContext context, int i) {
+          var index = i - 1;
+          if (i == 0) return _buildAddTile();
           if (index < widget.images.length) return _buildImageHolder(widget.images[index]);
           return _buildVideoHolder(widget.vids[index - widget.images.length]);
         },
