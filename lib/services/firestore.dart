@@ -60,6 +60,13 @@ class FirestoreServices {
     return updatedTool;
   }
 
+  static Future<List<QueryDocumentSnapshot<Object>>> searchForTool(String searchkey) async {
+    // https://stackoverflow.com/a/56747021/12571630
+    var out = await _toolsRef.orderBy('name').startAt([searchkey]).endAt([searchkey + '~']).limit(10).get();
+
+    return out.docs;
+  }
+
   // ////////////////////////////// User //////////////////////////////
 
   /// returns true if the user has a document in the Firestore database.
