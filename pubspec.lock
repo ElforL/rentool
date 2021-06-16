@@ -306,7 +306,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "3502282f607a48615d714bab8c2cf50c4d6b9c4b"
+      resolved-ref: "657df2fa68e892c84032413b9e6a54fcb8a86e3b"
       url: "git@github.com:ElforL/Rentool_sdk.git"
     source: git
     version: "0.0.0"
@@ -377,7 +377,7 @@ packages:
       name: video_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.5"
+    version: "2.1.6"
   video_player_platform_interface:
     dependency: transitive
     description:
