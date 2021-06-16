@@ -130,7 +130,6 @@ class _PostScreenState extends State<PostScreen> {
                       style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.grey.shade600),
                     ),
                     Text(widget.tool.ownerUID),
-                    // TODO owner rating
                   ],
                 ),
                 SizedBox(height: 5),
