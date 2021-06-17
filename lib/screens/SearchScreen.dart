@@ -66,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildResultContainer(QueryDocumentSnapshot<Object> result) {
     Tool tool = Tool.fromJson(
-      Map.from(result.data())..remove('media'),
+      Map.from(result.data())..addAll({'id': result.id}),
     );
     return InkWell(
       onTap: () {
