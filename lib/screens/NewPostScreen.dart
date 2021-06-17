@@ -263,7 +263,7 @@ class _MediaTileState extends State<MediaTile> {
       future: _controller.initialize(),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          _buildLoadingTile();
+          return _buildLoadingTile();
         }
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 3),
