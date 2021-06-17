@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/PopupMenuWidget.dart';
 import 'package:video_player/video_player.dart';
@@ -18,8 +20,7 @@ class NewPostScreen extends StatelessWidget {
   final _insuranceContoller = TextEditingController();
   final _locationContoller = TextEditingController();
 
-  final List<File> images = [];
-  final List<File> vids = [];
+  final List<File> media = [];
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +68,7 @@ class NewPostScreen extends StatelessWidget {
 
             // media
             MediaTile(
-              images: images,
-              vids: vids,
+              media: media,
             ),
 
             Padding(
@@ -99,7 +99,7 @@ class NewPostScreen extends StatelessWidget {
                         _descriptionContoller.text,
                         double.parse(_priceContoller.text.trim()),
                         double.parse(_insuranceContoller.text.trim()),
-                        images + vids,
+                        media,
                         _locationContoller.text,
                       );
                       Navigator.pop(context);
@@ -137,10 +137,9 @@ class NewPostScreen extends StatelessWidget {
 }
 
 class MediaTile extends StatefulWidget {
-  const MediaTile({Key key, @required this.images, @required this.vids}) : super(key: key);
+  const MediaTile({Key key, @required this.media}) : super(key: key);
 
-  final List<File> images;
-  final List<File> vids;
+  final List<File> media;
 
   @override
   _MediaTileState createState() => _MediaTileState();
@@ -150,44 +149,67 @@ class _MediaTileState extends State<MediaTile> {
   final picker = ImagePicker();
   List<VideoPlayerController> _contollers = [];
 
-  Future _getMedia(bool isImage, ImageSource source) async {
-    String mediaType = isImage ? 'Image' : 'Video';
-
-    final pickedFile = isImage ? await picker.getImage(source: source) : await picker.getVideo(source: source);
-
-    setState(() {
-      if (pickedFile != null) {
-        var file = File(pickedFile.path);
-        if (isImage)
-          widget.images.add(file);
-        else
-          widget.vids.add(file);
-        try {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('$mediaType added'),
-              action: SnackBarAction(
-                label: 'Undo',
-                onPressed: () => _undoAddMedia(isImage, file),
-              ),
-            ),
-          );
-        } catch (e) {}
+  Future _getMedia(MediaInput inputType) async {
+    try {
+      var res;
+      if (inputType == MediaInput.gallery) {
+        res = await FilePicker.platform.pickFiles(
+          type: FileType.media,
+          allowMultiple: true,
+        );
       } else {
-        print('No image selected.');
+        res = inputType == MediaInput.cameraVideo
+            ? await picker.getVideo(source: ImageSource.camera)
+            : await picker.getImage(source: ImageSource.camera);
       }
+
+      if (res != null) {
+        List<File> files;
+        if (res.runtimeType == FilePickerResult)
+          files = (res as FilePickerResult).paths.map((path) => File(path)).toList();
+        else
+          files = [File(res.path)];
+        _addMedia(files);
+      } else {
+        print('No files were selected.');
+      }
+    } on PlatformException catch (e) {
+      if (e.code == 'read_external_storage_denied') {
+        print('Storage read denied');
+        _showStorageDeniedDialog();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  /// add [files] to `widget.media` and rebuilds the widget.
+  _addMedia(Iterable<File> files) {
+    setState(() {
+      widget.media.addAll(files);
+      try {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('files added'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                setState(() {
+                  _removeMedia(files);
+                });
+              },
+            ),
+          ),
+        );
+      } catch (e) {}
     });
   }
 
-  /// removes [file] from the images/vids list (depending on [isImage]) and rebuilds the tiles.
-  _undoAddMedia(isImage, file) {
-    setState(() {
-      if (isImage) {
-        widget.images.remove(file);
-      } else {
-        widget.vids.remove(file);
-      }
-    });
+  /// removes [files] from the `widget.media`.
+  _removeMedia(files) {
+    for (var file in files) {
+      widget.media.remove(file);
+    }
   }
 
   @override
@@ -205,12 +227,18 @@ class _MediaTileState extends State<MediaTile> {
       height: 300,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: widget.images.length + widget.vids.length + 1,
+        itemCount: widget.media.length + 1,
         itemBuilder: (BuildContext context, int i) {
           var index = i - 1;
           if (i == 0) return _buildAddTile();
-          if (index < widget.images.length) return _buildImageHolder(widget.images[index]);
-          return _buildVideoHolder(widget.vids[index - widget.images.length]);
+          var type = lookupMimeType(widget.media[index].path).split('/')[0];
+          if (type == 'image') {
+            return _buildImageHolder(widget.media[index]);
+          } else if (type == 'video') {
+            return _buildVideoHolder(widget.media[index]);
+          } else {
+            throw Exception('Media type is not an image nor a video: $type, index: $index.');
+          }
         },
       ),
     );
@@ -227,24 +255,31 @@ class _MediaTileState extends State<MediaTile> {
         tooltip: 'Add media',
         itemBuilder: (BuildContext context) => [
           PopupMenuWidget(
-            padding: EdgeInsets.symmetric(horizontal: 9),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  icon: Icon(Icons.videocam),
-                  tooltip: 'Video',
+                  icon: Icon(Icons.photo_library),
+                  tooltip: 'Pick from gallery',
                   onPressed: () {
                     Navigator.pop(context);
-                    _getMedia(false, ImageSource.gallery);
+                    _getMedia(MediaInput.gallery);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.videocam),
+                  tooltip: 'Take video',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _getMedia(MediaInput.cameraVideo);
                   },
                 ),
                 IconButton(
                   icon: Icon(Icons.camera_alt_outlined),
-                  tooltip: 'Photo',
+                  tooltip: 'Take photo',
                   onPressed: () {
                     Navigator.pop(context);
-                    _getMedia(true, ImageSource.gallery);
+                    _getMedia(MediaInput.cameraImage);
                   },
                 ),
               ],
@@ -306,18 +341,18 @@ class _MediaTileState extends State<MediaTile> {
 
   Widget _buildIconOnFog(IconData icon) {
     return Container(
-            margin: const EdgeInsets.all(3),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: Icon(
+      margin: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: Icon(
         icon,
-              color: Colors.white70,
-            ),
+        color: Colors.white70,
+      ),
     );
   }
 
@@ -337,4 +372,29 @@ class _MediaTileState extends State<MediaTile> {
       ),
     );
   }
+
+  _showStorageDeniedDialog() {
+    var dialog = AlertDialog(
+      title: Column(
+        children: [
+          Icon(Icons.folder),
+          Text('Storage permission denied'),
+        ],
+      ),
+      content: Text(
+        "The app was denied access to the gallery. To allow the app to upload media from your device, it needs to have access to the device storage.\n\n"
+        "You can give access if a permission dialog pops up, or in the app settings.",
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: Text('OK')),
+      ],
+    );
+    showDialog(context: context, builder: (_) => dialog);
+  }
+}
+
+enum MediaInput {
+  cameraVideo,
+  cameraImage,
+  gallery,
 }
