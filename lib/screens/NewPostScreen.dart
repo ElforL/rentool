@@ -272,10 +272,7 @@ class _MediaTileState extends State<MediaTile> {
             child: Stack(
               children: [
                 VideoPlayer(_controller),
-                Icon(
-                  Icons.videocam,
-                  color: Colors.white70,
-                ),
+                _buildIconOnFog(Icons.videocam),
               ],
             ),
           ),
@@ -301,23 +298,26 @@ class _MediaTileState extends State<MediaTile> {
               image,
               fit: BoxFit.contain,
             ),
-          Container(
+          _buildIconOnFog(Icons.photo),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIconOnFog(IconData icon) {
+    return Container(
             margin: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  // color: Colors.,
                   blurRadius: 5,
                 ),
               ],
             ),
             child: Icon(
-              Icons.photo,
+        icon,
               color: Colors.white70,
             ),
-          ),
-        ],
-      ),
     );
   }
 
