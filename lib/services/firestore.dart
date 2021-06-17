@@ -62,9 +62,14 @@ class FirestoreServices {
 
   static Future<List<QueryDocumentSnapshot<Object>>> searchForTool(String searchkey) async {
     // https://stackoverflow.com/a/56747021/12571630
-    var out = await _toolsRef.orderBy('name').startAt([searchkey]).endAt([searchkey + '~']).limit(10).get();
+    var out = await _toolsRef.orderBy('name').startAt([searchkey]).endAt([searchkey + '\uf8ff']).limit(10).get();
 
     return out.docs;
+  }
+
+  static Future<void> sendToolRequest(ToolRequest request, String toolID) async {
+    var requestJson = request.toJson()..remove('renterUID');
+    await _toolsRef.doc(toolID).collection('requests').doc(AuthServices.auth.currentUser.uid).set(requestJson);
   }
 
   // ////////////////////////////// User //////////////////////////////
