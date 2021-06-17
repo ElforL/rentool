@@ -21,7 +21,7 @@ class AuthServices {
 
     await auth.signOut();
     try {
-      if (_isProviderUsed('google')) {
+      if (_isProviderUsed('google.com')) {
         await GoogleSignIn().signOut();
         print('G logout');
       }
