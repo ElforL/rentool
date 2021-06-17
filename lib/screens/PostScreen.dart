@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rentool/screens/NewRequestScreen.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class PostScreen extends StatefulWidget {
@@ -136,7 +137,15 @@ class _PostScreenState extends State<PostScreen> {
                 ElevatedButton.icon(
                   icon: Icon(Icons.shopping_cart),
                   label: Text('Request'),
-                  onPressed: !widget.tool.isAvailable ? null : () {},
+                  onPressed: !widget.tool.isAvailable
+                      ? null
+                      : () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => NewRequestScreen(tool: widget.tool),
+                            ),
+                          );
+                        },
                 ),
               ],
             ),
