@@ -48,5 +48,12 @@
 	<string>To be able to take photos/videos</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To be able to record voices in the videos</string>
+	<!-- File Picker -->
+	<!-- "Required if you'll be using the `FileType.any` or `FileType.custom`." needed for FR35 -->
+	<key>UIBackgroundModes</key> 
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>
