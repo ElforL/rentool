@@ -72,6 +72,18 @@ class FirestoreServices {
     await _toolsRef.doc(toolID).collection('requests').doc(AuthServices.auth.currentUser.uid).set(requestJson);
   }
 
+  static Future<QuerySnapshot<Map<String, dynamic>>> fetchToolRequests(
+    String toolID, {
+    int limit = 10,
+    DocumentSnapshot previousDoc,
+  }) async {
+    if (previousDoc == null) {
+      return await _toolsRef.doc(toolID).collection('requests').limit(limit).get();
+    } else {
+      return await _toolsRef.doc(toolID).collection('requests').limit(limit).startAfterDocument(previousDoc).get();
+    }
+  }
+
   // ////////////////////////////// User //////////////////////////////
 
   /// returns true if the user has a document in the Firestore database.
