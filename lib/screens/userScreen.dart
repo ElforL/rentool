@@ -27,8 +27,8 @@ class UserScreen extends StatelessWidget {
             trailing: Text(AuthServices.auth.currentUser.email),
           ),
           ListTile(
-            title: Text('verified?'),
-            trailing: Text(AuthServices.auth.currentUser.emailVerified.toString()),
+            title: Text('uid'),
+            trailing: Text(AuthServices.auth.currentUser.uid),
           ),
           Divider(),
           ListTile(
