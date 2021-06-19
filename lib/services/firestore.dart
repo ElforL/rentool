@@ -84,6 +84,14 @@ class FirestoreServices {
     }
   }
 
+  static Future<void> acceptRequest(String toolID, String renterUID) async {
+    return await _toolsRef.doc(toolID).update({'acceptedRequestID': renterUID});
+  }
+
+  static Future<void> rejectRequest(String toolID, String renterUID) async {
+    return await _toolsRef.doc(toolID).collection('requests').doc(renterUID).delete();
+  }
+
   // ////////////////////////////// User //////////////////////////////
 
   /// returns true if the user has a document in the Firestore database.
