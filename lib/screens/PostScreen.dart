@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rentool/screens/NewRequestScreen.dart';
+import 'package:rentool/screens/RequestsListScreen.dart';
+import 'package:rentool/services/auth.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class PostScreen extends StatefulWidget {
@@ -13,6 +15,9 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   PageController _mediaController;
+
+  /// returns `true` if the tool belongs to the user (i.e., user = owner).
+  bool get isUsersTool => AuthServices.auth.currentUser.uid == widget.tool.ownerUID;
 
   @override
   void initState() {
@@ -135,17 +140,21 @@ class _PostScreenState extends State<PostScreen> {
                 ),
                 SizedBox(height: 5),
                 ElevatedButton.icon(
-                  icon: Icon(Icons.shopping_cart),
-                  label: Text('Request'),
-                  onPressed: !widget.tool.isAvailable
-                      ? null
-                      : () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => NewRequestScreen(tool: widget.tool),
-                            ),
-                          );
-                        },
+                  icon: Icon(isUsersTool ? Icons.list_rounded : Icons.shopping_cart),
+                  label: Text(isUsersTool ? 'VIEW REQUESTS' : 'REQUEST'),
+                  onPressed: isUsersTool
+                      ? () => Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => RequestsListScreen(tool: widget.tool)),
+                          )
+                      : (!widget.tool.isAvailable
+                          ? null
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => NewRequestScreen(tool: widget.tool),
+                                ),
+                              );
+                            }),
                 ),
               ],
             ),
