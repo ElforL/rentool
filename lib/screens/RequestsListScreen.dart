@@ -56,6 +56,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
               if (index % 2 != 0) return Divider();
               return RequestTile(
                 request: list[index ~/ 2],
+                tool: widget.tool,
               );
             },
           );
@@ -66,35 +67,38 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
 }
 
 class RequestTile extends StatefulWidget {
-  const RequestTile({Key key, @required this.request}) : super(key: key);
+  const RequestTile({Key key, @required this.request, @required this.tool}) : super(key: key);
 
   final ToolRequest request;
+  final Tool tool;
 
   @override
   _RequestTileState createState() => _RequestTileState();
 }
 
 class _RequestTileState extends State<RequestTile> {
-  var subtitle = Row(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: [
-      ElevatedButton(
-        onPressed: () {
-          // FirestoreServices.acceptRequest(widget.request.renterUID);
-        },
-        child: Text('ACCEPT'),
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
-      ),
-      SizedBox(width: 20),
-      ElevatedButton(
-        onPressed: () {
-          // FirestoreServices.rejectRequest(widget.request.renterUID);
-        },
-        child: Text('REJECT'),
-        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
-      )
-    ],
-  );
+  Widget get subtitle => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              FirestoreServices.acceptRequest(widget.tool.id, widget.request.renterUID);
+              widget.tool.acceptedRequestID = widget.request.renterUID;
+              Navigator.of(context).pop();
+            },
+            child: Text('ACCEPT'),
+            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
+          ),
+          SizedBox(width: 20),
+          ElevatedButton(
+            onPressed: () {
+              FirestoreServices.rejectRequest(widget.tool.id, widget.request.renterUID);
+            },
+            child: Text('REJECT'),
+            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+          )
+        ],
+      );
 
   bool _show = false;
 

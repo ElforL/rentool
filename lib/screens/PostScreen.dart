@@ -143,9 +143,11 @@ class _PostScreenState extends State<PostScreen> {
                   icon: Icon(isUsersTool ? Icons.list_rounded : Icons.shopping_cart),
                   label: Text(isUsersTool ? 'VIEW REQUESTS' : 'REQUEST'),
                   onPressed: isUsersTool
-                      ? () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => RequestsListScreen(tool: widget.tool)),
-                          )
+                      ? widget.tool.acceptedRequestID != null
+                          ? null
+                          : () => Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => RequestsListScreen(tool: widget.tool)),
+                              )
                       : (!widget.tool.isAvailable
                           ? null
                           : () {
