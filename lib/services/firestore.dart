@@ -85,7 +85,7 @@ class FirestoreServices {
   }
 
   static Future<void> acceptRequest(String toolID, String renterUID) async {
-    return await _toolsRef.doc(toolID).update({'acceptedRequestID': renterUID});
+    return await _toolsRef.doc(toolID).update({'acceptedRequestID': renterUID, 'isAvailable': false});
   }
 
   static Future<void> rejectRequest(String toolID, String renterUID) async {
