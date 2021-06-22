@@ -69,7 +69,11 @@ class FirestoreServices {
 
   static Future<void> sendToolRequest(ToolRequest request, String toolID) async {
     var requestJson = request.toJson()..remove('renterUID');
-    await _toolsRef.doc(toolID).collection('requests').doc(AuthServices.auth.currentUser.uid).set(requestJson);
+    await _toolsRef.doc(toolID).collection('requests').doc(request.renterUID).set(requestJson);
+  }
+
+  static Future<void> deleteToolRequest(String renterUID, String toolID) {
+    return _toolsRef.doc(toolID).collection('requests').doc(renterUID).delete();
   }
 
   static Future<QuerySnapshot<Map<String, dynamic>>> fetchToolRequests(
