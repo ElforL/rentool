@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:rentool/models/CreditCard.dart';
 import 'package:rentool/services/StorageServices.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -129,5 +130,9 @@ class FirestoreServices {
 
   static Future<void> updateID(String uid, String newID) {
     return _usersRef.doc(uid).collection('private').doc('ID').set({'idNumber': newID});
+  }
+
+  static Future<void> updateCard(String uid, CreditCard card) {
+    return _usersRef.doc(uid).collection('private').doc('ID').set(card.toJson());
   }
 }
