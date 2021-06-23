@@ -132,6 +132,10 @@ class FirestoreServices {
     return _usersRef.doc(uid).collection('private').doc('ID').set({'idNumber': newID});
   }
 
+  static Future<DocumentSnapshot<Object>> getID(String uid) {
+    return _usersRef.doc(uid).collection('private').doc('ID').get();
+  }
+
   static Future<void> updateCard(String uid, CreditCard card) {
     return _usersRef.doc(uid).collection('private').doc('ID').set(card.toJson());
   }

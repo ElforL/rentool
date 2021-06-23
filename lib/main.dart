@@ -69,8 +69,16 @@ class FirstScreen extends StatelessWidget {
             print('Email address not verified.');
           }
           FirestoreServices.ensureUserExist(user);
+          // TODO
+          // FirestoreServices.getID(user.uid).then((value) {
+          //   if (value.exists) {
+          //     Navigator.pushReplacement(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => EnterIDScreen()),
+          //     );
+          //   }
+          // });
           return UserScreen();
-          // return HomePage();
         }
       },
     );
