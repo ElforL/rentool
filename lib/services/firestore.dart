@@ -126,4 +126,8 @@ class FirestoreServices {
       return false;
     }
   }
+
+  static Future<void> updateID(String uid, String newID) {
+    return _usersRef.doc(uid).collection('private').doc('ID').set({'idNumber': newID});
+  }
 }
