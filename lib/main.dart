@@ -71,7 +71,7 @@ class FirstScreen extends StatelessWidget {
           FirestoreServices.ensureUserExist(user);
           // TODO
           // FirestoreServices.getID(user.uid).then((value) {
-          //   if (value.exists) {
+          //   if (!value.exists) {
           //     Navigator.pushReplacement(
           //       context,
           //       MaterialPageRoute(builder: (context) => EnterIDScreen()),
