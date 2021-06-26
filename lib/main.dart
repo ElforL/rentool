@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,6 +14,31 @@ import 'package:rentool/services/firestore.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  const EMULATOR_ON = true; // TODO hard coded bool
+  // Configure emulator settings
+  if (EMULATOR_ON && !kReleaseMode) {
+    final localhost = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
+
+    // //// AUTHENTICATION ////
+    await FirebaseAuth.instance.useEmulator('http://$localhost:9099');
+
+    // //// FIRESTORE ////
+    FirebaseFirestore.instance.settings = Settings(
+      // Alternative = kIsWeb ? 'localhost:8080' : (Platform.isAndroid ? '10.0.2.2:8080' : 'localhost:8080)'
+      host: '$localhost:8080',
+      persistenceEnabled: false,
+      sslEnabled: false,
+    );
+
+    // STORAGE
+    await FirebaseStorage.instance.useEmulator(host: '$localhost', port: 9199);
+
+    // //// FUNCTIONS ////
+    // In case of errors due to insecure connection check the Android and iOS steps in the documentation
+    // https://firebase.flutter.dev/docs/functions/usage#emulator-usage
+    // await FirebaseFunctions.instance.useFunctionsEmulator(origin: 'http://$localhost:5001');
+  }
 
   runApp(MyApp());
 }
