@@ -31,8 +31,19 @@ class FirestoreServices {
     String location,
   ) async {
     // create a new document to get an ID
-    // TODO add all the info not just the onwerUID then wait for media?
-    var ref = await _toolsRef.add(<String, dynamic>{'ownerUID': AuthServices.auth.currentUser.uid});
+    var tool = Tool(
+      null,
+      AuthServices.auth.currentUser.uid,
+      name,
+      description,
+      rentPrice,
+      insuranceAmount,
+      null,
+      location,
+      true,
+    );
+    var toolJson = tool.toJson()..remove('id')..remove('requests');
+    var ref = await _toolsRef.add(toolJson);
 
     List<String> mediaURLs;
 
@@ -41,16 +52,10 @@ class FirestoreServices {
     }
 
     // create model and post
-    var tool = Tool(
-      ref.id,
-      AuthServices.auth.currentUser.uid,
-      name,
-      description,
-      rentPrice,
-      insuranceAmount,
-      mediaURLs,
-      location,
-      true,
+    tool = Tool.fromJson(
+      tool.toJson()
+        ..['id'] = ref.id
+        ..['media'] = mediaURLs,
     );
     return await updateTool(tool);
   }
