@@ -17,44 +17,84 @@ service cloud.firestore {
     }
     ////////////////////////////////// Tools ////////////////////////////////
     match /Tools/{toolID}{
-        allow read;
-        // allow delete if the user is the owner (requester uid == ownerUID)
-        allow delete: if request.auth != null && request.auth.uid == resource.data.ownerUID;
+      function hasIdAndCredit(){
+        return exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/ID)
+        && exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/creditCard);
+      }
+
+      function isEmailVerified(){
+        return request.auth != null && request.auth.token.email_verified == true;
+      }
+
+      function isTheOwner(){
+        return request.auth != null && request.auth.uid == resource.data.ownerUID;
+      }
+
+      function isToolValid(isNew){
+        // the name description and location must be strings whose length is > 0
+        return request.resource.data.description is string
+        && request.resource.data.description.length > 0
+        && request.resource.data.name is string
+        && request.resource.data.name.length > 0
+        && request.resource.data.location is string
+        && request.resource.data.location.length > 0
+        // isAvailable must be a boolean
+        && request.resource.data.isAvailable is bool
+        // ownerUID must be string and the same as the user's
+        && request.resource.data.ownerUID is string
+        && request.resource.data.ownerUID == request.auth.uid
+        // the rent and insurance must be a numbers and greater than 0
+        && request.resource.data.rentPrice is number
+        && request.resource.data.rentPrice > 0
+        && request.resource.data.insuranceAmount is number
+        && request.resource.data.insuranceAmount > 0
+
+        // media can be null or a list
+        && request.resource.data.media is list || request.resource.data.media == null
+
+        // acceptedRequestID
+        && isNew == true 
+        ? request.resource.data.acceptedRequestID == null
+        : (request.resource.data.acceptedRequestID is string || request.resource.data.acceptedRequestID == null)
+      }
+
+      allow read;
+      // allow if the user is the owner
+      allow delete: if isTheOwner();
+      
+      // allow if the user is the owner
+      allow update: if isTheOwner()
+      // and the updates are valid
+      && isToolValid(false);
+      
+      // allow creation if the user is authinticated and verified
+      allow create: if isEmailVerified()
+      // and has an ID number and a credit card
+      && hasIdAndCredit()
+      // and the tool is valid
+      && isToolValid(true);
+      
+      match /requests/{renterUID}{
+        allow read: if request.auth.uid == renterUID;
         
-        // allow update if the user is the owner (requester uid == ownerUID)
-        allow update: if request.auth != null && request.auth.uid == resource.data.ownerUID
-        // Don't allow changing the ownerUID
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['ownerUID']));
-        
-        // allow creation if the user is authinticated and verified
-        // TODO: add checks to see if he's authorized (check FRs)
         allow create: if request.auth != null && request.auth.token.email_verified == true
-        // only allow if the request has an ownerUID
-        && request.resource.data.ownerUID != null 
-        // and the ownerUID (in the request) == the user's uid
-        && request.resource.data.ownerUID == request.auth.uid;
+        && request.auth.uid == renterUID
+        && request.resource.data.isRented == false
+        && request.resource.data.isAccepted == false;
         
-        match /requests/{renterUID}{
-          allow read: if request.auth.uid == renterUID;
-          
-          allow create: if request.auth != null && request.auth.token.email_verified == true
-          && request.auth.uid == renterUID
-          && request.resource.data.isRented == false
-          && request.resource.data.isAccepted == false;
-          
-          allow update: if request.auth != null 
-          // if the requester is the renter
-          && request.auth.uid == renterUID
-          // and (s)he's not changing `isAccepted` or `isRented`
-          && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
-          
-          allow delete: if request.auth != null && request.auth.uid == renterUID;
-        }
-        match /requests/{renterUID} {
-          // allow the tool onwer to read all requests
-          allow read: if get(/databases/$(database)/documents/Tools/$(toolID)).data.ownerUID == request.auth.uid;
-          allow delete: if get(/databases/$(database)/documents/Tools/$(toolID)).data.ownerUID == request.auth.uid;
-        }
+        allow update: if request.auth != null 
+        // if the requester is the renter
+        && request.auth.uid == renterUID
+        // and (s)he's not changing `isAccepted` or `isRented`
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
+        
+        allow delete: if request.auth != null && request.auth.uid == renterUID;
+      }
+      match /requests/{renterUID} {
+        // allow the tool onwer to read all requests
+        allow read: if get(/databases/$(database)/documents/Tools/$(toolID)).data.ownerUID == request.auth.uid;
+        allow delete: if get(/databases/$(database)/documents/Tools/$(toolID)).data.ownerUID == request.auth.uid;
+      }
     }
   }
 }
