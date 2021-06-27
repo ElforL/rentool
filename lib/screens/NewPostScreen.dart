@@ -95,12 +95,12 @@ class NewPostScreen extends StatelessWidget {
                         return;
                       }
                       await FirestoreServices.createNewTool(
-                        _nameContoller.text,
-                        _descriptionContoller.text,
+                        _nameContoller.text.trim(),
+                        _descriptionContoller.text.trim(),
                         double.parse(_priceContoller.text.trim()),
                         double.parse(_insuranceContoller.text.trim()),
                         media,
-                        _locationContoller.text,
+                        _locationContoller.text.trim(),
                       );
                       Navigator.pop(context);
                     },
