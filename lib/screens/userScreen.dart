@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -65,10 +66,10 @@ class _UserScreenState extends State<UserScreen> {
           // ID NUMBER
           FutureBuilder(
               future: FirestoreServices.getID(AuthServices.auth.currentUser.uid),
-              builder: (context, snapshot) {
+              builder: (context, AsyncSnapshot<DocumentSnapshot<Object>> snapshot) {
                 bool isDone = snapshot.connectionState == ConnectionState.done;
                 if (isDone) {
-                  idNum = snapshot.data['idNumber'];
+                  if (snapshot.data != null && snapshot.data.exists) idNum = snapshot.data['idNumber'] ?? null;
                 }
                 return ListTile(
                   title: Text(idNum ?? (isDone ? 'NOT CONFIGURED' : 'Loading...')),
