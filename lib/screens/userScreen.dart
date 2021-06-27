@@ -39,6 +39,10 @@ class _UserScreenState extends State<UserScreen> {
             title: Text('uid'),
             trailing: Text(AuthServices.auth.currentUser.uid),
           ),
+          ListTile(
+            title: Text('verified'),
+            trailing: Text(AuthServices.auth.currentUser.emailVerified.toString()),
+          ),
           Divider(),
           ListTile(
             trailing: OutlinedButton(
