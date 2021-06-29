@@ -33,11 +33,11 @@ service cloud.firestore {
       function isToolValid(isNew){
         // the name description and location must be strings whose length is > 0
         return request.resource.data.description is string
-        && request.resource.data.description.length > 0
+        && request.resource.data.description.size() > 0
         && request.resource.data.name is string
-        && request.resource.data.name.length > 0
+        && request.resource.data.name.size() > 0
         && request.resource.data.location is string
-        && request.resource.data.location.length > 0
+        && request.resource.data.location.size() > 0
         // isAvailable must be a boolean
         && request.resource.data.isAvailable is bool
         // ownerUID must be string and the same as the user's
@@ -50,7 +50,7 @@ service cloud.firestore {
         && request.resource.data.insuranceAmount > 0
 
         // media can be null or a list
-        && request.resource.data.media is list || request.resource.data.media == null
+        && (request.resource.data.media is list || request.resource.data.media == null)
 
         // acceptedRequestID
         && isNew == true 
