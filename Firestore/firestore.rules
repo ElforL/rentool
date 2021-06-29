@@ -75,25 +75,36 @@ service cloud.firestore {
       && isToolValid(true);
       
       match /requests/{renterUID}{
-        allow read: if request.auth.uid == renterUID;
+        /// checks if the user is the owner of the tool which the request is being send to
+        function isTheToolOwner(){
+          return get(/databases/$(database)/documents/Tools/$(toolID)).data.ownerUID == request.auth.uid;
+        }
+
+        /// checks if the user has the same uid as the document id
+        function isTheRenter(){
+          return request.auth != null && request.auth.uid == renterUID;
+        }
+
+        /// checks the validity of a new tool-request's fields
+        function isNewRequestValid(){
+          // 'isAccepted' and 'isRented must be false
+          return request.resource.data.isRented == false && request.resource.data.isAccepted == false;
+        }
+
+        /// checks the validity of updates on the tool-request's fields
+        function isRequestUpdateValid(){
+          // 'isAccepted' and 'isRented must be false
+          return (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
+        }
+
+        allow read, delete: if isTheRenter() || isTheToolOwner();
         
-        allow create: if request.auth != null && request.auth.token.email_verified == true
-        && request.auth.uid == renterUID
-        && request.resource.data.isRented == false
-        && request.resource.data.isAccepted == false;
+        allow create: if isEmailVerified()
+        && isTheRenter()
+        && isNewRequestValid();
         
-        allow update: if request.auth != null 
-        // if the requester is the renter
-        && request.auth.uid == renterUID
-        // and (s)he's not changing `isAccepted` or `isRented`
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
+        allow update: if isTheRenter() && isRequestUpdateValid();
         
-        allow delete: if request.auth != null && request.auth.uid == renterUID;
-      }
-      match /requests/{renterUID} {
-        // allow the tool onwer to read all requests
-        allow read: if get(/databases/$(database)/documents/Tools/$(toolID)).data.ownerUID == request.auth.uid;
-        allow delete: if get(/databases/$(database)/documents/Tools/$(toolID)).data.ownerUID == request.auth.uid;
       }
     }
   }
