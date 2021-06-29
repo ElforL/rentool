@@ -66,6 +66,11 @@ class FirestoreServices {
     return updatedTool;
   }
 
+  static Future<void> deleteTool(String toolID) {
+    var ref = _toolsRef.doc(toolID);
+    return ref.delete();
+  }
+
   static Future<List<QueryDocumentSnapshot<Object>>> searchForTool(String searchkey) async {
     // https://stackoverflow.com/a/56747021/12571630
     var out = await _toolsRef.orderBy('name').startAt([searchkey]).endAt([searchkey + '\uf8ff']).limit(10).get();
