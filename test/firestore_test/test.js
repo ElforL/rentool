@@ -61,6 +61,63 @@ describe("`Users` rules", () => {
     const testDoc = db.collection('Users').doc(theirUid);
     await firebase.assertFails(testDoc.set({ 'foo': 'bar' }));
   });
+  
+  // PRIVATE DOCS
+
+  it("User CAN'T read other user's private docs", async () => {
+    const db = getFirestore(myAuth(true));
+    const testDoc = db.collection('Users').doc(theirUid).collection('private').doc('ID');
+    await firebase.assertFails(testDoc.get());
+  });
+
+  it("User CAN read own private docs", async () => {
+    const db = getFirestore(myAuth(true));
+    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('ID');
+    await firebase.assertSucceeds(testDoc.get());
+  });
+
+  it("User CAN set new ID", async () => {
+    const db = getFirestore(myAuth(true));
+    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('ID');
+    await firebase.assertSucceeds(testDoc.set({ 'idNumber': '1122334455' }));
+  });
+
+  it("User CAN'T update ID", async () => {
+    const db = getFirestore(myAuth(true));
+    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('ID');
+    testDoc.set({ 'idNumber': '1122334455' })
+    await firebase.assertFails(testDoc.update({ 'idNumber': '5522334455' }));
+  });
+
+  function card(name = 'FOO BAR') {
+    return {
+      number: 112233445566,
+      name_on_card: name,
+      ccv: '987',
+      expYear: 12,
+      expMonth: 2020
+    };
+  }
+
+  it("User CAN set first card", async () => {
+    const db = getFirestore(myAuth(true));
+    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('creditCard');
+    await firebase.assertSucceeds(testDoc.set(card()));
+  });
+
+  it("User CAN set new card", async () => {
+    const db = getFirestore(myAuth(true));
+    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('creditCard');
+    testDoc.set(card());
+    await firebase.assertSucceeds(testDoc.set(card('TEST NAME')));
+  });
+
+  it("User CAN update card", async () => {
+    const db = getFirestore(myAuth(true));
+    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('creditCard');
+    testDoc.set(card());
+    await firebase.assertSucceeds(testDoc.update({ 'name': 'BAR FOO' }));
+  });
 });
 
 describe("`Tools` rules", () => {
