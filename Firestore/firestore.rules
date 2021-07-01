@@ -85,15 +85,29 @@ service cloud.firestore {
           return request.auth != null && request.auth.uid == renterUID;
         }
 
-        /// checks the validity of a new tool-request's fields
-        function isNewRequestValid(){
-          // 'isAccepted' and 'isRented must be false
-          return request.resource.data.isRented == false && request.resource.data.isAccepted == false;
+        /// checks the validity of the tool-request's fields except `isAccepted` and `isRented`
+        function isRequestFieldsValid(){
+          return request.resource.data.toolID is String
+          && request.resource.data.toolID == toolID
+          && request.resource.data.numOfDays is number
+          && request.resource.data.rentPrice is number
+          && request.resource.data.rentPrice > 0
+          && request.resource.data.insuranceAmount is number
+          && request.resource.data.insuranceAmount > 0;
         }
 
-        /// checks the validity of updates on the tool-request's fields
+        /// checks the validity of a new tool-request
+        function isNewRequestValid(){
+          return isRequestFieldsValid()
+          // 'isAccepted' and 'isRented' must be false
+          && request.resource.data.isRented == false 
+          && request.resource.data.isAccepted == false;
+        }
+
+        /// checks the validity of updates on a tool-request
         function isRequestUpdateValid(){
-          // 'isAccepted' and 'isRented must be false
+          return isRequestFieldsValid()
+          // 'isAccepted' and 'isRented' must not be changed
           return (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
         }
 
