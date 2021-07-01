@@ -64,17 +64,18 @@ describe("`Users` rules", () => {
 });
 
 describe("`Tools` rules", () => {
-  const myValidTool = {
-    ownerUID: myUid,
-    name:'Test Tool',
-    description: "Test tool's description",
-    location: 'Test city',
-    isAvailable:  true,
-    rentPrice:  23,
-    insuranceAmount:  100,
-    media:  null,
-    acceptedRequestID:  null,
-  }
+  function myValidTool(iOwnerUID){
+    return {
+      ownerUID: iOwnerUID,
+      name:'Test Tool',
+      description: "Test tool's description",
+      location: 'Test city',
+      isAvailable:  true,
+      rentPrice:  23,
+      insuranceAmount:  100,
+      media:  null,
+      acceptedRequestID:  null,
+    }
 
   // READ
   it("Signed in user CAN read a tool document", async () => {
@@ -91,14 +92,14 @@ describe("`Tools` rules", () => {
   it("Guest user CAN'T create a tool document", async () => {
     const db = getFirestore(null);
     const testDoc = db.collection('Tools').doc(theirToolId);
-    await firebase.assertFails(testDoc.set({'foo':'bar'}));
+    await firebase.assertFails(testDoc.set(myValidTool('foo')));
   });
 
   // CREATE
   it("Signed in user with verified email but no ID nor credit card CAN'T create a tool document", async () => {
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(myToolId);
-    await firebase.assertFails(testDoc.set(myValidTool));
+    await firebase.assertFails(testDoc.set(myValidTool(myUid)));
   });
   it("Signed in user with verified email and ID but no credit card CAN'T create a tool document", async () => {
     const admin = getAdminFirestore();
@@ -107,7 +108,7 @@ describe("`Tools` rules", () => {
     
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(myToolId);
-    await firebase.assertFails(testDoc.set(myValidTool));
+    await firebase.assertFails(testDoc.set(myValidTool(myUid)));
   });
   it("Signed in user with verified email and credit card but no ID CAN'T create a tool document", async () => {
     const admin = getAdminFirestore();
@@ -116,7 +117,7 @@ describe("`Tools` rules", () => {
 
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(myToolId);
-    await firebase.assertFails(testDoc.set(myValidTool));
+    await firebase.assertFails(testDoc.set(myValidTool(myUid)));
   });
   it("Signed in user with verified email, credit card and ID CAN create a tool document", async () => {
     const admin = getAdminFirestore();
@@ -127,7 +128,7 @@ describe("`Tools` rules", () => {
     
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(myToolId);
-    await firebase.assertSucceeds(testDoc.set(myValidTool));
+    await firebase.assertSucceeds(testDoc.set(myValidTool(myUid)));
   });
   it("Signed in user with unverified email but has credit card and ID CANT'T create a tool document", async () => {
     const admin = getAdminFirestore();
@@ -138,41 +139,41 @@ describe("`Tools` rules", () => {
 
     const db = getFirestore(myAuth(false));
     const testDoc = db.collection('Tools').doc(myToolId);
-    await firebase.assertFails(testDoc.set({'ownerUID':myUid}));
+    await firebase.assertFails(testDoc.set(myValidTool(myUid)));
   });
 
   it("Signed in user CAN update own tool document", async () => {
     const admin = getAdminFirestore();
     const myToolDoc = admin.collection('Tools').doc(myToolId);
-    await myToolDoc.set({'ownerUID': myUid});
+    await myToolDoc.set(myValidTool(myUid));
 
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(myToolId);
-    await firebase.assertSucceeds(testDoc.set(myValidTool));
+    await firebase.assertSucceeds(testDoc.update({'name': 'newTestName'}));
   });
   it("Signed in user CAN'T update other's tool document", async () => {
     const admin = getAdminFirestore();
     const myToolDoc = admin.collection('Tools').doc(theirToolId);
-    await myToolDoc.set({'ownerUID': theirUid});
+    await myToolDoc.set(myValidTool(theirUid));
 
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(theirToolId);
-    await firebase.assertFails(testDoc.set({'ownerUID': theirUid, 'name': 'foo'}));
+    await firebase.assertFails(testDoc.update({'name': 'newTestName'}));
   });
   it("Guest user CAN'T update other's tool document", async () => {
     const admin = getAdminFirestore();
     const myToolDoc = admin.collection('Tools').doc(theirToolId);
-    await myToolDoc.set({'ownerUID': theirUid});
+    await myToolDoc.set(myValidTool(theirUid));
 
     const db = getFirestore(null);
     const testDoc = db.collection('Tools').doc(theirToolId);
-    await firebase.assertFails(testDoc.set({'ownerUID': theirUid, 'name': 'foo'}));
+    await firebase.assertFails(testDoc.update({'name': 'foo'}));
   });
 
   it("Signed in user CAN delete own tool document", async () => {
     const admin = getAdminFirestore();
     const myToolDoc = admin.collection('Tools').doc(myToolId);
-    await myToolDoc.set({'ownerUID': myUid});
+    await myToolDoc.set(myValidTool(myUid));
 
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(myToolId);
@@ -181,7 +182,7 @@ describe("`Tools` rules", () => {
   it("Signed in user CAN'T delete other's tool document", async () => {
     const admin = getAdminFirestore();
     const myToolDoc = admin.collection('Tools').doc(theirToolId);
-    await myToolDoc.set({'ownerUID': theirUid});
+    await myToolDoc.set(myValidTool(theirUid));
 
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(theirToolId);
@@ -190,7 +191,7 @@ describe("`Tools` rules", () => {
   it("Guest user CAN'T delete other's tool document", async () => {
     const admin = getAdminFirestore();
     const myToolDoc = admin.collection('Tools').doc(theirToolId);
-    await myToolDoc.set({'ownerUID': theirUid});
+    await myToolDoc.set(myValidTool(theirUid));
 
     const db = getFirestore(null);
     const testDoc = db.collection('Tools').doc(theirToolId);
