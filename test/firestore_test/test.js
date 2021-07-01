@@ -76,6 +76,18 @@ describe("`Tools` rules", () => {
       media:  null,
       acceptedRequestID:  null,
     }
+  }
+
+  function myValidRequest(iToolID){
+    return {
+      insuranceAmount: 20.1,
+      isAccepted : false,
+      isRented : false,
+      numOfDays : 2,
+      rentPrice : 3.4,
+      toolID :iToolID
+    }
+  }
 
   // READ
   it("Signed in user CAN read a tool document", async () => {
@@ -196,6 +208,18 @@ describe("`Tools` rules", () => {
     const db = getFirestore(null);
     const testDoc = db.collection('Tools').doc(theirToolId);
     await firebase.assertFails(testDoc.delete());
+  });
+
+  it("Signed in user CAN'T accept a request if one is already accepted", async () => {
+    const admin = getAdminFirestore();
+    const myToolDoc = admin.collection('Tools').doc(myToolId);
+    await myToolDoc.set(myValidTool(myUid));
+    await myToolDoc.collection('requests').doc(theirUid).set(myValidRequest(myToolId));
+    await myToolDoc.update({'acceptedRequestID': theirUid})
+
+    const db = getFirestore(myAuth(true));
+    const testDoc = db.collection('Tools').doc(myToolId);
+    await firebase.assertFails(testDoc.update({'acceptedRequestID': 'user_test'}));
   });
 
 });
