@@ -30,6 +30,10 @@ service cloud.firestore {
         return request.auth != null && request.auth.uid == resource.data.ownerUID;
       }
 
+      function isRequestListed(){
+        return exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/$(request.resource.data.acceptedRequestID));
+      }
+
       function isToolValid(isNew){
         // the name description and location must be strings whose length is > 0
         return request.resource.data.description is string
@@ -55,7 +59,17 @@ service cloud.firestore {
         // acceptedRequestID
         && isNew == true 
         ? request.resource.data.acceptedRequestID == null
-        : (request.resource.data.acceptedRequestID is string || request.resource.data.acceptedRequestID == null)
+        : isAcceptedRequestUpdateValid();
+      }
+
+
+      function isAcceptedRequestUpdateValid(){
+        // ACCEPT
+        return (resource.data.acceptedRequestID == null && request.resource.data.acceptedRequestID is string && isRequestListed()) ||
+        // Cancel
+        (resource.data.acceptedRequestID is string && request.resource.data.acceptedRequestID == null) ||
+        // UPDATE
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['acceptedRequestID']));
       }
 
       allow read;
