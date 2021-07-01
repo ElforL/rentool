@@ -87,7 +87,7 @@ service cloud.firestore {
 
         /// checks the validity of the tool-request's fields except `isAccepted` and `isRented`
         function isRequestFieldsValid(){
-          return request.resource.data.toolID is String
+          return request.resource.data.toolID is string
           && request.resource.data.toolID == toolID
           && request.resource.data.numOfDays is number
           && request.resource.data.rentPrice is number
@@ -108,7 +108,7 @@ service cloud.firestore {
         function isRequestUpdateValid(){
           return isRequestFieldsValid()
           // 'isAccepted' and 'isRented' must not be changed
-          return (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
+          && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
         }
 
         allow read, delete: if isTheRenter() || isTheToolOwner();
