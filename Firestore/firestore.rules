@@ -9,7 +9,9 @@ service cloud.firestore {
       allow get;
       allow write: if isTHEuser();
       match /private/{privateDoc}{
-      	allow read, write: if request.auth.uid == userID;
+      	allow get: if isTHEuser();
+        allow write: if isTHEuser() && privateDoc != "ID" ? true
+        : (resource == null || !('idNumber' in resource.data) || resource.data.idNumber == null);
       }
       match /requests{
       	allow read, write: if isTHEuser();
