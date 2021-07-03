@@ -26,7 +26,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
     var res = await FirestoreServices.fetchToolRequests(widget.tool.id, previousDoc: _lastDoc);
     _lastDoc = res.docs.last;
     for (var doc in res.docs) {
-      var request = ToolRequest.fromJson(doc.data());
+      var request = ToolRequest.fromJson(doc.data()..addAll({'renterUID': doc.id}));
       list.add(request);
     }
   }
@@ -92,6 +92,7 @@ class _RequestTileState extends State<RequestTile> {
           SizedBox(width: 20),
           ElevatedButton(
             onPressed: () {
+              print(widget.request.renterUID);
               FirestoreServices.rejectRequest(widget.tool.id, widget.request.renterUID);
             },
             child: Text('REJECT'),
