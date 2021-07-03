@@ -35,8 +35,8 @@ service cloud.firestore {
         return request.auth != null && request.auth.uid == resource.data.ownerUID;
       }
 
-      function isRequestListed(){
-        return exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/$(request.resource.data.acceptedRequestID));
+      function isRequestListed(acceptedRequestID){
+        return exists(/databases/$(database)/documents/Tools/$(toolID)/requests/$(acceptedRequestID));
       }
 
       function isToolValid(isNew){
@@ -70,7 +70,7 @@ service cloud.firestore {
 
       function isAcceptedRequestUpdateValid(){
         // ACCEPT
-        return (resource.data.acceptedRequestID == null && request.resource.data.acceptedRequestID is string && isRequestListed()) ||
+        return (resource.data.acceptedRequestID == null && request.resource.data.acceptedRequestID is string && isRequestListed(request.resource.data.acceptedRequestID)) ||
         // Cancel
         (resource.data.acceptedRequestID is string && request.resource.data.acceptedRequestID == null) ||
         // UPDATE
