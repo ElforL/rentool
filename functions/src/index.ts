@@ -38,4 +38,16 @@ export const acceptRequset =
     }
   });
 
-});
+/** Checks if the deleted tool-request was accepted and changes the tool's `acceptedRequestID` to null */
+export const requestDeleted = 
+  functions.firestore.document('Tools/{toolID}/requests/{renterUID}')
+  .onDelete(async (snapshot, context) => {
+    const docData = snapshot.data();
+    if(docData && docData.isAccepted == true){
+      const toolID = snapshot.ref.parent.parent!.id;
+      return admin.firestore().doc(`Tools/${toolID}`).update({'acceptedRequestID': null});
+    }else{
+      // if the request wasn't accepted
+      return null;
+    }
+  });
