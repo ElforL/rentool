@@ -18,9 +18,7 @@ service cloud.firestore {
         }
 
       	allow get: if isTHEuser();
-        allow write: if isTHEuser() && 
-        // if there is no previous ID set
-        (resource == null || !('idNumber' in resource.data) || resource.data.idNumber == null) &&
+        allow create: if isTHEuser() && 
         isIdNumValid(request.resource.data.idNumber);
       }
 
