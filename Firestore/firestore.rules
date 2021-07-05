@@ -8,10 +8,27 @@ service cloud.firestore {
       }
       allow get;
       allow write: if isTHEuser();
+
+      // `ID` private doc
+      match /private/ID{
+        function isIdNumValid(idNumber){
+          return idNumber.size() == 10 &&
+          // Check if ID is banned
+          !exists(banlist/${idNumber});
+        }
+
+      	allow get: if isTHEuser();
+        allow write: if isTHEuser() && 
+        // if there is no previous ID set
+        (resource == null || !('idNumber' in resource.data) || resource.data.idNumber == null) &&
+        isIdNumValid(requst.resource.data.idNumber);
+      }
+
+      // Private docs OTHER THAN `ID`
       match /private/{privateDoc}{
       	allow get: if isTHEuser();
-        allow write: if isTHEuser() && privateDoc != "ID" ? true
-        : (resource == null || !('idNumber' in resource.data) || resource.data.idNumber == null);
+        allow write: if privateDoc == "ID" ? false : // always return false if the doc is 'ID' since its rules are already processed ⬆
+        isTHEuser();
       }
       match /requests{
       	allow read, write: if isTHEuser();
