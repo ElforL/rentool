@@ -14,14 +14,14 @@ service cloud.firestore {
         function isIdNumValid(idNumber){
           return idNumber.size() == 10 &&
           // Check if ID is banned
-          !exists(banlist/${idNumber});
+          !exists(/databases/$(database)/documents/banlist/$(idNumber));
         }
 
       	allow get: if isTHEuser();
         allow write: if isTHEuser() && 
         // if there is no previous ID set
         (resource == null || !('idNumber' in resource.data) || resource.data.idNumber == null) &&
-        isIdNumValid(requst.resource.data.idNumber);
+        isIdNumValid(request.resource.data.idNumber);
       }
 
       // Private docs OTHER THAN `ID`
