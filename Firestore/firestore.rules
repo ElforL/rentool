@@ -14,7 +14,8 @@ service cloud.firestore {
         function isIdNumValid(idNumber){
           return idNumber.size() == 10 &&
           // Check if ID is banned
-          !exists(/databases/$(database)/documents/banlist/$(idNumber));
+          !exists(/databases/$(database)/documents/bannedList/$(idNumber)) &&
+          !exists(/databases/$(database)/documents/idsList/$(idNumber));
         }
 
       	allow get: if isTHEuser();
