@@ -30,11 +30,15 @@ service cloud.firestore {
         allow write: if privateDoc == "ID" ? false : // always return false if the doc is 'ID' since its rules are already processed ⬆
         isTHEuser();
       }
-      match /requests{
-      	allow read, write: if isTHEuser();
+
+      match /requests/{toolID}{
+      	allow read: if isTHEuser();
+        allow write: if false;
       }
-      match /reviews{
-      	allow read, write: if isTHEuser();
+      match /reviews/{reviewID}{
+        allow read: if isTHEuser();
+        // TODO allow if the user is the author
+        allow write: if false;
       }
     }
     ////////////////////////////////// Tools ////////////////////////////////
