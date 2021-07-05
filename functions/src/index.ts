@@ -63,3 +63,12 @@ export const requestWrite =
         return admin.firestore().doc(`Users/${renterUID}/requests/${docData!.toolID}`).set(docData!);
       }
     });
+
+// Creates an entry in db/idsList when the user sets thier ID number
+export const IdCreated =
+  functions.firestore.document('Users/{uid}/private/ID')
+    .onCreate(async (snapshot, context) => {
+      const idNumber = snapshot.data().idNumber;
+      const uid = snapshot.ref.parent.parent!.id;
+      return admin.firestore().doc(`idsList/${idNumber}`).set({'uid':uid, 'time':snapshot.createTime});
+    });
