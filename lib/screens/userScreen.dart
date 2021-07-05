@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/models/CreditCard.dart';
 import 'package:rentool/screens/NewPostScreen.dart';
 import 'package:rentool/screens/SearchScreen.dart';
 import 'package:rentool/services/auth.dart';
@@ -94,7 +95,10 @@ class _UserScreenState extends State<UserScreen> {
             trailing: OutlinedButton(
               child: Text('add credit card'),
               onPressed: () {
-                //
+                var card = CreditCard('1122334455667788', 'LAITH SHONO', 12, 2023, '222');
+                FirestoreServices.updateCard(AuthServices.auth.currentUser.uid, card)
+                    .then((value) => print('Card set.'))
+                    .onError((error, stackTrace) => print('Card not set.\n' + error.toString()));
               },
             ),
           ),
