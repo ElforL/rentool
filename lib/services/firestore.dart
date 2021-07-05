@@ -148,6 +148,6 @@ class FirestoreServices {
   }
 
   static Future<void> updateCard(String uid, CreditCard card) {
-    return _usersRef.doc(uid).collection('private').doc('ID').set(card.toJson());
+    return _usersRef.doc(uid).collection('private').doc('creditCard').set(card.toJson());
   }
 }
