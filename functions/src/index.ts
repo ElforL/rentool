@@ -38,16 +38,28 @@ export const acceptRequset =
     }
   });
 
-/** Checks if the deleted tool-request was accepted and changes the tool's `acceptedRequestID` to null */
-export const requestDeleted = 
+export const requestWrite =
   functions.firestore.document('Tools/{toolID}/requests/{renterUID}')
-  .onDelete(async (snapshot, context) => {
-    const docData = snapshot.data();
-    if(docData && docData.isAccepted == true){
-      const toolID = snapshot.ref.parent.parent!.id;
-      return admin.firestore().doc(`Tools/${toolID}`).update({'acceptedRequestID': null});
-    }else{
-      // if the request wasn't accepted
-      return null;
-    }
-  });
+    .onWrite(async (change, context) => {
+      if (!change.after.exists) {
+        // DELETE
+
+        const docData = change.before.data();
+        // if the request was accepted, remove its ID from `acceptedRequestID`
+        if (docData && docData.isAccepted == true) {
+          const toolID = docData.toolID;
+          await admin.firestore().doc(`Tools/${toolID}`).update({ 'acceptedRequestID': null });
+        }
+
+        // delete the request snippet in the user subcollection
+        const renterUID = change.before.id;
+        return admin.firestore().doc(`Users/${renterUID}/requests/${docData!.toolID}`).delete();
+      } else {
+        // UPDATE OR CREATE
+
+        // update/create the request snippet in the user's subcollection
+        const docData = change.after.data();
+        const renterUID = change.after.id;
+        return admin.firestore().doc(`Users/${renterUID}/requests/${docData!.toolID}`).set(docData!);
+      }
+    });
