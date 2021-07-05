@@ -11,32 +11,32 @@ admin.initializeApp();
  * - if a new requst was added this function changes the request's `isAccepted` to true
  * - if `acceptedRequestID` changed to null this function changes the old request's `isAccepted` to false (if it still exist)
 */
-export const acceptRequset = 
+export const acceptRequset =
   functions.firestore.document('Tools/{toolID}')
-  .onUpdate(async (change, context)=>{
-    /** did `acceptedRequestID` field changed */
-    const changedAcceptedID = change.before.data().acceptedRequestID != change.after.data().acceptedRequestID;
-    if(changedAcceptedID){
-      const toolID = change.after.id;
-      const oldRequestID = change.before.data().acceptedRequestID;
-      const newRequestID = change.after.data().acceptedRequestID;
-      if(newRequestID != null){
-        // accepted a new request
-      return admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).update({'isAccepted': true});
-      }else{
-        // canceled accepted request
-        // i.e., changed acceptedRequestID to null
-        const docExists = (await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`).get()).exists
-        if(docExists){
-          return admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`).update({'isAccepted': false});
-        }else{
-          return null
+    .onUpdate(async (change, context) => {
+      /** did `acceptedRequestID` field changed */
+      const changedAcceptedID = change.before.data().acceptedRequestID != change.after.data().acceptedRequestID;
+      if (changedAcceptedID) {
+        const toolID = change.after.id;
+        const oldRequestID = change.before.data().acceptedRequestID;
+        const newRequestID = change.after.data().acceptedRequestID;
+        if (newRequestID != null) {
+          // accepted a new request
+          return admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).update({ 'isAccepted': true });
+        } else {
+          // canceled accepted request
+          // i.e., changed acceptedRequestID to null
+          const docExists = (await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`).get()).exists
+          if (docExists) {
+            return admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`).update({ 'isAccepted': false });
+          } else {
+            return null
+          }
         }
+      } else {
+        return null;
       }
-    }else{
-      return null;
-    }
-  });
+    });
 
 export const requestWrite =
   functions.firestore.document('Tools/{toolID}/requests/{renterUID}')
