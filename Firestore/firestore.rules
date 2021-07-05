@@ -151,7 +151,8 @@ service cloud.firestore {
           && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
         }
 
-        allow read, delete: if isTheRenter() || isTheToolOwner();
+        allow read: if isTheRenter() || isTheToolOwner();
+        allow delete: if (isTheRenter() || isTheToolOwner()) && resource.data.isRented == false;
         
         allow create: if isEmailVerified()
         && hasIdAndCredit()
