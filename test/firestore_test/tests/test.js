@@ -9,6 +9,8 @@ const theirUid = "user_xyc";
 const myToolId = "tool_abc";
 const theirToolId = "tool_xyz";
 
+process.env['FIRESTORE_EMULATOR_HOST'] = "localhost:8080";
+
 function myAuth(isEmailVerified) {
   return { uid: myUid, email:'test@gmail.com', email_verified: isEmailVerified };
 }
