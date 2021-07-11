@@ -161,6 +161,57 @@ service cloud.firestore {
         allow update: if isTheRenter() && isRequestUpdateValid();
         
       }
+    
+      // meeting id == request id
+      match /meetings/{meetingID}{
+        function bothArrived(){
+          return resource.data.owner_arrived == true && resource.data.renter_arrived == true;
+        }
+
+        function bothPicsOK(){
+          return resource.data.owner_pics_ok == true && resource.data.renter_pics_ok == true;
+        }
+
+        function isTheToolOwner(){
+          return request.auth != null && resource.data.ownerUID == request.auth.uid;
+        }
+
+        function isTheRenter(){
+          return request.auth != null && resource.data.renterUID == request.auth.uid;
+        }
+
+        function validAffectedFields(){
+          return (isTheRenter() && request.resource.data.diff(resource.data).affectedKeys().hasAny(['renter_arrived', 'renter_pics_ok', 'renter_ids_ok'])) || 
+          (isTheToolOwner() && request.resource.data.diff(resource.data).affectedKeys().hasAny(['owner_arrived', 'owner_pics_ok', 'owner_ids_ok']))
+        }
+
+        function areRenterUpdatesValid(){
+          // if arrive is false you can only change anything `arrive`. (i.e., note `pics` and `ids`)
+          return bothArrived() != true ? request.resource.data.diff(resource.data).affectedKeys().hasAny(['renter_arrived']) : 
+          // if arrive is true and pics is false you can only change `arrive` and `pics` (i.e., not `ids`)
+          bothPicsOK() != true ? request.resource.data.diff(resource.data).affectedKeys().hasAny(['renter_arrived', 'renter_pics_ok'])
+          // if arrive pics and ids are true you can change anything.
+          : true;
+        }
+
+        function areOwnerUpdatesValid(){
+          // if arrive is false you can only change anything `arrive`. (i.e., note `pics` and `ids`)
+          return bothArrived() != true ? request.resource.data.diff(resource.data).affectedKeys().hasAny(['owner_arrived']) : 
+          // if arrive is true and pics is false you can only change `arrive` and `pics` (i.e., not `ids`)
+          bothPicsOK() != true ? request.resource.data.diff(resource.data).affectedKeys().hasAny(['owner_arrived', 'owner_pics_ok'])
+          // if arrive pics and ids are true you can change anything.
+          : true;
+        }
+        
+
+        allow read: if isTheRenter() || isTheToolOwner();
+
+        // NOTE: there's a function listening to changes and changing fields as necessary.
+        // e.g., if all is true and pics changed to false the function will change `pics` and `ids` for owner and renter to false.
+        allow update: if validAffectedFields() &&
+        // the use of `isTheRenter()` because it doesn't cost a read.
+        isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid();
+      }
     }
   }
 }
