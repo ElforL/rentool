@@ -168,6 +168,9 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
         setState(() {
           emailError = AppLocalizations.of(context).badEmail;
         });
+      } else {
+        // TODO show dialog
+        print(e);
       }
     }
   }
