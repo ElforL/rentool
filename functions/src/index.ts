@@ -87,3 +87,80 @@ export const IdCreated =
       const uid = snapshot.ref.parent.parent!.id;
       return admin.firestore().doc(`idsList/${idNumber}`).set({'uid':uid, 'time':snapshot.createTime});
     });
+
+export const meetingInfoChanged =
+  functions.firestore.document('Tools/{toolID}/meetings/{requestID}')
+    .onUpdate(async (change, context) => {
+      const after = change.after.data();
+      const before = change.before.data();
+
+      // if either the owner or renter changed arrive from `true` to `false`
+      if(before.owner_arrived && !after.owner_arrived || before.renter_arrived && !after.renter_arrived){
+        return change.after.ref.update({
+          'owner_pics_ok': false,
+          'owner_ids_ok': false,
+          'renter_pics_ok': false,
+          'renter_ids_ok': false,
+        });
+      }
+
+      // if either the owner or renter changed [pics] from `true` to `false`
+      if(before.owner_pics_ok && !after.owner_pics_ok || before.renter_pics_ok && !after.renter_pics_ok){
+        // if `owner_id` or `renter_id` wasn't null (which mean they were both agreed on pics)
+        // set the IDs to null
+        if(before.owner_id != null || before.renter_id != null){
+          await change.after.ref.update({
+            'owner_id': null, 
+            'renter_id': null,
+          });
+        }
+        return change.after.ref.update({
+          'owner_ids_ok': false,
+          'renter_ids_ok': false,
+        });
+      }
+
+      // if either the owner or renter changed [pics] from `false` to `true`
+      if(!before.owner_pics_ok && after.owner_pics_ok || !before.renter_pics_ok && after.renter_pics_ok){
+        // when BOTH agree on pics set the IDs
+        if(after.owner_pics_ok && after.renter_pics_ok){
+          const ownerUID = after.ownerUID;
+          const renterUID = after.renterUID;
+          const ownerIdDoc = await admin.firestore().doc(`Users/${ownerUID}/private/ID`).get();
+          const renterIdDoc = await admin.firestore().doc(`Users/${renterUID}/private/ID`).get();
+          return change.after.ref.update({
+            'owner_id': ownerIdDoc.data()?.idNumber, 
+            'renter_id': renterIdDoc.data()?.idNumber,
+          });
+        }else 
+          return null;
+      }
+
+      // if the owner was ok with IDs then wasn't, change the renter's IDs-OK to false aswell
+      if(before.owner_ids_ok && !after.owner_ids_ok){
+        return change.after.ref.update({
+          'renter_ids_ok': false,
+        });
+      }
+
+      // if the renter was ok with IDs then wasn't, change the owner's IDs-OK to false aswell
+      if(before.renter_ids_ok && !after.renter_ids_ok){
+        return change.after.ref.update({
+          'owner_ids_ok': false,
+        });
+      }
+
+      // after the both agree on IDs remove the IDs strings
+      if(!before.owner_ids_ok && after.owner_ids_ok || !before.renter_ids_ok && after.renter_ids_ok){
+        if(after.owner_ids_ok && after.renter_ids_ok){
+          return change.after.ref.update({
+            'owner_id': null, 
+            'renter_id': null,
+          });
+        }else{
+          return null;
+        }
+      }
+
+      return null;
+    });
