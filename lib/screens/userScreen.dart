@@ -91,18 +91,6 @@ class _UserScreenState extends State<UserScreen> {
                 );
               }),
           ListTile(
-            title: Text('xxxx xxxx xxxx 2293'),
-            trailing: OutlinedButton(
-              child: Text('add credit card'),
-              onPressed: () {
-                var card = CreditCard('1122334455667788', 'LAITH SHONO', 12, 2023, '222');
-                FirestoreServices.updateCard(AuthServices.auth.currentUser.uid, card)
-                    .then((value) => print('Card set.'))
-                    .onError((error, stackTrace) => print('Card not set.\n' + error.toString()));
-              },
-            ),
-          ),
-          ListTile(
             title: ElevatedButton(
               child: Text('Sign out'),
               onPressed: () {
