@@ -181,8 +181,8 @@ service cloud.firestore {
         }
 
         function validAffectedFields(){
-          return (isTheRenter() && request.resource.data.diff(resource.data).affectedKeys().hasAny(['renter_arrived', 'renter_pics_ok', 'renter_ids_ok','renter_pics_urls'])) || 
-          (isTheToolOwner() && request.resource.data.diff(resource.data).affectedKeys().hasAny(['owner_arrived', 'owner_pics_ok', 'owner_ids_ok','owner_pics_urls']))
+          return (isTheRenter() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['renter_arrived', 'renter_pics_ok', 'renter_ids_ok','renter_pics_urls'])) || 
+          (isTheToolOwner() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['owner_arrived', 'owner_pics_ok', 'owner_ids_ok','owner_pics_urls']))
         }
 
         function areRenterUpdatesValid(){
