@@ -40,9 +40,10 @@ export const acceptRequset =
         } else {
           // canceled accepted request
           // i.e., changed acceptedRequestID to null
-          const docExists = (await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`).get()).exists
-          if (docExists) {
-            return admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`).update({ 'isAccepted': false });
+          // await admin.firestore().doc(`Tools/${toolID}/meetings/${oldRequestID}`).update({'isActive': false});
+          const oldRequestDoc = await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`)
+          if ((await oldRequestDoc.get()).exists) {
+            return oldRequestDoc.update({ 'isAccepted': false });
           } else {
             return null
           }
