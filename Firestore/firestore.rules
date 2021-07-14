@@ -187,18 +187,18 @@ service cloud.firestore {
 
         function areRenterUpdatesValid(){
           // if arrive is false you can only change anything `arrive`. (i.e., note `pics` and `ids`)
-          return bothArrived() != true ? request.resource.data.diff(resource.data).affectedKeys().hasAny(['renter_arrived']) : 
+          return bothArrived() != true ? request.resource.data.diff(resource.data).affectedKeys().hasOnly(['renter_arrived']) : 
           // if arrive is true and pics is false you can only change `arrive` and `pics` (i.e., not `ids`)
-          bothPicsOK() != true ? request.resource.data.diff(resource.data).affectedKeys().hasAny(['renter_arrived', 'renter_pics_ok', 'renter_pics_urls'])
+          bothPicsOK() != true ? request.resource.data.diff(resource.data).affectedKeys().hasOnly(['renter_arrived', 'renter_pics_ok', 'renter_pics_urls'])
           // if arrive pics and ids are true you can change anything.
           : true;
         }
 
         function areOwnerUpdatesValid(){
           // if arrive is false you can only change anything `arrive`. (i.e., note `pics` and `ids`)
-          return bothArrived() != true ? request.resource.data.diff(resource.data).affectedKeys().hasAny(['owner_arrived']) : 
+          return bothArrived() != true ? request.resource.data.diff(resource.data).affectedKeys().hasOnly(['owner_arrived']) : 
           // if arrive is true and pics is false you can only change `arrive` and `pics` (i.e., not `ids`)
-          bothPicsOK() != true ? request.resource.data.diff(resource.data).affectedKeys().hasAny(['owner_arrived', 'owner_pics_ok', 'owner_pics_urls'])
+          bothPicsOK() != true ? request.resource.data.diff(resource.data).affectedKeys().hasOnly(['owner_arrived', 'owner_pics_ok', 'owner_pics_urls'])
           // if arrive pics and ids are true you can change anything.
           : true;
         }
