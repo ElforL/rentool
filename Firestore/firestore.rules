@@ -42,9 +42,8 @@ service cloud.firestore {
     }
     ////////////////////////////////// Tools ////////////////////////////////
     match /Tools/{toolID}{
-      function hasIdAndCredit(){
-        return exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/ID)
-        && exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/creditCard);
+      function hasID(){
+        return exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/ID);
       }
 
       function isEmailVerified(){
@@ -108,8 +107,8 @@ service cloud.firestore {
       
       // allow creation if the user is authinticated and verified
       allow create: if isEmailVerified()
-      // and has an ID number and a credit card
-      && hasIdAndCredit()
+      // and has an ID number
+      && hasID()
       // and the tool is valid
       && isToolValid(true);
       
@@ -154,7 +153,7 @@ service cloud.firestore {
         allow delete: if (isTheRenter() || isTheToolOwner()) && resource.data.isRented == false;
         
         allow create: if isEmailVerified()
-        && hasIdAndCredit()
+        && hasID()
         && isTheRenter()
         && isNewRequestValid();
         
