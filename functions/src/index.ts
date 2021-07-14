@@ -21,6 +21,20 @@ export const acceptRequset =
         const oldRequestID = change.before.data().acceptedRequestID;
         const newRequestID = change.after.data().acceptedRequestID;
         if (newRequestID != null) {
+          // create a meeting doc
+          await admin.firestore().doc(`Tools/${toolID}/meetings/${newRequestID}`).set({
+            // 'isActive': true,
+            'ownerUID': change.after.data().ownerUID,
+            'owner_arrived': false,
+            'owner_pics_ok': false,
+            'owner_ids_ok': false,
+            'owner_pics_urls': [],
+            'renterUID': newRequestID,
+            'renter_arrived': false,
+            'renter_pics_ok': false,
+            'renter_ids_ok': false,
+            'renter_pics_urls': [],
+          });
           // accepted a new request
           return admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).update({ 'isAccepted': true });
         } else {
