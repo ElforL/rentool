@@ -23,7 +23,7 @@ export const acceptRequset =
         if (newRequestID != null) {
           // create a meeting doc
           await admin.firestore().doc(`Tools/${toolID}/meetings/${newRequestID}`).set({
-            // 'isActive': true,
+            'isActive': true,
             'ownerUID': change.after.data().ownerUID,
             'owner_arrived': false,
             'owner_pics_ok': false,
@@ -34,13 +34,22 @@ export const acceptRequset =
             'renter_pics_ok': false,
             'renter_ids_ok': false,
             'renter_pics_urls': [],
+            // if the meeting was done and succesful and a rent object/doc was created
+            'rent_started': false,
+            // any errors that could occur with the meeting e.g., payment fail, database error... etc
+            // TODO consider changing it to list in case there were multiple erros
+            'error': null, 
           });
           // accepted a new request
           return admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).update({ 'isAccepted': true });
         } else {
           // canceled accepted request
           // i.e., changed acceptedRequestID to null
-          // await admin.firestore().doc(`Tools/${toolID}/meetings/${oldRequestID}`).update({'isActive': false});
+
+          // set its meeting to inactive
+          await admin.firestore().doc(`Tools/${toolID}/meetings/${oldRequestID}`).update({'isActive': false});
+
+          // change the request's `isAccepted` to false if it still exist (i.e., it wasn't deleted)
           const oldRequestDoc = await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`)
           if ((await oldRequestDoc.get()).exists) {
             return oldRequestDoc.update({ 'isAccepted': false });
