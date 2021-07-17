@@ -163,6 +163,14 @@ service cloud.firestore {
     
       // meeting id == request id
       match /meetings/{meetingID}{
+        function isActive(){
+          return resource.data.isActive == true;
+        }
+
+        function didRentStart(){
+          return resource.data.rent_started == true;
+        }
+
         function bothArrived(){
           return resource.data.owner_arrived == true && resource.data.renter_arrived == true;
         }
@@ -203,12 +211,13 @@ service cloud.firestore {
         }
         
 
-        allow read: if isTheRenter() || isTheToolOwner();
+        allow read: if isActive() && (isTheRenter() || isTheToolOwner());
 
         // NOTE: there's a function listening to changes and changing fields as necessary.
         // e.g., if all is true and pics changed to false the function will change `pics` and `ids` for owner and renter to false.
-        allow update: if validAffectedFields() &&
-        // the use of `isTheRenter()` because it doesn't cost a read.
+        allow update: if isActive() &&
+        !didRentStart() &&
+        validAffectedFields() &&
         isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid();
       }
     }
