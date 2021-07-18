@@ -150,6 +150,8 @@ service cloud.firestore {
         function isRequestUpdateValid(){
           return isRequestFieldsValid()
           // 'isAccepted' and 'isRented' must not be changed
+          // TODO don't allow to delete if there's a current rent
+          // maybe don't allow if it's the accepted request and implement a way to cancel (but not delete) an accepted request
           && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
         }
 
@@ -222,7 +224,7 @@ service cloud.firestore {
         allow update: if isActive() &&
         !didRentStart() &&
         validAffectedFields() &&
-        isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid();
+        (isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid());
       }
     }
   }
