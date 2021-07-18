@@ -11,7 +11,7 @@ admin.initializeApp();
  * - if a new requst was added this function changes the request's `isAccepted` to true
  * - if `acceptedRequestID` changed to null this function changes the old request's `isAccepted` to false (if it still exist)
 */
-export const acceptRequset =
+export const toolUpdated =
   functions.firestore.document('Tools/{toolID}')
     .onUpdate(async (change, context) => {
       /** did `acceptedRequestID` field changed */
