@@ -114,7 +114,7 @@ class _MeetScreenState extends State<MeetScreen> {
 
   void arriveFunction(value) {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
-    FirestoreServices.setMeetingField(widget.tool, '${userRole}_pics_ok', value);
+    FirestoreServices.setMeetingField(widget.tool, '${userRole}_arrived', value);
   }
 
   void picsFunction(Map<String, dynamic> data, bool isUserTheOwner) {
