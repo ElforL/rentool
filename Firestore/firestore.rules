@@ -80,6 +80,10 @@ service cloud.firestore {
         // media can be null or a list
         && (request.resource.data.media is list || request.resource.data.media == null)
 
+        && isNew == true
+        ? request.resource.data.currentRent == null
+        : !request.resource.data.diff(resource.data).affectedKeys().hasAny(['currentRent'])
+
         // acceptedRequestID
         && isNew == true 
         ? request.resource.data.acceptedRequestID == null
@@ -88,11 +92,11 @@ service cloud.firestore {
 
 
       function isAcceptedRequestUpdateValid(){
-        // ACCEPT
+        // ACCEPT: allow if `acceptedRequestID` is in `/requests`
         return (resource.data.acceptedRequestID == null && request.resource.data.acceptedRequestID is string && isRequestListed(request.resource.data.acceptedRequestID)) ||
-        // Cancel
-        (resource.data.acceptedRequestID is string && request.resource.data.acceptedRequestID == null) ||
-        // UPDATE
+        // Cancel: allow if there's no current rent
+        (resource.data.currentRent == null && resource.data.acceptedRequestID is string && request.resource.data.acceptedRequestID == null) ||
+        // UPDATE: allow if `acceptedRequestID` wasn't changed
         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['acceptedRequestID']));
       }
 

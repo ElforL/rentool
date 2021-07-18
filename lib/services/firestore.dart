@@ -41,7 +41,10 @@ class FirestoreServices {
       location,
       true,
     );
-    var toolJson = tool.toJson()..remove('id')..remove('requests');
+    var toolJson = tool.toJson()
+      ..remove('id') //TODO add option to remove these fields in sdk
+      ..remove('requests')
+      ..addAll({'currentRent': null}); // TODO update sdk
     var ref = await _toolsRef.add(toolJson);
 
     List<String> mediaURLs;
