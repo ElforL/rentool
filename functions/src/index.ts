@@ -159,13 +159,37 @@ export const meetingInfoChanged =
         });
       }
 
-      // after the both agree on IDs remove the IDs strings
       if(!before.owner_ids_ok && after.owner_ids_ok || !before.renter_ids_ok && after.renter_ids_ok){
+        // when they both agree on IDs
         if(after.owner_ids_ok && after.renter_ids_ok){
-          return change.after.ref.update({
+          // remove the IDs strings from meetings doc
+          await change.after.ref.update({
             'owner_id': null, 
             'renter_id': null,
           });
+          try {
+            const rentsCollection = admin.firestore().collection('rents/')
+            // Create rent doc
+            const rentDoc = await rentsCollection.add({
+              toolID : change.after.ref.parent.parent!.id,
+              requestID: change.after.id,
+              startTime: admin.firestore.Timestamp.now(),
+              endTime: null,
+            });
+            // Update the tool doc
+            const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`)
+            await toolDoc.update({
+              'currentRent': rentDoc,
+            });
+            // Update the meeting doc
+            return change.after.ref.update({
+              'rent_started': true, 
+            });
+          } catch (error) {
+            return change.after.ref.update({
+              'error': error, 
+            });
+          }
         }else{
           return null;
         }
