@@ -105,10 +105,20 @@ class _MeetScreenState extends State<MeetScreen> {
         onPressed: () => FirestoreServices.setMeetingField(widget.tool, '${userRole}_ids_ok', !currentValue),
       );
     } else {
-      // TODO
-      return Center(
-        child: Text('UNEMPLEMENTED'),
-      );
+      if (data['rent_started']) {
+        return Center(
+          child: Text('SUCCESS\n Rent has started'),
+        );
+      } else if (data['error'] != null) {
+        return Center(
+          child: Text(data['error'].toString()),
+        );
+      } else {
+        // TODO
+        return Center(
+          child: Text('Loading... / unemplemented'),
+        );
+      }
     }
   }
 
