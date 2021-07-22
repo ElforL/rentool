@@ -13,8 +13,10 @@ class NewRequestScreen extends StatefulWidget {
 }
 
 class _NewRequestScreenState extends State<NewRequestScreen> {
+  TextEditingController _descriptionController;
   TextEditingController _daysController;
-  String _errorText;
+  String _descriptionErrorText;
+  String _daysErrorText;
 
   int get daysNum => int.parse(_daysController.text);
 
@@ -26,6 +28,7 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
 
   @override
   void dispose() {
+    _descriptionController.dispose();
     _daysController.dispose();
     super.dispose();
   }
@@ -55,6 +58,20 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
             )),
             SizedBox(height: 10),
             TextField(
+              controller: _descriptionController,
+              textInputAction: TextInputAction.newline,
+              decoration: InputDecoration(
+                labelText: 'Description',
+                errorText: _descriptionErrorText,
+              ),
+              onChanged: (_) {
+                if (_descriptionErrorText != null) {
+                  _descriptionErrorText = null;
+                  setState(() {});
+                }
+              },
+            ),
+            TextField(
               maxLength: 3,
               controller: _daysController,
               textInputAction: TextInputAction.done,
@@ -63,10 +80,10 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
               decoration: InputDecoration(
                 labelText: 'Number of days',
                 counterText: '',
-                errorText: _errorText,
+                errorText: _daysErrorText,
               ),
               onChanged: (_) {
-                if (_errorText != null) _errorText = null;
+                if (_daysErrorText != null) _daysErrorText = null;
                 setState(() {});
               },
             ),
@@ -101,17 +118,18 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                     onPressed: () async {
                       if (_daysController.text.isEmpty) {
                         setState(() {
-                          _errorText = "You can't leave this empty";
+                          _daysErrorText = "You can't leave this empty";
                         });
                       } else if (daysNum == 0) {
                         setState(() {
-                          _errorText = "Days must be 1 or greater";
+                          _daysErrorText = "Days must be 1 or greater";
                         });
                       } else {
                         var request = ToolRequest(
                           null,
                           AuthServices.auth.currentUser.uid,
                           widget.tool.id,
+                          _descriptionController.text,
                           daysNum,
                           widget.tool.rentPrice,
                           widget.tool.insuranceAmount,
