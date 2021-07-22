@@ -320,7 +320,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: d2470adbbc7ba74e351f6aa7a013d2051a7882b7
+      resolved-ref: "60fd38c0b564e759015d9cb03fd6727ad458c313"
       url: "git@github.com:ElforL/Rentool_sdk.git"
     source: git
     version: "0.0.0"
