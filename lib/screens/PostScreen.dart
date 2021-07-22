@@ -160,16 +160,17 @@ class _PostScreenState extends State<PostScreen> {
                               );
                             }),
                 ),
-                ElevatedButton(
-                  child: Text('Meet'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => MeetScreen(tool: widget.tool),
-                      ),
-                    );
-                  },
-                ),
+                if (widget.tool.acceptedRequestID != null)
+                  ElevatedButton(
+                    child: Text('Meet'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MeetScreen(tool: widget.tool),
+                        ),
+                      );
+                    },
+                  ),
               ],
             ),
           ), // end of main details
