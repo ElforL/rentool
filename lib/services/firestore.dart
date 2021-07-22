@@ -41,10 +41,7 @@ class FirestoreServices {
       location,
       true,
     );
-    var toolJson = tool.toJson()
-      ..remove('id') //TODO add option to remove these fields in sdk
-      ..remove('requests')
-      ..addAll({'currentRent': null}); // TODO update sdk
+    var toolJson = tool.toJson(['id', 'requests']);
     var ref = await _toolsRef.add(toolJson);
 
     List<String> mediaURLs;
@@ -64,7 +61,7 @@ class FirestoreServices {
 
   static Future<Tool> updateTool(Tool updatedTool) async {
     var ref = _toolsRef.doc(updatedTool.id);
-    await ref.update(updatedTool.toJson()..remove('id')..remove('requests'));
+    await ref.update(updatedTool.toJson(['id', 'requests']));
     return updatedTool;
   }
 
@@ -82,7 +79,7 @@ class FirestoreServices {
 
   /// updates or creates the tool [request] of the user for the tool with the given [toolID]
   static Future<void> updateToolRequest(ToolRequest request, String toolID) {
-    var requestJson = request.toJson()..remove('renterUID');
+    var requestJson = request.toJson(['renterUID']);
     return _toolsRef.doc(toolID).collection('requests').doc(request.renterUID).set(requestJson);
   }
 
