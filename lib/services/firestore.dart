@@ -78,9 +78,15 @@ class FirestoreServices {
   }
 
   /// updates or creates the tool [request] of the user for the tool with the given [toolID]
-  static Future<void> updateToolRequest(ToolRequest request, String toolID) {
-    var requestJson = request.toJson(['renterUID']);
-    return _toolsRef.doc(toolID).collection('requests').doc(request.renterUID).set(requestJson);
+  static Future<ToolRequest> sendNewToolRequest(ToolRequest request, String toolID) async {
+    var requestJson = request.toJson(['id']);
+    var doc = await _toolsRef.doc(toolID).collection('requests').add(requestJson);
+    return ToolRequest.fromJson(
+      requestJson
+        ..addAll({
+          'id': doc.id,
+        }),
+    );
   }
 
   /// updates or creates the tool [request] of the user for the tool with the given [toolID]
