@@ -82,7 +82,7 @@ class _RequestTileState extends State<RequestTile> {
         children: [
           ElevatedButton(
             onPressed: () {
-              FirestoreServices.acceptRequest(widget.tool.id, widget.request.renterUID);
+              FirestoreServices.acceptRequest(widget.tool.id, widget.request.id);
               widget.tool.acceptedRequestID = widget.request.renterUID;
               Navigator.of(context).pop();
             },
@@ -93,7 +93,7 @@ class _RequestTileState extends State<RequestTile> {
           ElevatedButton(
             onPressed: () {
               print(widget.request.renterUID);
-              FirestoreServices.rejectRequest(widget.tool.id, widget.request.renterUID);
+              FirestoreServices.deleteRequest(widget.tool.id, widget.request.id);
             },
             child: Text('REJECT'),
             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
