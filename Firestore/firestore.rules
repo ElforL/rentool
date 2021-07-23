@@ -7,7 +7,8 @@ service cloud.firestore {
         return request.auth != null && userID == request.auth.uid;
       }
       allow get;
-      allow write: if isTHEuser();
+      allow write: if isTHEuser()
+      && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['rating']));
 
       // `ID` private doc
       match /private/ID{
