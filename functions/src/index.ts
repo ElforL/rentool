@@ -78,14 +78,23 @@ export const requestWrite =
 
         // delete the request snippet in the user subcollection
         const renterUID = docData.renterUID;
-        return admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`).delete();
+        const renterRequestDoc = admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`);
+        return renterRequestDoc.delete();
       } else {
         // UPDATE OR CREATE
 
         // update/create the request snippet in the user's subcollection
         const docData = change.after.data()!;
         const renterUID = docData.renterUID;
-        return admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`).set(docData!);
+        const renterRequestDoc = admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`);
+        if ((await renterRequestDoc.get()).exists){
+          // if the user already has a request doc for the tool in his `requests` subcollection (i.e., already sent a request to this tool)
+          // then delete the new request
+          return change.after.ref.delete();
+        }else{
+          // otherwise, create the request doc
+          return renterRequestDoc.set(docData!);
+        }
       }
     });
 
