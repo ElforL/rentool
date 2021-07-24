@@ -117,20 +117,21 @@ service cloud.firestore {
       // and the tool is valid
       && isToolValid(true);
       
-      match /requests/{renterUID}{
+      match /requests/{requestID}{
         /// checks if the user is the owner of the tool which the request is being send to
         function isTheToolOwner(){
           return get(/databases/$(database)/documents/Tools/$(toolID)).data.ownerUID == request.auth.uid;
         }
 
-        /// checks if the user has the same uid as the document id
+        /// checks if the user has the same uid as the `renterUID` field
         function isTheRenter(){
-          return request.auth != null && request.auth.uid == renterUID;
+          return request.auth != null && resource.data.renterUID == request.auth.uid;
         }
 
         /// checks the validity of the tool-request's fields except `isAccepted` and `isRented`
         function isRequestFieldsValid(){
-          return request.resource.data.toolID is string
+          return request.resource.data.renterUID == request.auth.uid 
+          && request.resource.data.toolID is string
           && request.resource.data.toolID == toolID
           && request.resource.data.numOfDays is number
           && request.resource.data.rentPrice is number
@@ -161,7 +162,7 @@ service cloud.firestore {
         
         allow create: if isEmailVerified()
         && hasID()
-        && isTheRenter()
+        
         && isNewRequestValid();
         
         allow update: if isTheRenter() && isRequestUpdateValid();
