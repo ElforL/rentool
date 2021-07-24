@@ -23,6 +23,7 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
   @override
   void initState() {
     _daysController = TextEditingController(text: '1');
+    _descriptionController = TextEditingController();
     super.initState();
   }
 
