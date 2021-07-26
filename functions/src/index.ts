@@ -203,8 +203,9 @@ export const meetingInfoChanged =
               'rent_started': true, 
             });
           } catch (error) {
+            // TODO undo things done before the error. transactions??
             return change.after.ref.update({
-              'error': error, 
+              'error': error.toString(), 
             });
           }
         }else{
