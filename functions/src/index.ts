@@ -21,6 +21,7 @@ export const toolUpdated =
         const oldRequestID = change.before.data().acceptedRequestID;
         const newRequestID = change.after.data().acceptedRequestID;
         if (newRequestID != null) {
+          const renterUID = (await admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).get()).data()!.renterUID;
           // create a meeting doc
           await admin.firestore().doc(`Tools/${toolID}/meetings/${newRequestID}`).set({
             'isActive': true,
@@ -29,7 +30,7 @@ export const toolUpdated =
             'owner_pics_ok': false,
             'owner_ids_ok': false,
             'owner_pics_urls': [],
-            'renterUID': newRequestID,
+            'renterUID': renterUID,
             'renter_arrived': false,
             'renter_pics_ok': false,
             'renter_ids_ok': false,
@@ -43,8 +44,8 @@ export const toolUpdated =
           // accepted a new request
           return admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).update({ 'isAccepted': true });
         } else {
-          // canceled accepted request
-          // i.e., changed acceptedRequestID to null
+          // changed acceptedRequestID to null
+          // i.e., canceled accepted request
 
           // set its meeting to inactive
           await admin.firestore().doc(`Tools/${toolID}/meetings/${oldRequestID}`).update({'isActive': false});
@@ -63,12 +64,12 @@ export const toolUpdated =
     });
 
 export const requestWrite =
-  functions.firestore.document('Tools/{toolID}/requests/{renterUID}')
+  functions.firestore.document('Tools/{toolID}/requests/{requestID}')
     .onWrite(async (change, context) => {
       if (!change.after.exists) {
         // DELETE
 
-        const docData = change.before.data();
+        const docData = change.before.data()!;
         // if the request was accepted, remove its ID from `acceptedRequestID`
         if (docData && docData.isAccepted == true) {
           const toolID = docData.toolID;
@@ -76,15 +77,24 @@ export const requestWrite =
         }
 
         // delete the request snippet in the user subcollection
-        const renterUID = change.before.id;
-        return admin.firestore().doc(`Users/${renterUID}/requests/${docData!.toolID}`).delete();
+        const renterUID = docData.renterUID;
+        const renterRequestDoc = admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`);
+        return renterRequestDoc.delete();
       } else {
         // UPDATE OR CREATE
 
         // update/create the request snippet in the user's subcollection
-        const docData = change.after.data();
-        const renterUID = change.after.id;
-        return admin.firestore().doc(`Users/${renterUID}/requests/${docData!.toolID}`).set(docData!);
+        const docData = change.after.data()!;
+        const renterUID = docData.renterUID;
+        const renterRequestDoc = admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`);
+        if ((await renterRequestDoc.get()).exists){
+          // if the user already has a request doc for the tool in his `requests` subcollection (i.e., already sent a request to this tool)
+          // then delete the new request
+          return change.after.ref.delete();
+        }else{
+          // otherwise, create the request doc
+          return renterRequestDoc.set(docData!);
+        }
       }
     });
 
@@ -141,8 +151,9 @@ export const meetingInfoChanged =
             'owner_id': ownerIdDoc.data()?.idNumber, 
             'renter_id': renterIdDoc.data()?.idNumber,
           });
-        }else 
+        }else {
           return null;
+        }
       }
 
       // if the owner was ok with IDs then wasn't, change the renter's IDs-OK to false aswell

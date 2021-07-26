@@ -78,13 +78,21 @@ class FirestoreServices {
   }
 
   /// updates or creates the tool [request] of the user for the tool with the given [toolID]
-  static Future<void> updateToolRequest(ToolRequest request, String toolID) {
-    var requestJson = request.toJson(['renterUID']);
-    return _toolsRef.doc(toolID).collection('requests').doc(request.renterUID).set(requestJson);
+  static Future<ToolRequest> sendNewToolRequest(ToolRequest request, String toolID) async {
+    var requestJson = request.toJson(['id']);
+    var doc = await _toolsRef.doc(toolID).collection('requests').add(requestJson);
+    return ToolRequest.fromJson(
+      requestJson
+        ..addAll({
+          'id': doc.id,
+        }),
+    );
   }
 
-  static Future<void> deleteToolRequest(String renterUID, String toolID) {
-    return _toolsRef.doc(toolID).collection('requests').doc(renterUID).delete();
+  /// updates or creates the tool [request] of the user for the tool with the given [toolID]
+  static Future<void> updateToolRequest(ToolRequest request, String toolID) {
+    var requestJson = request.toJson(['id']);
+    return _toolsRef.doc(toolID).collection('requests').doc(request.id).set(requestJson);
   }
 
   static Future<QuerySnapshot<Map<String, dynamic>>> fetchToolRequests(
@@ -99,12 +107,12 @@ class FirestoreServices {
     }
   }
 
-  static Future<void> acceptRequest(String toolID, String renterUID) async {
-    return await _toolsRef.doc(toolID).update({'acceptedRequestID': renterUID});
+  static Future<void> acceptRequest(String toolID, String requestID) async {
+    return await _toolsRef.doc(toolID).update({'acceptedRequestID': requestID});
   }
 
-  static Future<void> rejectRequest(String toolID, String renterUID) async {
-    return await _toolsRef.doc(toolID).collection('requests').doc(renterUID).delete();
+  static Future<void> deleteRequest(String toolID, String requestID) async {
+    return await _toolsRef.doc(toolID).collection('requests').doc(requestID).delete();
   }
 
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getMeetingStream(Tool tool) {
