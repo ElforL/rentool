@@ -138,6 +138,7 @@ describe("`Tools` rules", () => {
       insuranceAmount:  100,
       media:  null,
       acceptedRequestID:  null,
+      currentRent: null,
     }
   }
 
