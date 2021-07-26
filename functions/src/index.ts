@@ -191,7 +191,7 @@ export const meetingInfoChanged =
             // Update the tool doc
             const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`)
             await toolDoc.update({
-              'currentRent': rentDoc,
+              'currentRent': rentDoc.id,
             });
             // Update the request `isRented` field
             const requestDoc = admin.firestore().doc(`Tools/${context.params.toolID}/requests/${context.params.requestID}`)
