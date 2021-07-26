@@ -13,15 +13,19 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-        
-      - run: cd functions
-      - run: npm install
-      - run: npm run build
-        
-      - run: npm install -g firebase-tools
 
-      - run: cd test/firestore_test
-      - run: npm install
-      - run: cd ../..
+      - name: 🔥 Install Firebase CLI
+        run: npm install -g firebase-tools
+        
+      - name: ☁ Install functions dependencies
+        working-directory: ./functions
+        run: |
+          npm ci
+          npm run build
+        
+      - name: ⬇ Install tests dependencies
+        working-directory: ./test/firestore_test
+        run: npm install
 
-      - run: firebase emulators:exec "cd test/firestore_test && npm test"
+      - name: 🧪 Run tests
+        run: firebase emulators:exec "cd test/firestore_test && npm test"
