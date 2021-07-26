@@ -1,4 +1,4 @@
-# rentool
+# Rentool
 
 A new Flutter project.
 
