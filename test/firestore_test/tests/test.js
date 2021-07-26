@@ -94,36 +94,6 @@ describe("`Users` rules", () => {
     testDoc.set({ 'idNumber': '1122334455' })
     await firebase.assertFails(testDoc.update({ 'idNumber': '5522334455' }));
   });
-
-  function card(name = 'FOO BAR') {
-    return {
-      number: 112233445566,
-      name_on_card: name,
-      ccv: '987',
-      expYear: 12,
-      expMonth: 2020
-    };
-  }
-
-  it("User CAN set first card", async () => {
-    const db = getFirestore(myAuth(true));
-    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('creditCard');
-    await firebase.assertSucceeds(testDoc.set(card()));
-  });
-
-  it("User CAN set new card", async () => {
-    const db = getFirestore(myAuth(true));
-    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('creditCard');
-    testDoc.set(card());
-    await firebase.assertSucceeds(testDoc.set(card('TEST NAME')));
-  });
-
-  it("User CAN update card", async () => {
-    const db = getFirestore(myAuth(true));
-    const testDoc = db.collection('Users').doc(myUid).collection('private').doc('creditCard');
-    testDoc.set(card());
-    await firebase.assertSucceeds(testDoc.update({ 'name': 'BAR FOO' }));
-  });
 });
 
 describe("`Tools` rules", () => {
@@ -172,46 +142,24 @@ describe("`Tools` rules", () => {
   });
 
   // CREATE
-  it("Signed in user with verified email but no ID nor credit card CAN'T create a tool document", async () => {
+  it("Signed in user with verified email but no ID CAN'T create a tool document", async () => {
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(myToolId);
     await firebase.assertFails(testDoc.set(myValidTool(myUid)));
   });
-  it("Signed in user with verified email and ID but no credit card CAN'T create a tool document", async () => {
+  it("Signed in user with verified email and ID CAN create a tool document", async () => {
     const admin = getAdminFirestore();
     const idDoc = admin.collection('Users').doc(myUid).collection('private').doc('ID');
     await idDoc.set({'idNumber': 2233445566});
-    
-    const db = getFirestore(myAuth(true));
-    const testDoc = db.collection('Tools').doc(myToolId);
-    await firebase.assertFails(testDoc.set(myValidTool(myUid)));
-  });
-  it("Signed in user with verified email and credit card but no ID CAN'T create a tool document", async () => {
-    const admin = getAdminFirestore();
-    const creditDoc = admin.collection('Users').doc(myUid).collection('private').doc('creditCard');
-    await creditDoc.set({'number': 112233445566});
-
-    const db = getFirestore(myAuth(true));
-    const testDoc = db.collection('Tools').doc(myToolId);
-    await firebase.assertFails(testDoc.set(myValidTool(myUid)));
-  });
-  it("Signed in user with verified email, credit card and ID CAN create a tool document", async () => {
-    const admin = getAdminFirestore();
-    const idDoc = admin.collection('Users').doc(myUid).collection('private').doc('ID');
-    const creditDoc = admin.collection('Users').doc(myUid).collection('private').doc('creditCard');
-    await idDoc.set({'idNumber': 2233445566});
-    await creditDoc.set({'number': 112233445566});
     
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Tools').doc(myToolId);
     await firebase.assertSucceeds(testDoc.set(myValidTool(myUid)));
   });
-  it("Signed in user with unverified email but has credit card and ID CANT'T create a tool document", async () => {
+  it("Signed in user with unverified email but has an ID CANT'T create a tool document", async () => {
     const admin = getAdminFirestore();
     const idDoc = admin.collection('Users').doc(myUid).collection('private').doc('ID');
-    const creditDoc = admin.collection('Users').doc(myUid).collection('private').doc('creditCard');
     await idDoc.set({'idNumber': 2233445566});
-    await creditDoc.set({'number': 112233445566});
 
     const db = getFirestore(myAuth(false));
     const testDoc = db.collection('Tools').doc(myToolId);
