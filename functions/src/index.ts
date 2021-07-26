@@ -86,14 +86,15 @@ export const requestWrite =
         // update/create the request snippet in the user's subcollection
         const docData = change.after.data()!;
         const renterUID = docData.renterUID;
-        const renterRequestDoc = admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`);
-        if ((await renterRequestDoc.get()).exists){
+        const renterRequestDoc = await admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`).get();
+        if (renterRequestDoc.exists && renterRequestDoc.data()!.id != change.after.id){
           // if the user already has a request doc for the tool in his `requests` subcollection (i.e., already sent a request to this tool)
           // then delete the new request
           return change.after.ref.delete();
         }else{
           // otherwise, create the request doc
-          return renterRequestDoc.set(docData!);
+          docData.id = change.after.id;
+          return renterRequestDoc.ref.set(docData);
         }
       }
     });
