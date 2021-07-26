@@ -14,13 +14,14 @@ jobs:
         with:
           node-version: '14'
         
-      - run: echo ⬇ 🔥 Installing Firebase CLI
+      - run: cd functions
+      - run: npm install
+      - run: npm run build
+        
       - run: npm install -g firebase-tools
 
       - run: cd test/firestore_test
-      - run: echo ⬇ Installing test dependencies
       - run: npm install
       - run: cd ../..
 
-      - run: echo 🧪 Running Firestore tests
       - run: firebase emulators:exec "cd test/firestore_test && npm test"
