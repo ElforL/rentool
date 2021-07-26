@@ -193,6 +193,11 @@ export const meetingInfoChanged =
             await toolDoc.update({
               'currentRent': rentDoc,
             });
+            // Update the request `isRented` field
+            const requestDoc = admin.firestore().doc(`Tools/${context.params.toolID}/request/${context.params.requestID}`)
+            await requestDoc.update({
+              'isRented': true,
+            });
             // Update the meeting doc
             return change.after.ref.update({
               'rent_started': true, 
