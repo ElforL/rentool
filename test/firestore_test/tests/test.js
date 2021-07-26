@@ -49,7 +49,11 @@ describe("`Users` rules", () => {
   it("Signed in user CAN change own user document", async () => {
     const db = getFirestore(myAuth(true));
     const testDoc = db.collection('Users').doc(myUid);
-    await firebase.assertSucceeds(testDoc.set({ 'foo': 'bar' }));
+    // TODO change to valid and full fields (for all tests aswell)
+    await firebase.assertSucceeds(testDoc.set({
+      'name': 'Test Name',
+      'rating': 0,
+    }));
   });
 
   it("Signed in user CAN'T change other's user document", async () => {
