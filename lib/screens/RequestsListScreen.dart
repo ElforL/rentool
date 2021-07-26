@@ -26,7 +26,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
     var res = await FirestoreServices.fetchToolRequests(widget.tool.id, previousDoc: _lastDoc);
     _lastDoc = res.docs.last;
     for (var doc in res.docs) {
-      var request = ToolRequest.fromJson(doc.data()..addAll({'renterUID': doc.id}));
+      var request = ToolRequest.fromJson(doc.data()..addAll({'id': doc.id}));
       list.add(request);
     }
   }
