@@ -114,6 +114,9 @@ export const deliverMeetingUpdated =
       const after = change.after.data();
       const before = change.before.data();
 
+      const ownerUID = after.ownerUID;
+      const renterUID = after.renterUID;
+
       // if either the owner or renter changed arrive from `true` to `false`
       if(before.owner_arrived && !after.owner_arrived || before.renter_arrived && !after.renter_arrived){
         return change.after.ref.update({
@@ -144,8 +147,6 @@ export const deliverMeetingUpdated =
       if(!before.owner_pics_ok && after.owner_pics_ok || !before.renter_pics_ok && after.renter_pics_ok){
         // when BOTH agree on pics set the IDs
         if(after.owner_pics_ok && after.renter_pics_ok){
-          const ownerUID = after.ownerUID;
-          const renterUID = after.renterUID;
           const ownerIdDoc = await admin.firestore().doc(`Users/${ownerUID}/private/ID`).get();
           const renterIdDoc = await admin.firestore().doc(`Users/${renterUID}/private/ID`).get();
           return change.after.ref.update({
@@ -198,6 +199,29 @@ export const deliverMeetingUpdated =
             await requestDoc.update({
               'isRented': true,
             });
+
+            // Create return meeting doc
+            const returnMeetingDoc = admin.firestore().doc(`Tools/${context.params.toolID}/return_meetings/${context.params.requestID}`)
+            await returnMeetingDoc.set({
+              'isActive': true,
+              'ownerUID': ownerUID,
+              'renterUID': renterUID,
+              'ownerArrived': false,
+              'renterArrived': false,
+              'toolChecked': false,
+              'toolDamaged': null,
+              'renterAdmitDamage': null,
+              'compensationPrice': null,
+              'ownerConfirmHandover': false,
+              'renterConfirmHandover': false,
+              'disagreementCaseID': null,
+              'disagreementCaseSettled': null,
+              'disagreementCaseResult': null,
+              'ownerMediaOK': false,
+              'renterMediaOK': false,
+              'mediaUrls': [],
+            });
+
             // Update the meeting doc
             return change.after.ref.update({
               'rent_started': true, 
