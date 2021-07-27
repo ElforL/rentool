@@ -35,7 +35,7 @@ class _MeetScreenState extends State<MeetScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Meeting for ${widget.tool.name}')),
       body: StreamBuilder(
-        stream: FirestoreServices.getMeetingStream(widget.tool),
+        stream: FirestoreServices.getDeliverMeetingStream(widget.tool),
         builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -94,7 +94,7 @@ class _MeetScreenState extends State<MeetScreen> {
           // ImagePicker().getImage(source: ImageSource.camera);
           var url =
               'https://www.hebergementwebs.com/image/04/044b635292b90188f40c240b51ae64bc.png/how-to-fix-http-error-code-501.png';
-          FirestoreServices.setMeetingField(widget.tool, '${userRole}_pics_urls', FieldValue.arrayUnion([url]));
+          FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_pics_urls', FieldValue.arrayUnion([url]));
         },
       );
     } else if (data['renter_ids_ok'] != true || data['owner_ids_ok'] != true) {
@@ -102,7 +102,7 @@ class _MeetScreenState extends State<MeetScreen> {
       return MeetingIdsContainer(
         data: data,
         isUserTheOwner: isUserTheOwner,
-        onPressed: () => FirestoreServices.setMeetingField(widget.tool, '${userRole}_ids_ok', !currentValue),
+        onPressed: () => FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_ids_ok', !currentValue),
       );
     } else {
       if (data['rent_started']) {
@@ -124,13 +124,13 @@ class _MeetScreenState extends State<MeetScreen> {
 
   void arriveFunction(value) {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
-    FirestoreServices.setMeetingField(widget.tool, '${userRole}_arrived', value);
+    FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_arrived', value);
   }
 
   void picsFunction(Map<String, dynamic> data, bool isUserTheOwner) {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
     final arePicsOk = data['${userRole}_pics_ok'];
-    FirestoreServices.setMeetingField(widget.tool, '${userRole}_pics_ok', !arePicsOk);
+    FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_pics_ok', !arePicsOk);
   }
 }
 

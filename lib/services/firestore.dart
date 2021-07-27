@@ -115,12 +115,12 @@ class FirestoreServices {
     return await _toolsRef.doc(toolID).collection('requests').doc(requestID).delete();
   }
 
-  static Stream<DocumentSnapshot<Map<String, dynamic>>> getMeetingStream(Tool tool) {
-    return _toolsRef.doc(tool.id).collection('meetings').doc(tool.acceptedRequestID).snapshots();
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getDeliverMeetingStream(Tool tool) {
+    return _toolsRef.doc(tool.id).collection('deliver_meetings').doc(tool.acceptedRequestID).snapshots();
   }
 
-  static Future<void> setMeetingField(Tool tool, String field, dynamic value) async {
-    return await _toolsRef.doc(tool.id).collection('meetings').doc(tool.acceptedRequestID).update(
+  static Future<void> setDeliverMeetingField(Tool tool, String field, dynamic value) async {
+    return await _toolsRef.doc(tool.id).collection('deliver_meetings').doc(tool.acceptedRequestID).update(
       {field: value},
     );
   }

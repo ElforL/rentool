@@ -22,8 +22,8 @@ export const toolUpdated =
         const newRequestID = change.after.data().acceptedRequestID;
         if (newRequestID != null) {
           const renterUID = (await admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).get()).data()!.renterUID;
-          // create a meeting doc
-          await admin.firestore().doc(`Tools/${toolID}/meetings/${newRequestID}`).set({
+          // create a deliver_meeting doc
+          await admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${newRequestID}`).set({
             'isActive': true,
             'ownerUID': change.after.data().ownerUID,
             'owner_arrived': false,
@@ -48,7 +48,7 @@ export const toolUpdated =
           // i.e., canceled accepted request
 
           // set its meeting to inactive
-          await admin.firestore().doc(`Tools/${toolID}/meetings/${oldRequestID}`).update({'isActive': false});
+          await admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${oldRequestID}`).update({'isActive': false});
 
           // change the request's `isAccepted` to false if it still exist (i.e., it wasn't deleted)
           const oldRequestDoc = await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`)
@@ -108,8 +108,8 @@ export const IdCreated =
       return admin.firestore().doc(`idsList/${idNumber}`).set({'uid':uid, 'time':snapshot.createTime});
     });
 
-export const meetingInfoChanged =
-  functions.firestore.document('Tools/{toolID}/meetings/{requestID}')
+export const deliverMeetingUpdated =
+  functions.firestore.document('Tools/{toolID}/deliver_meetings/{requestID}')
     .onUpdate(async (change, context) => {
       const after = change.after.data();
       const before = change.before.data();

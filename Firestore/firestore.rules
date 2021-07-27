@@ -177,8 +177,7 @@ service cloud.firestore {
         
       }
     
-      // meeting id == request id
-      match /meetings/{meetingID}{
+      match /deliver_meetings/{requestID}{
         function isActive(){
           return resource.data.isActive == true;
         }
