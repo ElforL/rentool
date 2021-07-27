@@ -125,6 +125,16 @@ class FirestoreServices {
     );
   }
 
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getReturnMeetingStream(Tool tool) {
+    return _toolsRef.doc(tool.id).collection('return_meetings').doc(tool.acceptedRequestID).snapshots();
+  }
+
+  static Future<void> setReturnMeetingField(Tool tool, String field, dynamic value) async {
+    return await _toolsRef.doc(tool.id).collection('return_meetings').doc(tool.acceptedRequestID).update(
+      {field: value},
+    );
+  }
+
   // ////////////////////////////// User //////////////////////////////
 
   /// returns true if the user has a document in the Firestore database.
