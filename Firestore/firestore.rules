@@ -235,6 +235,170 @@ service cloud.firestore {
         validAffectedFields() &&
         (isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid());
       }
+
+      match /return_meetings/{requestID}{
+        function isActive(){
+          return resource.data.isActive == true;
+        }
+
+        function bothArrived(){
+          return resource.data.ownerArrived == true && resource.data.renterArrived == true;
+        }
+
+        function isTheToolOwner(){
+          return request.auth != null && resource.data.ownerUID == request.auth.uid;
+        }
+
+        function isTheRenter(){
+          return request.auth != null && resource.data.renterUID == request.auth.uid;
+        }
+
+        function validAffectedFields(){
+          return (isTheRenter() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['renterArrived','renterAdmitDamage','renterConfirmHandover', 'renterAcceptCompensationPrice', 'renterMediaOK', 'renterMediaUrls'])) || 
+          (isTheToolOwner() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ownerArrived','toolDamaged','ownerConfirmHandover', 'compensationPrice', 'ownerMediaOK', 'ownerMediaUrls']))
+        }
+
+        function onlyAllow(list){
+          return request.resource.data.diff(resource.data).affectedKeys().hasOnly(list);
+        }
+
+        function areRenterUpdatesValid() {
+          return ((resource.data.disagreementCaseSettled != null)
+              ? (resource.data.disagreementCaseSettled == false)
+                  ?
+                  // 👮⏳
+                  false //allowNothing()
+                  :
+                  // 👮✅
+                  (bothArrived() == true)
+                      ?
+                      // 🤝 both arrived
+                      (resource.data.disagreementCaseResult == true)
+                          ?
+                          // 👮💔
+                          (resource.data.compensationPrice != null)
+                              ? (resource.data.renterAcceptCompensationPrice == true)
+                                  ? onlyAllow(['renterArrived', 'renterAcceptCompensationPrice', 'renterConfirmHandover'])
+                                  : onlyAllow(['renterArrived', 'renterAcceptCompensationPrice'])
+                              : onlyAllow(['renterArrived'])
+                          :
+                          // 👮💖
+                          onlyAllow(['renterArrived', 'renterConfirmHandover'])
+                      :
+                      // 🧍 didn't both arrive
+                      onlyAllow(['renterArrived'])
+              : (bothArrived() == false)
+                  ?
+                  // 🧍
+                  onlyAllow(['renterArrived'])
+                  :
+                  // 🤝
+                  (resource.data.toolDamaged == null)
+                      ?
+                      // ❓ Tool unchecked
+                      onlyAllow(['renterArrived'])
+                      : (resource.data.toolDamaged == true)
+                          ?
+                          // 💔 Tool Damaged
+                          (resource.data.renterAdmitDamage != null)
+                              ?
+                              // Renter responded to claims
+                              (resource.data.renterAdmitDamage == true)
+                                  ?
+                                  // 😞 Admit damage
+                                  (resource.data.compensationPrice != null)
+                                      ? (resource.data.renterAcceptCompensationPrice== true)
+                                          ? onlyAllow([
+                                              'renterArrived',
+                                              'renterAdmitDamage',
+                                              'renterAcceptCompensationPrice',
+                                              'renterConfirmHandover',
+                                            ])
+                                          : onlyAllow([
+                                              'renterArrived',
+                                              'renterAdmitDamage',
+                                              'renterAcceptCompensationPrice',
+                                            ])
+                                      : onlyAllow(['renterArrived', 'renterAdmitDamage'])
+                                  :
+                                  // 😡 Deny damage
+                                  (resource.data.renterMediaOK == true)
+                                      ? onlyAllow(['renterArrived', 'renterAdmitDamage', 'renterMediaOK'])
+                                      : onlyAllow(['renterArrived', 'renterAdmitDamage', 'renterMediaUrls', 'renterMediaOK'])
+                              :
+                              // Renter hasn't responded to claims yet
+                              onlyAllow(['renterArrived', 'renterAdmitDamage'])
+                          :
+                          // 💖 Tool Undamaged
+                          onlyAllow(['renterArrived', 'renterConfirmHandover'])
+          );
+        }
+        
+        function areOwnerUpdatesValid() {
+          return ((resource.data.disagreementCaseSettled != null)
+              ? (resource.data.disagreementCaseSettled == false)
+                  ?
+                  // 👮⏳
+                  false //allowNothing()
+                  :
+                  // 👮✅
+                  (bothArrived() == true)
+                      ?
+                      // 🤝 both arrived
+                      (resource.data.disagreementCaseResult == true)
+                          ?
+                          // 👮💔
+                          (resource.data.renterAcceptCompensationPrice != null && resource.data.renterAcceptCompensationPrice == true)
+                              ? onlyAllow(['ownerArrived', 'compensationPrice', 'ownerConfirmHandover'])
+                              : onlyAllow(['ownerArrived', 'compensationPrice'])
+                          :
+                          // 👮💖
+                          onlyAllow(['ownerArrived', 'ownerConfirmHandover'])
+                      :
+                      // 🧍 didn't both arrive
+                      onlyAllow(['ownerArrived'])
+              : (bothArrived() == false)
+                  ?
+                  // 🧍
+                  onlyAllow(['ownerArrived'])
+                  :
+                  // 🤝
+                  (resource.data.toolDamaged == null)
+                      ?
+                      // ❓ Tool unchecked
+                      onlyAllow(['ownerArrived', 'toolDamaged'])
+                      : (resource.data.toolDamaged == true)
+                          ?
+                          // 💔 Tool Damaged
+                          (resource.data.renterAdmitDamage != null)
+                              ?
+                              // Renter responded to claims
+                              (resource.data.renterAdmitDamage == true)
+                                  ?
+                                  // 😞 Admit damage
+                                  (resource.data.renterAcceptCompensationPrice != null && resource.data.renterAcceptCompensationPrice == true)
+                                      ? onlyAllow(['ownerArrived', 'toolDamaged', 'compensationPrice', 'ownerConfirmHandover'])
+                                      : onlyAllow(['ownerArrived', 'toolDamaged', 'compensationPrice'])
+                                  :
+                                  // 😡 Deny damage
+                                  (resource.data.ownerMediaOK == true)
+                                      ? onlyAllow(['ownerArrived', 'toolDamaged', 'ownerMediaOK'])
+                                      : onlyAllow(['ownerArrived', 'toolDamaged', 'ownerMediaUrls', 'ownerMediaOK'])
+                              :
+                              // Renter hasn't responded to claims yet
+                              onlyAllow(['ownerArrived', 'toolDamaged'])
+                          :
+                          // 💖 Tool Undamaged
+                          onlyAllow(['ownerArrived', 'toolDamaged', 'ownerConfirmHandover'])
+          );
+        }
+
+        allow read: if isActive() && (isTheRenter() || isTheToolOwner());
+
+        allow update: if isActive() &&
+        validAffectedFields() &&
+        (isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid());
+      }
     }
   }
 }
