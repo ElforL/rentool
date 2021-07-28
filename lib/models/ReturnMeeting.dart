@@ -9,9 +9,6 @@ class ReturnMeeting {
   /// did the renter arrive to the meeting place
   bool renterArrived;
 
-  /// did the tool get checked for damages.
-  bool toolChecked;
-
   /// is the tool damaged. `toolChecked` must be `true` to give [toolDamaged] a value.
   bool toolDamaged;
 
@@ -44,14 +41,14 @@ class ReturnMeeting {
 
   /// List of URLs to pictures/videos
   // TODO maybe move to disagreement case
-  List<String> mediaUrls;
+  List<String> renterMediaUrls;
+  List<String> ownerMediaUrls;
 
   ReturnMeeting(
     this.ownerUID,
     this.renterUID, {
     this.ownerArrived = false,
     this.renterArrived = false,
-    this.toolChecked = false,
     this.toolDamaged,
     this.renterAdmitDamage,
     this.compensationPrice,
@@ -63,7 +60,8 @@ class ReturnMeeting {
     this.disagreementCaseResult,
     this.ownerMediaOK,
     this.renterMediaOK,
-    this.mediaUrls,
+    this.renterMediaUrls,
+    this.ownerMediaUrls,
   });
 
   factory ReturnMeeting.fromJson(Map<String, dynamic> json) {
@@ -72,7 +70,6 @@ class ReturnMeeting {
       json['renterUID'],
       ownerArrived: json['ownerArrived'],
       renterArrived: json['renterArrived'],
-      toolChecked: json['toolChecked'],
       toolDamaged: json['toolDamaged'],
       renterAdmitDamage: json['renterAdmitDamage'],
       compensationPrice: json['compensationPrice'],
@@ -84,7 +81,8 @@ class ReturnMeeting {
       disagreementCaseResult: json['disagreementCaseResult'],
       ownerMediaOK: json['ownerMediaOK'],
       renterMediaOK: json['renterMediaOK'],
-      mediaUrls: json['mediaUrls'] != null ? List<String>.from(json['mediaUrls']) : null,
+      renterMediaUrls: json['renterMediaUrls'] != null ? List<String>.from(json['renterMediaUrls']) : null,
+      ownerMediaUrls: json['ownerMediaUrls'] != null ? List<String>.from(json['ownerMediaUrls']) : null,
     );
   }
 
@@ -94,7 +92,6 @@ class ReturnMeeting {
       'renterUID': renterUID,
       'ownerArrived': ownerArrived,
       'renterArrived': renterArrived,
-      'toolChecked': toolChecked,
       'toolDamaged': toolDamaged,
       'renterAdmitDamage': renterAdmitDamage,
       'compensationPrice': compensationPrice,
@@ -106,7 +103,8 @@ class ReturnMeeting {
       'disagreementCaseResult': disagreementCaseResult,
       'ownerMediaOK': ownerMediaOK,
       'renterMediaOK': renterMediaOK,
-      'mediaUrls': mediaUrls,
+      'renterMediaUrls': renterMediaUrls,
+      'ownerMediaUrls': ownerMediaUrls,
     };
   }
 

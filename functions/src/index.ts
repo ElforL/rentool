@@ -208,10 +208,10 @@ export const deliverMeetingUpdated =
               'renterUID': renterUID,
               'ownerArrived': false,
               'renterArrived': false,
-              'toolChecked': false,
               'toolDamaged': null,
               'renterAdmitDamage': null,
               'compensationPrice': null,
+              'renterAcceptCompensationPrice': null,
               'ownerConfirmHandover': false,
               'renterConfirmHandover': false,
               'disagreementCaseID': null,
@@ -219,7 +219,8 @@ export const deliverMeetingUpdated =
               'disagreementCaseResult': null,
               'ownerMediaOK': false,
               'renterMediaOK': false,
-              'mediaUrls': [],
+              'renterMediaUrls': [],
+              'ownerMediaUrls': [],
             });
 
             // Update the meeting doc
