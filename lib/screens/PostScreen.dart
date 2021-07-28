@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rentool/screens/MeetScreen.dart';
 import 'package:rentool/screens/NewRequestScreen.dart';
 import 'package:rentool/screens/RequestsListScreen.dart';
+import 'package:rentool/screens/ReturnMeetScreen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
@@ -167,6 +168,17 @@ class _PostScreenState extends State<PostScreen> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => MeetScreen(tool: widget.tool),
+                        ),
+                      );
+                    },
+                  ),
+                if (widget.tool.currentRent != null)
+                  ElevatedButton(
+                    child: Text('Return'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ReturnMeetScreen(tool: widget.tool),
                         ),
                       );
                     },
