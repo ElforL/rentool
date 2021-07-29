@@ -62,7 +62,10 @@ class ReturnMeeting {
     this.renterMediaOK,
     this.renterMediaUrls,
     this.ownerMediaUrls,
-  });
+  }) {
+    if (ownerMediaUrls == null) ownerMediaUrls = [];
+    if (renterMediaUrls == null) renterMediaUrls = [];
+  }
 
   factory ReturnMeeting.fromJson(Map<String, dynamic> json) {
     return ReturnMeeting(
@@ -81,8 +84,8 @@ class ReturnMeeting {
       disagreementCaseResult: json['disagreementCaseResult'],
       ownerMediaOK: json['ownerMediaOK'],
       renterMediaOK: json['renterMediaOK'],
-      renterMediaUrls: json['renterMediaUrls'] != null ? List<String>.from(json['renterMediaUrls']) : null,
-      ownerMediaUrls: json['ownerMediaUrls'] != null ? List<String>.from(json['ownerMediaUrls']) : null,
+      renterMediaUrls: json['renterMediaUrls'] != null ? List<String>.from(json['renterMediaUrls']) : [],
+      ownerMediaUrls: json['ownerMediaUrls'] != null ? List<String>.from(json['ownerMediaUrls']) : [],
     );
   }
 
