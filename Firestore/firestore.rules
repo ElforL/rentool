@@ -173,7 +173,8 @@ service cloud.firestore {
         && hasNoPreviousRequests()
         && isNewRequestValid();
         
-        allow update: if isTheRenter() && isRequestUpdateValid();
+        // if the request is accepted the renter CAN'T update it
+        allow update: if (resource.data.isAccepted == true) ? false : (isTheRenter() && isRequestUpdateValid());
         
       }
     
