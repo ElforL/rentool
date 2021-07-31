@@ -7,7 +7,7 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class ReturnMeetScreen extends StatefulWidget {
-  const ReturnMeetScreen({Key key, this.tool}) : super(key: key);
+  const ReturnMeetScreen({Key? key, required this.tool}) : super(key: key);
 
   final Tool tool;
 
@@ -16,10 +16,10 @@ class ReturnMeetScreen extends StatefulWidget {
 }
 
 class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
-  ReturnMeeting meeting;
-  bool isUserTheOwner;
-  String userRole;
-  String otherRole;
+  late ReturnMeeting meeting;
+  late bool isUserTheOwner;
+  late String userRole;
+  late String otherRole;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +40,9 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
               child: Text('Getting ready...'),
             );
 
-          var data = snapshot.data.data();
+          var data = snapshot.data!.data()!;
           meeting = ReturnMeeting.fromJson(data);
-          isUserTheOwner = meeting.isTheOwner(AuthServices.auth.currentUser.uid);
+          isUserTheOwner = meeting.isTheOwner(AuthServices.auth.currentUser!.uid);
           userRole = isUserTheOwner ? 'owner' : 'renter';
           otherRole = !isUserTheOwner ? 'owner' : 'renter';
 
@@ -78,8 +78,8 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
       return arriveContainer();
     } else {
       if (meeting.disagreementCaseSettled != null) {
-        if (meeting.disagreementCaseSettled) {
-          if (meeting.disagreementCaseResult) {
+        if (meeting.disagreementCaseSettled!) {
+          if (meeting.disagreementCaseResult!) {
             // tool damaged
             if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
               return compensationPriceContainer();
@@ -96,10 +96,10 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
       } else if (meeting.toolDamaged == null) {
         return checkToolContainer();
       } else {
-        if (meeting.toolDamaged) {
+        if (meeting.toolDamaged!) {
           if (meeting.renterAdmitDamage == null) {
             return admitDamageContainer();
-          } else if (meeting.renterAdmitDamage) {
+          } else if (meeting.renterAdmitDamage!) {
             if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
               return compensationPriceContainer();
             } else {
@@ -120,7 +120,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
   }
 
   arriveFunction() {
-    final isUserTheOwner = meeting.isTheOwner(AuthServices.auth.currentUser.uid);
+    final isUserTheOwner = meeting.isTheOwner(AuthServices.auth.currentUser!.uid);
     final userRole = isUserTheOwner ? 'owner' : 'renter';
     return FirestoreServices.setReturnMeetingField(widget.tool, '${userRole}Arrived', false);
   }
@@ -178,7 +178,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
               Text('Awaiting renter to accept the price of SAR ${meeting.compensationPrice}')
             else
               Text(
-                'The renter ${meeting.renterAcceptCompensationPrice ? 'accepted' : 'rejected'} the price of SAR ${meeting.compensationPrice}',
+                'The renter ${meeting.renterAcceptCompensationPrice! ? 'accepted' : 'rejected'} the price of SAR ${meeting.compensationPrice}',
               ),
         ],
         if (!isUserTheOwner) ...[
@@ -208,7 +208,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
       children: [
         if (meeting.disagreementCaseSettled ?? false)
           Text(
-              'After reviewing the case it was decided that the tool was ${meeting.disagreementCaseResult ? 'indeed' : 'not'} damaged.'),
+              'After reviewing the case it was decided that the tool was ${meeting.disagreementCaseResult! ? 'indeed' : 'not'} damaged.'),
         Text(isUserTheOwner ? 'Recive your tool' : 'Hand the tool over to the owner'),
         ElevatedButton(
           child: Text(userConfirmValue ? 'HAND-OVER YET TO HAPPEN' : 'CONFIRM HAND-OVER'),

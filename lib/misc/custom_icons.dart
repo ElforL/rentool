@@ -13,7 +13,7 @@ class CustomIcons {
   CustomIcons._();
 
   static const _kFontFam = 'CustomIcons';
-  static const String _kFontPkg = null;
+  static const String? _kFontPkg = null;
 
   static const IconData facebook_square = IconData(0xf082, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData apple = IconData(0xf179, fontFamily: _kFontFam, fontPackage: _kFontPkg);

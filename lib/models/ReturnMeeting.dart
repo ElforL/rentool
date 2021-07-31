@@ -10,14 +10,14 @@ class ReturnMeeting {
   bool renterArrived;
 
   /// is the tool damaged. `toolChecked` must be `true` to give [toolDamaged] a value.
-  bool toolDamaged;
+  bool? toolDamaged;
 
   /// does the renter admit the tool is damaged. Requires `toolDamaged` to be `true`.
-  bool renterAdmitDamage;
+  bool? renterAdmitDamage;
 
-  double compensationPrice;
+  double? compensationPrice;
 
-  bool renterAcceptCompensationPrice;
+  bool? renterAcceptCompensationPrice;
 
   /// did the owner confirm the handover
   bool ownerConfirmHandover;
@@ -25,13 +25,13 @@ class ReturnMeeting {
   /// did the renter confirm the handover
   bool renterConfirmHandover;
 
-  String disagreementCaseID;
+  String? disagreementCaseID;
 
   /// was the disagreement case reviewed and given a result
-  bool disagreementCaseSettled;
+  bool? disagreementCaseSettled;
 
   /// is the tool damage according to disagreement case result
-  bool disagreementCaseResult;
+  bool? disagreementCaseResult;
 
   /// did the owner arrive to the meeting place
   bool ownerMediaOK;
@@ -41,8 +41,8 @@ class ReturnMeeting {
 
   /// List of URLs to pictures/videos
   // TODO maybe move to disagreement case
-  List<String> renterMediaUrls;
-  List<String> ownerMediaUrls;
+  List<String>? renterMediaUrls;
+  List<String>? ownerMediaUrls;
 
   ReturnMeeting(
     this.ownerUID,
@@ -58,8 +58,8 @@ class ReturnMeeting {
     this.disagreementCaseID,
     this.disagreementCaseSettled,
     this.disagreementCaseResult,
-    this.ownerMediaOK,
-    this.renterMediaOK,
+    required this.ownerMediaOK,
+    required this.renterMediaOK,
     this.renterMediaUrls,
     this.ownerMediaUrls,
   }) {

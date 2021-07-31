@@ -5,23 +5,23 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key key}) : super(key: key);
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  TextEditingController _controller;
+  late TextEditingController _controller;
 
-  List<QueryDocumentSnapshot<Object>> results;
+  late List<QueryDocumentSnapshot<Object>> results;
 
   _search() async {
     var searchKey = _controller.text;
     _controller.text = '';
     var res = await FirestoreServices.searchForTool(searchKey);
     setState(() {
-      results = res;
+      if (res is List<QueryDocumentSnapshot<Object>>) results = res;
     });
   }
 
@@ -66,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildResultContainer(QueryDocumentSnapshot<Object> result) {
     Tool tool = Tool.fromJson(
-      Map.from(result.data())..addAll({'id': result.id}),
+      Map.from(result.data() as Map<dynamic, dynamic>)..addAll({'id': result.id}),
     );
     return InkWell(
       onTap: () {

@@ -12,7 +12,7 @@ import 'package:rentool/widgets/PopupMenuWidget.dart';
 import 'package:video_player/video_player.dart';
 
 class NewPostScreen extends StatelessWidget {
-  NewPostScreen({Key key}) : super(key: key);
+  NewPostScreen({Key? key}) : super(key: key);
 
   final _nameContoller = TextEditingController();
   final _descriptionContoller = TextEditingController();
@@ -115,9 +115,9 @@ class NewPostScreen extends StatelessWidget {
   }
 
   Widget _buildTextField({
-    TextEditingController controller,
-    String labelText,
-    TextInputAction textInputAction,
+    TextEditingController? controller,
+    String? labelText,
+    TextInputAction? textInputAction,
     bool isNumber = false,
   }) {
     return Padding(
@@ -137,7 +137,7 @@ class NewPostScreen extends StatelessWidget {
 }
 
 class MediaTile extends StatefulWidget {
-  const MediaTile({Key key, @required this.media}) : super(key: key);
+  const MediaTile({Key? key, required this.media}) : super(key: key);
 
   final List<File> media;
 
@@ -166,7 +166,7 @@ class _MediaTileState extends State<MediaTile> {
       if (res != null) {
         List<File> files;
         if (res.runtimeType == FilePickerResult)
-          files = (res as FilePickerResult).paths.map((path) => File(path)).toList();
+          files = (res as FilePickerResult).paths.map((path) => File(path!)).toList();
         else
           files = [File(res.path)];
         _addMedia(files);
@@ -231,7 +231,7 @@ class _MediaTileState extends State<MediaTile> {
         itemBuilder: (BuildContext context, int i) {
           var index = i - 1;
           if (i == 0) return _buildAddTile();
-          var type = lookupMimeType(widget.media[index].path).split('/')[0];
+          var type = lookupMimeType(widget.media[index].path)!.split('/')[0];
           if (type == 'image') {
             return _buildImageHolder(widget.media[index]);
           } else if (type == 'video') {
@@ -356,7 +356,7 @@ class _MediaTileState extends State<MediaTile> {
     );
   }
 
-  Widget _buildLoadingTile([ImageChunkEvent loadingProgress]) {
+  Widget _buildLoadingTile([ImageChunkEvent? loadingProgress]) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Container(
@@ -366,7 +366,7 @@ class _MediaTileState extends State<MediaTile> {
           child: CircularProgressIndicator(
             value: loadingProgress == null
                 ? null
-                : loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes,
+                : loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!,
           ),
         ),
       ),

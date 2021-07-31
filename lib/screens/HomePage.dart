@@ -5,7 +5,7 @@ import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -42,12 +42,12 @@ class _HomePageState extends State<HomePage> {
               // ChangeLanguage
 
               // get the index of the current locale
-              var crntLocale = Locale(AppLocalizations.of(context).localeName);
+              var crntLocale = Locale(AppLocalizations.of(context)!.localeName);
               var localeIndex = AppLocalizations.supportedLocales.indexOf(crntLocale);
 
               var next =
                   AppLocalizations.supportedLocales[(localeIndex + 1) % AppLocalizations.supportedLocales.length];
-              MyApp.of(context).setLocale(next);
+              MyApp.of(context)!.setLocale(next);
             },
           ),
           IconButton(
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Center(
-        child: Text(AppLocalizations.of(context).rentool),
+        child: Text(AppLocalizations.of(context)!.rentool),
       ),
     );
   }

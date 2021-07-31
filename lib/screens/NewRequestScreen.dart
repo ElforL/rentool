@@ -5,7 +5,7 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class NewRequestScreen extends StatefulWidget {
-  const NewRequestScreen({Key key, @required this.tool}) : super(key: key);
+  const NewRequestScreen({Key? key, required this.tool}) : super(key: key);
   final Tool tool;
 
   @override
@@ -13,10 +13,10 @@ class NewRequestScreen extends StatefulWidget {
 }
 
 class _NewRequestScreenState extends State<NewRequestScreen> {
-  TextEditingController _descriptionController;
-  TextEditingController _daysController;
-  String _descriptionErrorText;
-  String _daysErrorText;
+  late TextEditingController _descriptionController;
+  late TextEditingController _daysController;
+  String? _descriptionErrorText;
+  String? _daysErrorText;
 
   int get daysNum => int.parse(_daysController.text);
 
@@ -127,8 +127,8 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                         });
                       } else {
                         var request = ToolRequest(
-                          null,
-                          AuthServices.auth.currentUser.uid,
+                          'TEMP',
+                          AuthServices.auth.currentUser!.uid,
                           widget.tool.id,
                           _descriptionController.text,
                           daysNum,

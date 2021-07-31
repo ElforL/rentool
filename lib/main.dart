@@ -49,14 +49,14 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
+  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale;
+  Locale? _locale;
 
   void setLocale(Locale value) {
     setState(() {
@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
       title: 'Rentool',
-      onGenerateTitle: (_) => AppLocalizations.of(_).rentool,
+      onGenerateTitle: (_) => AppLocalizations.of(_)!.rentool,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -81,15 +81,15 @@ class _MyAppState extends State<MyApp> {
 }
 
 class FirstScreen extends StatelessWidget {
-  FirstScreen({Key key}) : super(key: key);
+  FirstScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       // Initialize FlutterFire:
       stream: AuthServices.authStateChanges,
-      builder: (context, AsyncSnapshot<User> snapshot) {
-        if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error);
+      builder: (context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error!);
         var user = snapshot.data;
 
         if (user == null) {

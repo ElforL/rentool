@@ -7,14 +7,14 @@ import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   /// shows an alert dialog
   Future showMyAlert(
     BuildContext context,
     Widget title,
     Widget content, [
-    List<Widget> actions,
+    List<Widget>? actions,
   ]) async {
     Widget k = AlertDialog(
       title: title,
@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  AppLocalizations.of(context).login_welcome,
+                  AppLocalizations.of(context)!.login_welcome,
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ),
@@ -50,10 +50,10 @@ class LoginScreen extends StatelessWidget {
                       padding: MaterialStateProperty.all(EdgeInsets.all(kIsWeb ? 17 : 10)),
                       backgroundColor: option.value['backgroundColor'] == null
                           ? null
-                          : MaterialStateProperty.all<Color>(option.value['backgroundColor'] as Color),
+                          : MaterialStateProperty.all<Color >(option.value['backgroundColor'] as Color),
                       foregroundColor: option.value['foregroundColor'] == null
                           ? null
-                          : MaterialStateProperty.all<Color>(option.value['foregroundColor'] as Color),
+                          : MaterialStateProperty.all<Color >(option.value['foregroundColor'] as Color),
                     ),
                     child: Row(
                       children: [
@@ -64,7 +64,7 @@ class LoginScreen extends StatelessWidget {
                               : option.value['icon'] as Widget, //Icon(Icons.email),
                         ),
                         Text(
-                          '${AppLocalizations.of(context).sign_in_with} ${option.key}',
+                          '${AppLocalizations.of(context)!.sign_in_with} ${option.key}',
                         ),
                       ],
                     ),
@@ -100,7 +100,7 @@ class LoginScreen extends StatelessWidget {
       await AuthServices.signInWithGoogle();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
-        showDiffCredsAlert(context, e.email);
+        showDiffCredsAlert(context, e.email!);
       } else {
         rethrow;
       }
@@ -112,7 +112,7 @@ class LoginScreen extends StatelessWidget {
       await AuthServices.signInWithFacebook();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
-        showDiffCredsAlert(context, e.email);
+        showDiffCredsAlert(context, e.email!);
       } else {
         rethrow;
       }
@@ -123,24 +123,24 @@ class LoginScreen extends StatelessWidget {
     var list = await AuthServices.auth.fetchSignInMethodsForEmail(email);
     showMyAlert(
       context,
-      Text(AppLocalizations.of(context).loginError),
+      Text(AppLocalizations.of(context)!.loginError),
       SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppLocalizations.of(context).diff_creds_error,
+              AppLocalizations.of(context)!.diff_creds_error,
             ),
             Text(
-              AppLocalizations.of(context).no_password_error_dialog2(
+              AppLocalizations.of(context)!.no_password_error_dialog2(
                 list.length,
-                list.length != 1 ? list : list.first,
+                list.length != 1 ? list.toString() : list.first,
               ),
             ),
             SizedBox(height: 10),
             Text(
-              AppLocalizations.of(context).no_password_error_dialog3,
+              AppLocalizations.of(context)!.no_password_error_dialog3,
             ),
           ],
         ),
@@ -150,13 +150,13 @@ class LoginScreen extends StatelessWidget {
           onPressed: () {
             sendPassResetEmail(context, email);
           },
-          child: Text(AppLocalizations.of(context).send_email),
+          child: Text(AppLocalizations.of(context)!.send_email),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(AppLocalizations.of(context).ok),
+          child: Text(AppLocalizations.of(context)!.ok),
         ),
       ],
     );
@@ -167,7 +167,7 @@ class LoginScreen extends StatelessWidget {
       await AuthServices.auth.sendPasswordResetEmail(email: email);
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context).emailSent),
+        content: Text(AppLocalizations.of(context)!.emailSent),
       ));
     } on FirebaseAuthException catch (e) {
       print('cought');
@@ -175,18 +175,18 @@ class LoginScreen extends StatelessWidget {
       if (e.code == 'invalid-email') {
         showMyAlert(
           context,
-          Text(AppLocalizations.of(context).error),
-          Text(AppLocalizations.of(context).badEmail),
+          Text(AppLocalizations.of(context)!.error),
+          Text(AppLocalizations.of(context)!.badEmail),
         );
       } else if (e.code == 'user-not-found') {
         showMyAlert(
           context,
-          Text(AppLocalizations.of(context).error),
-          Text(AppLocalizations.of(context).userNotFoundError),
+          Text(AppLocalizations.of(context)!.error),
+          Text(AppLocalizations.of(context)!.userNotFoundError),
         );
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${AppLocalizations.of(context).error}: ${AppLocalizations.of(context).emailNotSent}'),
+        content: Text('${AppLocalizations.of(context)!.error}: ${AppLocalizations.of(context)!.emailNotSent}'),
       ));
     }
   }

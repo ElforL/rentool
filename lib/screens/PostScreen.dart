@@ -7,7 +7,7 @@ import 'package:rentool/services/auth.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class PostScreen extends StatefulWidget {
-  PostScreen({Key key, @required this.tool}) : super(key: key);
+  PostScreen({Key? key, required this.tool}) : super(key: key);
 
   final Tool tool;
 
@@ -16,10 +16,10 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-  PageController _mediaController;
+  late PageController _mediaController;
 
   /// returns `true` if the tool belongs to the user (i.e., user = owner).
-  bool get isUsersTool => AuthServices.auth.currentUser.uid == widget.tool.ownerUID;
+  bool get isUsersTool => AuthServices.auth.currentUser!.uid == widget.tool.ownerUID;
 
   @override
   void initState() {
@@ -92,14 +92,14 @@ class _PostScreenState extends State<PostScreen> {
               children: [
                 SelectableText(
                   widget.tool.name,
-                  style: Theme.of(context).textTheme.headline5.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 5),
                 Row(
                   children: [
                     Text(
                       'Price: ',
-                      style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.grey.shade600),
+                      style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                     ),
                     Text(
                       'SAR ' + widget.tool.rentPrice.toString() + '/day',
@@ -112,7 +112,7 @@ class _PostScreenState extends State<PostScreen> {
                   children: [
                     Text(
                       'Status: ',
-                      style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.grey.shade600),
+                      style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                     ),
                     Text(
                       (widget.tool.isAvailable ? '' : 'Not ') + 'Available',
@@ -125,7 +125,7 @@ class _PostScreenState extends State<PostScreen> {
                   children: [
                     Text(
                       'Location: ',
-                      style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.grey.shade600),
+                      style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                     ),
                     Text(widget.tool.location),
                   ],
@@ -135,7 +135,7 @@ class _PostScreenState extends State<PostScreen> {
                   children: [
                     Text(
                       'Owner: ',
-                      style: Theme.of(context).textTheme.bodyText1.apply(color: Colors.grey.shade600),
+                      style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                     ),
                     Text(widget.tool.ownerUID),
                   ],

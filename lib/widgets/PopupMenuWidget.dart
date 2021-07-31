@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 /// Useful for placing buttons or plain text in it.
 class PopupMenuWidget<T> extends PopupMenuEntry<T> {
   const PopupMenuWidget({
-    Key key,
-    this.height,
+    Key? key,
+    this.height = 1,
     this.child,
     this.padding = const EdgeInsets.all(0),
   }) : super(key: key);
 
-  final Widget child;
+  final Widget? child;
   final EdgeInsetsGeometry padding;
+
   @override
   final double height;
 
@@ -20,7 +21,7 @@ class PopupMenuWidget<T> extends PopupMenuEntry<T> {
   _PopupMenuWidgetState createState() => new _PopupMenuWidgetState();
 
   @override
-  bool represents(T value) {
+  bool represents(T? value) {
     throw UnimplementedError();
   }
 }
