@@ -21,7 +21,7 @@ void main() async {
     final localhost = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
 
     // //// AUTHENTICATION ////
-    await FirebaseAuth.instance.useEmulator('http://$localhost:9099');
+    await FirebaseAuth.instance.useAuthEmulator('$localhost', 9099);
 
     // //// FIRESTORE ////
     FirebaseFirestore.instance.settings = Settings(
@@ -32,8 +32,7 @@ void main() async {
     );
 
     // STORAGE
-    await FirebaseStorage.instance.useEmulator(host: '$localhost', port: 9199);
-
+    await FirebaseStorage.instance.useStorageEmulator('$localhost', 9199);
     // //// FUNCTIONS ////
     // In case of errors due to insecure connection check the Android and iOS steps in the documentation
     // https://firebase.flutter.dev/docs/functions/usage#emulator-usage
