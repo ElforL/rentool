@@ -159,8 +159,8 @@ class _MediaTileState extends State<MediaTile> {
         );
       } else {
         res = inputType == MediaInput.cameraVideo
-            ? await picker.getVideo(source: ImageSource.camera)
-            : await picker.getImage(source: ImageSource.camera);
+            ? await picker.pickVideo(source: ImageSource.camera)
+            : await picker.pickImage(source: ImageSource.camera);
       }
 
       if (res != null) {
