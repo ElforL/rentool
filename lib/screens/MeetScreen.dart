@@ -205,7 +205,7 @@ class MeetingPicsContainer extends StatelessWidget {
           ),
           SizedBox(
             height: 150,
-            child: (myPics == null || myPics.isEmpty)
+            child: (myPics.isEmpty)
                 ? SizedBox(
                     height: 150,
                     child: Center(
@@ -241,7 +241,7 @@ class MeetingPicsContainer extends StatelessWidget {
           ),
           SizedBox(
             height: 150,
-            child: (othersPics == null || othersPics.isEmpty)
+            child: (othersPics.isEmpty)
                 ? SizedBox(
                     child: Center(
                       child: Text('No Photos'),

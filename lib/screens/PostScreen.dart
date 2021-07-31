@@ -49,7 +49,7 @@ class _PostScreenState extends State<PostScreen> {
                   controller: _mediaController,
                   scrollDirection: Axis.horizontal,
                   children: [
-                    if (widget.tool.media != null && widget.tool.media.isNotEmpty)
+                    if (widget.tool.media.isNotEmpty)
                       for (var url in widget.tool.media) Image.network(url)
                     else
                       Center(
