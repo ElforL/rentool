@@ -33,10 +33,6 @@ void main() async {
 
     // STORAGE
     await FirebaseStorage.instance.useStorageEmulator('$localhost', 9199);
-    // //// FUNCTIONS ////
-    // In case of errors due to insecure connection check the Android and iOS steps in the documentation
-    // https://firebase.flutter.dev/docs/functions/usage#emulator-usage
-    // await FirebaseFunctions.instance.useFunctionsEmulator(origin: 'http://$localhost:5001');
   } else {
     // Turn of persistence (offline access)
     FirebaseFirestore.instance.settings = Settings(
