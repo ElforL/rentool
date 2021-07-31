@@ -17,9 +17,6 @@ dependencies:
   rentool_sdk:
     git: git@github.com:ElforL/Rentool_sdk.git
   
-  # UI
-  flutter_icons: ^1.1.0
-
   # Firebase
   firebase_core: ^1.3.0
   cloud_firestore: ^2.2.2
@@ -45,5 +42,9 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  fonts:
+    - family: CustomIcons
+      fonts:
+        - asset: assets/fonts/CustomIcons.ttf
   uses-material-design: true
   generate: true

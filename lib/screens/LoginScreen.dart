@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:rentool/misc/custom_icons.dart';
 import 'package:rentool/screens/EmailSignScreen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -204,20 +204,20 @@ var signInOptions = {
   'Google': {
     'backgroundColor': Colors.white,
     'foregroundColor': Colors.black,
-    'icon': Icon(AntDesign.google),
+    'icon': Icon(CustomIcons.google),
   },
   'Facebook': {
     'backgroundColor': Colors.blue.shade800,
-    'icon': Icon(FontAwesome.facebook_square),
+    'icon': Icon(CustomIcons.facebook_square),
   },
   // // Needs an apple developer account which costs $99 🤷‍♂️
   // 'Apple': {
   //   'backgroundColor': Colors.black,
-  //   'icon': Icon(FontAwesome.apple),
+  //   'icon': Icon(CustomIcons.apple),
   // },
   // // Azure subscription is free for only 12 months 🤔
   // 'Microsoft': {
   //   'backgroundColor': Colors.grey.shade800,
-  //   'icon': Icon(MaterialCommunityIcons.microsoft),
+  //   'icon': Icon(CustomIcons.microsoft),
   // },
 };
