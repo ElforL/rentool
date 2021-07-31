@@ -350,7 +350,7 @@ service cloud.firestore {
                           ?
                           // 👮💔
                           (resource.data.renterAcceptCompensationPrice != null && resource.data.renterAcceptCompensationPrice == true)
-                              ? onlyAllow(['ownerArrived', 'compensationPrice', 'ownerConfirmHandover'])
+                              ? onlyAllow(['ownerArrived', 'ownerConfirmHandover'])
                               : onlyAllow(['ownerArrived', 'compensationPrice'])
                           :
                           // 👮💖
