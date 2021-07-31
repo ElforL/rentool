@@ -236,3 +236,168 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
 
     return null;
   });
+
+export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}/return_meetings/{requestID}')
+  .onUpdate(async (change, context) => {
+    const toolID = context.params.toolID;
+    const requestID = context.params.requestID;
+    const newData = change.after.data();
+    const oldData = change.before.data();
+
+    // if renterArrived CHANGED to `false` set everything that comes after it to false
+    if (!oldData.renterArrived && newData.renterArrived) {
+      // same for other fields
+      var updates;
+      if (newData.disagreementCaseSettled != null) {
+        // if there is a disagreement case don't change `renterAdmitDamage` and `renterMediaOK`
+        // because 1- changing them won't change anythin 2- they must be `false` and `true` respectively for a disagreement case to have been created
+        updates = {
+          'renterAcceptCompensationPrice': null,
+          'renterConfirmHandover': false,
+        };
+      } else {
+        updates = {
+          'renterAdmitDamage': null,
+          'renterAcceptCompensationPrice': null,
+          'renterMediaOK': false,
+          'renterConfirmHandover': false,
+        };
+      }
+      return change.after.ref.update(updates);
+    }
+
+    // if ownerArrived CHANGED to `false` set everything that comes after it to false
+    if (!oldData.ownerArrived && newData.ownerArrived) {
+      var updates;
+      if (newData.disagreementCaseSettled != null) {
+        // if there is a disagreement case don't change `toolDamaged` and `ownerMediaOK`
+        // because 1- changing them won't change anythin 2- they must be both `true` for a disagreement case to have been created
+        updates = {
+          'compensationPrice': null,
+          'ownerConfirmHandover': false,
+        };
+      } else {
+        updates = {
+          'toolDamaged': null,
+          'compensationPrice': null,
+          'ownerMediaOK': false,
+          'ownerConfirmHandover': false,
+        };
+      }
+      return change.after.ref.update(updates);
+    }
+
+    // when any [mediaOk] change from `false` to `true`
+    if (!oldData.ownerMediaOK && newData.ownerMediaOK || !oldData.renterMediaOK && oldData.renterMediaOK) {
+      // when BOTH [mediaOk] are true
+      if (newData.ownerMediaOK && newData.renterMediaOK) {
+        // create disagreement case
+        const disagreementsCollection = admin.firestore().collection('disagreementCases/');
+        const disagreementDoc = await disagreementsCollection.add({
+          'toolID': toolID,
+          'requestID': requestID,
+          'ownerUID': newData.ownerUID,
+          'renterUID': newData.renterUID,
+          'ownerMedia': newData.ownerMediaUrls,
+          'renterMedia': newData.renterMediaUrls,
+          'Admin': null,
+          'Result_IsToolDamaged': null,
+          'ResultDescription': null,
+        });
+
+        // update return meeting doc
+        return change.after.ref.update({
+          'disagreementCaseID': disagreementDoc.id,
+          'disagreementCaseSettled': false,
+          'disagreementCaseResult': null,
+        });
+      }
+    }
+
+    // when any [ConfirmHandover] change from `false` to `true`
+    if (!oldData.ownerConfirmHandover && newData.ownerConfirmHandover || !oldData.renterConfirmHandover && newData.renterConfirmHandover) {
+      // when BOTH [ConfirmHandover] are true
+      if (newData.ownerConfirmHandover && newData.renterConfirmHandover) {
+        // after both_handover 
+        // calculate total - and process payment
+        // end rent 
+        // set isActive to false
+
+        // calculate total - and process payment
+        const requestDoc = admin.firestore().doc(`Tools/${toolID}/requests/${requestID}`);
+        const requstData = (await requestDoc.get()).data()!;
+        const insuranceAmount = requstData.insuranceAmount;
+        const compensationPrice = newData.compensationPrice ?? 0;
+
+        const total_to_renter = insuranceAmount - compensationPrice;
+        const total_to_owner = compensationPrice;
+
+        try {
+          if (total_to_renter != 0) {
+            // send the money
+          }
+          if (total_to_owner != 0) {
+            // send the money
+          }
+        } catch (error) {
+          // if an error occured during payment don't end rent
+          console.log(`An error occured after handover\n${error.toString()}`)
+          return null;
+        }
+
+        // end rent
+        const toolDoc = admin.firestore().doc(`Tools/${toolID}`);
+        const toolData = (await toolDoc.get()).data()!;
+
+        const rentDoc = admin.firestore().doc(`rents/${toolData.currentRent}`)
+        rentDoc.update({
+          endTime: admin.firestore.Timestamp.now(),
+        });
+        // Update the tool doc
+        await toolDoc.update({
+          'currentRent': null,
+          'acceptedRequestID': null,
+        });
+
+
+        // move the request to `previous_requests` subcollection then delete it from the `requests` subcollection
+        await admin.firestore().doc(`Tools/${toolID}/previous_requests/${requestID}`).set(
+          (await requestDoc.get()).data()!
+        )
+        await requestDoc.delete();
+
+        // Update the deliver meeting doc to inActive
+        const deliverMeetingDoc = admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${requestID}`);
+        await deliverMeetingDoc.update({
+          'isActive': false,
+        });
+
+        // set isActive to false
+        return change.after.ref.update({
+          'isActive': false,
+        });
+      }
+    }
+
+    return null;
+  });
+
+export const disagreementCaseUpdated = functions.firestore.document('/disagreementCases/{caseID}')
+  .onUpdate(async (change, context) => {
+    const newData = change.after.data();
+
+    if(newData == null) return null;
+
+    if(newData.Result_IsToolDamaged != null){
+      // a result has been set
+      const isToolDamaged = newData.Result_IsToolDamaged;
+      const toolID = newData.toolID;
+      const requestID = newData.requestID;
+      return admin.firestore().doc(`Tools/${toolID}/return_meetings/${requestID}`).update({
+        'disagreementCaseSettled': true,
+        'disagreementCaseResult': isToolDamaged,
+      });
+    }
+
+    return null;
+  });
