@@ -35,6 +35,17 @@ service cloud.firestore {
         isTHEuser();
       }
 
+      match /devices/{fcmToken}{
+      	allow read: if isTHEuser();
+        allow create: if isTHEuser();
+      }
+
+      match /notifications/{notificationID}{
+      	allow read: if isTHEuser();
+        // only allow the user to change `isRead` field
+        allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
+      }
+
       match /requests/{toolID}{
       	allow read: if isTHEuser();
         allow write: if false;
