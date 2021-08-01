@@ -1,14 +1,14 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
 admin.initializeApp();
 
-export const fcm = require('./fcm');
+export * from './fcm';
 
-/** 
+/**
  * handle tools' `acceptedRequestID` field changes
  * - if a new requst was added this function changes the request's `isAccepted` to true
  * - if `acceptedRequestID` changed to null this function changes the old request's `isAccepted` to false (if it still exist)
@@ -16,17 +16,21 @@ export const fcm = require('./fcm');
 export const toolUpdated = functions.firestore.document('Tools/{toolID}')
   .onUpdate(async (change, context) => {
     /** did `acceptedRequestID` field changed */
-    const changedAcceptedID = change.before.data().acceptedRequestID != change.after.data().acceptedRequestID;
+    const oldData = change.before.data();
+    const newData = change.after.data();
+
+    const changedAcceptedID = oldData.acceptedRequestID != newData.acceptedRequestID;
     if (changedAcceptedID) {
       const toolID = change.after.id;
-      const oldRequestID = change.before.data().acceptedRequestID;
-      const newRequestID = change.after.data().acceptedRequestID;
+      const oldRequestID = oldData.acceptedRequestID;
+      const newRequestID = newData.acceptedRequestID;
       if (newRequestID != null) {
-        const renterUID = (await admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).get()).data()!.renterUID;
+        const requestDoc = admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`);
+        const renterUID = (await requestDoc.get()).data()!.renterUID;
         // create a deliver_meeting doc
         await admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${newRequestID}`).set({
           'isActive': true,
-          'ownerUID': change.after.data().ownerUID,
+          'ownerUID': newData.ownerUID,
           'owner_arrived': false,
           'owner_pics_ok': false,
           'owner_ids_ok': false,
@@ -52,11 +56,11 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
         await admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${oldRequestID}`).update({ 'isActive': false });
 
         // change the request's `isAccepted` to false if it still exist (i.e., it wasn't deleted)
-        const oldRequestDoc = await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`)
+        const oldRequestDoc = await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`);
         if ((await oldRequestDoc.get()).exists) {
           return oldRequestDoc.update({ 'isAccepted': false });
         } else {
-          return null
+          return null;
         }
       }
     } else {
@@ -116,7 +120,9 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
     const renterUID = after.renterUID;
 
     // if either the owner or renter changed arrive from `true` to `false`
-    if (before.owner_arrived && !after.owner_arrived || before.renter_arrived && !after.renter_arrived) {
+    const ownerLeft = before.owner_arrived && !after.owner_arrived;
+    const renterLeft = before.renter_arrived && !after.renter_arrived;
+    if (ownerLeft || renterLeft) {
       return change.after.ref.update({
         'owner_pics_ok': false,
         'owner_ids_ok': false,
@@ -126,7 +132,9 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
     }
 
     // if either the owner or renter changed [pics] from `true` to `false`
-    if (before.owner_pics_ok && !after.owner_pics_ok || before.renter_pics_ok && !after.renter_pics_ok) {
+    const ownerPicsBecameFalse = before.owner_pics_ok && !after.owner_pics_ok;
+    const renterPicsBecameFalse = before.renter_pics_ok && !after.renter_pics_ok;
+    if (ownerPicsBecameFalse || renterPicsBecameFalse) {
       // if `owner_id` or `renter_id` wasn't null (which mean they were both agreed on pics)
       // set the IDs to null
       if (before.owner_id != null || before.renter_id != null) {
@@ -141,8 +149,10 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
       });
     }
 
+    const ownerAgreedOnPics = !before.owner_pics_ok && after.owner_pics_ok;
+    const renterAgreedOnPics = !before.renter_pics_ok && after.renter_pics_ok;
     // if either the owner or renter changed [pics] from `false` to `true`
-    if (!before.owner_pics_ok && after.owner_pics_ok || !before.renter_pics_ok && after.renter_pics_ok) {
+    if (ownerAgreedOnPics || renterAgreedOnPics) {
       // when BOTH agree on pics set the IDs
       if (after.owner_pics_ok && after.renter_pics_ok) {
         const ownerIdDoc = await admin.firestore().doc(`Users/${ownerUID}/private/ID`).get();
@@ -170,7 +180,9 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
       });
     }
 
-    if (!before.owner_ids_ok && after.owner_ids_ok || !before.renter_ids_ok && after.renter_ids_ok) {
+    const ownerAgreedOnIds = !before.owner_ids_ok && after.owner_ids_ok;
+    const renterAgreedOnIds = !before.renter_ids_ok && after.renter_ids_ok;
+    if (ownerAgreedOnIds || renterAgreedOnIds) {
       // when they both agree on IDs
       if (after.owner_ids_ok && after.renter_ids_ok) {
         // remove the IDs strings from meetings doc
@@ -179,7 +191,7 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
           'renter_id': null,
         });
         try {
-          const rentsCollection = admin.firestore().collection('rents/')
+          const rentsCollection = admin.firestore().collection('rents/');
           // Create rent doc
           const rentDoc = await rentsCollection.add({
             toolID: change.after.ref.parent.parent!.id,
@@ -188,18 +200,18 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
             endTime: null,
           });
           // Update the tool doc
-          const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`)
+          const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`);
           await toolDoc.update({
             'currentRent': rentDoc.id,
           });
           // Update the request `isRented` field
-          const requestDoc = admin.firestore().doc(`Tools/${context.params.toolID}/requests/${context.params.requestID}`)
+          const requestDoc = admin.firestore().doc(`Tools/${context.params.toolID}/requests/${context.params.requestID}`);
           await requestDoc.update({
             'isRented': true,
           });
 
           // Create return meeting doc
-          const returnMeetingDoc = admin.firestore().doc(`Tools/${context.params.toolID}/return_meetings/${context.params.requestID}`)
+          const returnMeetingDoc = admin.firestore().doc(`Tools/${context.params.toolID}/return_meetings/${context.params.requestID}`);
           await returnMeetingDoc.set({
             'isActive': true,
             'ownerUID': ownerUID,
@@ -249,7 +261,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
     // if renterArrived CHANGED to `false` set everything that comes after it to false
     if (!oldData.renterArrived && newData.renterArrived) {
       // same for other fields
-      var updates;
+      let updates;
       if (newData.disagreementCaseSettled != null) {
         // if there is a disagreement case don't change `renterAdmitDamage` and `renterMediaOK`
         // because 1- changing them won't change anythin 2- they must be `false` and `true` respectively for a disagreement case to have been created
@@ -270,7 +282,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
 
     // if ownerArrived CHANGED to `false` set everything that comes after it to false
     if (!oldData.ownerArrived && newData.ownerArrived) {
-      var updates;
+      let updates;
       if (newData.disagreementCaseSettled != null) {
         // if there is a disagreement case don't change `toolDamaged` and `ownerMediaOK`
         // because 1- changing them won't change anythin 2- they must be both `true` for a disagreement case to have been created
@@ -289,8 +301,10 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
       return change.after.ref.update(updates);
     }
 
+    const ownerFinishedMedia = !oldData.ownerMediaOK && newData.ownerMediaOK;
+    const renterLikedMedia = !oldData.renterMediaOK && oldData.renterMediaOK;
     // when any [mediaOk] change from `false` to `true`
-    if (!oldData.ownerMediaOK && newData.ownerMediaOK || !oldData.renterMediaOK && oldData.renterMediaOK) {
+    if (ownerFinishedMedia || renterLikedMedia) {
       // when BOTH [mediaOk] are true
       if (newData.ownerMediaOK && newData.renterMediaOK) {
         // create disagreement case
@@ -316,13 +330,15 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
       }
     }
 
+    const ownerConfirmedHO = !oldData.ownerConfirmHandover && newData.ownerConfirmHandover;
+    const renterConfirmedHO = !oldData.renterConfirmHandover && newData.renterConfirmHandover;
     // when any [ConfirmHandover] change from `false` to `true`
-    if (!oldData.ownerConfirmHandover && newData.ownerConfirmHandover || !oldData.renterConfirmHandover && newData.renterConfirmHandover) {
+    if (ownerConfirmedHO || renterConfirmedHO) {
       // when BOTH [ConfirmHandover] are true
       if (newData.ownerConfirmHandover && newData.renterConfirmHandover) {
-        // after both_handover 
+        // after both_handover
         // calculate total - and process payment
-        // end rent 
+        // end rent
         // set isActive to false
 
         // calculate total - and process payment
@@ -343,7 +359,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
           }
         } catch (error) {
           // if an error occured during payment don't end rent
-          console.log(`An error occured after handover\n${error.toString()}`)
+          console.log(`An error occured after handover\n${error.toString()}`);
           return null;
         }
 
@@ -351,7 +367,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
         const toolDoc = admin.firestore().doc(`Tools/${toolID}`);
         const toolData = (await toolDoc.get()).data()!;
 
-        const rentDoc = admin.firestore().doc(`rents/${toolData.currentRent}`)
+        const rentDoc = admin.firestore().doc(`rents/${toolData.currentRent}`);
         rentDoc.update({
           endTime: admin.firestore.Timestamp.now(),
         });
@@ -365,7 +381,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
         // move the request to `previous_requests` subcollection then delete it from the `requests` subcollection
         await admin.firestore().doc(`Tools/${toolID}/previous_requests/${requestID}`).set(
           (await requestDoc.get()).data()!
-        )
+        );
         await requestDoc.delete();
 
         // Update the deliver meeting doc to inActive
@@ -388,9 +404,9 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
   .onUpdate(async (change, context) => {
     const newData = change.after.data();
 
-    if(newData == null) return null;
+    if (newData == null) return null;
 
-    if(newData.Result_IsToolDamaged != null){
+    if (newData.Result_IsToolDamaged != null) {
       // a result has been set
       const isToolDamaged = newData.Result_IsToolDamaged;
       const toolID = newData.toolID;
