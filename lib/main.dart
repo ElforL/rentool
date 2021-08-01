@@ -9,6 +9,7 @@ import 'package:rentool/screens/FirebaseInitErrorScreen.dart';
 import 'package:rentool/screens/LoginScreen.dart';
 import 'package:rentool/screens/userScreen.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:rentool/services/cloud_messaging.dart';
 import 'package:rentool/services/firestore.dart';
 
 void main() async {
@@ -45,11 +46,18 @@ void main() async {
     );
   }
 
-  runApp(MyApp());
+  var fcmServices = CloudMessagingServices();
+  await fcmServices.init();
+
+  runApp(MyApp(fcmServices: fcmServices));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key key, @required this.fcmServices}) : super(key: key);
+
   static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
+
+  final CloudMessagingServices fcmServices;
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -57,6 +65,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale _locale;
+
+  CloudMessagingServices get fcmServices => widget.fcmServices;
 
   void setLocale(Locale value) {
     setState(() {
