@@ -6,6 +6,8 @@ import * as admin from "firebase-admin";
 
 admin.initializeApp();
 
+export const fcm = require('./fcm');
+
 /** 
  * handle tools' `acceptedRequestID` field changes
  * - if a new requst was added this function changes the request's `isAccepted` to true
