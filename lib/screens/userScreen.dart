@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:rentool/models/CreditCard.dart';
 import 'package:rentool/screens/NewPostScreen.dart';
 import 'package:rentool/screens/SearchScreen.dart';
 import 'package:rentool/services/auth.dart';
