@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  const EMULATOR_ON = true; // TODO hard coded bool
+  const EMULATOR_ON = true;
   // Configure emulator settings
   if (EMULATOR_ON && !kReleaseMode) {
     final localhost = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
@@ -110,19 +111,18 @@ class FirstScreen extends StatelessWidget {
           if (!user.emailVerified) {
             print('Email address not verified.');
           }
-          FirestoreServices.ensureUserExist(user);
-          // TODO
-          // FirestoreServices.getID(user.uid).then((value) {
-          //   if (!value.exists) {
-          //     Navigator.pushReplacement(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => EnterIDScreen()),
-          //     );
-          //   }
-          // });
+          FirestoreServices.ensureUserExist(user).then((userDocExists) {
+            if (userDocExists) addFcmTokenToDb(user);
+          });
+
           return UserScreen();
         }
       },
     );
+  }
+
+  void addFcmTokenToDb(User user) async {
+    final token = await FirebaseMessaging.instance.getToken();
+    FirestoreServices.addDeviceToken(token, user.uid);
   }
 }
