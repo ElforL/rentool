@@ -1,6 +1,20 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
+
+let prodAdmin: admin.app.App;
+const isOnLocalEmulator = process.env.FUNCTIONS_EMULATOR == 'true';
+if (isOnLocalEmulator) {
+  console.log('function running in local emulator');
+  const serviceAccount = require('../secret/rentool-5a78c-firebase-adminsdk-q4wqx-6c6f8750b2.json');
+  prodAdmin = admin.initializeApp(
+    {
+      credential: admin.credential.cert(serviceAccount),
+    },
+    'Production',
+  );
+}
+
 export const newNotification = functions.firestore
   .document('Users/{userID}/notifications/{notificationID}')
   .onCreate(async (snapshot, context) => {
@@ -31,5 +45,9 @@ export const newNotification = functions.firestore
       },
     };
 
-    admin.messaging().sendToDevice(deviceTokens, payload);
+    if (isOnLocalEmulator && prodAdmin != null) {
+      console.log('Sending fcm in local emulator');
+      return prodAdmin.messaging().sendToDevice(deviceTokens, payload);
+    }
+    return admin.messaging().sendToDevice(deviceTokens, payload);
   });

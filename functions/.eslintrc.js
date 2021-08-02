@@ -32,5 +32,6 @@ module.exports = {
     'camelcase': 'off',
     'object-curly-spacing': 'off',
     'valid-jsdoc': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
   },
 };
