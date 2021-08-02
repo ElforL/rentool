@@ -70,25 +70,48 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
 
 export const requestWrite = functions.firestore.document('Tools/{toolID}/requests/{requestID}')
   .onWrite(async (change, context) => {
+    const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`);
     if (!change.after.exists) {
       // DELETE
-
       const docData = change.before.data()!;
       // if the request was accepted, remove its ID from `acceptedRequestID`
       if (docData && docData.isAccepted == true) {
-        const toolID = docData.toolID;
-        await admin.firestore().doc(`Tools/${toolID}`).update({ 'acceptedRequestID': null });
+        await toolDoc.update({ 'acceptedRequestID': null });
       }
 
       // delete the request snippet in the user subcollection
       const renterUID = docData.renterUID;
       const renterRequestDoc = admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`);
-      return renterRequestDoc.delete();
+      await renterRequestDoc.delete();
+
+      // send notification to renter
+      const toolDocData = await toolDoc.get();
+      const toolName = toolDocData.data()?.name;
+      return addNotification(docData.renterUID, 'REQ_DEL', {
+        'toolID': context.params.toolID,
+        'requestID': context.params.requestID,
+        'toolName': toolName,
+      });
     } else {
       // UPDATE OR CREATE
+      const docData = change.after.data()!;
+
+      if (!change.before.exists) {
+        // if it was a new request
+        // send notification to owner
+        const toolDocData = await toolDoc.get();
+        const toolName = toolDocData.data()?.name;
+        const renterDoc = await admin.firestore().doc(`Users/${docData.renterUID}`).get();
+        const renterName = renterDoc.data()?.name;
+        await addNotification(docData.renterUID, 'REQ_REC', {
+          'toolID': context.params.toolID,
+          'requestID': context.params.requestID,
+          'toolName': toolName,
+          'renterName': renterName,
+        });
+      }
 
       // update/create the request snippet in the user's subcollection
-      const docData = change.after.data()!;
       const renterUID = docData.renterUID;
       const renterRequestDoc = await admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`).get();
       if (renterRequestDoc.exists && renterRequestDoc.data()!.id != change.after.id) {
@@ -232,6 +255,23 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
             'renterMediaUrls': [],
             'ownerMediaUrls': [],
           });
+
+
+          // Send notifications
+          const toolName = (await toolDoc.get()).data()?.name;
+          const renterName = (await admin.firestore().doc(`Users/${renterUID}`).get()).data()?.name;
+          const ownerName = (await admin.firestore().doc(`Users/${ownerUID}`).get()).data()?.name;
+
+          const notifCode = `REN_START`;
+          const notifData = {
+            'toolID': context.params.toolID,
+            'toolName': toolName,
+            'renterName': renterName,
+            'ownerName': ownerName,
+            'renterUID': renterUID,
+          };
+          addNotification(ownerUID, notifCode, notifData);
+          addNotification(renterUID, notifCode, notifData);
 
           // Update the meeting doc
           return change.after.ref.update({
@@ -390,6 +430,22 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
           'isActive': false,
         });
 
+        // Send notifications
+        const toolName = toolData.name;
+        const renterName = (await admin.firestore().doc(`Users/${newData.renterUID}`).get()).data()?.name;
+        const ownerName = (await admin.firestore().doc(`Users/${newData.ownerUID}`).get()).data()?.name;
+
+        const notifCode = `REN_END`;
+        const NotifData = {
+          'toolID': toolID,
+          'toolName': toolName,
+          'renterName': renterName,
+          'ownerName': ownerName,
+          'renterUID': newData.renterUID,
+        };
+        addNotification(newData.ownerUID, notifCode, NotifData);
+        addNotification(newData.renterUID, notifCode, NotifData);
+
         // set isActive to false
         return change.after.ref.update({
           'isActive': false,
@@ -410,6 +466,18 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
       // a result has been set
       const isToolDamaged = newData.Result_IsToolDamaged;
       const toolID = newData.toolID;
+
+      const toolDoc = await admin.firestore().doc(`Tools/${toolID}`).get();
+      const toolName = toolDoc.data()?.name;
+
+      const notifCode = isToolDamaged ? 'DC_DAM' : 'DC_NDAM';
+      const notifData = {
+        'toolID': toolID, 
+        'toolName': toolName,
+      };
+      addNotification(newData.renterUID, notifCode, notifData);
+      addNotification(newData.ownerUID, notifCode, notifData);
+
       const requestID = newData.requestID;
       return admin.firestore().doc(`Tools/${toolID}/return_meetings/${requestID}`).update({
         'disagreementCaseSettled': true,
@@ -419,3 +487,38 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
 
     return null;
   });
+
+/**
+ * create a new doc in the user's notification collections which also invokes `newNotification()` and sends the user an FCM message
+ * 
+ * @param userUID the user's uid
+ * @param code 
+ * Notifications codes:  
+ * - `REQ_REC`: request recived
+ * - `REQ_ACC`: request accepted
+ * - `REQ_DEL`: request deleted
+ * - `REN_START`: rent started
+ * - `REN_END`: rent ended
+ * - `DC_DAM`: disagreement case settled and tool is damaged
+ * - `DC_NDAM`: disagreement case settled and tool is not damaged
+ * 
+ * @param data the notification data required for each code
+ * - `REQ_REC`: toolID, requestID, toolName, renterName
+ * - `REQ_ACC`: toolID, requestID, toolName,
+ * - `REQ_DEL`: toolID, requestID, toolName,
+ * - `REN_START`: toolID, toolName, renterName, ownerName, renterUID
+ * - `REN_END`: toolID, toolName, renterName, ownerName, renterUID
+ * - `DC_DAM`: toolID, toolName
+ * - `DC_NDAM`: toolID, toolName
+ * 
+ * @returns A Promise resolved with a DocumentReference pointing to the newly created document after it has been written to the backend.
+ */
+function addNotification(userUID: string, code: string, data: any) {
+  const notifsCollection = admin.firestore().collection(`Users/${userUID}/notifications`);
+  return notifsCollection.add({
+    'code': code,
+    'data': data,
+    'time': admin.firestore.FieldValue.serverTimestamp(),
+    'isRead': false,
+  });
+}
