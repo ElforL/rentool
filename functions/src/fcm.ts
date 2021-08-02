@@ -4,6 +4,9 @@ import * as admin from 'firebase-admin';
 export const newNotification = functions.firestore
   .document('Users/{userID}/notifications/{notificationID}')
   .onCreate(async (snapshot, context) => {
+    const docData = snapshot.data()!;
+    if (docData.isRead ?? false) return null;
+
     const userID = context.params.userID;
 
     const devices = await admin.firestore().collection(`Users/${userID}/devices`).get();
@@ -22,11 +25,9 @@ export const newNotification = functions.firestore
     }
 
     const payload = {
-      'data': {},
-      'notification': {
-        'title': 'Hi!',
-        'body': 'This message was sent from the cloud ☁ 😲',
-        'icons': 'https://www.gstatic.com/devrel-devsite/prod/v0492b3db79b8927fe2347ea2dc87c471b22f173331622ffd10334837d43ea37f/firebase/images/lockup.png',
+      'data': {
+        'code': docData.code,
+        'data': docData.data,
       },
     };
 
