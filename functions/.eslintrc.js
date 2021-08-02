@@ -31,5 +31,6 @@ module.exports = {
     'indent': 'off',
     'camelcase': 'off',
     'object-curly-spacing': 'off',
+    'valid-jsdoc': 'off',
   },
 };

@@ -262,7 +262,7 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
           const renterName = (await admin.firestore().doc(`Users/${renterUID}`).get()).data()?.name;
           const ownerName = (await admin.firestore().doc(`Users/${ownerUID}`).get()).data()?.name;
 
-          const notifCode = `REN_START`;
+          const notifCode = 'REN_START';
           const notifData = {
             'toolID': context.params.toolID,
             'toolName': toolName,
@@ -435,7 +435,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
         const renterName = (await admin.firestore().doc(`Users/${newData.renterUID}`).get()).data()?.name;
         const ownerName = (await admin.firestore().doc(`Users/${newData.ownerUID}`).get()).data()?.name;
 
-        const notifCode = `REN_END`;
+        const notifCode = 'REN_END';
         const NotifData = {
           'toolID': toolID,
           'toolName': toolName,
@@ -472,7 +472,7 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
 
       const notifCode = isToolDamaged ? 'DC_DAM' : 'DC_NDAM';
       const notifData = {
-        'toolID': toolID, 
+        'toolID': toolID,
         'toolName': toolName,
       };
       addNotification(newData.renterUID, notifCode, notifData);
@@ -490,10 +490,9 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
 
 /**
  * create a new doc in the user's notification collections which also invokes `newNotification()` and sends the user an FCM message
- * 
  * @param userUID the user's uid
- * @param code 
- * Notifications codes:  
+ * @param code
+ * Notifications codes:
  * - `REQ_REC`: request recived
  * - `REQ_ACC`: request accepted
  * - `REQ_DEL`: request deleted
@@ -501,7 +500,6 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
  * - `REN_END`: rent ended
  * - `DC_DAM`: disagreement case settled and tool is damaged
  * - `DC_NDAM`: disagreement case settled and tool is not damaged
- * 
  * @param data the notification data required for each code
  * - `REQ_REC`: toolID, requestID, toolName, renterName
  * - `REQ_ACC`: toolID, requestID, toolName,
@@ -510,10 +508,10 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
  * - `REN_END`: toolID, toolName, renterName, ownerName, renterUID
  * - `DC_DAM`: toolID, toolName
  * - `DC_NDAM`: toolID, toolName
- * 
  * @returns A Promise resolved with a DocumentReference pointing to the newly created document after it has been written to the backend.
  */
-function addNotification(userUID: string, code: string, data: any) {
+function addNotification(userUID: string, code: string, data: any)
+  : Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>> {
   const notifsCollection = admin.firestore().collection(`Users/${userUID}/notifications`);
   return notifsCollection.add({
     'code': code,
