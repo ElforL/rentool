@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +10,14 @@ import 'package:rentool/screens/FirebaseInitErrorScreen.dart';
 import 'package:rentool/screens/LoginScreen.dart';
 import 'package:rentool/screens/userScreen.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:rentool/services/cloud_messaging.dart';
 import 'package:rentool/services/firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  const EMULATOR_ON = true; // TODO hard coded bool
+  const EMULATOR_ON = true;
   // Configure emulator settings
   if (EMULATOR_ON && !kReleaseMode) {
     final localhost = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
@@ -40,11 +42,17 @@ void main() async {
     );
   }
 
-  runApp(MyApp());
+  final fcmServices = CloudMessagingServices();
+  await fcmServices.init();
+
+  runApp(MyApp(fcmServices: fcmServices));
 }
 
 class MyApp extends StatefulWidget {
   static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
+  const MyApp({Key? key, this.fcmServices}) : super(key: key);
+
+  final CloudMessagingServices? fcmServices;
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -52,6 +60,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
+
+  CloudMessagingServices? get fcmServices => widget.fcmServices;
 
   void setLocale(Locale value) {
     setState(() {
@@ -95,19 +105,20 @@ class FirstScreen extends StatelessWidget {
           if (!user.emailVerified) {
             print('Email address not verified.');
           }
-          FirestoreServices.ensureUserExist(user);
-          // TODO
-          // FirestoreServices.getID(user.uid).then((value) {
-          //   if (!value.exists) {
-          //     Navigator.pushReplacement(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => EnterIDScreen()),
-          //     );
-          //   }
-          // });
+          FirestoreServices.ensureUserExist(user).then((userDocExists) {
+            if (userDocExists) addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
+          });
+
           return UserScreen();
         }
       },
     );
+  }
+
+  void addFcmTokenToDb(User user, String languageCode) async {
+    final token = await FirebaseMessaging.instance.getToken();
+    if (token != null) {
+      FirestoreServices.addDeviceToken(token, user.uid, languageCode);
+    }
   }
 }

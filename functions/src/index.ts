@@ -1,12 +1,14 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
 admin.initializeApp();
 
-/** 
+export * from './fcm';
+
+/**
  * handle tools' `acceptedRequestID` field changes
  * - if a new requst was added this function changes the request's `isAccepted` to true
  * - if `acceptedRequestID` changed to null this function changes the old request's `isAccepted` to false (if it still exist)
@@ -14,17 +16,21 @@ admin.initializeApp();
 export const toolUpdated = functions.firestore.document('Tools/{toolID}')
   .onUpdate(async (change, context) => {
     /** did `acceptedRequestID` field changed */
-    const changedAcceptedID = change.before.data().acceptedRequestID != change.after.data().acceptedRequestID;
+    const oldData = change.before.data();
+    const newData = change.after.data();
+
+    const changedAcceptedID = oldData.acceptedRequestID != newData.acceptedRequestID;
     if (changedAcceptedID) {
       const toolID = change.after.id;
-      const oldRequestID = change.before.data().acceptedRequestID;
-      const newRequestID = change.after.data().acceptedRequestID;
+      const oldRequestID = oldData.acceptedRequestID;
+      const newRequestID = newData.acceptedRequestID;
       if (newRequestID != null) {
-        const renterUID = (await admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).get()).data()!.renterUID;
+        const requestDoc = admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`);
+        const renterUID = (await requestDoc.get()).data()!.renterUID;
         // create a deliver_meeting doc
         await admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${newRequestID}`).set({
           'isActive': true,
-          'ownerUID': change.after.data().ownerUID,
+          'ownerUID': newData.ownerUID,
           'owner_arrived': false,
           'owner_pics_ok': false,
           'owner_ids_ok': false,
@@ -50,11 +56,11 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
         await admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${oldRequestID}`).update({ 'isActive': false });
 
         // change the request's `isAccepted` to false if it still exist (i.e., it wasn't deleted)
-        const oldRequestDoc = await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`)
+        const oldRequestDoc = await admin.firestore().doc(`Tools/${toolID}/requests/${oldRequestID}`);
         if ((await oldRequestDoc.get()).exists) {
           return oldRequestDoc.update({ 'isAccepted': false });
         } else {
-          return null
+          return null;
         }
       }
     } else {
@@ -64,25 +70,48 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
 
 export const requestWrite = functions.firestore.document('Tools/{toolID}/requests/{requestID}')
   .onWrite(async (change, context) => {
+    const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`);
     if (!change.after.exists) {
       // DELETE
-
       const docData = change.before.data()!;
       // if the request was accepted, remove its ID from `acceptedRequestID`
       if (docData && docData.isAccepted == true) {
-        const toolID = docData.toolID;
-        await admin.firestore().doc(`Tools/${toolID}`).update({ 'acceptedRequestID': null });
+        await toolDoc.update({ 'acceptedRequestID': null });
       }
 
       // delete the request snippet in the user subcollection
       const renterUID = docData.renterUID;
       const renterRequestDoc = admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`);
-      return renterRequestDoc.delete();
+      await renterRequestDoc.delete();
+
+      // send notification to renter
+      const toolDocData = await toolDoc.get();
+      const toolName = toolDocData.data()?.name;
+      return addNotification(docData.renterUID, 'REQ_DEL', {
+        'toolID': context.params.toolID,
+        'requestID': context.params.requestID,
+        'toolName': toolName,
+      });
     } else {
       // UPDATE OR CREATE
+      const docData = change.after.data()!;
+
+      if (!change.before.exists) {
+        // if it was a new request
+        // send notification to owner
+        const toolDocData = await toolDoc.get();
+        const toolName = toolDocData.data()?.name;
+        const renterDoc = await admin.firestore().doc(`Users/${docData.renterUID}`).get();
+        const renterName = renterDoc.data()?.name;
+        await addNotification(docData.renterUID, 'REQ_REC', {
+          'toolID': context.params.toolID,
+          'requestID': context.params.requestID,
+          'toolName': toolName,
+          'renterName': renterName,
+        });
+      }
 
       // update/create the request snippet in the user's subcollection
-      const docData = change.after.data()!;
       const renterUID = docData.renterUID;
       const renterRequestDoc = await admin.firestore().doc(`Users/${renterUID}/requests/${docData.toolID}`).get();
       if (renterRequestDoc.exists && renterRequestDoc.data()!.id != change.after.id) {
@@ -114,7 +143,9 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
     const renterUID = after.renterUID;
 
     // if either the owner or renter changed arrive from `true` to `false`
-    if (before.owner_arrived && !after.owner_arrived || before.renter_arrived && !after.renter_arrived) {
+    const ownerLeft = before.owner_arrived && !after.owner_arrived;
+    const renterLeft = before.renter_arrived && !after.renter_arrived;
+    if (ownerLeft || renterLeft) {
       return change.after.ref.update({
         'owner_pics_ok': false,
         'owner_ids_ok': false,
@@ -124,7 +155,9 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
     }
 
     // if either the owner or renter changed [pics] from `true` to `false`
-    if (before.owner_pics_ok && !after.owner_pics_ok || before.renter_pics_ok && !after.renter_pics_ok) {
+    const ownerPicsBecameFalse = before.owner_pics_ok && !after.owner_pics_ok;
+    const renterPicsBecameFalse = before.renter_pics_ok && !after.renter_pics_ok;
+    if (ownerPicsBecameFalse || renterPicsBecameFalse) {
       // if `owner_id` or `renter_id` wasn't null (which mean they were both agreed on pics)
       // set the IDs to null
       if (before.owner_id != null || before.renter_id != null) {
@@ -139,8 +172,10 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
       });
     }
 
+    const ownerAgreedOnPics = !before.owner_pics_ok && after.owner_pics_ok;
+    const renterAgreedOnPics = !before.renter_pics_ok && after.renter_pics_ok;
     // if either the owner or renter changed [pics] from `false` to `true`
-    if (!before.owner_pics_ok && after.owner_pics_ok || !before.renter_pics_ok && after.renter_pics_ok) {
+    if (ownerAgreedOnPics || renterAgreedOnPics) {
       // when BOTH agree on pics set the IDs
       if (after.owner_pics_ok && after.renter_pics_ok) {
         const ownerIdDoc = await admin.firestore().doc(`Users/${ownerUID}/private/ID`).get();
@@ -168,7 +203,9 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
       });
     }
 
-    if (!before.owner_ids_ok && after.owner_ids_ok || !before.renter_ids_ok && after.renter_ids_ok) {
+    const ownerAgreedOnIds = !before.owner_ids_ok && after.owner_ids_ok;
+    const renterAgreedOnIds = !before.renter_ids_ok && after.renter_ids_ok;
+    if (ownerAgreedOnIds || renterAgreedOnIds) {
       // when they both agree on IDs
       if (after.owner_ids_ok && after.renter_ids_ok) {
         // remove the IDs strings from meetings doc
@@ -177,7 +214,7 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
           'renter_id': null,
         });
         try {
-          const rentsCollection = admin.firestore().collection('rents/')
+          const rentsCollection = admin.firestore().collection('rents/');
           // Create rent doc
           const rentDoc = await rentsCollection.add({
             toolID: change.after.ref.parent.parent!.id,
@@ -186,18 +223,18 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
             endTime: null,
           });
           // Update the tool doc
-          const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`)
+          const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`);
           await toolDoc.update({
             'currentRent': rentDoc.id,
           });
           // Update the request `isRented` field
-          const requestDoc = admin.firestore().doc(`Tools/${context.params.toolID}/requests/${context.params.requestID}`)
+          const requestDoc = admin.firestore().doc(`Tools/${context.params.toolID}/requests/${context.params.requestID}`);
           await requestDoc.update({
             'isRented': true,
           });
 
           // Create return meeting doc
-          const returnMeetingDoc = admin.firestore().doc(`Tools/${context.params.toolID}/return_meetings/${context.params.requestID}`)
+          const returnMeetingDoc = admin.firestore().doc(`Tools/${context.params.toolID}/return_meetings/${context.params.requestID}`);
           await returnMeetingDoc.set({
             'isActive': true,
             'ownerUID': ownerUID,
@@ -218,6 +255,23 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
             'renterMediaUrls': [],
             'ownerMediaUrls': [],
           });
+
+
+          // Send notifications
+          const toolName = (await toolDoc.get()).data()?.name;
+          const renterName = (await admin.firestore().doc(`Users/${renterUID}`).get()).data()?.name;
+          const ownerName = (await admin.firestore().doc(`Users/${ownerUID}`).get()).data()?.name;
+
+          const notifCode = 'REN_START';
+          const notifData = {
+            'toolID': context.params.toolID,
+            'toolName': toolName,
+            'renterName': renterName,
+            'ownerName': ownerName,
+            'renterUID': renterUID,
+          };
+          addNotification(ownerUID, notifCode, notifData);
+          addNotification(renterUID, notifCode, notifData);
 
           // Update the meeting doc
           return change.after.ref.update({
@@ -247,7 +301,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
     // if renterArrived CHANGED to `false` set everything that comes after it to false
     if (!oldData.renterArrived && newData.renterArrived) {
       // same for other fields
-      var updates;
+      let updates;
       if (newData.disagreementCaseSettled != null) {
         // if there is a disagreement case don't change `renterAdmitDamage` and `renterMediaOK`
         // because 1- changing them won't change anythin 2- they must be `false` and `true` respectively for a disagreement case to have been created
@@ -268,7 +322,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
 
     // if ownerArrived CHANGED to `false` set everything that comes after it to false
     if (!oldData.ownerArrived && newData.ownerArrived) {
-      var updates;
+      let updates;
       if (newData.disagreementCaseSettled != null) {
         // if there is a disagreement case don't change `toolDamaged` and `ownerMediaOK`
         // because 1- changing them won't change anythin 2- they must be both `true` for a disagreement case to have been created
@@ -287,8 +341,10 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
       return change.after.ref.update(updates);
     }
 
+    const ownerFinishedMedia = !oldData.ownerMediaOK && newData.ownerMediaOK;
+    const renterLikedMedia = !oldData.renterMediaOK && oldData.renterMediaOK;
     // when any [mediaOk] change from `false` to `true`
-    if (!oldData.ownerMediaOK && newData.ownerMediaOK || !oldData.renterMediaOK && oldData.renterMediaOK) {
+    if (ownerFinishedMedia || renterLikedMedia) {
       // when BOTH [mediaOk] are true
       if (newData.ownerMediaOK && newData.renterMediaOK) {
         // create disagreement case
@@ -314,13 +370,15 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
       }
     }
 
+    const ownerConfirmedHO = !oldData.ownerConfirmHandover && newData.ownerConfirmHandover;
+    const renterConfirmedHO = !oldData.renterConfirmHandover && newData.renterConfirmHandover;
     // when any [ConfirmHandover] change from `false` to `true`
-    if (!oldData.ownerConfirmHandover && newData.ownerConfirmHandover || !oldData.renterConfirmHandover && newData.renterConfirmHandover) {
+    if (ownerConfirmedHO || renterConfirmedHO) {
       // when BOTH [ConfirmHandover] are true
       if (newData.ownerConfirmHandover && newData.renterConfirmHandover) {
-        // after both_handover 
+        // after both_handover
         // calculate total - and process payment
-        // end rent 
+        // end rent
         // set isActive to false
 
         // calculate total - and process payment
@@ -341,7 +399,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
           }
         } catch (error) {
           // if an error occured during payment don't end rent
-          console.log(`An error occured after handover\n${error.toString()}`)
+          console.log(`An error occured after handover\n${error.toString()}`);
           return null;
         }
 
@@ -349,7 +407,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
         const toolDoc = admin.firestore().doc(`Tools/${toolID}`);
         const toolData = (await toolDoc.get()).data()!;
 
-        const rentDoc = admin.firestore().doc(`rents/${toolData.currentRent}`)
+        const rentDoc = admin.firestore().doc(`rents/${toolData.currentRent}`);
         rentDoc.update({
           endTime: admin.firestore.Timestamp.now(),
         });
@@ -363,7 +421,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
         // move the request to `previous_requests` subcollection then delete it from the `requests` subcollection
         await admin.firestore().doc(`Tools/${toolID}/previous_requests/${requestID}`).set(
           (await requestDoc.get()).data()!
-        )
+        );
         await requestDoc.delete();
 
         // Update the deliver meeting doc to inActive
@@ -371,6 +429,22 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
         await deliverMeetingDoc.update({
           'isActive': false,
         });
+
+        // Send notifications
+        const toolName = toolData.name;
+        const renterName = (await admin.firestore().doc(`Users/${newData.renterUID}`).get()).data()?.name;
+        const ownerName = (await admin.firestore().doc(`Users/${newData.ownerUID}`).get()).data()?.name;
+
+        const notifCode = 'REN_END';
+        const NotifData = {
+          'toolID': toolID,
+          'toolName': toolName,
+          'renterName': renterName,
+          'ownerName': ownerName,
+          'renterUID': newData.renterUID,
+        };
+        addNotification(newData.ownerUID, notifCode, NotifData);
+        addNotification(newData.renterUID, notifCode, NotifData);
 
         // set isActive to false
         return change.after.ref.update({
@@ -386,12 +460,24 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
   .onUpdate(async (change, context) => {
     const newData = change.after.data();
 
-    if(newData == null) return null;
+    if (newData == null) return null;
 
-    if(newData.Result_IsToolDamaged != null){
+    if (newData.Result_IsToolDamaged != null) {
       // a result has been set
       const isToolDamaged = newData.Result_IsToolDamaged;
       const toolID = newData.toolID;
+
+      const toolDoc = await admin.firestore().doc(`Tools/${toolID}`).get();
+      const toolName = toolDoc.data()?.name;
+
+      const notifCode = isToolDamaged ? 'DC_DAM' : 'DC_NDAM';
+      const notifData = {
+        'toolID': toolID,
+        'toolName': toolName,
+      };
+      addNotification(newData.renterUID, notifCode, notifData);
+      addNotification(newData.ownerUID, notifCode, notifData);
+
       const requestID = newData.requestID;
       return admin.firestore().doc(`Tools/${toolID}/return_meetings/${requestID}`).update({
         'disagreementCaseSettled': true,
@@ -401,3 +487,36 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
 
     return null;
   });
+
+/**
+ * create a new doc in the user's notification collections which also invokes `newNotification()` and sends the user an FCM message
+ * @param userUID the user's uid
+ * @param code
+ * Notifications codes:
+ * - `REQ_REC`: request recived
+ * - `REQ_ACC`: request accepted
+ * - `REQ_DEL`: request deleted
+ * - `REN_START`: rent started
+ * - `REN_END`: rent ended
+ * - `DC_DAM`: disagreement case settled and tool is damaged
+ * - `DC_NDAM`: disagreement case settled and tool is not damaged
+ * @param data the notification data required for each code
+ * - `REQ_REC`: toolID, requestID, toolName, renterName
+ * - `REQ_ACC`: toolID, requestID, toolName,
+ * - `REQ_DEL`: toolID, requestID, toolName,
+ * - `REN_START`: toolID, toolName, renterName, ownerName, renterUID
+ * - `REN_END`: toolID, toolName, renterName, ownerName, renterUID
+ * - `DC_DAM`: toolID, toolName
+ * - `DC_NDAM`: toolID, toolName
+ * @returns A Promise resolved with a DocumentReference pointing to the newly created document after it has been written to the backend.
+ */
+function addNotification(userUID: string, code: string, data: any)
+  : Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>> {
+  const notifsCollection = admin.firestore().collection(`Users/${userUID}/notifications`);
+  return notifsCollection.add({
+    'code': code,
+    'data': data,
+    'time': admin.firestore.FieldValue.serverTimestamp(),
+    'isRead': false,
+  });
+}

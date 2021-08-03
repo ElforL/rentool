@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/main.dart';
 import 'package:rentool/screens/NewPostScreen.dart';
 import 'package:rentool/screens/SearchScreen.dart';
 import 'package:rentool/services/auth.dart';
@@ -20,6 +21,19 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Screen'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.language),
+            onPressed: () {
+              final currentLocale = Locale(AppLocalizations.of(context)!.localeName);
+              final currentIndex = AppLocalizations.supportedLocales.indexOf(currentLocale);
+              final nextLocaleIndex = (currentIndex + 1) % AppLocalizations.supportedLocales.length;
+              MyApp.of(context)!.setLocale(
+                AppLocalizations.supportedLocales.elementAt(nextLocaleIndex),
+              );
+            },
+          ),
+        ],
       ),
       body: ListView(
         children: [
