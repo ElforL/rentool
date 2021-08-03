@@ -47,14 +47,14 @@ void main() async {
     );
   }
 
-  var fcmServices = CloudMessagingServices();
+  final fcmServices = CloudMessagingServices();
   await fcmServices.init();
 
   runApp(MyApp(fcmServices: fcmServices));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key key, @required this.fcmServices}) : super(key: key);
+  const MyApp({Key key, this.fcmServices}) : super(key: key);
 
   static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
 
@@ -121,8 +121,8 @@ class FirstScreen extends StatelessWidget {
     );
   }
 
-  void addFcmTokenToDb(User user) async {
+  void addFcmTokenToDb(User user, String languageCode) async {
     final token = await FirebaseMessaging.instance.getToken();
-    FirestoreServices.addDeviceToken(token, user.uid);
+    FirestoreServices.addDeviceToken(token, user.uid, languageCode);
   }
 }

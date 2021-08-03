@@ -3,12 +3,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 class CloudMessagingServices {
   FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-  CloudMessagingServices();
-
+  String deviceToken;
   Future<void> init() async {
-    var token = await _fcm.getToken();
-    print(token);
+    NotificationSettings settings = await _fcm.requestPermission();
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      deviceToken = await _fcm.getToken();
+    }
+
     FirebaseMessaging.onMessage.listen((message) {
+      // TODO show in-app notification
       print('`onMessage` Noti Gang: ${message.notification.title}, ${message.notification.body}');
       print('`onMessage`- Body: ${message.data}');
     });
@@ -17,6 +21,8 @@ class CloudMessagingServices {
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (message) {
+        // Navigate to page?
+        // set `isRead` to `true`
         print('`onMessageOpenedApp` Noti Gang: ${message.notification.title}, ${message.notification.body}');
         print('`onMessageOpenedApp`- Body: ${message.data}');
       },
@@ -27,4 +33,9 @@ class CloudMessagingServices {
 Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
   print('`onBackgroundMessage` Noti Gang: ${message.notification.title}, ${message.notification.body}');
   print('`onBackgroundMessage`- Body: ${message.data}');
+}
+
+// TODO set `NotificationType`
+enum NotificationType {
+  normal,
 }
