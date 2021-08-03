@@ -37,7 +37,7 @@ service cloud.firestore {
 
       match /devices/{fcmToken}{
       	allow read: if isTHEuser();
-        allow create: if isTHEuser();
+        allow write: if isTHEuser();
       }
 
       match /notifications/{notificationID}{
