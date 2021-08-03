@@ -13,7 +13,9 @@ class CloudMessagingServices {
 
     FirebaseMessaging.onMessage.listen((message) {
       // TODO show in-app notification
-      print('`onMessage` Noti Gang: ${message.notification.title}, ${message.notification.body}');
+      print(
+        '`onMessage` Noti Gang: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}',
+      );
       print('`onMessage`- Body: ${message.data}');
     });
 
@@ -23,7 +25,8 @@ class CloudMessagingServices {
       (message) {
         // Navigate to page?
         // set `isRead` to `true`
-        print('`onMessageOpenedApp` Noti Gang: ${message.notification.title}, ${message.notification.body}');
+        print(
+            '`onMessage` Noti Gang: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}');
         print('`onMessageOpenedApp`- Body: ${message.data}');
       },
     );
@@ -31,7 +34,8 @@ class CloudMessagingServices {
 }
 
 Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
-  print('`onBackgroundMessage` Noti Gang: ${message.notification.title}, ${message.notification.body}');
+  print(
+      '`onMessage` Noti Gang: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}');
   print('`onBackgroundMessage`- Body: ${message.data}');
 }
 
