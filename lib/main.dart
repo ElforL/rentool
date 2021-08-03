@@ -23,7 +23,7 @@ void main() async {
     final localhost = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
 
     // //// AUTHENTICATION ////
-    await FirebaseAuth.instance.useEmulator('http://$localhost:9099');
+    await FirebaseAuth.instance.useAuthEmulator('$localhost', 9099);
 
     // //// FIRESTORE ////
     FirebaseFirestore.instance.settings = Settings(
@@ -34,12 +34,7 @@ void main() async {
     );
 
     // STORAGE
-    await FirebaseStorage.instance.useEmulator(host: '$localhost', port: 9199);
-
-    // //// FUNCTIONS ////
-    // In case of errors due to insecure connection check the Android and iOS steps in the documentation
-    // https://firebase.flutter.dev/docs/functions/usage#emulator-usage
-    // await FirebaseFunctions.instance.useFunctionsEmulator(origin: 'http://$localhost:5001');
+    await FirebaseStorage.instance.useStorageEmulator('$localhost', 9199);
   } else {
     // Turn of persistence (offline access)
     FirebaseFirestore.instance.settings = Settings(
@@ -54,20 +49,19 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key key, this.fcmServices}) : super(key: key);
+  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
+  const MyApp({Key? key, this.fcmServices}) : super(key: key);
 
-  static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
-
-  final CloudMessagingServices fcmServices;
+  final CloudMessagingServices? fcmServices;
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale;
+  Locale? _locale;
 
-  CloudMessagingServices get fcmServices => widget.fcmServices;
+  CloudMessagingServices? get fcmServices => widget.fcmServices;
 
   void setLocale(Locale value) {
     setState(() {
@@ -82,7 +76,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
       title: 'Rentool',
-      onGenerateTitle: (_) => AppLocalizations.of(_).rentool,
+      onGenerateTitle: (_) => AppLocalizations.of(_)!.rentool,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -92,15 +86,15 @@ class _MyAppState extends State<MyApp> {
 }
 
 class FirstScreen extends StatelessWidget {
-  FirstScreen({Key key}) : super(key: key);
+  FirstScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       // Initialize FlutterFire:
       stream: AuthServices.authStateChanges,
-      builder: (context, AsyncSnapshot<User> snapshot) {
-        if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error);
+      builder: (context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error!);
         var user = snapshot.data;
 
         if (user == null) {
@@ -112,7 +106,7 @@ class FirstScreen extends StatelessWidget {
             print('Email address not verified.');
           }
           FirestoreServices.ensureUserExist(user).then((userDocExists) {
-            if (userDocExists) addFcmTokenToDb(user, AppLocalizations.of(context).localeName);
+            if (userDocExists) addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
           });
 
           return UserScreen();
@@ -123,6 +117,8 @@ class FirstScreen extends StatelessWidget {
 
   void addFcmTokenToDb(User user, String languageCode) async {
     final token = await FirebaseMessaging.instance.getToken();
-    FirestoreServices.addDeviceToken(token, user.uid, languageCode);
+    if (token != null) {
+      FirestoreServices.addDeviceToken(token, user.uid, languageCode);
+    }
   }
 }

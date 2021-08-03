@@ -8,11 +8,11 @@ class AuthServices {
 
   static bool get isSignedIn => auth.currentUser != null;
 
-  static Stream<User> get authStateChanges => auth.authStateChanges();
+  static Stream<User?> get authStateChanges => auth.authStateChanges();
 
   static void signOut() async {
     /// a list of the user information for each authentication provider.
-    var providerData = auth.currentUser.providerData;
+    var providerData = auth.currentUser!.providerData;
 
     /// checks if the user has an authintication provider with the given [providerId].
     bool _isProviderUsed(String providerId) {
@@ -41,7 +41,7 @@ class AuthServices {
       email: inEmail,
       password: inPassword,
     );
-    if (creds.additionalUserInfo.isNewUser) auth.currentUser.sendEmailVerification();
+    if (creds.additionalUserInfo!.isNewUser) auth.currentUser!.sendEmailVerification();
     return creds;
   }
 
@@ -79,9 +79,12 @@ class AuthServices {
     // return await auth.signInWithRedirect(googleProvider);
   }
 
+  /// Throws an `Exception` if sign in process was aborted
   static Future<UserCredential> signInWithGoogleNative() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser == null) throw Exception('Sign in process was aborted');
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -105,7 +108,7 @@ class AuthServices {
     } else {
       creds = await signInWithFacebookNative();
     }
-    if (creds.additionalUserInfo.isNewUser) auth.currentUser.sendEmailVerification();
+    if (creds.additionalUserInfo!.isNewUser) auth.currentUser!.sendEmailVerification();
     return creds;
   }
 
@@ -117,7 +120,7 @@ class AuthServices {
     final result = await FacebookAuth.instance.login();
 
     // Create a credential from the access token
-    final facebookAuthCredential = FacebookAuthProvider.credential(result.accessToken.token);
+    final facebookAuthCredential = FacebookAuthProvider.credential(result.accessToken!.token);
 
     // Once signed in, return the UserCredential
     return await auth.signInWithCredential(facebookAuthCredential);

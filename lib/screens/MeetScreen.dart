@@ -5,12 +5,12 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class MeetScreen extends StatefulWidget {
-  const MeetScreen({Key key, this.tool}) : super(key: key);
+  const MeetScreen({Key? key, required this.tool}) : super(key: key);
 
   final Tool tool;
 
   @override
-  _MeetScreenState createState() => _MeetScreenState(tool.ownerUID == AuthServices.auth.currentUser.uid);
+  _MeetScreenState createState() => _MeetScreenState(tool.ownerUID == AuthServices.auth.currentUser!.uid);
 }
 
 class _MeetScreenState extends State<MeetScreen> {
@@ -18,13 +18,13 @@ class _MeetScreenState extends State<MeetScreen> {
 
   final bool isUserTheOwner;
 
-  bool bothArrived;
-  bool bothPicsOK;
-  bool bothIdsOK;
+  bool? bothArrived;
+  bool? bothPicsOK;
+  bool? bothIdsOK;
 
   @override
   void dispose() {
-    if (!bothIdsOK) {
+    if (!(bothIdsOK ?? false)) {
       arriveFunction(false);
     }
     super.dispose();
@@ -47,7 +47,7 @@ class _MeetScreenState extends State<MeetScreen> {
               child: Text('Getting ready...'),
             );
 
-          var data = snapshot.data.data();
+          var data = snapshot.data!.data()!;
           bothArrived = data['renter_arrived'] == true && data['owner_arrived'] == true;
           bothPicsOK = data['renter_pics_ok'] == true && data['owner_pics_ok'] == true;
           bothIdsOK = data['renter_ids_ok'] == true && data['owner_ids_ok'] == true;
@@ -56,7 +56,7 @@ class _MeetScreenState extends State<MeetScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (bothArrived)
+                  if (bothArrived!)
                     ElevatedButton.icon(
                       icon: Icon(Icons.arrow_back),
                       label: Text('GO BACK'),
@@ -136,10 +136,10 @@ class _MeetScreenState extends State<MeetScreen> {
 
 class MeetingArrivedContainer extends StatelessWidget {
   const MeetingArrivedContainer({
-    Key key,
-    @required this.didUserArrive,
-    @required this.didOtherUserArrive,
-    @required this.onPressed,
+    Key? key,
+    required this.didUserArrive,
+    required this.didOtherUserArrive,
+    required this.onPressed,
   }) : super(key: key);
 
   final bool didUserArrive;
@@ -168,11 +168,11 @@ class MeetingArrivedContainer extends StatelessWidget {
 
 class MeetingPicsContainer extends StatelessWidget {
   MeetingPicsContainer({
-    Key key,
-    @required this.data,
-    @required this.isUserTheOwner,
-    @required this.onPressed,
-    @required this.onTakePics,
+    Key? key,
+    required this.data,
+    required this.isUserTheOwner,
+    required this.onPressed,
+    required this.onTakePics,
   })  : iAgree = data['${isUserTheOwner ? 'owner' : 'renter'}_pics_ok'],
         super(key: key);
 
@@ -205,7 +205,7 @@ class MeetingPicsContainer extends StatelessWidget {
           ),
           SizedBox(
             height: 150,
-            child: (myPics == null || myPics.isEmpty)
+            child: (myPics.isEmpty)
                 ? SizedBox(
                     height: 150,
                     child: Center(
@@ -241,7 +241,7 @@ class MeetingPicsContainer extends StatelessWidget {
           ),
           SizedBox(
             height: 150,
-            child: (othersPics == null || othersPics.isEmpty)
+            child: (othersPics.isEmpty)
                 ? SizedBox(
                     child: Center(
                       child: Text('No Photos'),
@@ -273,7 +273,7 @@ class MeetingPicsContainer extends StatelessWidget {
 }
 
 class MeetingIdsContainer extends StatelessWidget {
-  MeetingIdsContainer({Key key, @required this.data, @required this.isUserTheOwner, @required this.onPressed})
+  MeetingIdsContainer({Key? key, required this.data, required this.isUserTheOwner, required this.onPressed})
       : super(key: key);
 
   final void Function() onPressed;

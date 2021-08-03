@@ -31,20 +31,20 @@ class FirestoreServices {
   ) async {
     // create a new document to get an ID
     var tool = Tool(
-      null,
-      AuthServices.auth.currentUser.uid,
+      'tempID',
+      AuthServices.auth.currentUser!.uid,
       name,
       description,
       rentPrice,
       insuranceAmount,
-      null,
+      [],
       location,
       true,
     );
     var toolJson = tool.toJson(['id', 'requests']);
     var ref = await _toolsRef.add(toolJson);
 
-    List<String> mediaURLs;
+    List<String>? mediaURLs;
 
     if (media.isNotEmpty) {
       mediaURLs = await StorageServices.uploadMediaOfTool(media, ref.id);
@@ -70,7 +70,7 @@ class FirestoreServices {
     return ref.delete();
   }
 
-  static Future<List<QueryDocumentSnapshot<Object>>> searchForTool(String searchkey) async {
+  static Future<List<QueryDocumentSnapshot<Object?>>> searchForTool(String searchkey) async {
     // https://stackoverflow.com/a/56747021/12571630
     var out = await _toolsRef.orderBy('name').startAt([searchkey]).endAt([searchkey + '\uf8ff']).limit(10).get();
 
@@ -98,7 +98,7 @@ class FirestoreServices {
   static Future<QuerySnapshot<Map<String, dynamic>>> fetchToolRequests(
     String toolID, {
     int limit = 10,
-    DocumentSnapshot previousDoc,
+    DocumentSnapshot? previousDoc,
   }) async {
     if (previousDoc == null) {
       return await _toolsRef.doc(toolID).collection('requests').limit(limit).get();
@@ -153,7 +153,7 @@ class FirestoreServices {
   static Future<bool> ensureUserExist(User user) async {
     var userExists = (await _usersRef.doc(user.uid).get()).exists;
     if (!userExists) {
-      return await addUser(RentoolUser(user.uid, user.displayName, 0));
+      return await addUser(RentoolUser(user.uid, user.displayName ?? 'NOT-SET', 0));
     }
     return true;
   }

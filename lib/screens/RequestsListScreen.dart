@@ -4,7 +4,7 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class RequestsListScreen extends StatefulWidget {
-  const RequestsListScreen({Key key, this.tool}) : super(key: key);
+  const RequestsListScreen({Key? key, required this.tool}) : super(key: key);
 
   final Tool tool;
 
@@ -13,8 +13,8 @@ class RequestsListScreen extends StatefulWidget {
 }
 
 class _RequestsListScreenState extends State<RequestsListScreen> {
-  List<ToolRequest> list;
-  DocumentSnapshot _lastDoc;
+  late List<ToolRequest> list;
+  DocumentSnapshot? _lastDoc;
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
 }
 
 class RequestTile extends StatefulWidget {
-  const RequestTile({Key key, @required this.request, @required this.tool}) : super(key: key);
+  const RequestTile({Key? key, required this.request, required this.tool}) : super(key: key);
 
   final ToolRequest request;
   final Tool tool;

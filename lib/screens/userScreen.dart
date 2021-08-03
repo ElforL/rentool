@@ -14,7 +14,7 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
-  String idNum;
+  String? idNum;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +25,10 @@ class _UserScreenState extends State<UserScreen> {
           IconButton(
             icon: Icon(Icons.language),
             onPressed: () {
-              final currentLocale = Locale(AppLocalizations.of(context).localeName);
+              final currentLocale = Locale(AppLocalizations.of(context)!.localeName);
               final currentIndex = AppLocalizations.supportedLocales.indexOf(currentLocale);
               final nextLocaleIndex = (currentIndex + 1) % AppLocalizations.supportedLocales.length;
-              MyApp.of(context).setLocale(
+              MyApp.of(context)!.setLocale(
                 AppLocalizations.supportedLocales.elementAt(nextLocaleIndex),
               );
             },
@@ -40,23 +40,23 @@ class _UserScreenState extends State<UserScreen> {
           ListTile(
             title: Text('Name:'),
             trailing: Text(
-              AuthServices.auth.currentUser.displayName ?? '[NONE]',
+              AuthServices.auth.currentUser!.displayName ?? '[NONE]',
               style: TextStyle(
-                color: AuthServices.auth.currentUser.displayName == null ? Colors.red : null,
+                color: AuthServices.auth.currentUser!.displayName == null ? Colors.red : null,
               ),
             ),
           ),
           ListTile(
-            title: Text(AppLocalizations.of(context).emailAddress),
-            trailing: Text(AuthServices.auth.currentUser.email),
+            title: Text(AppLocalizations.of(context)!.emailAddress),
+            trailing: Text(AuthServices.auth.currentUser!.email!),
           ),
           ListTile(
             title: Text('uid'),
-            trailing: Text(AuthServices.auth.currentUser.uid),
+            trailing: Text(AuthServices.auth.currentUser!.uid),
           ),
           ListTile(
             title: Text('verified'),
-            trailing: Text(AuthServices.auth.currentUser.emailVerified.toString()),
+            trailing: Text(AuthServices.auth.currentUser!.emailVerified.toString()),
           ),
           Divider(),
           ListTile(
@@ -79,11 +79,11 @@ class _UserScreenState extends State<UserScreen> {
           ),
           // ID NUMBER
           FutureBuilder(
-              future: FirestoreServices.getID(AuthServices.auth.currentUser.uid),
+              future: FirestoreServices.getID(AuthServices.auth.currentUser!.uid),
               builder: (context, AsyncSnapshot<DocumentSnapshot<Object>> snapshot) {
                 bool isDone = snapshot.connectionState == ConnectionState.done;
                 if (isDone) {
-                  if (snapshot.data != null && snapshot.data.exists) idNum = snapshot.data['idNumber'] ?? null;
+                  if (snapshot.data != null && snapshot.data!.exists) idNum = snapshot.data!['idNumber'] ?? null;
                 }
                 return ListTile(
                   title: Text(idNum ?? (isDone ? 'NOT CONFIGURED' : 'Loading...')),
@@ -96,7 +96,7 @@ class _UserScreenState extends State<UserScreen> {
                             var newID = await _showChangeIdDialog();
                             if (newID != null) {
                               print('newID = $newID');
-                              FirestoreServices.updateID(AuthServices.auth.currentUser.uid, newID);
+                              FirestoreServices.updateID(AuthServices.auth.currentUser!.uid, newID);
                               setState(() {});
                             }
                           },
