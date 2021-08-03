@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 class CloudMessagingServices {
   FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-  String deviceToken;
+  String? deviceToken;
   Future<void> init() async {
     NotificationSettings settings = await _fcm.requestPermission();
 
