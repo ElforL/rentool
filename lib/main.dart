@@ -112,7 +112,7 @@ class FirstScreen extends StatelessWidget {
             print('Email address not verified.');
           }
           FirestoreServices.ensureUserExist(user).then((userDocExists) {
-            if (userDocExists) addFcmTokenToDb(user);
+            if (userDocExists) addFcmTokenToDb(user, AppLocalizations.of(context).localeName);
           });
 
           return UserScreen();

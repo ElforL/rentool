@@ -137,9 +137,10 @@ class FirestoreServices {
 
   // ////////////////////////////// User //////////////////////////////
 
-  static Future<void> addDeviceToken(String token, String uid) {
+  static Future<void> addDeviceToken(String token, String uid, String languageCode) {
     return _usersRef.doc(uid).collection('devices').doc(token).set({
       'token': token,
+      'language': languageCode,
       // TODO add device info
       // https://pub.dev/packages/device_info
     });
