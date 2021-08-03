@@ -38,16 +38,36 @@ export const newNotification = functions.firestore
       );
     }
 
-    const payload = {
-      'data': {
-        'code': docData.code,
-        'data': docData.data,
+    const data = {
+      'code': docData.code,
+      'data': docData.data
+    }
+
+    const payload2: admin.messaging.MulticastMessage = {
+      tokens: deviceTokens,
+      data: data,
+      // Set Android priority to "high"
+      android: {
+        priority: "normal",
+      },
+      // Add APNS (Apple) config
+      apns: {
+        payload: {
+          aps: {
+            contentAvailable: true,
+          },
+        },
+        headers: {
+          "apns-push-type": "background",
+          "apns-priority": "5", // Must be `5` when `contentAvailable` is set to true.
+          "apns-topic": "io.flutter.plugins.firebase.messaging", // bundle identifier
+        },
       },
     };
 
     if (isOnLocalEmulator && prodAdmin != null) {
       console.log('Sending fcm in local emulator');
-      return prodAdmin.messaging().sendToDevice(deviceTokens, payload);
+      return prodAdmin.messaging().sendMulticast(payload2);
     }
-    return admin.messaging().sendToDevice(deviceTokens, payload);
+    return admin.messaging().sendMulticast(payload2);
   });
