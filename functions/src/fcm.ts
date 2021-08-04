@@ -40,6 +40,8 @@ export const newNotification = functions.firestore
 
     const data = docData.data;
     data.code = docData.code;
+    data.userID = context.params.userID;
+    data.notificationID = context.params.notificationID;
 
     const payload2: admin.messaging.MulticastMessage = {
       tokens: deviceTokens,
