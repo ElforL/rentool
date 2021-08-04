@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -114,9 +115,29 @@ class FirstScreen extends StatelessWidget {
 
   void addFcmTokenToDb(User user, String languageCode) async {
     if (kIsWeb) return;
+
     final token = await FirebaseMessaging.instance.getToken();
-    if (token != null) {
-      FirestoreServices.addDeviceToken(token, user.uid, languageCode);
+    if (token == null) return;
+
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String? uuid;
+    String? deviceName;
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        final androidInfo = await deviceInfo.androidInfo;
+        uuid = androidInfo.androidId;
+        deviceName = '${androidInfo.model}';
+        break;
+      case TargetPlatform.iOS:
+        final iosInfo = await deviceInfo.iosInfo;
+        uuid = iosInfo.identifierForVendor;
+        deviceName = '${iosInfo.model}';
+        break;
+      default:
+        print("addFcmTokenToDb() couldn't identify current platfrom");
+        return;
     }
+
+    if (uuid != null) FirestoreServices.addDeviceToken(token, user.uid, uuid, deviceName);
   }
 }

@@ -27,7 +27,7 @@ export const newNotification = functions.firestore
 
     const deviceTokens: string[] = [];
     devices.docs.forEach((docReference, index, array) => {
-      deviceTokens.push(docReference.id);
+      deviceTokens.push(docReference.data()!.token);
     });
 
     if (deviceTokens.length == 0) {
