@@ -103,7 +103,7 @@ export const requestWrite = functions.firestore.document('Tools/{toolID}/request
         const toolName = toolDocData.data()?.name;
         const renterDoc = await admin.firestore().doc(`Users/${docData.renterUID}`).get();
         const renterName = renterDoc.data()?.name;
-        await addNotification(docData.renterUID, 'REQ_REC', {
+        await addNotification(docData.ownerUID, 'REQ_REC', {
           'toolID': context.params.toolID,
           'requestID': context.params.requestID,
           'toolName': toolName,
