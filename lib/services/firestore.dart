@@ -144,8 +144,10 @@ class FirestoreServices {
     });
   }
 
-  static Future<void> deleteDeviceToken(String token, String uid) {
-    return _usersRef.doc(uid).collection('devices').doc(token).delete();
+  static Future<void> deleteDeviceToken(String uuid, String uid) {
+    return _usersRef.doc(uid).collection('devices').doc(uuid).update({
+      'token': null,
+    });
   }
 
   /// returns true if the user has a document in the Firestore database.
