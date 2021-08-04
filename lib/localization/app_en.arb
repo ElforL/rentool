@@ -57,6 +57,80 @@
         "description": "message for FirebaseAuthException code: account-exists-with-different-credential"
     },
     
+    "title_REQ_REC": "Recived a New Request",
+    "title_REQ_ACC": "Request Accepted",
+    "title_REQ_DEL": "Request Deleted",
+    "title_REN_START": "Rent Started",
+    "title_REN_END": "Rent Ended",
+    "title_DC_DAM": "Disagreement Case Settled",
+    "title_DC_NDAM": "Disagreement Case Settled",
+
+    "body_REQ_REC": "You recived a new request on your {toolName} by {renterName}.",
+    "@body_REQ_REC": {
+        "placeholders": {
+            "toolName": {},
+            "renterName": {}
+        }
+    },
+
+    "body_REQ_ACC": "Your request on {toolName} was accepted.",
+    "@body_REQ_ACC": {
+        "placeholders": {
+            "toolName": {}
+        }
+    },
+
+    "body_REQ_DEL": "Your request on {toolName} was deleted. If you didn't delete, it means the owner rejected your request.",
+    "@body_REQ_DEL": {
+        "placeholders": {
+            "toolName": {}
+        }
+    },
+    
+    "body_REN_START": "Rent has started between you and {isTheOwner, select, true{renterName} false{ownerName}} for the tool {toolName}.",
+    "@body_REN_START": {
+        "placeholders": {
+            "isTheOwner": {
+                "type": "bool"
+            },
+            "toolName": {},
+            "renterName": {},
+            "ownerName": {}
+        }
+    },
+    
+    "body_REN_END": "Your rent for the tool {toolName} has ended. You can now send a review on {isTheOwner, select, true{renterName} false{ownerName}}.",
+    "@body_REN_END": {
+        "placeholders": {
+            "isTheOwner": {
+                "type": "bool"
+            },
+            "toolName": {},
+            "renterName": {},
+            "ownerName": {}
+        }
+    },
+    
+    
+    "body_DC_DAM": "We reviewed the case for the tool {toolName} and decided it was indeed damaged. Please organize a meeting to agree on a compensation price and deliver the tool.",
+    "@body_DC_DAM": {
+        "placeholders": {
+            "toolName": {}
+        }
+    },
+    
+    
+    "body_DC_NDAM": "We reviewed the case for the tool {toolName} and decided it was not damaged. Please organize a meeting to deliver the tool.",
+    "@body_DC_NDAM": {
+        "placeholders": {
+            "toolName": {}
+        }
+    },
+
+
+
+
+
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
