@@ -38,8 +38,9 @@ void main() async {
     );
   }
 
-  final fcmServices = CloudMessagingServices();
-  await fcmServices.init();
+  CloudMessagingServices? fcmServices;
+  if (!kIsWeb) fcmServices = CloudMessagingServices();
+  await fcmServices?.init();
 
   runApp(MyApp(fcmServices: fcmServices));
 }
@@ -112,6 +113,7 @@ class FirstScreen extends StatelessWidget {
   }
 
   void addFcmTokenToDb(User user, String languageCode) async {
+    if (kIsWeb) return;
     final token = await FirebaseMessaging.instance.getToken();
     if (token != null) {
       FirestoreServices.addDeviceToken(token, user.uid, languageCode);
