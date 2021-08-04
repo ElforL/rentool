@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -12,14 +13,27 @@ class AuthServices {
 
   static Stream<User?> get authStateChanges => auth.authStateChanges();
 
-  static void signOut() async {
+  static void signOut([String? uuid]) async {
     if (auth.currentUser == null) return;
 
-    final oldDeviceToken = await FirebaseMessaging.instance.getToken();
     await FirebaseMessaging.instance.deleteToken();
-    if (oldDeviceToken != null) {
-      FirestoreServices.deleteDeviceToken(oldDeviceToken, auth.currentUser!.uid);
+
+    // get the device uuid to be able to navigate to the device's Firestore document and deleting the token
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String? uuid;
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        final androidInfo = await deviceInfo.androidInfo;
+        uuid = androidInfo.androidId;
+        break;
+      case TargetPlatform.iOS:
+        final iosInfo = await deviceInfo.iosInfo;
+        uuid = iosInfo.identifierForVendor;
+        break;
+      default:
+        return;
     }
+    if (uuid != null) FirestoreServices.deleteDeviceToken(uuid, auth.currentUser!.uid);
 
     /// a list of the user information for each authentication provider.
     var providerData = auth.currentUser!.providerData;
