@@ -6,7 +6,7 @@ let prodAdmin: admin.app.App;
 const isOnLocalEmulator = process.env.FUNCTIONS_EMULATOR == 'true';
 if (isOnLocalEmulator) {
   console.log('function running in local emulator');
-  const serviceAccount = require('../secret/rentool-5a78c-firebase-adminsdk-q4wqx-6c6f8750b2.json');
+  const serviceAccount = require('../secret/rentool-5a78c-firebase-adminsdk.json');
   prodAdmin = admin.initializeApp(
     {
       credential: admin.credential.cert(serviceAccount),
@@ -38,10 +38,8 @@ export const newNotification = functions.firestore
       );
     }
 
-    const data = {
-      'code': docData.code,
-      'data': docData.data
-    }
+    const data = docData.data;
+    data.code = docData.code;
 
     const payload2: admin.messaging.MulticastMessage = {
       tokens: deviceTokens,
@@ -71,3 +69,4 @@ export const newNotification = functions.firestore
     }
     return admin.messaging().sendMulticast(payload2);
   });
+  
