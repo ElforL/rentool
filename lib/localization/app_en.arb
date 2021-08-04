@@ -80,26 +80,22 @@
         }
     },
 
-    "body_REQ_DEL": "Your request on {toolName} was deleted. If you didn't delete, it means the owner rejected your request.",
+    "body_REQ_DEL": "Your request on {toolName} was deleted. If you didn't delete it, it means the owner rejected your request.",
     "@body_REQ_DEL": {
         "placeholders": {
             "toolName": {}
         }
     },
     
-    "body_REN_START": "Rent has started between you and {isTheOwner, select, true{renterName} false{ownerName}} for the tool {toolName}.",
+    "body_REN_START": "Rent has started between you and {otherUserName} for the tool {toolName}.",
     "@body_REN_START": {
         "placeholders": {
-            "isTheOwner": {
-                "type": "bool"
-            },
             "toolName": {},
-            "renterName": {},
-            "ownerName": {}
+            "otherUserName": {}
         }
     },
     
-    "body_REN_END": "Your rent for the tool {toolName} has ended. You can now send a review on {isTheOwner, select, true{renterName} false{ownerName}}.",
+    "body_REN_END": "Your rent for the tool {toolName} has ended. You can now send a review on {otherUserName}.",
     "@body_REN_END": {
         "placeholders": {
             "isTheOwner": {

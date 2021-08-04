@@ -1,18 +1,1 @@
-{
-  "ar": [
-    "title_REQ_REC",
-    "title_REQ_ACC",
-    "title_REQ_DEL",
-    "title_REN_START",
-    "title_REN_END",
-    "title_DC_DAM",
-    "title_DC_NDAM",
-    "body_REQ_REC",
-    "body_REQ_ACC",
-    "body_REQ_DEL",
-    "body_REN_START",
-    "body_REN_END",
-    "body_DC_DAM",
-    "body_DC_NDAM"
-  ]
-}
+{}

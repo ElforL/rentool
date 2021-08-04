@@ -36,5 +36,27 @@
 
     "diff_creds_error": "يوجد حساب مسبقًا لعنوان البريد الالكتروني هذا باستخدام مخدم آخر.",
 
+    "title_REQ_REC": "تم إستلام طلب جديد",
+    "title_REQ_ACC": "تم قبول طلبك",
+    "title_REQ_DEL": "تم حذف طلبك",
+    "title_REN_START": "بدء الإيجار",
+    "title_REN_END": "انتهى الإيجار",
+    "title_DC_DAM": "تمت تسوية قضية الخلاف",
+    "title_DC_NDAM": "تمت تسوية قضية الخلاف",
+
+    "body_REQ_REC": "لديك طلب جديد على {toolName} من {renterName}.",
+
+    "body_REQ_ACC": "تم قبول طلبك لـ {toolName}",
+
+    "body_REQ_DEL": "تم حذف طلبك لـ {toolName}. إن لم تكن انت من حذفه، فهذا يعني أن المالك رفض الطلب.",
+
+    "body_REN_START": "بدأت عملية إيجار {toolName} بينك وبين {otherUserName}.",
+
+    "body_REN_END": "إنتهت عملية إيجار {toolName}. يمكنك الان تقييم {otherUserName}.",
+
+    "body_DC_DAM": "بعد مراجعة القضية المتعلقة بـ {toolName}، توصلنا ان الأداة تضررت. يرجى تنظيم لقاء آخر للاتفاق على مبلغ التعويض وارجاع الأداة.",
+
+    "body_DC_NDAM": "بعد مراجعة القضية المتعلقة بـ {toolName}، توصلنا ان الأداة لم تتضرر. يرجى تنظيم لقاء آخر لارجاع الأداة.",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

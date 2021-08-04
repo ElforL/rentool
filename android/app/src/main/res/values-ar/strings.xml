@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_REQ_REC">تم إستلام طلب جديد</string>
+    <string name="title_REQ_ACC">تم قبول طلبك</string>
+    <string name="title_REQ_DEL">تم حذف طلبك</string>
+    <string name="title_REN_START">بدء الإيجار</string>
+    <string name="title_REN_END">"انتهى الإيجار</string>
+    <string name="title_DC_DAM">"تمت تسوية قضية الخلاف</string>
+    <string name="title_DC_NDAM">"تمت تسوية قضية الخلاف</string>
+
+    <string name="body_REQ_REC">لديك طلب جديد على %1$s من %2$s.</string>
+    <string name="body_REQ_ACC">تم قبول طلبك لـ %1$s</string>
+    <string name="body_REQ_DEL">تم حذف طلبك لـ %1$s. إن لم تكن انت من حذفه، فهذا يعني أن المالك رفض الطلب.</string>
+    <string name="body_REN_START">بدأت عملية إيجار %1$s بينك وبين %2$s.</string>
+    <string name="body_REN_END">إنتهت عملية إيجار %1$s. يمكنك الان تقييم %2$s.</string>
+    <string name="body_DC_DAM">بعد مراجعة القضية المتعلقة بـ %1$s، توصلنا ان الأداة تضررت. يرجى تنظيم لقاء آخر للاتفاق على مبلغ التعويض وارجاع الأداة.</string>
+    <string name="body_DC_NDAM">بعد مراجعة القضية المتعلقة بـ %1$s، توصلنا ان الأداة لم تتضرر. يرجى تنظيم لقاء آخر لارجاع الأداة.</string>
+</resources>

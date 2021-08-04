@@ -3,4 +3,33 @@
     <string name="app_name">Rentool</string>
     <string name="facebook_app_id">1941987192620334</string>
     <string name="fb_login_protocol_scheme">fb1941987192620334</string>
+    
+    <string name="title_REQ_REC">Recived a New Request</string>
+    <string name="title_REQ_ACC">Request Accepted</string>
+    <string name="title_REQ_DEL">Request Deleted</string>
+    <string name="title_REN_START">Rent Started</string>
+    <string name="title_REN_END">Rent Ended</string>
+    <string name="title_DC_DAM">Disagreement Case Settled</string>
+    <string name="title_DC_NDAM">Disagreement Case Settled</string>
+
+    <!-- "toolName", "renterName"  -->
+    <string name="body_REQ_REC">You recived a new request on your %1$s by %2$s.</string>
+
+    <!-- "toolName" -->
+    <string name="body_REQ_ACC">Your request on %1$s was accepted.</string>
+
+    <!-- "toolName" -->
+    <string name="body_REQ_DEL">Your request on %1$s was deleted. If you didn\'t delete it, it means the owner rejected your request.</string>
+
+    <!-- "toolName", "otherUserName" -->
+    <string name="body_REN_START">Rent has started between you and %2$s for the tool %1$s.</string>
+
+    <!-- "toolName", "otherUserName" -->
+    <string name="body_REN_END">Your rent for the tool %1$s has ended. You can now send a review on %2$s.</string>
+
+    <!-- "toolName" -->
+    <string name="body_DC_DAM">We reviewed the case for the tool %1$s and decided it was indeed damaged. Please organize a meeting to agree on a compensation price and deliver the tool.</string>
+
+    <!-- "toolName" -->
+    <string name="body_DC_NDAM">We reviewed the case for the tool %1$s and decided it was not damaged. Please organize a meeting to deliver the tool.</string>
 </resources>
