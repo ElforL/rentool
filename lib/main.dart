@@ -26,12 +26,7 @@ void main() async {
     await FirebaseAuth.instance.useAuthEmulator('$localhost', 9099);
 
     // //// FIRESTORE ////
-    FirebaseFirestore.instance.settings = Settings(
-      // Alternative = kIsWeb ? 'localhost:8080' : (Platform.isAndroid ? '10.0.2.2:8080' : 'localhost:8080)'
-      host: '$localhost:8080',
-      persistenceEnabled: false,
-      sslEnabled: false,
-    );
+    FirebaseFirestore.instance.useFirestoreEmulator(localhost, 8080);
 
     // STORAGE
     await FirebaseStorage.instance.useStorageEmulator('$localhost', 9199);
