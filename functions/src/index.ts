@@ -26,7 +26,8 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
       const newRequestID = newData.acceptedRequestID;
       if (newRequestID != null) {
         const requestDoc = admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`);
-        const renterUID = (await requestDoc.get()).data()!.renterUID;
+        const requestData = (await requestDoc.get()).data()!;
+        const renterUID = requestData.renterUID;
         // create a deliver_meeting doc
         await admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${newRequestID}`).set({
           'isActive': true,
@@ -46,6 +47,15 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
           // TODO consider changing it to list in case there were multiple erros
           'error': null,
         });
+
+        // Send notification to renter
+        addNotification(renterUID, 'REQ_ACC', {
+          'notificationBodyArgs': [newData.name],
+          'toolID': context.params.toolID,
+          'requestID': context.params.requestID,
+          'toolName': newData.name,
+        });
+        
         // accepted a new request
         return admin.firestore().doc(`Tools/${toolID}/requests/${newRequestID}`).update({ 'isAccepted': true });
       } else {
