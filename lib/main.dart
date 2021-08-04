@@ -30,8 +30,9 @@ void main() async {
 
     // STORAGE
     await FirebaseStorage.instance.useStorageEmulator('$localhost', 9199);
-  } else {
-    // Turn of persistence (offline access)
+  }
+  // Turn off persistence (offline access)
+  if (!kIsWeb) {
     FirebaseFirestore.instance.settings = Settings(
       persistenceEnabled: false,
     );
