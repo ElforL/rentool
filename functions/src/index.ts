@@ -88,6 +88,7 @@ export const requestWrite = functions.firestore.document('Tools/{toolID}/request
       const toolDocData = await toolDoc.get();
       const toolName = toolDocData.data()?.name;
       return addNotification(docData.renterUID, 'REQ_DEL', {
+        'notificationBodyArgs': [toolName],
         'toolID': context.params.toolID,
         'requestID': context.params.requestID,
         'toolName': toolName,
@@ -104,6 +105,7 @@ export const requestWrite = functions.firestore.document('Tools/{toolID}/request
         const renterDoc = await admin.firestore().doc(`Users/${docData.renterUID}`).get();
         const renterName = renterDoc.data()?.name;
         await addNotification(toolDocData.data()!.ownerUID, 'REQ_REC', {
+          'notificationBodyArgs': [toolName, renterName],
           'toolID': context.params.toolID,
           'requestID': context.params.requestID,
           'toolName': toolName,
@@ -263,15 +265,24 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
           const ownerName = (await admin.firestore().doc(`Users/${ownerUID}`).get()).data()?.name;
 
           const notifCode = 'REN_START';
-          const notifData = {
-            'toolID': context.params.toolID,
+          const renterBodyData = {
+            'notificationBodyArgs': [toolName, ownerName],
             'toolName': toolName,
             'renterName': renterName,
             'ownerName': ownerName,
+            'toolID': context.params.toolID,
             'renterUID': renterUID,
           };
-          addNotification(ownerUID, notifCode, notifData);
-          addNotification(renterUID, notifCode, notifData);
+          const ownerBodyData = {
+            'notificationBodyArgs': [toolName, renterName],
+            'toolName': toolName,
+            'renterName': renterName,
+            'ownerName': ownerName,
+            'toolID': context.params.toolID,
+            'renterUID': renterUID,
+          };
+          addNotification(ownerUID, notifCode, ownerBodyData);
+          addNotification(renterUID, notifCode, renterBodyData);
 
           // Update the meeting doc
           return change.after.ref.update({
@@ -436,15 +447,25 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
         const ownerName = (await admin.firestore().doc(`Users/${newData.ownerUID}`).get()).data()?.name;
 
         const notifCode = 'REN_END';
-        const NotifData = {
-          'toolID': toolID,
+        const renterBodyData = {
+          'notificationBodyArgs': [toolName, ownerName],
           'toolName': toolName,
-          'renterName': renterName,
           'ownerName': ownerName,
+          'renterName': renterName,
+          'toolID': toolID,
           'renterUID': newData.renterUID,
         };
-        addNotification(newData.ownerUID, notifCode, NotifData);
-        addNotification(newData.renterUID, notifCode, NotifData);
+        const ownerBodyData = {
+          'notificationBodyArgs': [toolName, renterName],
+          'toolName': toolName,
+          'ownerName': ownerName,
+          'renterName': renterName,
+          'toolID': toolID,
+          'renterUID': newData.renterUID,
+        };
+
+        addNotification(newData.ownerUID, notifCode, ownerBodyData);
+        addNotification(newData.renterUID, notifCode, renterBodyData);
 
         // set isActive to false
         return change.after.ref.update({
@@ -472,6 +493,7 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
 
       const notifCode = isToolDamaged ? 'DC_DAM' : 'DC_NDAM';
       const notifData = {
+        'notificationBodyArgs': [toolName],
         'toolID': toolID,
         'toolName': toolName,
       };

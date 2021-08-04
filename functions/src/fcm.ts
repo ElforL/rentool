@@ -38,7 +38,10 @@ export const newNotification = functions.firestore
       );
     }
 
+    const bodyArgs = docData.data.notificationBodyArgs;
+
     const data = docData.data;
+    delete data.notificationBodyArgs;
     data.code = docData.code;
     data.userID = context.params.userID;
     data.notificationID = context.params.notificationID;
@@ -49,11 +52,21 @@ export const newNotification = functions.firestore
       // Set Android priority to "high"
       android: {
         priority: "normal",
+        notification: {
+          titleLocKey: `title_${docData.code}`,
+          bodyLocKey: `body_${docData.code}`,
+          bodyLocArgs: bodyArgs,
+        }
       },
       // Add APNS (Apple) config
       apns: {
         payload: {
           aps: {
+            alert: {
+              titleLocKey: `title_${docData.code}`,
+              locKey: `body_${docData.code}`,
+              locArgs: bodyArgs,
+            },
             contentAvailable: true,
           },
         },
@@ -71,4 +84,3 @@ export const newNotification = functions.firestore
     }
     return admin.messaging().sendMulticast(payload2);
   });
-  
