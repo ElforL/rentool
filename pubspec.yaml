@@ -33,6 +33,8 @@ dependencies:
   video_player: ^2.1.5
   file_picker: ^3.0.2+2
   mime: ^1.0.0
+  flutter_local_notifications: ^8.0.0
+
   
   # // Needs an apple developer account which costs $99 🤷‍♂️
   # sign_in_with_apple: ^3.0.0
