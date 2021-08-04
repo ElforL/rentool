@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:rentool/services/firestore.dart';
 
 class AuthServices {
   static FirebaseAuth auth = FirebaseAuth.instance;
@@ -11,6 +13,14 @@ class AuthServices {
   static Stream<User?> get authStateChanges => auth.authStateChanges();
 
   static void signOut() async {
+    if (auth.currentUser == null) return;
+
+    final oldDeviceToken = await FirebaseMessaging.instance.getToken();
+    await FirebaseMessaging.instance.deleteToken();
+    if (oldDeviceToken != null) {
+      FirestoreServices.deleteDeviceToken(oldDeviceToken, auth.currentUser!.uid);
+    }
+
     /// a list of the user information for each authentication provider.
     var providerData = auth.currentUser!.providerData;
 
