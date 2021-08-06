@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/custom_icons.dart';
 import 'package:rentool/screens/EmailSignScreen.dart';
 import 'package:rentool/services/auth.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -27,6 +28,12 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        brightness: Brightness.light,
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -35,7 +42,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  AppLocalizations.of(context)!.login_welcome,
+                  AppLocalizations.of(context)!.rentool,
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ),
@@ -50,10 +57,10 @@ class LoginScreen extends StatelessWidget {
                       padding: MaterialStateProperty.all(EdgeInsets.all(kIsWeb ? 17 : 10)),
                       backgroundColor: option.value['backgroundColor'] == null
                           ? null
-                          : MaterialStateProperty.all<Color >(option.value['backgroundColor'] as Color),
+                          : MaterialStateProperty.all<Color>(option.value['backgroundColor'] as Color),
                       foregroundColor: option.value['foregroundColor'] == null
                           ? null
-                          : MaterialStateProperty.all<Color >(option.value['foregroundColor'] as Color),
+                          : MaterialStateProperty.all<Color>(option.value['foregroundColor'] as Color),
                     ),
                     child: Row(
                       children: [
