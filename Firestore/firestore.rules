@@ -405,6 +405,8 @@ service cloud.firestore {
           );
         }
 
+        // TODO validNewVals() e.g., check if compensation price is a double and < resource.data.insuranceAmount
+
         allow read: if isActive() && (isTheRenter() || isTheToolOwner());
 
         allow update: if isActive() &&

@@ -209,6 +209,7 @@ async function startRent(
   let error;
   const toolDoc = admin.firestore().doc(`Tools/${toolID}`);
   const requestDoc = admin.firestore().doc(`Tools/${toolID}/requests/${requestID}`);
+  const requestData = (await requestDoc.get()).data()!;
 
   // Process payment
   try {
@@ -251,6 +252,7 @@ async function startRent(
       batch.set(returnMeetingDoc, {
         'isActive': true,
         'error': false,
+        'insuranceAmount': requestData.insuranceAmount,
         'ownerUID': ownerUID,
         'renterUID': renterUID,
         'ownerArrived': false,
