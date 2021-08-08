@@ -50,10 +50,26 @@ service cloud.firestore {
       	allow read: if isTHEuser();
         allow write: if false;
       }
-      match /reviews/{reviewID}{
-        allow read: if isTHEuser();
-        // TODO allow if the user is the author
-        allow write: if false;
+
+      match /reviews/{reviewerUID}{
+        function isTheReviewer(){
+          return request.auth != null && request.auth.uid == reviewerUID;
+        }
+
+        function isValidReview(){
+          return request.resource.data.value is int && 
+          request.resource.data.value >= 0 &&
+          request.resource.data.value <= 5 &&
+          
+          request.resource.data.description is string &&
+          request.resource.data.creatorUID == reviewerUID &&
+          request.resource.data.targerUID == userID;
+        }
+
+        allow read: if isTHEuser() || isTheReviewer();
+        allow write: if isTheReviewer() &&
+        isValidReview() &&
+        exists(/databases/$(database)/documents/Users/$(request.auth.uid)/previous_users/$(userID));
       }
     }
     ////////////////////////////////// Tools ////////////////////////////////
