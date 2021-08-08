@@ -8,10 +8,10 @@ import * as admin from 'firebase-admin';
 */
 export const toolUpdated = functions.firestore.document('Tools/{toolID}')
   .onUpdate(async (change, context) => {
-    /** did `acceptedRequestID` field changed */
     const oldData = change.before.data();
     const newData = change.after.data();
-
+    
+    /** did `acceptedRequestID` field changed */
     const changedAcceptedID = oldData.acceptedRequestID != newData.acceptedRequestID;
     if (changedAcceptedID) {
       const toolID = change.after.id;
@@ -45,7 +45,7 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
         addNotification(renterUID, 'REQ_ACC', {
           'notificationBodyArgs': [newData.name],
           'toolID': context.params.toolID,
-          'requestID': context.params.requestID,
+          'requestID': newRequestID,
           'toolName': newData.name,
         });
 
