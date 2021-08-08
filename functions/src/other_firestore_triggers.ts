@@ -10,7 +10,7 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
   .onUpdate(async (change, context) => {
     const oldData = change.before.data();
     const newData = change.after.data();
-    
+
     /** did `acceptedRequestID` field changed */
     const changedAcceptedID = oldData.acceptedRequestID != newData.acceptedRequestID;
     if (changedAcceptedID) {
@@ -88,14 +88,19 @@ export const requestWrite = functions.firestore.document('Tools/{toolID}/request
       await renterRequestDoc.delete();
 
       // send notification to renter
-      const toolDocData = await toolDoc.get();
-      const toolName = toolDocData.data()?.name;
-      return addNotification(docData.renterUID, 'REQ_DEL', {
-        'notificationBodyArgs': [toolName],
-        'toolID': context.params.toolID,
-        'requestID': context.params.requestID,
-        'toolName': toolName,
-      });
+      // IF it wasn't rented before (prevent notification when a rent ends and the request is moved)
+      if (!docData.isRented) {
+        const toolDocData = await toolDoc.get();
+        const toolName = toolDocData.data()?.name;
+        return addNotification(docData.renterUID, 'REQ_DEL', {
+          'notificationBodyArgs': [toolName],
+          'toolID': context.params.toolID,
+          'requestID': context.params.requestID,
+          'toolName': toolName,
+        });
+      }else{
+        return null;
+      }
     } else {
       // UPDATE OR CREATE
       const docData = change.after.data()!;
