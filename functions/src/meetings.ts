@@ -411,6 +411,11 @@ async function endRent(
         'isActive': false,
       });
 
+      const rentersPreviousUserDoc = admin.firestore().doc(`Users/${renterUID}/previous_users/${ownerUID}`);
+      const owbersPreviousUserDoc = admin.firestore().doc(`Users/${ownerUID}/previous_users/${renterUID}`);
+      batch.set(rentersPreviousUserDoc, { toolID: true }, { merge: true });
+      batch.set(owbersPreviousUserDoc, { toolID: true }, { merge: true });
+
       await batch.commit();
     } catch (e) {
       success = false;
