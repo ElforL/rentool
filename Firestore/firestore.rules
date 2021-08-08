@@ -28,22 +28,25 @@ service cloud.firestore {
         isIdNumValid(request.resource.data.idNumber);
       }
 
-      // Private docs OTHER THAN `ID`
-      match /private/{privateDoc}{
-      	allow get: if isTHEuser();
-        allow write: if privateDoc == "ID" ? false : // always return false if the doc is 'ID' since its rules are already processed ⬆
-        isTHEuser();
-      }
-
       match /devices/{fcmToken}{
+        function areFieldsValid(){
+          return request.resource.data.deviceName is string &&
+          request.resource.data.token is string;
+        }
+
       	allow read: if isTHEuser();
-        allow write: if isTHEuser();
+        allow write: if isTHEuser() && areFieldsValid();
       }
 
       match /notifications/{notificationID}{
+        function onlyChangedRead(){
+          return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead'])
+          && request.resource.data.isRead is bool;
+        }
+
       	allow read: if isTHEuser();
         // only allow the user to change `isRead` field
-        allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
+        allow update: if onlyChangedRead(); 
       }
 
       match /requests/{toolID}{
@@ -235,6 +238,17 @@ service cloud.firestore {
           (isTheToolOwner() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['owner_arrived', 'owner_pics_ok', 'owner_ids_ok','owner_pics_urls']))
         }
 
+        function areValidFields(){
+          return request.resource.data.renter_arrived is bool &&
+          request.resource.data.renter_pics_ok is bool &&
+          request.resource.data.renter_ids_ok is bool &&
+          request.resource.data.renter_pics_urls is list &&
+          request.resource.data.owner_arrived is bool &&
+          request.resource.data.owner_pics_ok is bool &&
+          request.resource.data.owner_ids_ok is bool &&
+          request.resource.data.owner_pics_urls is list;
+        }
+
         function areRenterUpdatesValid(){
           // if arrive is false you can only change anything `arrive`. (i.e., note `pics` and `ids`)
           return bothArrived() != true ? request.resource.data.diff(resource.data).affectedKeys().hasOnly(['renter_arrived']) : 
@@ -259,6 +273,7 @@ service cloud.firestore {
         // NOTE: there's a function listening to changes and changing fields as necessary.
         // e.g., if all is true and pics changed to false the function will change `pics` and `ids` for owner and renter to false.
         allow update: if isActive() &&
+        areValidFields() &&
         !didRentStart() &&
         validAffectedFields() &&
         (isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid());
@@ -288,6 +303,22 @@ service cloud.firestore {
 
         function onlyAllow(list){
           return request.resource.data.diff(resource.data).affectedKeys().hasOnly(list);
+        }
+
+        function areValidFields(){
+          return request.resource.data.renterArrived is bool &&
+          request.resource.data.renterAdmitDamage is bool &&
+          request.resource.data.renterConfirmHandover is bool &&
+          request.resource.data.renterAcceptCompensationPrice is bool &&
+          request.resource.data.renterMediaOK is bool &&
+          request.resource.data.renterMediaUrls is list &&
+
+          request.resource.data.ownerArrived is bool &&
+          request.resource.data.toolDamaged is bool &&
+          request.resource.data.ownerConfirmHandover is bool &&
+          request.resource.data.compensationPrice is float &&
+          request.resource.data.ownerMediaOK is bool &&
+          request.resource.data.ownerMediaUrls is list;
         }
 
         function areRenterUpdatesValid() {
@@ -427,6 +458,7 @@ service cloud.firestore {
 
         allow update: if isActive() &&
         validAffectedFields() &&
+        areValidFields() &&
         (isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid());
       }
     }
