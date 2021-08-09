@@ -21,6 +21,17 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
       });
     }
 
+    const renterPicsChanged =  before.renter_pics_urls != after.renter_pics_urls;
+    const ownerPicsChanged =  before.owner_pics_urls != after.owner_pics_urls;
+    if(renterPicsChanged || ownerPicsChanged){
+      return change.after.ref.update({
+        'owner_pics_ok': false,
+        'owner_ids_ok': false,
+        'renter_pics_ok': false,
+        'renter_ids_ok': false,
+      });
+    }
+
     // if either the owner or renter changed [pics] from `true` to `false`
     const ownerPicsBecameFalse = before.owner_pics_ok && !after.owner_pics_ok;
     const renterPicsBecameFalse = before.renter_pics_ok && !after.renter_pics_ok;
