@@ -307,17 +307,17 @@ service cloud.firestore {
 
         function areValidFields(){
           return request.resource.data.renterArrived is bool &&
-          request.resource.data.renterAdmitDamage is bool &&
           request.resource.data.renterConfirmHandover is bool &&
-          request.resource.data.renterAcceptCompensationPrice is bool &&
           request.resource.data.renterMediaOK is bool &&
+          (request.resource.data.renterAdmitDamage is bool || request.resource.data.renterAdmitDamage == null) &&
+          (request.resource.data.renterAcceptCompensationPrice is bool || request.resource.data.renterAcceptCompensationPrice == null) &&
           request.resource.data.renterMediaUrls is list &&
 
           request.resource.data.ownerArrived is bool &&
-          request.resource.data.toolDamaged is bool &&
           request.resource.data.ownerConfirmHandover is bool &&
-          request.resource.data.compensationPrice is float &&
           request.resource.data.ownerMediaOK is bool &&
+          (request.resource.data.toolDamaged is bool || request.resource.data.toolDamaged == null) &&
+          (request.resource.data.compensationPrice is float || request.resource.data.compensationPrice == null) &&
           request.resource.data.ownerMediaUrls is list;
         }
 
