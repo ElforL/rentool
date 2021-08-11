@@ -24,13 +24,13 @@ void main() async {
     final localhost = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
 
     // //// AUTHENTICATION ////
-    await FirebaseAuth.instance.useAuthEmulator('$localhost', 9099);
+    await FirebaseAuth.instance.useAuthEmulator(localhost, 9099);
 
     // //// FIRESTORE ////
     FirebaseFirestore.instance.useFirestoreEmulator(localhost, 8080);
 
     // STORAGE
-    await FirebaseStorage.instance.useStorageEmulator('$localhost', 9199);
+    await FirebaseStorage.instance.useStorageEmulator(localhost, 9199);
   }
   // Turn off persistence (offline access)
   if (!kIsWeb) {
@@ -126,12 +126,12 @@ class FirstScreen extends StatelessWidget {
       case TargetPlatform.android:
         final androidInfo = await deviceInfo.androidInfo;
         uuid = androidInfo.androidId;
-        deviceName = '${androidInfo.model}';
+        deviceName = androidInfo.model;
         break;
       case TargetPlatform.iOS:
         final iosInfo = await deviceInfo.iosInfo;
         uuid = iosInfo.identifierForVendor;
-        deviceName = '${iosInfo.model}';
+        deviceName = iosInfo.model;
         break;
       default:
         print("addFcmTokenToDb() couldn't identify current platfrom");
