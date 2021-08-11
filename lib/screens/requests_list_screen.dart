@@ -41,19 +41,19 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
         future: _getRequests(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return Center(
-              child: CircularProgressIndicator(),
+            return const Center(
+              child: const CircularProgressIndicator(),
             );
           }
           if (list.length == 0) {
-            return Center(
-              child: Text('No Requests'),
+            return const Center(
+              child: const Text('No Requests'),
             );
           }
           return ListView.builder(
             itemCount: (list.length > 10 ? 10 : list.length) * 2,
             itemBuilder: (context, index) {
-              if (index % 2 != 0) return Divider();
+              if (index % 2 != 0) return const Divider();
               return RequestTile(
                 request: list[index ~/ 2],
                 tool: widget.tool,
@@ -86,16 +86,16 @@ class _RequestTileState extends State<RequestTile> {
               widget.tool.acceptedRequestID = widget.request.renterUID;
               Navigator.of(context).pop();
             },
-            child: Text('ACCEPT'),
+            child: const Text('ACCEPT'),
             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           ElevatedButton(
             onPressed: () {
               print(widget.request.renterUID);
               FirestoreServices.deleteRequest(widget.tool.id, widget.request.id);
             },
-            child: Text('REJECT'),
+            child: const Text('REJECT'),
             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
           )
         ],
@@ -117,7 +117,7 @@ class _RequestTileState extends State<RequestTile> {
         child: Text(widget.request.numOfDays.toString()),
       ),
       subtitle: AnimatedSize(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         child: _show ? subtitle : Container(),
       ),
       onTap: _tap,

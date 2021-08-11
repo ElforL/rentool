@@ -42,10 +42,11 @@ class _MeetScreenState extends State<MeetScreen> {
               child: Text("Something went wrong\n${snapshot.error}"),
             );
           }
-          if (snapshot.connectionState != ConnectionState.active)
-            return Center(
+          if (snapshot.connectionState != ConnectionState.active) {
+            return const Center(
               child: Text('Getting ready...'),
             );
+          }
 
           var data = snapshot.data!.data()!;
           bothArrived = data['renter_arrived'] == true && data['owner_arrived'] == true;
@@ -58,13 +59,13 @@ class _MeetScreenState extends State<MeetScreen> {
                 children: [
                   if (bothArrived!)
                     ElevatedButton.icon(
-                      icon: Icon(Icons.arrow_back),
-                      label: Text('GO BACK'),
+                      icon: const Icon(Icons.arrow_back),
+                      label: const Text('GO BACK'),
                       onPressed: () {
                         arriveFunction(false);
                       },
                     ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   // TODO show dialogs to each agree button
                   rentunAppropiateWidget(data, isUserTheOwner),
                 ],
@@ -106,7 +107,7 @@ class _MeetScreenState extends State<MeetScreen> {
       );
     } else {
       if (data['rent_started']) {
-        return Center(
+        return const Center(
           child: Text('SUCCESS\n Rent has started'),
         );
       } else if (data['error'] != null) {
@@ -115,7 +116,7 @@ class _MeetScreenState extends State<MeetScreen> {
         );
       } else {
         // TODO
-        return Center(
+        return const Center(
           child: Text('Loading... / unemplemented'),
         );
       }
@@ -152,8 +153,8 @@ class MeetingArrivedContainer extends StatelessWidget {
       children: [
         Text('You: ${didUserArrive ? 'Arrived / Ready' : "Didn't arrive yet"}'),
         Text('The Renter: ${didOtherUserArrive ? 'Arrived / Ready' : "Didn't arrive yet"}'),
-        SizedBox(height: 30),
-        Text('Did you arrive?'),
+        const SizedBox(height: 30),
+        const Text('Did you arrive?'),
         ElevatedButton(
           child: Text(didUserArrive ? "I'M NOT THERE" : 'I ARRIVED'),
           style: ButtonStyle(
@@ -197,8 +198,8 @@ class MeetingPicsContainer extends StatelessWidget {
             children: [
               Text('Your photos', style: Theme.of(context).textTheme.subtitle2),
               OutlinedButton.icon(
-                label: Text('Take pictures'),
-                icon: Icon(Icons.camera_alt),
+                label: const Text('Take pictures'),
+                icon: const Icon(Icons.camera_alt),
                 onPressed: onTakePics,
               )
             ],
@@ -206,7 +207,7 @@ class MeetingPicsContainer extends StatelessWidget {
           SizedBox(
             height: 150,
             child: (myPics.isEmpty)
-                ? SizedBox(
+                ? const SizedBox(
                     height: 150,
                     child: Center(
                       child: Text('No Photos'),
@@ -223,7 +224,7 @@ class MeetingPicsContainer extends StatelessWidget {
                     ],
                   ),
           ),
-          Divider(),
+          const Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -242,7 +243,7 @@ class MeetingPicsContainer extends StatelessWidget {
           SizedBox(
             height: 150,
             child: (othersPics.isEmpty)
-                ? SizedBox(
+                ? const SizedBox(
                     child: Center(
                       child: Text('No Photos'),
                     ),
@@ -258,7 +259,7 @@ class MeetingPicsContainer extends StatelessWidget {
                     ],
                   ),
           ),
-          Divider(),
+          const Divider(),
           ElevatedButton(
             onPressed: onPressed,
             child: Text(iAgree ? 'DISAGREE' : 'AGREE'),
@@ -273,7 +274,7 @@ class MeetingPicsContainer extends StatelessWidget {
 }
 
 class MeetingIdsContainer extends StatelessWidget {
-  MeetingIdsContainer({Key? key, required this.data, required this.isUserTheOwner, required this.onPressed})
+  const MeetingIdsContainer({Key? key, required this.data, required this.isUserTheOwner, required this.onPressed})
       : super(key: key);
 
   final void Function() onPressed;
@@ -302,8 +303,8 @@ class MeetingIdsContainer extends StatelessWidget {
           "Ask the $otherRole to give you his ID and make sure\n1- it matches him/her.\n2-its number matches the number above.\n3- it's not expired or about to.",
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 30),
-        Text('Does it match'),
+        const SizedBox(height: 30),
+        const Text('Does it match'),
         ElevatedButton(
           child: Text(iAgree ? "NOT A MATCH" : 'A MATCH'),
           style: ButtonStyle(

@@ -19,16 +19,16 @@ class _FirebaseInitErrorScreenState extends State<FirebaseInitErrorScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Something went wrong'),
-            Text('Couldn\'t initialize Firebase app'),
-            SizedBox(height: 30),
+            const Text('Something went wrong'),
+            const Text('Couldn\'t initialize Firebase app'),
+            const SizedBox(height: 30),
             TextButton(
               onPressed: () {
                 setState(() {
                   _showInfo = !_showInfo;
                 });
               },
-              child: Padding(
+              child: const Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text('More Info'),
               ),

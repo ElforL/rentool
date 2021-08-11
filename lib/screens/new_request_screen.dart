@@ -47,17 +47,17 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
             Text.rich(TextSpan(
               text: 'Price: ',
               children: [
-                TextSpan(text: 'SAR ${widget.tool.rentPrice}', style: TextStyle(color: Colors.blue)),
+                TextSpan(text: 'SAR ${widget.tool.rentPrice}', style: const TextStyle(color: Colors.blue)),
               ],
             )),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text.rich(TextSpan(
               text: 'Insurance deposit: ',
               children: [
-                TextSpan(text: 'SAR ${widget.tool.insuranceAmount}', style: TextStyle(color: Colors.blue)),
+                TextSpan(text: 'SAR ${widget.tool.insuranceAmount}', style: const TextStyle(color: Colors.blue)),
               ],
             )),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: _descriptionController,
               textInputAction: TextInputAction.newline,
@@ -88,18 +88,18 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                 setState(() {});
               },
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Text.rich(TextSpan(
               text: 'Rent: ',
               children: [
-                TextSpan(text: 'SAR ${_calcTotal()}', style: TextStyle(color: Colors.blue)),
+                TextSpan(text: 'SAR ${_calcTotal()}', style: const TextStyle(color: Colors.blue)),
               ],
             )),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text.rich(TextSpan(
               text: 'Total with insurance: ',
               children: [
-                TextSpan(text: 'SAR ${_calcTotal(true)}', style: TextStyle(color: Colors.blue)),
+                TextSpan(text: 'SAR ${_calcTotal(true)}', style: const TextStyle(color: Colors.blue)),
               ],
             )),
             Padding(
@@ -108,14 +108,14 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    child: Text('CANCEL'),
+                    child: const Text('CANCEL'),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   ElevatedButton(
-                    child: Text('SEND'),
+                    child: const Text('SEND'),
                     onPressed: () async {
                       if (_daysController.text.isEmpty) {
                         setState(() {

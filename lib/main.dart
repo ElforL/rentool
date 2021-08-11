@@ -34,7 +34,7 @@ void main() async {
   }
   // Turn off persistence (offline access)
   if (!kIsWeb) {
-    FirebaseFirestore.instance.settings = Settings(
+    FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: false,
     );
   }
@@ -78,13 +78,13 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FirstScreen(),
+      home: const FirstScreen(),
     );
   }
 }
 
 class FirstScreen extends StatelessWidget {
-  FirstScreen({Key? key}) : super(key: key);
+  const FirstScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class FirstScreen extends StatelessWidget {
 
         if (user == null) {
           print('User signed out');
-          return LoginScreen();
+          return const LoginScreen();
         } else {
           print('Signed in as ${user.displayName ?? '[Unser Name]'} ');
           if (!user.emailVerified) {

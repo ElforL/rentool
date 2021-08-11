@@ -46,15 +46,15 @@ class LoginScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ),
-              EmailSignScreen(),
+              const EmailSignScreen(),
               for (var option in signInOptions.entries)
                 Container(
-                  constraints: BoxConstraints(maxWidth: 250),
+                  constraints: const BoxConstraints(maxWidth: 250),
                   // width: 250,
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.all(kIsWeb ? 17 : 10)),
+                      padding: MaterialStateProperty.all(const EdgeInsets.all(kIsWeb ? 17 : 10)),
                       backgroundColor: option.value['backgroundColor'] == null
                           ? null
                           : MaterialStateProperty.all<Color>(option.value['backgroundColor'] as Color),
@@ -67,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: option.value['icon'] == null
-                              ? Icon(Icons.error)
+                              ? const Icon(Icons.error)
                               : option.value['icon'] as Widget, //Icon(Icons.email),
                         ),
                         Text(
@@ -145,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                 list.length != 1 ? list.toString() : list.first,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               AppLocalizations.of(context)!.no_password_error_dialog3,
             ),
@@ -211,11 +211,11 @@ var signInOptions = {
   'Google': {
     'backgroundColor': Colors.white,
     'foregroundColor': Colors.black,
-    'icon': Icon(CustomIcons.google),
+    'icon': const Icon(CustomIcons.google),
   },
   'Facebook': {
     'backgroundColor': Colors.blue.shade800,
-    'icon': Icon(CustomIcons.facebook_square),
+    'icon': const Icon(CustomIcons.facebook_square),
   },
   // // Needs an apple developer account which costs $99 🤷‍♂️
   // 'Apple': {

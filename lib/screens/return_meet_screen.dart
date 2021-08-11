@@ -35,10 +35,11 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
               child: Text("Something went wrong\n${snapshot.error}"),
             );
           }
-          if (snapshot.connectionState != ConnectionState.active)
-            return Center(
+          if (snapshot.connectionState != ConnectionState.active) {
+            return const Center(
               child: Text('Getting ready...'),
             );
+          }
 
           var data = snapshot.data!.data()!;
           meeting = ReturnMeeting.fromJson(data);
@@ -53,13 +54,13 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
                 children: [
                   if (meeting.bothArrived)
                     ElevatedButton.icon(
-                      icon: Icon(Icons.arrow_back),
-                      label: Text('GO BACK'),
+                      icon: const Icon(Icons.arrow_back),
+                      label: const Text('GO BACK'),
                       onPressed: () {
                         arriveFunction();
                       },
                     ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   // TODO show dialogs to each agree button
                   rentunAppropiateWidget(),
                 ],
@@ -127,7 +128,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
 
   Widget handoverSuccesContainer() {
     return Column(
-      children: [
+      children: const [
         Text('Handover successful'),
         Text('Rent concluded'),
       ],
@@ -138,7 +139,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     final userArrived = isUserTheOwner ? meeting.ownerArrived : meeting.renterArrived;
     return Column(
       children: [
-        Text('did you arrive?'),
+        const Text('did you arrive?'),
         ElevatedButton(
           child: Text(userArrived ? "DIDN'T ARRIVE YET" : 'ARRIVED'),
           onPressed: () {
@@ -155,20 +156,20 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     return Column(
       children: [
         if (meeting.disagreementCaseResult ?? false)
-          Text('After reviewing the case it was decided that the tool was indeed damaged.'),
-        Text('Agree on a compensation price and confirm it'),
+          const Text('After reviewing the case it was decided that the tool was indeed damaged.'),
+        const Text('Agree on a compensation price and confirm it'),
         Container(
-          constraints: BoxConstraints(maxWidth: 100),
+          constraints: const BoxConstraints(maxWidth: 100),
           child: TextField(
             readOnly: !isUserTheOwner,
             controller: _controller,
-            decoration: InputDecoration(border: OutlineInputBorder()),
+            decoration: const InputDecoration(border: OutlineInputBorder()),
             inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]|\.'))],
           ),
         ),
         if (isUserTheOwner) ...[
           ElevatedButton(
-            child: Text('CONFIRM'),
+            child: const Text('CONFIRM'),
             onPressed: () {
               FirestoreServices.setReturnMeetingField(widget.tool, 'compensationPrice', double.parse(_controller.text));
             },
@@ -184,19 +185,19 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         if (!isUserTheOwner) ...[
           if (meeting.compensationPrice != null) ...[
             ElevatedButton(
-              child: Text('ACCEPT PRICE'),
+              child: const Text('ACCEPT PRICE'),
               onPressed: () {
                 FirestoreServices.setReturnMeetingField(widget.tool, 'renterAcceptCompensationPrice', true);
               },
             ),
             ElevatedButton(
-              child: Text('REJECT PRICE'),
+              child: const Text('REJECT PRICE'),
               onPressed: () {
                 FirestoreServices.setReturnMeetingField(widget.tool, 'renterAcceptCompensationPrice', false);
               },
             ),
           ] else
-            Text('Waiting the owner to set the compensation price'),
+            const Text('Waiting the owner to set the compensation price'),
         ]
       ],
     );
@@ -223,11 +224,11 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
   Widget disagreementCaseCreatedContainer() {
     return Column(
       children: [
-        Text(
+        const Text(
           'a disagreement case was created. We will review the images/videos and arrive to a decission',
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text('Disagreement case ID: ${meeting.disagreementCaseID}'),
       ],
     );
@@ -237,15 +238,15 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     if (isUserTheOwner) {
       return Column(
         children: [
-          Text('Check the tool'),
+          const Text('Check the tool'),
           ElevatedButton(
-            child: Text('Not Damaged'),
+            child: const Text('Not Damaged'),
             onPressed: () {
               FirestoreServices.setReturnMeetingField(widget.tool, 'toolDamaged', false);
             },
           ),
           ElevatedButton(
-            child: Text('Damaged'),
+            child: const Text('Damaged'),
             onPressed: () {
               FirestoreServices.setReturnMeetingField(widget.tool, 'toolDamaged', true);
             },
@@ -254,7 +255,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
       );
     } else {
       return Column(
-        children: [
+        children: const [
           Text('The owner is checking the tool.'),
           Text('Please wait.'),
           //
@@ -266,23 +267,23 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
   Widget admitDamageContainer() {
     if (isUserTheOwner) {
       return Column(
-        children: [
+        children: const [
           Text('awaiting renter to admit or deny damages'),
         ],
       );
     } else {
       return Column(
         children: [
-          Text('The owner claims the tool is damaged'),
-          Text("Do you admit you could've damaged the tool?"),
+          const Text('The owner claims the tool is damaged'),
+          const Text("Do you admit you could've damaged the tool?"),
           ElevatedButton(
-            child: Text('I DIDN\'T DAMAGE IT'),
+            child: const Text('I DIDN\'T DAMAGE IT'),
             onPressed: () {
               FirestoreServices.setReturnMeetingField(widget.tool, 'renterAdmitDamage', false);
             },
           ),
           ElevatedButton(
-            child: Text('I DID DAMAGE IT'),
+            child: const Text('I DID DAMAGE IT'),
             onPressed: () {
               FirestoreServices.setReturnMeetingField(widget.tool, 'renterAdmitDamage', true);
             },
@@ -296,7 +297,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     var userValue = isUserTheOwner ? meeting.ownerMediaOK : meeting.renterMediaOK;
     return Column(
       children: [
-        Text('Upload media'),
+        const Text('Upload media'),
         ElevatedButton(
           child: Text(userValue ? 'NOT DONE' : 'DONE'),
           onPressed: () {

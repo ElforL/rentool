@@ -22,8 +22,8 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           children: [
             if (_size.width > 530)
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
+              const Padding(
+                padding: EdgeInsets.only(right: 20),
                 child: Text('Rentool'),
               ),
             Flexible(
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             iconSize: 30,
             splashRadius: 20,
-            icon: Icon(Icons.language),
+            icon: const Icon(Icons.language),
             onPressed: () {
               // ChangeLanguage
 
@@ -53,12 +53,12 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             iconSize: 30,
             splashRadius: 20,
-            icon: CircleAvatar(),
+            icon: const CircleAvatar(),
             onPressed: () {
               AuthServices.signOut();
             },
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
         ],
       ),
       body: Center(
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
 
   Container buildSearchBar() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.blue[300],
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       width: 500,
       child: TextField(
         controller: _searchController,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           icon: Icon(Icons.search),
           border: InputBorder.none,
         ),

@@ -7,7 +7,7 @@ class LoadingScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: const [
             Text('Initializing Fireabase app'),
             SizedBox(height: 20),
             CircularProgressIndicator(),

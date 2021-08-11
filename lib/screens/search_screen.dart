@@ -54,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               IconButton(
                 onPressed: () => _search(),
-                icon: Icon(Icons.search),
+                icon: const Icon(Icons.search),
               ),
             ],
           ),
@@ -77,7 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           border: Border.all(),
         ),

@@ -136,7 +136,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
                       list.length != 1 ? list.toString() : list.first,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(AppLocalizations.of(context)!.no_password_error_dialog3),
                 ],
               ),
@@ -212,8 +212,8 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(30),
-      constraints: BoxConstraints(maxWidth: 350),
+      padding: const EdgeInsets.all(30),
+      constraints: const BoxConstraints(maxWidth: 350),
       child: AutofillGroup(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -314,7 +314,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
         decoration: InputDecoration(
           errorText: errorText,
           labelText: labelText,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );

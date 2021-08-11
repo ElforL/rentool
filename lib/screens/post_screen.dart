@@ -7,7 +7,7 @@ import 'package:rentool/services/auth.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class PostScreen extends StatefulWidget {
-  PostScreen({Key? key, required this.tool}) : super(key: key);
+  const PostScreen({Key? key, required this.tool}) : super(key: key);
 
   final Tool tool;
 
@@ -42,7 +42,7 @@ class _PostScreenState extends State<PostScreen> {
           // media
           Container(
             margin: const EdgeInsets.only(top: 5),
-            constraints: BoxConstraints(maxHeight: 200),
+            constraints: const BoxConstraints(maxHeight: 200),
             child: Stack(
               children: [
                 PageView(
@@ -52,7 +52,7 @@ class _PostScreenState extends State<PostScreen> {
                     if (widget.tool.media.isNotEmpty)
                       for (var url in widget.tool.media) Image.network(url)
                     else
-                      Center(
+                      const Center(
                         child: Text('No media'),
                       ),
                   ],
@@ -64,27 +64,27 @@ class _PostScreenState extends State<PostScreen> {
                     IconButton(
                       onPressed: () {
                         _mediaController.previousPage(
-                          duration: Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 200),
                           curve: Curves.ease,
                         );
                       },
-                      icon: Icon(Icons.arrow_left),
+                      icon: const Icon(Icons.arrow_left),
                     ),
                     IconButton(
                       onPressed: () {
                         _mediaController.nextPage(
-                          duration: Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 200),
                           curve: Curves.ease,
                         );
                       },
-                      icon: Icon(Icons.arrow_right),
+                      icon: const Icon(Icons.arrow_right),
                     ),
                   ],
                 )
               ],
             ),
           ),
-          Divider(thickness: 1),
+          const Divider(thickness: 1),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
             child: Column(
@@ -94,7 +94,7 @@ class _PostScreenState extends State<PostScreen> {
                   widget.tool.name,
                   style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     Text(
@@ -103,11 +103,11 @@ class _PostScreenState extends State<PostScreen> {
                     ),
                     Text(
                       'SAR ' + widget.tool.rentPrice.toString() + '/day',
-                      style: TextStyle(color: Colors.blue),
+                      style: const TextStyle(color: Colors.blue),
                     ),
                   ],
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     Text(
@@ -120,7 +120,7 @@ class _PostScreenState extends State<PostScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     Text(
@@ -130,7 +130,7 @@ class _PostScreenState extends State<PostScreen> {
                     Text(widget.tool.location),
                   ],
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Row(
                   children: [
                     Text(
@@ -140,7 +140,7 @@ class _PostScreenState extends State<PostScreen> {
                     Text(widget.tool.ownerUID),
                   ],
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 ElevatedButton.icon(
                   icon: Icon(isUsersTool ? Icons.list_rounded : Icons.shopping_cart),
                   label: Text(isUsersTool ? 'VIEW REQUESTS' : 'REQUEST'),
@@ -163,7 +163,7 @@ class _PostScreenState extends State<PostScreen> {
                 ),
                 if (widget.tool.acceptedRequestID != null)
                   ElevatedButton(
-                    child: Text('Meet'),
+                    child: const Text('Meet'),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -174,7 +174,7 @@ class _PostScreenState extends State<PostScreen> {
                   ),
                 if (widget.tool.currentRent != null)
                   ElevatedButton(
-                    child: Text('Return'),
+                    child: const Text('Return'),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -186,7 +186,7 @@ class _PostScreenState extends State<PostScreen> {
               ],
             ),
           ), // end of main details
-          Divider(thickness: 1),
+          const Divider(thickness: 1),
           // Description
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
@@ -197,12 +197,12 @@ class _PostScreenState extends State<PostScreen> {
                   'Description',
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 SelectableText(widget.tool.description),
               ],
             ),
           ), // end of Description
-          Divider(thickness: 1),
+          const Divider(thickness: 1),
         ],
       ),
     );

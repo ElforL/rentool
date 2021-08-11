@@ -26,13 +26,13 @@ class NewPostScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Post'),
+        title: const Text('New Post'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ListView(
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // name
             _buildTextField(
               controller: _nameContoller,
@@ -77,14 +77,14 @@ class NewPostScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    child: Text('CANCEL'),
+                    child: const Text('CANCEL'),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   ElevatedButton(
-                    child: Text('CREATE'),
+                    child: const Text('CREATE'),
                     onPressed: () async {
                       if (_nameContoller.text.trim().isEmpty ||
                           _descriptionContoller.text.trim().isEmpty ||
@@ -129,7 +129,7 @@ class NewPostScreen extends StatelessWidget {
         inputFormatters: isNumber ? [FilteringTextInputFormatter.digitsOnly] : null,
         decoration: InputDecoration(
           labelText: labelText,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
@@ -190,7 +190,7 @@ class _MediaTileState extends State<MediaTile> {
       try {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('files added'),
+            content: const Text('files added'),
             action: SnackBarAction(
               label: 'Undo',
               onPressed: () {
@@ -223,7 +223,7 @@ class _MediaTileState extends State<MediaTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       height: 300,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -250,8 +250,8 @@ class _MediaTileState extends State<MediaTile> {
       width: 200,
       // child: Icon(Icons.add),
       child: PopupMenuButton(
-        child: Icon(Icons.add),
-        offset: Offset(50, 0),
+        child: const Icon(Icons.add),
+        offset: const Offset(50, 0),
         tooltip: 'Add media',
         itemBuilder: (BuildContext context) => [
           PopupMenuWidget(
@@ -259,7 +259,7 @@ class _MediaTileState extends State<MediaTile> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  icon: Icon(Icons.photo_library),
+                  icon: const Icon(Icons.photo_library),
                   tooltip: 'Pick from gallery',
                   onPressed: () {
                     Navigator.pop(context);
@@ -267,7 +267,7 @@ class _MediaTileState extends State<MediaTile> {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.videocam),
+                  icon: const Icon(Icons.videocam),
                   tooltip: 'Take video',
                   onPressed: () {
                     Navigator.pop(context);
@@ -275,7 +275,7 @@ class _MediaTileState extends State<MediaTile> {
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.camera_alt_outlined),
+                  icon: const Icon(Icons.camera_alt_outlined),
                   tooltip: 'Take photo',
                   onPressed: () {
                     Navigator.pop(context);
@@ -342,7 +342,7 @@ class _MediaTileState extends State<MediaTile> {
   Widget _buildIconOnFog(IconData icon) {
     return Container(
       margin: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
             blurRadius: 5,
@@ -376,17 +376,17 @@ class _MediaTileState extends State<MediaTile> {
   _showStorageDeniedDialog() {
     var dialog = AlertDialog(
       title: Column(
-        children: [
+        children: const [
           Icon(Icons.folder),
           Text('Storage permission denied'),
         ],
       ),
-      content: Text(
+      content: const Text(
         "The app was denied access to the gallery. To allow the app to upload media from your device, it needs to have access to the device storage.\n\n"
         "You can give access if a permission dialog pops up, or in the app settings.",
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text('OK')),
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK')),
       ],
     );
     showDialog(context: context, builder: (_) => dialog);

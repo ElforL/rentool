@@ -20,10 +20,10 @@ class _UserScreenState extends State<UserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Screen'),
+        title: const Text('User Screen'),
         actions: [
           IconButton(
-            icon: Icon(Icons.language),
+            icon: const Icon(Icons.language),
             onPressed: () {
               final currentLocale = Locale(AppLocalizations.of(context)!.localeName);
               final currentIndex = AppLocalizations.supportedLocales.indexOf(currentLocale);
@@ -38,7 +38,7 @@ class _UserScreenState extends State<UserScreen> {
       body: ListView(
         children: [
           ListTile(
-            title: Text('Name:'),
+            title: const Text('Name:'),
             trailing: Text(
               AuthServices.auth.currentUser!.displayName ?? '[NONE]',
               style: TextStyle(
@@ -51,26 +51,26 @@ class _UserScreenState extends State<UserScreen> {
             trailing: Text(AuthServices.auth.currentUser!.email!),
           ),
           ListTile(
-            title: Text('uid'),
+            title: const Text('uid'),
             trailing: Text(AuthServices.auth.currentUser!.uid),
           ),
           ListTile(
-            title: Text('verified'),
+            title: const Text('verified'),
             trailing: Text(AuthServices.auth.currentUser!.emailVerified.toString()),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             trailing: OutlinedButton(
-              child: Text('SEARCH'),
+              child: const Text('SEARCH'),
               onPressed: () {
                 //
-                Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const SearchScreen()));
               },
             ),
           ),
           ListTile(
             trailing: OutlinedButton(
-              child: Text('CREATE POST'),
+              child: const Text('CREATE POST'),
               onPressed: () {
                 //
                 Navigator.push(context, MaterialPageRoute(builder: (_) => NewPostScreen()));
@@ -88,7 +88,7 @@ class _UserScreenState extends State<UserScreen> {
                 return ListTile(
                   title: Text(idNum ?? (isDone ? 'NOT CONFIGURED' : 'Loading...')),
                   trailing: OutlinedButton(
-                    child: Text('change ID number'),
+                    child: const Text('change ID number'),
                     onPressed: !isDone
                         ? null
                         : () async {
@@ -105,7 +105,7 @@ class _UserScreenState extends State<UserScreen> {
               }),
           ListTile(
             title: ElevatedButton(
-              child: Text('Sign out'),
+              child: const Text('Sign out'),
               onPressed: () {
                 AuthServices.signOut();
               },
@@ -119,20 +119,20 @@ class _UserScreenState extends State<UserScreen> {
   Future _showChangeIdDialog() async {
     var _idController = TextEditingController();
     var dialog = AlertDialog(
-      title: Text('Change your ID number'),
+      title: const Text('Change your ID number'),
       content: TextField(
         controller: _idController,
-        decoration: InputDecoration(hintText: 'Enter a new ID number'),
+        decoration: const InputDecoration(hintText: 'Enter a new ID number'),
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text('CANCEL')),
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('CANCEL')),
         TextButton(
           onPressed: () {
             Navigator.pop(context, _idController.text);
           },
-          child: Text('CHANGE'),
+          child: const Text('CHANGE'),
         ),
       ],
     );
