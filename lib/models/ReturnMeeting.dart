@@ -1,4 +1,3 @@
-// TODO change name
 class ReturnMeeting {
   final String ownerUID;
   final String renterUID;
@@ -40,7 +39,6 @@ class ReturnMeeting {
   bool renterMediaOK;
 
   /// List of URLs to pictures/videos
-  // TODO maybe move to disagreement case
   List<String>? renterMediaUrls;
   List<String>? ownerMediaUrls;
 

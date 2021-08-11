@@ -38,8 +38,3 @@ Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
       '`onMessage` Noti Gang: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}');
   print('`onBackgroundMessage`- Body: ${message.data}');
 }
-
-// TODO set `NotificationType`
-enum NotificationType {
-  normal,
-}
