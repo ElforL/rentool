@@ -21,9 +21,9 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
       });
     }
 
-    const renterPicsChanged =  before.renter_pics_urls != after.renter_pics_urls;
-    const ownerPicsChanged =  before.owner_pics_urls != after.owner_pics_urls;
-    if(renterPicsChanged || ownerPicsChanged){
+    const renterPicsChanged = before.renter_pics_urls != after.renter_pics_urls;
+    const ownerPicsChanged = before.owner_pics_urls != after.owner_pics_urls;
+    if (renterPicsChanged || ownerPicsChanged) {
       return change.after.ref.update({
         'owner_pics_ok': false,
         'owner_ids_ok': false,
@@ -183,6 +183,13 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
           'disagreementCaseResult': null,
         });
       }
+    }
+
+    const compensationPriceChanged = oldData.compensationPrice != newData.compensationPrice;
+    if (compensationPriceChanged) {
+      await change.after.ref.update({
+        'renterAcceptCompensationPrice': null,
+      });
     }
 
     const ownerConfirmedHO = !oldData.ownerConfirmHandover && newData.ownerConfirmHandover;
