@@ -224,7 +224,6 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
               onFieldSubmitted: (email) => submit(),
               labelText: AppLocalizations.of(context)!.emailAddress,
               errorText: emailError,
-              autofocus: _isLogin == null,
               autofillHints: [AutofillHints.email],
               onTap: () {
                 if (_isLogin != null) {
@@ -245,7 +244,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
                 isPassword: true,
                 autofillHints: [AutofillHints.password],
               ),
-            if (!(_isLogin ?? true))
+            if (!(_isLogin ?? true)) ...[
               _buildTextField(
                 controller: _confirmPasswordContoller,
                 onFieldSubmitted: (confirmPassword) => submit(),
@@ -254,13 +253,14 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
                 isPassword: true,
                 autofillHints: [AutofillHints.password],
               ),
+            ],
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 height: 35,
                 child: ElevatedButton(
                   child: Text(_isLogin == null
-                      ? AppLocalizations.of(context)!.next
+                      ? AppLocalizations.of(context)!.next.toUpperCase()
                       : _isLogin!
                           ? AppLocalizations.of(context)!.login
                           : AppLocalizations.of(context)!.signUp),
