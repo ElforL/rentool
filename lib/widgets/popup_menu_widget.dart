@@ -18,7 +18,7 @@ class PopupMenuWidget<T> extends PopupMenuEntry<T> {
   final double height;
 
   @override
-  _PopupMenuWidgetState createState() => new _PopupMenuWidgetState();
+  _PopupMenuWidgetState createState() => _PopupMenuWidgetState();
 
   @override
   bool represents(T? value) {

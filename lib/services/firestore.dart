@@ -11,13 +11,13 @@ class FirestoreServices {
   /// Firestore instance
   ///
   /// equivelant to `FirebaseFirestore.instance`
-  static FirebaseFirestore _db = FirebaseFirestore.instance;
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   /// `CollectionReference` of the 'Users' collection in the database
-  static CollectionReference _usersRef = _db.collection('Users');
+  static final CollectionReference _usersRef = _db.collection('Users');
 
   /// `CollectionReference` of the 'Tools' collection in the database
-  static CollectionReference _toolsRef = _db.collection('Tools');
+  static final CollectionReference _toolsRef = _db.collection('Tools');
 
   // ////////////////////////////// Tools //////////////////////////////
 

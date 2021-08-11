@@ -42,12 +42,12 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(
-              child: const CircularProgressIndicator(),
+              child: CircularProgressIndicator(),
             );
           }
-          if (list.length == 0) {
+          if (list.isEmpty) {
             return const Center(
-              child: const Text('No Requests'),
+              child: Text('No Requests'),
             );
           }
           return ListView.builder(

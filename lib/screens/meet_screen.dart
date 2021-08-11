@@ -5,18 +5,21 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class MeetScreen extends StatefulWidget {
-  const MeetScreen({Key? key, required this.tool}) : super(key: key);
+  MeetScreen({Key? key, required this.tool})
+      : isUserTheOwner = tool.ownerUID == AuthServices.auth.currentUser!.uid,
+        super(key: key);
 
   final Tool tool;
+  final bool isUserTheOwner;
 
   @override
-  _MeetScreenState createState() => _MeetScreenState(tool.ownerUID == AuthServices.auth.currentUser!.uid);
+  _MeetScreenState createState() => _MeetScreenState();
 }
 
 class _MeetScreenState extends State<MeetScreen> {
-  _MeetScreenState(this.isUserTheOwner);
+  _MeetScreenState();
 
-  final bool isUserTheOwner;
+  bool get isUserTheOwner => widget.isUserTheOwner;
 
   bool? bothArrived;
   bool? bothPicsOK;
@@ -147,6 +150,7 @@ class MeetingArrivedContainer extends StatelessWidget {
   final bool didOtherUserArrive;
   final void Function() onPressed;
 
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,

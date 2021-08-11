@@ -147,7 +147,7 @@ class MediaTile extends StatefulWidget {
 
 class _MediaTileState extends State<MediaTile> {
   final picker = ImagePicker();
-  List<VideoPlayerController> _contollers = [];
+  final List<VideoPlayerController> _contollers = [];
 
   Future _getMedia(MediaInput inputType) async {
     try {
@@ -165,10 +165,11 @@ class _MediaTileState extends State<MediaTile> {
 
       if (res != null) {
         List<File> files;
-        if (res.runtimeType == FilePickerResult)
+        if (res.runtimeType == FilePickerResult) {
           files = (res as FilePickerResult).paths.map((path) => File(path!)).toList();
-        else
+        } else {
           files = [File(res.path)];
+        }
         _addMedia(files);
       } else {
         print('No files were selected.');
@@ -214,9 +215,9 @@ class _MediaTileState extends State<MediaTile> {
 
   @override
   void dispose() {
-    _contollers.forEach((controller) {
+    for (var controller in _contollers) {
       controller.dispose();
-    });
+    }
     super.dispose();
   }
 

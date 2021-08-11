@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _searchController = TextEditingController();
+  final _searchController = TextEditingController();
 
   Size get _size => MediaQuery.of(context).size;
 

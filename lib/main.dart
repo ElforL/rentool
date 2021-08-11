@@ -18,9 +18,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  const EMULATOR_ON = true;
+  const emulatorOn = true;
   // Configure emulator settings
-  if (EMULATOR_ON && !kReleaseMode) {
+  if (emulatorOn && !kReleaseMode) {
     final localhost = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
 
     // //// AUTHENTICATION ////
@@ -107,7 +107,7 @@ class FirstScreen extends StatelessWidget {
             if (userDocExists) addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
           });
 
-          return UserScreen();
+          return const UserScreen();
         }
       },
     );

@@ -61,8 +61,8 @@ class ReturnMeeting {
     this.renterMediaUrls,
     this.ownerMediaUrls,
   }) {
-    if (ownerMediaUrls == null) ownerMediaUrls = [];
-    if (renterMediaUrls == null) renterMediaUrls = [];
+    ownerMediaUrls ??= [];
+    renterMediaUrls ??= [];
   }
 
   factory ReturnMeeting.fromJson(Map<String, dynamic> json) {

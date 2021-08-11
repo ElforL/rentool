@@ -9,6 +9,8 @@ import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 
 class UserScreen extends StatefulWidget {
+  const UserScreen({Key? key}) : super(key: key);
+
   @override
   State<UserScreen> createState() => _UserScreenState();
 }
@@ -83,7 +85,7 @@ class _UserScreenState extends State<UserScreen> {
               builder: (context, AsyncSnapshot<DocumentSnapshot<Object>> snapshot) {
                 bool isDone = snapshot.connectionState == ConnectionState.done;
                 if (isDone) {
-                  if (snapshot.data != null && snapshot.data!.exists) idNum = snapshot.data!['idNumber'] ?? null;
+                  if (snapshot.data != null && snapshot.data!.exists) idNum = snapshot.data!['idNumber'];
                 }
                 return ListTile(
                   title: Text(idNum ?? (isDone ? 'NOT CONFIGURED' : 'Loading...')),

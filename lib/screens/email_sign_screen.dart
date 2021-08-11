@@ -12,9 +12,9 @@ class EmailSignScreen extends StatefulWidget {
 }
 
 class _EmailSignScreenState extends State<EmailSignScreen> {
-  TextEditingController _emailContoller = TextEditingController();
-  TextEditingController _passwordContoller = TextEditingController();
-  TextEditingController _confirmPasswordContoller = TextEditingController();
+  final TextEditingController _emailContoller = TextEditingController();
+  final TextEditingController _passwordContoller = TextEditingController();
+  final TextEditingController _confirmPasswordContoller = TextEditingController();
 
   bool? _isLogin;
 
@@ -66,11 +66,12 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
       }
     } else {
       // signup
-      if (_passwordContoller.text != _confirmPasswordContoller.text)
+      if (_passwordContoller.text != _confirmPasswordContoller.text) {
         // unmatched passwords
         setState(() {
           confirmPasswordError = AppLocalizations.of(context)!.pass_not_match;
         });
+      }
 
       // matched passwords
       try {
@@ -255,7 +256,7 @@ class _EmailSignScreenState extends State<EmailSignScreen> {
               ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
+              child: SizedBox(
                 height: 35,
                 child: ElevatedButton(
                   child: Text(_isLogin == null
