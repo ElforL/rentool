@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool/widgets/PopupMenuWidget.dart';
+import 'package:rentool/widgets/popup_menu_widget.dart';
 import 'package:video_player/video_player.dart';
 
 class NewPostScreen extends StatelessWidget {

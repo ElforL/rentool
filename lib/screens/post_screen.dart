@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rentool/screens/MeetScreen.dart';
-import 'package:rentool/screens/NewRequestScreen.dart';
-import 'package:rentool/screens/RequestsListScreen.dart';
-import 'package:rentool/screens/ReturnMeetScreen.dart';
+import 'package:rentool/screens/meet_screen.dart';
+import 'package:rentool/screens/new_request_screen.dart';
+import 'package:rentool/screens/requests_list_screen.dart';
+import 'package:rentool/screens/return_meet_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/main.dart';
-import 'package:rentool/screens/NewPostScreen.dart';
-import 'package:rentool/screens/SearchScreen.dart';
+import 'package:rentool/screens/new_post_screen.dart';
+import 'package:rentool/screens/search_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 

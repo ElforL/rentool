@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/custom_icons.dart';
-import 'package:rentool/screens/EmailSignScreen.dart';
+import 'package:rentool/screens/email_sign_screen.dart';
 import 'package:rentool/services/auth.dart';
 
 class LoginScreen extends StatelessWidget {
