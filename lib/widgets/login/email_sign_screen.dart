@@ -101,6 +101,17 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           print(e.code);
         }
       } catch (e) {
+        showMyAlert(
+          context,
+          Text(AppLocalizations.of(context)!.loginError),
+          Text(AppLocalizations.of(context)!.errorInfo + e.toString()),
+          [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context)!.ok),
+            )
+          ],
+        );
         print(e);
       }
     }
@@ -170,7 +181,17 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           emailError = AppLocalizations.of(context)!.badEmail;
         });
       } else {
-        // TODO show dialog
+        showMyAlert(
+          context,
+          Text(AppLocalizations.of(context)!.loginError),
+          Text(AppLocalizations.of(context)!.errorInfo + e.toString()),
+          [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context)!.ok),
+            )
+          ],
+        );
         print(e);
       }
     }
@@ -201,6 +222,18 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${AppLocalizations.of(context)!.error}: ${AppLocalizations.of(context)!.emailNotSent}'),
       ));
+    } catch (e) {
+      showMyAlert(
+        context,
+        Text(AppLocalizations.of(context)!.loginError),
+        Text(AppLocalizations.of(context)!.errorInfo + e.toString()),
+        [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.ok),
+          )
+        ],
+      );
     }
   }
 
