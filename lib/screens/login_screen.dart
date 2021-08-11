@@ -45,8 +45,7 @@ class LoginScreen extends StatelessWidget {
                   AppLocalizations.of(context)!.rentool,
                   style: Theme.of(context).textTheme.headline5,
                 ),
-              ),
-              const EmailSignScreen(),
+              const EmailSignContainer(),
               for (var option in signInOptions.entries)
                 Container(
                   constraints: const BoxConstraints(maxWidth: 250),

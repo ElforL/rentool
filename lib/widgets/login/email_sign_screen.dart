@@ -4,14 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EmailSignScreen extends StatefulWidget {
-  const EmailSignScreen({Key? key}) : super(key: key);
+class EmailSignContainer extends StatefulWidget {
+  const EmailSignContainer({Key? key}) : super(key: key);
 
   @override
-  _EmailSignScreenState createState() => _EmailSignScreenState();
+  _EmailSignContainerState createState() => _EmailSignContainerState();
 }
 
-class _EmailSignScreenState extends State<EmailSignScreen> {
+class _EmailSignContainerState extends State<EmailSignContainer> {
   final TextEditingController _emailContoller = TextEditingController();
   final TextEditingController _passwordContoller = TextEditingController();
   final TextEditingController _confirmPasswordContoller = TextEditingController();
