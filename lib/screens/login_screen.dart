@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/custom_icons.dart';
-import 'package:rentool/screens/email_sign_screen.dart';
+import 'package:rentool/widgets/login/email_sign_screen.dart';
 import 'package:rentool/services/auth.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -40,11 +40,9 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.rentool,
-                  style: Theme.of(context).textTheme.headline5,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 6),
+                child: Image.asset('assets/images/Logo/primary.png'),
+              ),
               const EmailSignContainer(),
               for (var option in signInOptions.entries)
                 Container(
