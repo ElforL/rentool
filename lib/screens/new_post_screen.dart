@@ -43,21 +43,31 @@ class NewPostScreen extends StatelessWidget {
             _buildTextField(
               controller: _descriptionContoller,
               labelText: 'Description',
-              textInputAction: TextInputAction.next,
+              // textInputAction: TextInputAction.next,
+              maxLines: 20,
             ),
-            // rentPrice
-            _buildTextField(
-              controller: _priceContoller,
-              labelText: 'Price',
-              textInputAction: TextInputAction.next,
-              isNumber: true,
-            ),
-            // insuranceAmount
-            _buildTextField(
-              controller: _insuranceContoller,
-              labelText: 'Insurance Price',
-              textInputAction: TextInputAction.next,
-              isNumber: true,
+            Row(
+              children: [
+                // rentPrice
+                Expanded(
+                  child: _buildTextField(
+                    controller: _priceContoller,
+                    labelText: 'Price',
+                    textInputAction: TextInputAction.next,
+                    isNumber: true,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                // insuranceAmount
+                Expanded(
+                  child: _buildTextField(
+                    controller: _insuranceContoller,
+                    labelText: 'Insurance Price',
+                    textInputAction: TextInputAction.next,
+                    isNumber: true,
+                  ),
+                ),
+              ],
             ),
             // location
             _buildTextField(
