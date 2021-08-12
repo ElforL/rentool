@@ -76,6 +76,12 @@ class _MyAppState extends State<MyApp> {
       title: 'Rentool',
       onGenerateTitle: (_) => AppLocalizations.of(_)!.rentool,
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          backwardsCompatibility: false,
+          foregroundColor: Colors.black87,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         primarySwatch: Colors.blue,
       ),
       home: const FirstScreen(),
