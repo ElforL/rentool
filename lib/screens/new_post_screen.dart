@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool/widgets/popup_menu_widget.dart';
 import 'package:video_player/video_player.dart';
 
 class NewPostScreen extends StatelessWidget {
@@ -248,7 +248,7 @@ class _MediaTileState extends State<MediaTile> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      height: 300,
+      height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: widget.media.length + 1,
@@ -328,11 +328,37 @@ class _MediaTileState extends State<MediaTile> {
           padding: const EdgeInsets.symmetric(horizontal: 3),
           child: AspectRatio(
             aspectRatio: _controller.value.size.width / _controller.value.size.height,
-            child: Stack(
-              children: [
-                VideoPlayer(_controller),
-                _buildIconOnFog(Icons.videocam),
-              ],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Stack(
+                children: [
+                  VideoPlayer(_controller),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildIconOnFog(const Icon(
+                        Icons.videocam,
+                        color: Colors.white70,
+                      )),
+                      _buildIconOnFog(
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(maxHeight: 35),
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _removeMedia([video]);
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -341,29 +367,57 @@ class _MediaTileState extends State<MediaTile> {
   }
 
   Widget _buildImageHolder(File image) {
+    final imageWidget = kIsWeb
+        ? Image.network(
+            image.path,
+            fit: BoxFit.contain,
+            loadingBuilder: (context, child, loadingProgress) =>
+                loadingProgress == null ? child : _buildLoadingTile(loadingProgress),
+          )
+        : Image.file(
+            image,
+            fit: BoxFit.contain,
+          );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: Stack(
-        children: [
-          if (kIsWeb)
-            Image.network(
-              image.path,
-              fit: BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) =>
-                  loadingProgress == null ? child : _buildLoadingTile(loadingProgress),
-            )
-          else
-            Image.file(
-              image,
-              fit: BoxFit.contain,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Stack(
+          children: [
+            imageWidget,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildIconOnFog(
+                  const Icon(
+                    Icons.photo,
+                    color: Colors.white70,
+                  ),
+                ),
+                _buildIconOnFog(
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(maxHeight: 35),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _removeMedia([image]);
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
-          _buildIconOnFog(Icons.photo),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildIconOnFog(IconData icon) {
+  Widget _buildIconOnFog(Widget icon) {
     return Container(
       margin: const EdgeInsets.all(3),
       decoration: const BoxDecoration(
@@ -373,10 +427,7 @@ class _MediaTileState extends State<MediaTile> {
           ),
         ],
       ),
-      child: Icon(
-        icon,
-        color: Colors.white70,
-      ),
+      child: icon,
     );
   }
 
