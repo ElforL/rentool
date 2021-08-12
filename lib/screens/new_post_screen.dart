@@ -129,6 +129,7 @@ class NewPostScreen extends StatelessWidget {
     String? labelText,
     TextInputAction? textInputAction,
     bool isNumber = false,
+    int? maxLines = 1,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -137,9 +138,11 @@ class NewPostScreen extends StatelessWidget {
         textInputAction: textInputAction,
         keyboardType: isNumber ? TextInputType.number : null,
         inputFormatters: isNumber ? [FilteringTextInputFormatter.digitsOnly] : null,
+        minLines: 1,
+        maxLines: maxLines,
         decoration: InputDecoration(
           labelText: labelText,
-          border: const OutlineInputBorder(),
+          filled: true,
         ),
       ),
     );
