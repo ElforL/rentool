@@ -68,7 +68,7 @@ class _PostScreenState extends State<PostScreen> {
                           curve: Curves.ease,
                         );
                       },
-                      icon: const Icon(Icons.arrow_left),
+                      icon: const Icon(Icons.keyboard_arrow_left),
                     ),
                     IconButton(
                       onPressed: () {
@@ -77,22 +77,25 @@ class _PostScreenState extends State<PostScreen> {
                           curve: Curves.ease,
                         );
                       },
-                      icon: const Icon(Icons.arrow_right),
+                      icon: const Icon(Icons.keyboard_arrow_right),
                     ),
                   ],
                 )
               ],
             ),
           ),
-          const Divider(thickness: 1),
+          const Divider(thickness: 1, height: 2),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SelectableText(
-                  widget.tool.name,
-                  style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: SelectableText(
+                    widget.tool.name,
+                    style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(height: 5),
                 Row(
@@ -195,7 +198,7 @@ class _PostScreenState extends State<PostScreen> {
               children: [
                 Text(
                   'Description',
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.subtitle2,
                 ),
                 const SizedBox(height: 15),
                 SelectableText(widget.tool.description),
