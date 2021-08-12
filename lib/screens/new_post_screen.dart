@@ -270,44 +270,31 @@ class _MediaTileState extends State<MediaTile> {
 
   Widget _buildAddTile() {
     return Container(
-      color: Colors.black38,
-      width: 200,
-      // child: Icon(Icons.add),
-      child: PopupMenuButton(
-        child: const Icon(Icons.add),
-        offset: const Offset(50, 0),
-        tooltip: 'Add media',
-        itemBuilder: (BuildContext context) => [
-          PopupMenuWidget(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.photo_library),
-                  tooltip: 'Pick from gallery',
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _getMedia(MediaInput.gallery);
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.videocam),
-                  tooltip: 'Take video',
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _getMedia(MediaInput.cameraVideo);
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.camera_alt_outlined),
-                  tooltip: 'Take photo',
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _getMedia(MediaInput.cameraImage);
-                  },
-                ),
-              ],
-            ),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      width: 130,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.library_add),
+            onPressed: () {
+              _getMedia(MediaInput.gallery);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.camera_alt),
+            onPressed: () {
+              _getMedia(MediaInput.cameraImage);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.videocam),
+            onPressed: () {
+              _getMedia(MediaInput.cameraVideo);
+            },
           ),
         ],
       ),
