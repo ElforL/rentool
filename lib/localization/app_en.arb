@@ -123,10 +123,7 @@
         }
     },
 
-
-
-
-
+    "media": "Media",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

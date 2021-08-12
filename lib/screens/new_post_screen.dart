@@ -66,6 +66,16 @@ class NewPostScreen extends StatelessWidget {
               textInputAction: TextInputAction.done,
             ),
 
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 5),
+              child: Text(
+                AppLocalizations.of(context)!.media,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1!
+                    .copyWith(color: Theme.of(context).colorScheme.onSurface.withAlpha(150)),
+              ),
+            ),
             // media
             MediaTile(
               media: media,
