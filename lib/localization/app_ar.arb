@@ -60,5 +60,18 @@
 
     "media": "وسائط",
 
+    "search": "بحث",
+
+    "offeredTools": "الأدوات المؤجرة",
+
+    "signOut": "تسجيل خروج",
+
+    "notifications": "الإشعارات",
+
+    "settings": "الإعدادات",
+    "helpNSupport": "المساعدة والدعم",
+    "myTools": "أدواتي",
+    "myOrders": "طلباتي",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

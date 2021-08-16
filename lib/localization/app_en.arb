@@ -125,6 +125,18 @@
 
     "media": "Media",
 
+    "search": "Search",
+
+    "offeredTools": "Offered tools",
+
+    "signOut": "Sign out",
+
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "helpNSupport": "Help and support",
+    "myTools": "My tools",
+    "myOrders": "My orders",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
