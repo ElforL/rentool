@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rentool/screens/meet_screen.dart';
+import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
 import 'package:rentool/screens/requests_list_screen.dart';
 import 'package:rentool/screens/return_meet_screen.dart';
