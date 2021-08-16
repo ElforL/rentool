@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:rentool/main.dart';
-import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/services/auth.dart';
+import 'package:rentool/widgets/home_page/count_home_page_container.dart';
+import 'package:rentool/widgets/rentool_search_bar.dart';
+import 'package:rentool/widgets/user_listtile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,56 +15,86 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _searchController = TextEditingController();
 
-  Size get _size => MediaQuery.of(context).size;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
+      appBar: RentoolSearchAppBar(),
+      drawer: Drawer(
+        child: ListView(
           children: [
-            if (_size.width > 530)
-              const Padding(
-                padding: EdgeInsets.only(right: 20),
-                child: Text('Rentool'),
+            DrawerHeader(
+              child: Image.asset('assets/images/Logo/primary.png'),
+              margin: EdgeInsets.zero,
+            ),
+            UserListTile(
+              user: AuthServices.auth.currentUser!,
+            ),
+            const Divider(height: 2),
+            ListTile(
+              leading: Stack(
+                children: [
+                  const Icon(Icons.notifications),
+                  Icon(
+                    Icons.circle,
+                    size: 10,
+                    color: Colors.amber.shade900,
+                  ),
+                ],
               ),
-            Flexible(
-              child: Center(
-                child: buildSearchBar(),
+              title: Text(AppLocalizations.of(context)!.notifications),
+              trailing: Text(
+                '13',
+                style: TextStyle(color: Colors.amber.shade900),
               ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.inventory_rounded),
+              title: Text(AppLocalizations.of(context)!.myOrders),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.build_circle),
+              title: Text(AppLocalizations.of(context)!.myTools),
+              onTap: () {},
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: Text(AppLocalizations.of(context)!.settings),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.help_outline),
+              title: Text(AppLocalizations.of(context)!.helpNSupport),
+              onTap: () {},
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            iconSize: 30,
-            splashRadius: 20,
-            icon: const Icon(Icons.language),
-            onPressed: () {
-              // ChangeLanguage
-
-              // get the index of the current locale
-              var crntLocale = Locale(AppLocalizations.of(context)!.localeName);
-              var localeIndex = AppLocalizations.supportedLocales.indexOf(crntLocale);
-
-              var next =
-                  AppLocalizations.supportedLocales[(localeIndex + 1) % AppLocalizations.supportedLocales.length];
-              MyApp.of(context)!.setLocale(next);
-            },
-          ),
-          IconButton(
-            iconSize: 30,
-            splashRadius: 20,
-            icon: const CircleAvatar(),
-            onPressed: () {
-              AuthServices.signOut();
-            },
-          ),
-          const SizedBox(width: 20),
-        ],
       ),
-      body: Center(
-        child: Text(AppLocalizations.of(context)!.rentool),
+      body: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              children: const [
+                CountHomePageContainer(
+                  titleText: 'Tools rented',
+                  subtitle: '3',
+                ),
+                CountHomePageContainer(
+                  titleText: 'Recived requests',
+                  subtitle: '12',
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+              child: Text(AppLocalizations.of(context)!.offeredTools),
+            ),
+          ],
+        ),
       ),
     );
   }
