@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/screens/firebase_init_error_screen.dart';
+import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -113,6 +114,7 @@ class FirstScreen extends StatelessWidget {
             if (userDocExists) addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
           });
 
+          return const HomePage();
           return const UserScreen();
         }
       },
