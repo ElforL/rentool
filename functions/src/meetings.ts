@@ -21,8 +21,8 @@ export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID
       });
     }
 
-    const renterPicsChanged = before.renter_pics_urls != after.renter_pics_urls;
-    const ownerPicsChanged = before.owner_pics_urls != after.owner_pics_urls;
+    const renterPicsChanged = !arraysEqual(before.renter_pics_urls , after.renter_pics_urls);
+    const ownerPicsChanged = !arraysEqual(before.owner_pics_urls , after.owner_pics_urls);
     if (renterPicsChanged || ownerPicsChanged) {
       return change.after.ref.update({
         'owner_pics_ok': false,
@@ -491,6 +491,23 @@ async function endRent(
     }
   }
 
+}
+
+function arraysEqual(a: any, b: any) {
+  if(!Array.isArray(a) || !Array.isArray(b)) return false;
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  // If you don't care about the order of the elements inside
+  // the array, you should sort both arrays here.
+  // Please note that calling sort on an array will modify that array.
+  // you might want to clone your array first.
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
 }
 
 /**
