@@ -137,6 +137,16 @@
     "myTools": "My tools",
     "myOrders": "My orders",
 
+    "noOneHereYet": "No one is here yet",
+    "didYouArrive": "Did you arrive to the meeting place?",
+    "arrived": "Arrived",
+    "didntArrived": "Didn't arrive",
+
+    "waitingForOwner": "Waiting for the owner",
+    "waitingForRenter": "Waiting for the renter",
+    "ownerArrived": "The owner arrived",
+    "renterArrived": "The renter arrived",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

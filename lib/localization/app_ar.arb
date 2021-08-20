@@ -73,5 +73,15 @@
     "myTools": "أدواتي",
     "myOrders": "طلباتي",
 
+    "noOneHereYet": "لا أحد هنا حتى الآن",
+    "didYouArrive": "هل وصلت إلى موقع اللقاء؟",
+    "arrived": "وصلت",
+    "didntArrived": "لم أصل",
+
+    "waitingForOwner": "في إنتظار المالك",
+    "waitingForRenter": "في إنتظار المستأجر",
+    "ownerArrived": "وصَل المالك",
+    "renterArrived": "وصَل المستأجر",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
