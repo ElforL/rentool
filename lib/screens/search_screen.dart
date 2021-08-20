@@ -5,7 +5,9 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({Key? key, this.searchText}) : super(key: key);
+
+  final String? searchText;
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -18,7 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   _search() async {
     var searchKey = _controller.text;
-    _controller.text = '';
+    _controller.clear();
     var res = await FirestoreServices.searchForTool(searchKey);
     setState(() {
       if (res is List<QueryDocumentSnapshot<Object>>) results = res;
@@ -29,6 +31,10 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     _controller = TextEditingController();
     results = [];
+    if (widget.searchText != null) {
+      _controller.text = widget.searchText!;
+      _search();
+    }
     super.initState();
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/search_screen.dart';
 
 class _RentoolSearchBar extends StatefulWidget {
   const _RentoolSearchBar({Key? key}) : super(key: key);
@@ -66,6 +67,9 @@ class _RentoolSearchBarState extends State<_RentoolSearchBar> {
                   border: InputBorder.none,
                   hintText: AppLocalizations.of(context)!.search,
                 ),
+                onSubmitted: (value) {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen(searchText: value)));
+                },
               ),
             )
           else
