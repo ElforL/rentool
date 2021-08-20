@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/widgets/meetings_containers/meeting_arrived_container.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class MeetScreen extends StatefulWidget {
@@ -85,8 +86,9 @@ class _MeetScreenState extends State<MeetScreen> {
     final otherRole = !isUserTheOwner ? 'owner' : 'renter';
     if (data['renter_arrived'] != true || data['owner_arrived'] != true) {
       return MeetingArrivedContainer(
+        isUserTheOwner: isUserTheOwner,
         didUserArrive: data['${userRole}_arrived'] ?? false,
-        didOtherUserArrive: data['${userRole}_arrived'] ?? false,
+        didOtherUserArrive: data['${otherRole}_arrived'] ?? false,
         onPressed: () => arriveFunction(!data['${userRole}_arrived']),
       );
     } else if (data['renter_pics_ok'] != true || data['owner_pics_ok'] != true) {
@@ -136,39 +138,6 @@ class _MeetScreenState extends State<MeetScreen> {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
     final arePicsOk = data['${userRole}_pics_ok'];
     FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_pics_ok', !arePicsOk);
-  }
-}
-
-class MeetingArrivedContainer extends StatelessWidget {
-  const MeetingArrivedContainer({
-    Key? key,
-    required this.didUserArrive,
-    required this.didOtherUserArrive,
-    required this.onPressed,
-  }) : super(key: key);
-
-  final bool didUserArrive;
-  final bool didOtherUserArrive;
-  final void Function() onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text('You: ${didUserArrive ? 'Arrived / Ready' : "Didn't arrive yet"}'),
-        Text('The Renter: ${didOtherUserArrive ? 'Arrived / Ready' : "Didn't arrive yet"}'),
-        const SizedBox(height: 30),
-        const Text('Did you arrive?'),
-        ElevatedButton(
-          child: Text(didUserArrive ? "I'M NOT THERE" : 'I ARRIVED'),
-          style: ButtonStyle(
-            backgroundColor: didUserArrive ? MaterialStateProperty.all(Colors.redAccent) : null,
-          ),
-          onPressed: onPressed,
-        ),
-      ],
-    );
   }
 }
 
