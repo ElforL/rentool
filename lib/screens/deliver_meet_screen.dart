@@ -82,6 +82,7 @@ class _MeetScreenState extends State<MeetScreen> {
 
   Widget rentunAppropiateWidget(Map<String, dynamic> data, bool isUserTheOwner) {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
+    final otherRole = !isUserTheOwner ? 'owner' : 'renter';
     if (data['renter_arrived'] != true || data['owner_arrived'] != true) {
       return MeetingArrivedContainer(
         didUserArrive: data['${userRole}_arrived'] ?? false,
