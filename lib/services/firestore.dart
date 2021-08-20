@@ -59,6 +59,10 @@ class FirestoreServices {
     return await updateTool(tool);
   }
 
+  static Stream<DocumentSnapshot<Object?>> getToolStream(String toolID) {
+    return _toolsRef.doc(toolID).snapshots();
+  }
+
   static Future<Tool> updateTool(Tool updatedTool) async {
     var ref = _toolsRef.doc(updatedTool.id);
     await ref.update(updatedTool.toJson(['id', 'requests']));
