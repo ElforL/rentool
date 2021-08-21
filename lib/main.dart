@@ -13,6 +13,7 @@ import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/new_post_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
+import 'package:rentool/screens/return_meet_screen.dart';
 import 'package:rentool/screens/search_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -95,6 +96,7 @@ class _MyAppState extends State<MyApp> {
         '/post': (context) => const PostScreen(),
         '/newPost': (context) => NewPostScreen(),
         '/deliver': (context) => const DeliverMeetScreen(),
+        '/return': (context) => const ReturnMeetScreen(),
         '/search': (context) => const SearchScreen(),
       },
     );

@@ -7,15 +7,15 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class ReturnMeetScreen extends StatefulWidget {
-  const ReturnMeetScreen({Key? key, required this.tool}) : super(key: key);
-
-  final Tool tool;
+  const ReturnMeetScreen({Key? key}) : super(key: key);
 
   @override
   _ReturnMeetScreenState createState() => _ReturnMeetScreenState();
 }
 
 class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
+  late Tool tool;
+
   late ReturnMeeting meeting;
   late bool isUserTheOwner;
   late String userRole;
@@ -23,12 +23,14 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    tool = ModalRoute.of(context)!.settings.arguments as Tool;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Return ${widget.tool.name}'),
+        title: Text('Return ${tool.name}'),
       ),
       body: StreamBuilder(
-        stream: FirestoreServices.getReturnMeetingStream(widget.tool),
+        stream: FirestoreServices.getReturnMeetingStream(tool),
         builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -123,7 +125,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
   arriveFunction() {
     final isUserTheOwner = meeting.isTheOwner(AuthServices.auth.currentUser!.uid);
     final userRole = isUserTheOwner ? 'owner' : 'renter';
-    return FirestoreServices.setReturnMeetingField(widget.tool, '${userRole}Arrived', false);
+    return FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', false);
   }
 
   Widget handoverSuccesContainer() {
@@ -143,7 +145,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         ElevatedButton(
           child: Text(userArrived ? "DIDN'T ARRIVE YET" : 'ARRIVED'),
           onPressed: () {
-            FirestoreServices.setReturnMeetingField(widget.tool, '${userRole}Arrived', !userArrived);
+            FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', !userArrived);
           },
         ),
       ],
@@ -171,7 +173,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
           ElevatedButton(
             child: const Text('CONFIRM'),
             onPressed: () {
-              FirestoreServices.setReturnMeetingField(widget.tool, 'compensationPrice', double.parse(_controller.text));
+              FirestoreServices.setReturnMeetingField(tool, 'compensationPrice', double.parse(_controller.text));
             },
           ),
           if (meeting.compensationPrice != null)
@@ -187,13 +189,13 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
             ElevatedButton(
               child: const Text('ACCEPT PRICE'),
               onPressed: () {
-                FirestoreServices.setReturnMeetingField(widget.tool, 'renterAcceptCompensationPrice', true);
+                FirestoreServices.setReturnMeetingField(tool, 'renterAcceptCompensationPrice', true);
               },
             ),
             ElevatedButton(
               child: const Text('REJECT PRICE'),
               onPressed: () {
-                FirestoreServices.setReturnMeetingField(widget.tool, 'renterAcceptCompensationPrice', false);
+                FirestoreServices.setReturnMeetingField(tool, 'renterAcceptCompensationPrice', false);
               },
             ),
           ] else
@@ -214,7 +216,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         ElevatedButton(
           child: Text(userConfirmValue ? 'HAND-OVER YET TO HAPPEN' : 'CONFIRM HAND-OVER'),
           onPressed: () {
-            FirestoreServices.setReturnMeetingField(widget.tool, '${userRole}ConfirmHandover', !userConfirmValue);
+            FirestoreServices.setReturnMeetingField(tool, '${userRole}ConfirmHandover', !userConfirmValue);
           },
         ),
       ],
@@ -242,13 +244,13 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
           ElevatedButton(
             child: const Text('Not Damaged'),
             onPressed: () {
-              FirestoreServices.setReturnMeetingField(widget.tool, 'toolDamaged', false);
+              FirestoreServices.setReturnMeetingField(tool, 'toolDamaged', false);
             },
           ),
           ElevatedButton(
             child: const Text('Damaged'),
             onPressed: () {
-              FirestoreServices.setReturnMeetingField(widget.tool, 'toolDamaged', true);
+              FirestoreServices.setReturnMeetingField(tool, 'toolDamaged', true);
             },
           ),
         ],
@@ -279,13 +281,13 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
           ElevatedButton(
             child: const Text('I DIDN\'T DAMAGE IT'),
             onPressed: () {
-              FirestoreServices.setReturnMeetingField(widget.tool, 'renterAdmitDamage', false);
+              FirestoreServices.setReturnMeetingField(tool, 'renterAdmitDamage', false);
             },
           ),
           ElevatedButton(
             child: const Text('I DID DAMAGE IT'),
             onPressed: () {
-              FirestoreServices.setReturnMeetingField(widget.tool, 'renterAdmitDamage', true);
+              FirestoreServices.setReturnMeetingField(tool, 'renterAdmitDamage', true);
             },
           ),
         ],
@@ -301,7 +303,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         ElevatedButton(
           child: Text(userValue ? 'NOT DONE' : 'DONE'),
           onPressed: () {
-            FirestoreServices.setReturnMeetingField(widget.tool, '${userRole}MediaOK', !userValue);
+            FirestoreServices.setReturnMeetingField(tool, '${userRole}MediaOK', !userValue);
           },
         ),
       ],
