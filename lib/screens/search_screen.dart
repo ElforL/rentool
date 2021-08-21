@@ -76,10 +76,10 @@ class _SearchScreenState extends State<SearchScreen> {
     );
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => PostScreen(tool: tool),
-          ),
+        Navigator.pushNamed(
+          context,
+          '/post',
+          arguments: tool,
         );
       },
       child: Container(

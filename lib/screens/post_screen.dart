@@ -9,9 +9,7 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class PostScreen extends StatefulWidget {
-  const PostScreen({Key? key, required this.tool}) : super(key: key);
-
-  final Tool tool;
+  const PostScreen({Key? key}) : super(key: key);
 
   @override
   _PostScreenState createState() => _PostScreenState();
@@ -26,7 +24,6 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   void initState() {
-    tool = widget.tool;
     _mediaController = PageController();
     super.initState();
   }
@@ -39,10 +36,11 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    tool = ModalRoute.of(context)!.settings.arguments as Tool;
     return Scaffold(
       appBar: AppBar(),
       body: StreamBuilder(
-        stream: FirestoreServices.getToolStream(widget.tool.id),
+        stream: FirestoreServices.getToolStream(tool.id),
         builder: (context, AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
           if (snapshot.data != null && snapshot.data!.data() is Map) {
             var map = (snapshot.data!.data() as Map<String, dynamic>)..addAll({'id': snapshot.data!.id});
