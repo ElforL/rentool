@@ -62,30 +62,31 @@ class _PostScreenState extends State<PostScreen> {
                           ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            _mediaController.previousPage(
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.ease,
-                            );
-                          },
-                          icon: const Icon(Icons.keyboard_arrow_left),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _mediaController.nextPage(
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.ease,
-                            );
-                          },
-                          icon: const Icon(Icons.keyboard_arrow_right),
-                        ),
-                      ],
-                    )
+                    if (tool.media.isNotEmpty)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              _mediaController.previousPage(
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.ease,
+                              );
+                            },
+                            icon: const Icon(Icons.arrow_back_ios),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              _mediaController.nextPage(
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.ease,
+                              );
+                            },
+                            icon: const Icon(Icons.arrow_forward_ios),
+                          ),
+                        ],
+                      )
                   ],
                 ),
               ),
