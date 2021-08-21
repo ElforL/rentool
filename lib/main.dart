@@ -132,7 +132,6 @@ class FirstScreen extends StatelessWidget {
           });
 
           return const HomePage();
-          return const UserScreen();
         }
       },
     );
