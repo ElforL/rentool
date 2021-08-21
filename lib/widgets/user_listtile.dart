@@ -15,12 +15,13 @@ class UserListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
+        backgroundImage: user.photoURL == null ? null : NetworkImage(user.photoURL!),
         child: user.photoURL == null
             ? Icon(
                 Icons.person,
                 color: Theme.of(context).colorScheme.onSurface,
               )
-            : Image.network(user.photoURL!),
+            : null,
         backgroundColor: user.photoURL == null ? Colors.black12 : Colors.transparent,
       ),
       title: Text(user.displayName ?? 'Account'),
