@@ -12,6 +12,7 @@ import 'package:rentool/screens/firebase_init_error_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/new_post_screen.dart';
+import 'package:rentool/screens/new_request_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/return_meet_screen.dart';
 import 'package:rentool/screens/search_screen.dart';
@@ -97,6 +98,7 @@ class _MyAppState extends State<MyApp> {
         '/newPost': (context) => NewPostScreen(),
         '/deliver': (context) => const DeliverMeetScreen(),
         '/return': (context) => const ReturnMeetScreen(),
+        '/newRequest': (context) => const NewRequestScreen(),
         '/search': (context) => const SearchScreen(),
       },
     );

@@ -166,10 +166,10 @@ class _PostScreenState extends State<PostScreen> {
                           : (!tool.isAvailable
                               ? null
                               : () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => NewRequestScreen(tool: tool),
-                                    ),
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/newRequest',
+                                    arguments: tool,
                                   );
                                 }),
                     ),

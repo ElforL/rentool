@@ -5,14 +5,15 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class NewRequestScreen extends StatefulWidget {
-  const NewRequestScreen({Key? key, required this.tool}) : super(key: key);
-  final Tool tool;
+  const NewRequestScreen({Key? key}) : super(key: key);
 
   @override
   _NewRequestScreenState createState() => _NewRequestScreenState();
 }
 
 class _NewRequestScreenState extends State<NewRequestScreen> {
+  late Tool tool;
+
   late TextEditingController _descriptionController;
   late TextEditingController _daysController;
   String? _descriptionErrorText;
@@ -36,9 +37,11 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    tool = ModalRoute.of(context)!.settings.arguments as Tool;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Request ${widget.tool.name}'),
+        title: Text('Request ${tool.name}'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -47,14 +50,14 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
             Text.rich(TextSpan(
               text: 'Price: ',
               children: [
-                TextSpan(text: 'SAR ${widget.tool.rentPrice}', style: const TextStyle(color: Colors.blue)),
+                TextSpan(text: 'SAR ${tool.rentPrice}', style: const TextStyle(color: Colors.blue)),
               ],
             )),
             const SizedBox(height: 10),
             Text.rich(TextSpan(
               text: 'Insurance deposit: ',
               children: [
-                TextSpan(text: 'SAR ${widget.tool.insuranceAmount}', style: const TextStyle(color: Colors.blue)),
+                TextSpan(text: 'SAR ${tool.insuranceAmount}', style: const TextStyle(color: Colors.blue)),
               ],
             )),
             const SizedBox(height: 10),
@@ -129,15 +132,15 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                         var request = ToolRequest(
                           'TEMP',
                           AuthServices.auth.currentUser!.uid,
-                          widget.tool.id,
+                          tool.id,
                           _descriptionController.text,
                           daysNum,
-                          widget.tool.rentPrice,
-                          widget.tool.insuranceAmount,
+                          tool.rentPrice,
+                          tool.insuranceAmount,
                           false,
                           false,
                         );
-                        await FirestoreServices.sendNewToolRequest(request, widget.tool.id);
+                        await FirestoreServices.sendNewToolRequest(request, tool.id);
                         Navigator.pop(context);
                       }
                     },
@@ -153,7 +156,7 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
 
   _calcTotal([bool withInsurance = false]) {
     if (_daysController.text.isNotEmpty) {
-      return widget.tool.rentPrice * daysNum + (withInsurance ? widget.tool.insuranceAmount : 0);
+      return tool.rentPrice * daysNum + (withInsurance ? tool.insuranceAmount : 0);
     }
     return 0;
   }
