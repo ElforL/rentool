@@ -85,7 +85,10 @@ class _MyAppState extends State<MyApp> {
         ),
         primarySwatch: Colors.blue,
       ),
-      home: const FirstScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const FirstScreen(),
+      },
     );
   }
 }
