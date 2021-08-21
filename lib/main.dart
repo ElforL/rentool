@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/screens/firebase_init_error_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
+import 'package:rentool/screens/new_post_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const FirstScreen(),
         '/post': (context) => const PostScreen(),
+        '/newPost': (context) => NewPostScreen(),
       },
     );
   }

@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
       appBar: RentoolSearchAppBar(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => NewPostScreen()));
+          Navigator.pushNamed(context, '/newPost');
         },
       ),
       drawer: Drawer(

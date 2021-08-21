@@ -74,8 +74,7 @@ class _UserScreenState extends State<UserScreen> {
             trailing: OutlinedButton(
               child: const Text('CREATE POST'),
               onPressed: () {
-                //
-                Navigator.push(context, MaterialPageRoute(builder: (_) => NewPostScreen()));
+                Navigator.pushNamed(context, '/newPost');
               },
             ),
           ),
