@@ -48,7 +48,6 @@ void main() async {
 
   CloudMessagingServices? fcmServices;
   if (!kIsWeb) fcmServices = CloudMessagingServices();
-  await fcmServices?.init();
 
   runApp(MyApp(fcmServices: fcmServices));
 }
@@ -117,6 +116,7 @@ class FirstScreen extends StatelessWidget {
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error!);
         var user = snapshot.data;
+        MyApp.of(context)?.fcmServices?.init(context);
 
         if (user == null) {
           print('User signed out');

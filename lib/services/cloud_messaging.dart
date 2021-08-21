@@ -1,4 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:rentool/widgets/notification_tile.dart';
 
 class CloudMessagingServices {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
@@ -7,7 +9,7 @@ class CloudMessagingServices {
   bool initialized = false;
 
   String? deviceToken;
-  Future<void> init() async {
+  Future<void> init([BuildContext? context]) async {
     if (initialized) return;
     initialized = true;
     NotificationSettings settings = await _fcm.requestPermission();
@@ -16,12 +18,30 @@ class CloudMessagingServices {
       deviceToken = await _fcm.getToken();
     }
 
-    FirebaseMessaging.onMessage.listen((message) {
-      // TODO show in-app notification
-      print(
-        '`onMessage` Noti Gang: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}',
-      );
-      print('`onMessage`- Body: ${message.data}');
+    FirebaseMessaging.onMessage.listen((message) async {
+      if (context != null) {
+        try {
+          const duration = Duration(seconds: 5);
+          final entry = OverlayEntry(
+            builder: (context) {
+              return Align(
+                alignment: Alignment.topCenter,
+                child: NotificationTile(
+                  visibleDuration: duration,
+                  data: message.data,
+                ),
+              );
+            },
+          );
+          Overlay.of(context)!.insert(entry);
+          await Future.delayed(duration);
+          entry.remove();
+        } on ArgumentError catch (e) {
+          debugPrint(
+            "failed to show notification tile. this usually happens if `NotificationTile` couldn't parse the notification code",
+          );
+        }
+      }
     });
 
     FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
@@ -31,7 +51,8 @@ class CloudMessagingServices {
         // Navigate to page?
         // set `isRead` to `true`
         print(
-            '`onMessage` Noti Gang: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}');
+          '`onMessageOpenedApp` Notification: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}',
+        );
         print('`onMessageOpenedApp`- Body: ${message.data}');
       },
     );
