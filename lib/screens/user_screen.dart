@@ -65,8 +65,10 @@ class _UserScreenState extends State<UserScreen> {
             trailing: OutlinedButton(
               child: const Text('SEARCH'),
               onPressed: () {
-                //
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const SearchScreen()));
+                Navigator.pushNamed(
+                  context,
+                  '/search',
+                );
               },
             ),
           ),

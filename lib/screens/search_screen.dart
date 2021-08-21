@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key, this.searchText}) : super(key: key);
-
-  final String? searchText;
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -31,10 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     _controller = TextEditingController();
     results = [];
-    if (widget.searchText != null) {
-      _controller.text = widget.searchText!;
-      _search();
-    }
+
     super.initState();
   }
 
@@ -46,6 +40,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final searchText = ModalRoute.of(context)?.settings.arguments;
+    if (searchText != null && searchText is String) {
+      _controller.text = searchText;
+      _search();
+    }
+
     return Scaffold(
       appBar: AppBar(),
       body: ListView(

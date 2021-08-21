@@ -68,7 +68,11 @@ class _RentoolSearchBarState extends State<_RentoolSearchBar> {
                   hintText: AppLocalizations.of(context)!.search,
                 ),
                 onSubmitted: (value) {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen(searchText: value)));
+                  Navigator.pushNamed(
+                    context,
+                    '/search',
+                    arguments: value,
+                  );
                 },
               ),
             )
