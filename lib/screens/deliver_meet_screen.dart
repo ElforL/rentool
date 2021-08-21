@@ -6,21 +6,15 @@ import 'package:rentool/widgets/meetings_containers/meeting_arrived_container.da
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class DeliverMeetScreen extends StatefulWidget {
-  DeliverMeetScreen({Key? key, required this.tool})
-      : isUserTheOwner = tool.ownerUID == AuthServices.auth.currentUser!.uid,
-        super(key: key);
-
-  final Tool tool;
-  final bool isUserTheOwner;
+  const DeliverMeetScreen({Key? key}) : super(key: key);
 
   @override
   _DeliverMeetScreenState createState() => _DeliverMeetScreenState();
 }
 
 class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
-  _DeliverMeetScreenState();
-
-  bool get isUserTheOwner => widget.isUserTheOwner;
+  late Tool tool;
+  late bool isUserTheOwner;
 
   bool? bothArrived;
   bool? bothPicsOK;
@@ -36,10 +30,13 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    tool = ModalRoute.of(context)!.settings.arguments as Tool;
+    isUserTheOwner = tool.ownerUID == AuthServices.auth.currentUser!.uid;
+
     return Scaffold(
-      appBar: AppBar(title: Text('Meeting for ${widget.tool.name}')),
+      appBar: AppBar(title: Text('Meeting for ${tool.name}')),
       body: StreamBuilder(
-        stream: FirestoreServices.getDeliverMeetingStream(widget.tool),
+        stream: FirestoreServices.getDeliverMeetingStream(tool),
         builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -119,7 +116,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
           // ImagePicker().getImage(source: ImageSource.camera);
           var url =
               'https://www.hebergementwebs.com/image/04/044b635292b90188f40c240b51ae64bc.png/how-to-fix-http-error-code-501.png';
-          FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_pics_urls', FieldValue.arrayUnion([url]));
+          FirestoreServices.setDeliverMeetingField(tool, '${userRole}_pics_urls', FieldValue.arrayUnion([url]));
         },
       );
     } else if (data['renter_ids_ok'] != true || data['owner_ids_ok'] != true) {
@@ -127,7 +124,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       return MeetingIdsContainer(
         data: data,
         isUserTheOwner: isUserTheOwner,
-        onPressed: () => FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_ids_ok', !currentValue),
+        onPressed: () => FirestoreServices.setDeliverMeetingField(tool, '${userRole}_ids_ok', !currentValue),
       );
     } else {
       if (data['rent_started']) {
@@ -149,13 +146,13 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
 
   void arriveFunction(value) {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
-    FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_arrived', value);
+    FirestoreServices.setDeliverMeetingField(tool, '${userRole}_arrived', value);
   }
 
   void picsFunction(Map<String, dynamic> data, bool isUserTheOwner) {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
     final arePicsOk = data['${userRole}_pics_ok'];
-    FirestoreServices.setDeliverMeetingField(widget.tool, '${userRole}_pics_ok', !arePicsOk);
+    FirestoreServices.setDeliverMeetingField(tool, '${userRole}_pics_ok', !arePicsOk);
   }
 }
 

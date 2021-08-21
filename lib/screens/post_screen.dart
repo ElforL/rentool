@@ -177,10 +177,10 @@ class _PostScreenState extends State<PostScreen> {
                       ElevatedButton(
                         child: const Text('Meet'),
                         onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => DeliverMeetScreen(tool: tool),
-                            ),
+                          Navigator.pushNamed(
+                            context,
+                            '/deliver',
+                            arguments: tool,
                           );
                         },
                       ),

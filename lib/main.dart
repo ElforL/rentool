@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/firebase_init_error_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
@@ -93,6 +94,7 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => const FirstScreen(),
         '/post': (context) => const PostScreen(),
         '/newPost': (context) => NewPostScreen(),
+        '/deliver': (context) => const DeliverMeetScreen(),
         '/search': (context) => const SearchScreen(),
       },
     );
