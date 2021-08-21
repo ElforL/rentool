@@ -181,7 +181,7 @@ class _PostScreenState extends State<PostScreen> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => MeetScreen(tool: tool),
+                              builder: (context) => DeliverMeetScreen(tool: tool),
                             ),
                           );
                         },

@@ -5,8 +5,8 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/meetings_containers/meeting_arrived_container.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
-class MeetScreen extends StatefulWidget {
-  MeetScreen({Key? key, required this.tool})
+class DeliverMeetScreen extends StatefulWidget {
+  DeliverMeetScreen({Key? key, required this.tool})
       : isUserTheOwner = tool.ownerUID == AuthServices.auth.currentUser!.uid,
         super(key: key);
 
@@ -14,11 +14,11 @@ class MeetScreen extends StatefulWidget {
   final bool isUserTheOwner;
 
   @override
-  _MeetScreenState createState() => _MeetScreenState();
+  _DeliverMeetScreenState createState() => _DeliverMeetScreenState();
 }
 
-class _MeetScreenState extends State<MeetScreen> {
-  _MeetScreenState();
+class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
+  _DeliverMeetScreenState();
 
   bool get isUserTheOwner => widget.isUserTheOwner;
 
