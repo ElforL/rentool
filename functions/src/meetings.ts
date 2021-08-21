@@ -315,18 +315,14 @@ async function startRent(
     const renterBodyData = {
       'notificationBodyArgs': [toolName, ownerName],
       'toolName': toolName,
-      'renterName': renterName,
-      'ownerName': ownerName,
+      'otherUserName': ownerName,
       'toolID': toolID,
-      'renterUID': renterUID,
     };
     const ownerBodyData = {
       'notificationBodyArgs': [toolName, renterName],
       'toolName': toolName,
-      'renterName': renterName,
-      'ownerName': ownerName,
+      'otherUserName': renterName,
       'toolID': toolID,
-      'renterUID': renterUID,
     };
     await addNotification(ownerUID, notifCode, ownerBodyData);
     return addNotification(renterUID, notifCode, renterBodyData);
@@ -457,18 +453,14 @@ async function endRent(
     const renterBodyData = {
       'notificationBodyArgs': [toolName, ownerName],
       'toolName': toolName,
-      'ownerName': ownerName,
-      'renterName': renterName,
+      'otherUserName': ownerName,
       'toolID': toolID,
-      'renterUID': renterUID,
     };
     const ownerBodyData = {
       'notificationBodyArgs': [toolName, renterName],
       'toolName': toolName,
-      'ownerName': ownerName,
-      'renterName': renterName,
+      'otherUserName': renterName,
       'toolID': toolID,
-      'renterUID': renterUID,
     };
 
     await addNotification(ownerUID, notifCode, ownerBodyData);
