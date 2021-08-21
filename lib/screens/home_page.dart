@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/new_post_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/home_page/count_home_page_container.dart';
 import 'package:rentool/widgets/rentool_search_bar.dart';
@@ -19,6 +20,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: RentoolSearchAppBar(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => NewPostScreen()));
+        },
+      ),
       drawer: Drawer(
         child: ListView(
           children: [
