@@ -4,15 +4,15 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class RequestsListScreen extends StatefulWidget {
-  const RequestsListScreen({Key? key, required this.tool}) : super(key: key);
-
-  final Tool tool;
+  const RequestsListScreen({Key? key}) : super(key: key);
 
   @override
   _RequestsListScreenState createState() => _RequestsListScreenState();
 }
 
 class _RequestsListScreenState extends State<RequestsListScreen> {
+  late Tool tool;
+
   late List<ToolRequest> list;
   DocumentSnapshot? _lastDoc;
 
@@ -23,7 +23,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
   }
 
   _getRequests() async {
-    var res = await FirestoreServices.fetchToolRequests(widget.tool.id, previousDoc: _lastDoc);
+    var res = await FirestoreServices.fetchToolRequests(tool.id, previousDoc: _lastDoc);
     _lastDoc = res.docs.last;
     for (var doc in res.docs) {
       var request = ToolRequest.fromJson(doc.data()..addAll({'id': doc.id}));
@@ -33,9 +33,11 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    tool = ModalRoute.of(context)!.settings.arguments as Tool;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Requests for ${widget.tool.name}'),
+        title: Text('Requests for ${tool.name}'),
       ),
       body: FutureBuilder(
         future: _getRequests(),
@@ -56,7 +58,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
               if (index % 2 != 0) return const Divider();
               return RequestTile(
                 request: list[index ~/ 2],
-                tool: widget.tool,
+                tool: tool,
               );
             },
           );

@@ -160,8 +160,10 @@ class _PostScreenState extends State<PostScreen> {
                           ? /* widget.tool.acceptedRequestID != null
                               ? null
                               : */
-                          () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => RequestsListScreen(tool: tool)),
+                          () => Navigator.pushNamed(
+                                context,
+                                '/toolsRequests',
+                                arguments: tool,
                               )
                           : (!tool.isAvailable
                               ? null
