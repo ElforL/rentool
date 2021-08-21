@@ -3,8 +3,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 class CloudMessagingServices {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
+  /// was `init()` called
+  bool initialized = false;
+
   String? deviceToken;
   Future<void> init() async {
+    if (initialized) return;
+    initialized = true;
     NotificationSettings settings = await _fcm.requestPermission();
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
