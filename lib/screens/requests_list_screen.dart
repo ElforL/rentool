@@ -86,7 +86,7 @@ class _RequestTileState extends State<RequestTile> {
             onPressed: () {
               FirestoreServices.acceptRequest(widget.tool.id, widget.request.id);
               widget.tool.acceptedRequestID = widget.request.renterUID;
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
             child: const Text('ACCEPT'),
             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),

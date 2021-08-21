@@ -162,7 +162,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
                 child: Text(AppLocalizations.of(context)!.ok),
               ),
