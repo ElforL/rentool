@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:rentool/screens/meetings_screens/deliver_meeting_pics_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -34,31 +35,31 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
     isUserTheOwner = tool.ownerUID == AuthServices.auth.currentUser!.uid;
 
     return StreamBuilder(
-        stream: FirestoreServices.getDeliverMeetingStream(tool),
-        builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasError) {
+      stream: FirestoreServices.getDeliverMeetingStream(tool),
+      builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+        if (snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(),
             body: Center(
               child: Text("Something went wrong\n${snapshot.error}"),
             ),
-            );
-          }
-          if (snapshot.connectionState != ConnectionState.active) {
+          );
+        }
+        if (snapshot.connectionState != ConnectionState.active) {
           return Scaffold(
             appBar: AppBar(),
             body: const Center(
               child: Text('Getting ready...'),
             ),
-            );
-          }
+          );
+        }
 
-          var data = snapshot.data!.data()!;
-          bothArrived = data['renter_arrived'] == true && data['owner_arrived'] == true;
-          bothPicsOK = data['renter_pics_ok'] == true && data['owner_pics_ok'] == true;
-          bothIdsOK = data['renter_ids_ok'] == true && data['owner_ids_ok'] == true;
+        var data = snapshot.data!.data()!;
+        bothArrived = data['renter_arrived'] == true && data['owner_arrived'] == true;
+        bothPicsOK = data['renter_pics_ok'] == true && data['owner_pics_ok'] == true;
+        bothIdsOK = data['renter_ids_ok'] == true && data['owner_ids_ok'] == true;
         return rentunAppropiateWidget(data, isUserTheOwner);
-                      },
+      },
     );
   }
 
@@ -102,9 +103,9 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       return Scaffold(
         appBar: AppBar(),
         body: MeetingIdsContainer(
-        data: data,
-        isUserTheOwner: isUserTheOwner,
-        onPressed: () => FirestoreServices.setDeliverMeetingField(tool, '${userRole}_ids_ok', !currentValue),
+          data: data,
+          isUserTheOwner: isUserTheOwner,
+          onPressed: () => FirestoreServices.setDeliverMeetingField(tool, '${userRole}_ids_ok', !currentValue),
         ),
       );
     } else {
@@ -112,14 +113,14 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         return Scaffold(
           appBar: AppBar(),
           body: const Center(
-          child: Text('SUCCESS\n Rent has started'),
+            child: Text('SUCCESS\n Rent has started'),
           ),
         );
       } else if (data['error'] != null) {
         return Scaffold(
           appBar: AppBar(),
           body: Center(
-          child: Text(data['error'].toString()),
+            child: Text(data['error'].toString()),
           ),
         );
       } else {
@@ -127,7 +128,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         return Scaffold(
           appBar: AppBar(),
           body: const Center(
-          child: Text('Loading... / unemplemented'),
+            child: Text('Loading... / unemplemented'),
           ),
         );
       }
@@ -143,112 +144,6 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
     final arePicsOk = data['${userRole}_pics_ok'];
     FirestoreServices.setDeliverMeetingField(tool, '${userRole}_pics_ok', !arePicsOk);
-  }
-}
-
-class MeetingPicsContainer extends StatelessWidget {
-  MeetingPicsContainer({
-    Key? key,
-    required this.data,
-    required this.isUserTheOwner,
-    required this.onPressed,
-    required this.onTakePics,
-  })  : iAgree = data['${isUserTheOwner ? 'owner' : 'renter'}_pics_ok'],
-        super(key: key);
-
-  final void Function() onPressed;
-  final void Function() onTakePics;
-  final Map<String, dynamic> data;
-  final bool isUserTheOwner;
-
-  final bool iAgree;
-
-  @override
-  Widget build(BuildContext context) {
-    List<String> myPics = List<String>.from(data['${isUserTheOwner ? 'owner' : 'renter'}_pics_urls']);
-    List<String> othersPics = List<String>.from(data['${!isUserTheOwner ? 'owner' : 'renter'}_pics_urls']);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Your photos', style: Theme.of(context).textTheme.subtitle2),
-              OutlinedButton.icon(
-                label: const Text('Take pictures'),
-                icon: const Icon(Icons.camera_alt),
-                onPressed: onTakePics,
-              )
-            ],
-          ),
-          SizedBox(
-            height: 150,
-            child: (myPics.isEmpty)
-                ? const SizedBox(
-                    height: 150,
-                    child: Center(
-                      child: Text('No Photos'),
-                    ),
-                  )
-                : ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      for (var pic in myPics)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Image.network(pic),
-                        ),
-                    ],
-                  ),
-          ),
-          const Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'The ${isUserTheOwner ? "renter's" : "owner's"}',
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
-              Text(
-                data['${!isUserTheOwner ? 'owner' : 'renter'}_pics_ok'] ? 'Agree' : "Doesn't agree",
-                style: TextStyle(
-                  color: data['${!isUserTheOwner ? 'owner' : 'renter'}_pics_ok'] ? Colors.green : Colors.red,
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 150,
-            child: (othersPics.isEmpty)
-                ? const SizedBox(
-                    child: Center(
-                      child: Text('No Photos'),
-                    ),
-                  )
-                : ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      for (var pic in othersPics)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Image.network(pic),
-                        ),
-                    ],
-                  ),
-          ),
-          const Divider(),
-          ElevatedButton(
-            onPressed: onPressed,
-            child: Text(iAgree ? 'DISAGREE' : 'AGREE'),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(iAgree ? Colors.red : Colors.green),
-            ),
-          )
-        ],
-      ),
-    );
   }
 }
 
