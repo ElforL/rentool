@@ -7,6 +7,10 @@
     "ok": "OK",
     "next": "Next",
     "error": "Error",
+    "yes": "Yes",
+    "no": "No",
+    "sure": "Sure",
+    "cancel": "Cancel",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {
