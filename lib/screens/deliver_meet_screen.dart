@@ -33,19 +33,23 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
     isUserTheOwner = tool.ownerUID == AuthServices.auth.currentUser!.uid;
 
-    return Scaffold(
-      appBar: AppBar(title: Text('Meeting for ${tool.name}')),
-      body: StreamBuilder(
+    return StreamBuilder(
         stream: FirestoreServices.getDeliverMeetingStream(tool),
         builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasError) {
-            return Center(
+          return Scaffold(
+            appBar: AppBar(),
+            body: Center(
               child: Text("Something went wrong\n${snapshot.error}"),
+            ),
             );
           }
           if (snapshot.connectionState != ConnectionState.active) {
-            return const Center(
+          return Scaffold(
+            appBar: AppBar(),
+            body: const Center(
               child: Text('Getting ready...'),
+            ),
             );
           }
 
@@ -53,28 +57,8 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
           bothArrived = data['renter_arrived'] == true && data['owner_arrived'] == true;
           bothPicsOK = data['renter_pics_ok'] == true && data['owner_pics_ok'] == true;
           bothIdsOK = data['renter_ids_ok'] == true && data['owner_ids_ok'] == true;
-          return Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (bothArrived!)
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.arrow_back),
-                      label: const Text('GO BACK'),
-                      onPressed: () {
-                        arriveFunction(false);
+        return rentunAppropiateWidget(data, isUserTheOwner);
                       },
-                    ),
-                  const SizedBox(height: 50),
-                  // TODO show dialogs to each agree button
-                  rentunAppropiateWidget(data, isUserTheOwner),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 
@@ -107,38 +91,44 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       //     ],
       //   ),
       // );
-      return MeetingPicsContainer(
-        data: data,
+      return DeliverMeetingPicsContainer(
+        didUserAgree: data['${userRole}_pics_ok'],
+        didOtherUserAgree: data['${otherRole}_pics_ok'],
         isUserTheOwner: isUserTheOwner,
         onPressed: () => picsFunction(data, isUserTheOwner),
-        onTakePics: () {
-          // TODO upload and add url to db
-          // ImagePicker().getImage(source: ImageSource.camera);
-          var url =
-              'https://www.hebergementwebs.com/image/04/044b635292b90188f40c240b51ae64bc.png/how-to-fix-http-error-code-501.png';
-          FirestoreServices.setDeliverMeetingField(tool, '${userRole}_pics_urls', FieldValue.arrayUnion([url]));
-        },
       );
     } else if (data['renter_ids_ok'] != true || data['owner_ids_ok'] != true) {
       final currentValue = data['${userRole}_ids_ok'];
-      return MeetingIdsContainer(
+      return Scaffold(
+        appBar: AppBar(),
+        body: MeetingIdsContainer(
         data: data,
         isUserTheOwner: isUserTheOwner,
         onPressed: () => FirestoreServices.setDeliverMeetingField(tool, '${userRole}_ids_ok', !currentValue),
+        ),
       );
     } else {
       if (data['rent_started']) {
-        return const Center(
+        return Scaffold(
+          appBar: AppBar(),
+          body: const Center(
           child: Text('SUCCESS\n Rent has started'),
+          ),
         );
       } else if (data['error'] != null) {
-        return Center(
+        return Scaffold(
+          appBar: AppBar(),
+          body: Center(
           child: Text(data['error'].toString()),
+          ),
         );
       } else {
         // TODO
-        return const Center(
+        return Scaffold(
+          appBar: AppBar(),
+          body: const Center(
           child: Text('Loading... / unemplemented'),
+          ),
         );
       }
     }
