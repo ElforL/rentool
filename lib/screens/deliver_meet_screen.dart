@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool/widgets/meetings_containers/meeting_arrived_container.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
 class DeliverMeetScreen extends StatefulWidget {
