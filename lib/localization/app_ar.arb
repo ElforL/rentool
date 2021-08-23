@@ -97,8 +97,11 @@
 
     "areYouSure": "هل انت متأكد؟",
     "deliverMeet_pics_confirm_body": "هل تتفق مع صور وفيديوهات {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}}؟",
-    "deliverMeet_pics_confirm_important": "هذه الصور والفيديوهات ستكون دليل على حالة الأداة قبل التأجير، لذا احرص على مراجعة صور وفيدوهات {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}} والاتفاق عليها",
+    "deliverMeet_pics_confirm_important": "هذه الصور والفيديوهات ستكون دليل على حالة الأداة قبل التأجير، لذا احرص على مراجعة صور وفيديوهات {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}} والاتفاق عليها",
     "deliverMeet_pics_confirm_note": ".لا تقلق، اذا غير {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}} اي من الصور او الفيديوهات فستتغير حالتك إلى ’غير موافق’ تلقائياً",
+
+    "deliverMeet_pics_help_dialog_title": "التقط صور وفيديوهات",
+    "deliverMeet_pics_help_dialog_body": "التقط صور وفيديوهات تبين حالة الأداة. وتحقق من صور وفيديوهات {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}} وتأكد من أنك توافق عليها.",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

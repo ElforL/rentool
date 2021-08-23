@@ -25,7 +25,14 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () => showHelpDialog(context),
+            icon: const Icon(Icons.help_outline),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {},
@@ -111,6 +118,24 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
           TextButton(
             child: Text(AppLocalizations.of(context)!.sure.toUpperCase()),
             onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<dynamic> showHelpDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) => IconAlertDialog(
+        icon: Icons.camera_alt,
+        titleText: AppLocalizations.of(context)!.deliverMeet_pics_help_dialog_title,
+        bodyText: AppLocalizations.of(context)!.deliverMeet_pics_help_dialog_body(otherUserRole),
+        importantText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_important(otherUserRole),
+        actions: [
+          TextButton(
+            child: Text(AppLocalizations.of(context)!.ok),
+            onPressed: () => Navigator.pop(context),
           ),
         ],
       ),

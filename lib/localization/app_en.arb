@@ -183,6 +183,17 @@
         }
     },
 
+    "deliverMeet_pics_help_dialog_title": "Take pictures and videos",
+    "deliverMeet_pics_help_dialog_body": "Take pictures and videos showing the tool's current state. and check the {role, select, owner{owner} renter{renter} other{other preson}}'s pictures and videos and confirm that you agree on them.",
+    "@deliverMeet_pics_help_dialog_body": {
+        "placeholders": {
+            "role": {
+                "type": "String",
+                "description": "the other user's role. 'renter' or 'owner'."
+            }
+        }
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
