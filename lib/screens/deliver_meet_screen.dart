@@ -74,24 +74,6 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         onPressed: () => arriveFunction(!data['${userRole}_arrived']),
       );
     } else if (data['renter_pics_ok'] != true || data['owner_pics_ok'] != true) {
-      // showDialog(
-      //   context: context,
-      //   builder: (context) => IconAlertDialog(
-      //     icon: Icons.camera_alt,
-      //     titleText: 'Are you sure',
-      //     bodyText: 'Do you agree with the owner’s pictures and videos?',
-      //     importantText:
-      //         'These pictures and videos will be evidence of the tool’s status before renting so make sure you check the owner’s pictures and videos and agree on them.',
-      //     noteText:
-      //         'Note: if the owner changed his pictures and videos after you agree your status will change to not agree automatically.',
-      //     actions: [
-      //       TextButton(
-      //         child: const Text('OK'),
-      //         onPressed: () => Navigator.pop(context),
-      //       ),
-      //     ],
-      //   ),
-      // );
       return DeliverMeetingPicsContainer(
         didUserAgree: data['${userRole}_pics_ok'],
         didOtherUserAgree: data['${otherRole}_pics_ok'],

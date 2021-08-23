@@ -95,5 +95,10 @@
     "the_role_pics_n_vids": "صور وفيديوهات {role, select, owner{المالك} renter{المستأجر} other{الشخص الآخر}}",
     "my_pics_and_vids": "صوري وفيديوهاتي",
 
+    "areYouSure": "هل انت متأكد؟",
+    "deliverMeet_pics_confirm_body": "هل تتفق مع صور وفيديوهات {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}}؟",
+    "deliverMeet_pics_confirm_important": "هذه الصور والفيديوهات ستكون دليل على حالة الأداة قبل التأجير، لذا احرص على مراجعة صور وفيدوهات {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}} والاتفاق عليها",
+    "deliverMeet_pics_confirm_note": ".لا تقلق، اذا غير {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}} اي من الصور او الفيديوهات فستتغير حالتك إلى ’غير موافق’ تلقائياً",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

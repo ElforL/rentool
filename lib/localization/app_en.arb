@@ -163,6 +163,26 @@
     },
     "my_pics_and_vids": "My pictures and videos",
 
+    "areYouSure": "Are you sure?",
+    "deliverMeet_pics_confirm_body": "Do you agree with the {role, select, owner{owner} renter{renter} other{other preson}}'s pictures and videos?",
+    "@deliverMeet_pics_confirm_body": {
+        "placeholders": {
+            "role": {}
+        }
+    },
+    "deliverMeet_pics_confirm_important": "These pictures and videos will be evidence of the tool's status before renting so make sure you check the {role, select, owner{owner} renter{renter} other{other preson}}'s pictures and videos and agree on them.",
+    "@deliverMeet_pics_confirm_important": {
+        "placeholders": {
+            "role": {}
+        }
+    },
+    "deliverMeet_pics_confirm_note": "Don't worry if the {role, select, owner{owner} renter{renter} other{other preson}} changed his pictures and/or videos after you agreed, your status will automatically change to 'disagree'.",
+    "@deliverMeet_pics_confirm_note": {
+        "placeholders": {
+            "role": {}
+        }
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

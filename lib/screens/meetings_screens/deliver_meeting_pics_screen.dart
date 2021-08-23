@@ -99,12 +99,10 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
       context: context,
       builder: (context) => IconAlertDialog(
         icon: Icons.camera_alt,
-        titleText: 'Are you sure',
-        bodyText: 'Do you agree with the owner’s pictures and videos?',
-        importantText:
-            'These pictures and videos will be evidence of the tool’s status before renting so make sure you check the owner’s pictures and videos and agree on them.',
-        noteText:
-            'Note: if the owner changed his pictures and videos after you agree your status will change to not agree automatically.',
+        titleText: AppLocalizations.of(context)!.areYouSure,
+        bodyText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_body(otherUserRole),
+        importantText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_important(otherUserRole),
+        noteText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_note(otherUserRole),
         actions: [
           TextButton(
             child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
