@@ -143,6 +143,22 @@
     "ownerArrived": "The owner arrived",
     "renterArrived": "The renter arrived",
 
+    "agree": "Agree",
+    "disagree": "Disagree",
+
+    "deliver_pics_explanation": "Do you agree that these images and videos represents the tool's current statue?",
+    "@deliver_pics_explanation": {
+        "description": "the text above the agree button in the pics screen in the deliver meeting."
+    },
+
+    "the_role_pics_n_vids": "The {role, select, owner{owner} renter{renter} other{other preson}}'s pictures and videos",
+    "@the_role_pics_n_vids": {
+        "placeholders": {
+            "role": {}
+        }
+    },
+    "my_pics_and_vids": "My pictures and videos",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

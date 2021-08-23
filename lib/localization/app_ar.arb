@@ -83,5 +83,12 @@
     "ownerArrived": "وصَل المالك",
     "renterArrived": "وصَل المستأجر",
 
+    "agree": "اتفق",
+    "disagree": "لا اتفق",
+
+    "deliver_pics_explanation": "هل توافق ان هذه الصور والفيديوهات تبين حالة الأداة؟",
+    "the_role_pics_n_vids": "صور وفيديوهات {role, select, owner{المالك} renter{المستأجر} other{الشخص الآخر}}",
+    "my_pics_and_vids": "صوري وفيديوهاتي",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
