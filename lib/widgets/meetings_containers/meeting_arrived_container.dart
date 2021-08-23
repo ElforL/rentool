@@ -19,33 +19,40 @@ class MeetingArrivedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (noOneArrived)
-          const NoOneArrivedIcon()
-        else if (didUserArrive)
-          UserArrivedIcon(
-            isUserTheOwner: isUserTheOwner,
-          )
-        else if (didOtherUserArrive)
-          OtherArrivedIcon(
-            isUserTheOwner: isUserTheOwner,
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (noOneArrived)
+                const NoOneArrivedIcon()
+              else if (didUserArrive)
+                UserArrivedIcon(
+                  isUserTheOwner: isUserTheOwner,
+                )
+              else if (didOtherUserArrive)
+                OtherArrivedIcon(
+                  isUserTheOwner: isUserTheOwner,
+                ),
+              const SizedBox(height: 30),
+              Text(AppLocalizations.of(context)!.didYouArrive),
+              ElevatedButton(
+                child: Text(
+                  didUserArrive
+                      ? AppLocalizations.of(context)!.didntArrived.toUpperCase()
+                      : AppLocalizations.of(context)!.arrived.toUpperCase(),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: didUserArrive ? MaterialStateProperty.all(Colors.orange.shade900) : null,
+                ),
+                onPressed: onPressed,
+              ),
+            ],
           ),
-        const SizedBox(height: 30),
-        Text(AppLocalizations.of(context)!.didYouArrive),
-        ElevatedButton(
-          child: Text(
-            didUserArrive
-                ? AppLocalizations.of(context)!.didntArrived.toUpperCase()
-                : AppLocalizations.of(context)!.arrived.toUpperCase(),
-          ),
-          style: ButtonStyle(
-            backgroundColor: didUserArrive ? MaterialStateProperty.all(Colors.orange.shade900) : null,
-          ),
-          onPressed: onPressed,
         ),
-      ],
+      ),
     );
   }
 }
