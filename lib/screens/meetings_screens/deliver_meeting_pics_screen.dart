@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/widgets/dialogs.dart';
 import 'package:rentool/widgets/drag_indicator.dart';
 
 class DeliverMeetingPicsContainer extends StatelessWidget {
@@ -80,12 +81,40 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
                     (didUserAgree ? AppLocalizations.of(context)!.disagree : AppLocalizations.of(context)!.agree)
                         .toUpperCase(),
                   ),
-                  onPressed: () => onPressed(),
+                  onPressed: () async {
+                    var isSure = didUserAgree ? true : await showConfirmDialog(context);
+                    if (isSure) onPressed();
+                  },
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<dynamic> showConfirmDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) => IconAlertDialog(
+        icon: Icons.camera_alt,
+        titleText: 'Are you sure',
+        bodyText: 'Do you agree with the owner’s pictures and videos?',
+        importantText:
+            'These pictures and videos will be evidence of the tool’s status before renting so make sure you check the owner’s pictures and videos and agree on them.',
+        noteText:
+            'Note: if the owner changed his pictures and videos after you agree your status will change to not agree automatically.',
+        actions: [
+          TextButton(
+            child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+          TextButton(
+            child: Text(AppLocalizations.of(context)!.sure.toUpperCase()),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
       ),
     );
   }
