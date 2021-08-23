@@ -59,7 +59,7 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 5,
+              height: MediaQuery.of(context).size.height / 10,
             ),
             Padding(
               padding: const EdgeInsets.all(10),
@@ -100,8 +100,8 @@ class DeliverMeetingPicsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.1,
-      minChildSize: 0.1,
+      initialChildSize: 0.11,
+      minChildSize: 0.11,
       maxChildSize: 0.5,
       builder: (context, scrollController) {
         return Container(
@@ -132,7 +132,7 @@ class DeliverMeetingPicsBottomSheet extends StatelessWidget {
                       // scrollController.animateTo(100, duration: Duration(seconds: 1), curve: Curves.ease);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      padding: const EdgeInsets.only(right: 15, left: 15, bottom: 8),
                       child: Text(
                         AppLocalizations.of(context)!.my_pics_and_vids,
                         style: Theme.of(context).textTheme.headline6,
@@ -142,7 +142,7 @@ class DeliverMeetingPicsBottomSheet extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: SizedBox(
-                      height: 200,
+                      height: min(MediaQuery.of(context).size.height / 4, 200),
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: [
