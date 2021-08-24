@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BigIcon extends StatelessWidget {
-  const BigIcon({Key? key, required this.icon, this.caption}) : super(key: key);
+  const BigIcon({Key? key, this.icon, this.caption, this.child}) : super(key: key);
 
-  final Widget icon;
+  final IconData? icon;
+  final Widget? child;
   final String? caption;
 
   @override
   Widget build(BuildContext context) {
+    assert(icon != null || child != null);
     return Column(
       children: [
-        icon,
+        if (icon != null)
+          Icon(
+            icon!,
+            size: 150,
+          ),
+        if (child != null) child!,
         if (caption != null)
           Text(
             caption!,
@@ -28,10 +35,7 @@ class NoOneArrivedIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BigIcon(
-      icon: const Icon(
-        Icons.deck,
-        size: 150,
-      ),
+      icon: Icons.deck,
       caption: AppLocalizations.of(context)!.noOneHereYet,
     );
   }
@@ -45,7 +49,7 @@ class UserArrivedIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BigIcon(
-      icon: Stack(
+      child: Stack(
         alignment: Alignment.topRight,
         children: const [
           Icon(
@@ -73,10 +77,7 @@ class OtherArrivedIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BigIcon(
-      icon: const Icon(
-        Icons.emoji_people,
-        size: 150,
-      ),
+      icon: Icons.emoji_people,
       caption:
           isUserTheOwner ? AppLocalizations.of(context)!.ownerArrived : AppLocalizations.of(context)!.renterArrived,
     );
