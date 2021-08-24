@@ -239,6 +239,28 @@
     },
     "deliverMeet_ids_confirm_dialog_note": "When both of you confirm the IDs the rent will start",
 
+    "let_owner_inspect_tool": "Let the owner inspect the tool for damages.",
+    "inspect_the_tool": "Inspect the tool and look for damages caused by the renter.",
+    "was_tool_damaged": "Was the tool damaged?",
+    "damaged": "{isMale, select, true{Damaged} other{Damaged}}",
+    "@damaged": {
+        "description": "[isMale] for the word\\'s gender (e.g., Arabic: \"متضررة\" and \"متضرر\")",
+        "placeholders": {
+            "isMale": {
+                "type": "bool"
+            }
+        }
+    },
+    "not_damaged": "Not {isMale, select, true{damaged} other{damaged}}",
+    "@not_damaged": {
+        "description": "[isMale] for the word\\'s gender (e.g., Arabic: \"متضررة\" and \"متضرر\")",
+        "placeholders": {
+            "isMale": {
+                "type": "bool"
+            }
+        }
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

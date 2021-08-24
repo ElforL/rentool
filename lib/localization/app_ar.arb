@@ -117,5 +117,11 @@
     "deliverMeet_ids_confirm_dialog_body": "هل يطابق رقم هوية الشخص الذي تقابله {idNum}؟",
     "deliverMeet_ids_confirm_dialog_note": "يبدأ الأيجار بعد تأكيد كل منكما هوية الآخر",
 
+    "let_owner_inspect_tool": "دع المالك يفحص الأداة بحثًا عن اي أضرار.",
+    "inspect_the_tool": "افحص الأداة بحثًا عن اضرار بسبب المستأجر.",
+    "was_tool_damaged": "هل تضررت الأداة؟",
+    "damaged": "{isMale, select, true{متضرر} other{متضررة}}",
+    "not_damaged": "غير {isMale, select, true{متضرر} other{متضررة}}",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
