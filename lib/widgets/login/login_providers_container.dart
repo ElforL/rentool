@@ -39,7 +39,10 @@ class AuthProvidersContainer extends StatelessWidget {
           children: [
             AuthProviderButton(
               icon: Image.asset('assets/images/google_icon.png'),
-              label: const Text('SIGN IN WITH GOOGLE'),
+              label: const Text(
+                'SIGN IN WITH GOOGLE',
+                style: TextStyle(fontFamily: 'Roboto'),
+              ),
               onPressed: () {
                 googleSignin(context);
               },
@@ -49,7 +52,10 @@ class AuthProvidersContainer extends StatelessWidget {
             ),
             AuthProviderButton(
               icon: Image.asset('assets/images/Facebook_icon.png'),
-              label: const Text('Login with Facebook'),
+              label: const Text(
+                'Login with Facebook',
+                style: TextStyle(fontFamily: 'Roboto'),
+              ),
               onPressed: () {
                 facebookSignin(context);
               },
@@ -59,7 +65,10 @@ class AuthProvidersContainer extends StatelessWidget {
             ),
             AuthProviderButton(
               icon: Image.asset('assets/images/microsoft_icon.png'),
-              label: const Text('Sign in with Microsoft'),
+              label: const Text(
+                'Sign in with Microsoft',
+                style: TextStyle(fontFamily: 'Roboto'),
+              ),
               onPressed: () {
                 microsoftSignin(context);
               },
@@ -230,16 +239,20 @@ class AuthProviderButton extends StatelessWidget {
           foregroundColor: foregroundColor,
           shape: shape,
         ),
-        child: Row(
-          children: [
-            SizedBox(
-              height: 18,
-              width: 18,
-              child: icon,
-            ),
-            const SizedBox(width: 24),
-            label,
-          ],
+        child: Directionality(
+          // Keeps the Row in ltr so the provider icon is on the left
+          textDirection: TextDirection.ltr,
+          child: Row(
+            children: [
+              SizedBox(
+                height: 18,
+                width: 18,
+                child: icon,
+              ),
+              const SizedBox(width: 24),
+              label,
+            ],
+          ),
         ),
         onPressed: onPressed,
       ),
