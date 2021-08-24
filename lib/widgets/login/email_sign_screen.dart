@@ -53,7 +53,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           showMyAlert(
             context,
             Text(AppLocalizations.of(context)!.loginError),
-            Text(AppLocalizations.of(context)!.errorInfo + '\n${e.code}:${e.message}'),
+            SelectableText(AppLocalizations.of(context)!.errorInfo + '\n${e.code}:${e.message}'),
             [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -90,7 +90,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           showMyAlert(
             context,
             Text(AppLocalizations.of(context)!.signUpError),
-            Text(AppLocalizations.of(context)!.errorInfo + '\n${e.code}:${e.message}'),
+            SelectableText(AppLocalizations.of(context)!.errorInfo + '\n${e.code}:${e.message}'),
             [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -104,7 +104,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         showMyAlert(
           context,
           Text(AppLocalizations.of(context)!.loginError),
-          Text(AppLocalizations.of(context)!.errorInfo + e.toString()),
+          SelectableText(AppLocalizations.of(context)!.errorInfo + e.toString()),
           [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -184,7 +184,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         showMyAlert(
           context,
           Text(AppLocalizations.of(context)!.loginError),
-          Text(AppLocalizations.of(context)!.errorInfo + e.toString()),
+          SelectableText(AppLocalizations.of(context)!.errorInfo + e.toString()),
           [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -226,7 +226,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       showMyAlert(
         context,
         Text(AppLocalizations.of(context)!.loginError),
-        Text(AppLocalizations.of(context)!.errorInfo + e.toString()),
+        SelectableText(AppLocalizations.of(context)!.errorInfo + e.toString()),
         [
           TextButton(
             onPressed: () => Navigator.pop(context),
