@@ -82,15 +82,22 @@ class _MyAppState extends State<MyApp> {
       locale: _locale,
       title: 'Rentool',
       onGenerateTitle: (_) => AppLocalizations.of(_)!.rentool,
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          backwardsCompatibility: false,
-          foregroundColor: Colors.black87,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        primarySwatch: Colors.blue,
-      ),
+      // using the builder instead of `theme` so i can access the context to get the locale
+      // and change the font family based on the language
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData(
+            fontFamily: AppLocalizations.of(context)!.localeName == 'ar' ? 'Almarai' : null,
+            appBarTheme: const AppBarTheme(
+              foregroundColor: Colors.black87,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+            primarySwatch: Colors.blue,
+          ),
+          child: child!,
+        );
+      },
       initialRoute: '/',
       routes: {
         '/': (context) => const FirstScreen(),
