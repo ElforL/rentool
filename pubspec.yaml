@@ -54,5 +54,15 @@ flutter:
     - family: CustomIcons
       fonts:
         - asset: assets/fonts/CustomIcons.ttf
+    - family: Almarai
+      fonts:
+        - asset: assets/fonts/Almarai/Almarai-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Almarai/Almarai-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Almarai/Almarai-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Almarai/Almarai-Regular.ttf
+          weight: 400
   uses-material-design: true
   generate: true
