@@ -11,6 +11,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  bool readArguments = false;
   late TextEditingController _controller;
 
   late List<QueryDocumentSnapshot<Object>> results;
@@ -18,6 +19,7 @@ class _SearchScreenState extends State<SearchScreen> {
   _search() async {
     var searchKey = _controller.text;
     _controller.clear();
+    print('searching for $searchKey');
     var res = await FirestoreServices.searchForTool(searchKey);
     setState(() {
       if (res is List<QueryDocumentSnapshot<Object>>) results = res;
@@ -40,10 +42,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final searchText = ModalRoute.of(context)?.settings.arguments;
-    if (searchText != null && searchText is String) {
-      _controller.text = searchText;
-      _search();
+    if (!readArguments) {
+      final searchText = ModalRoute.of(context)?.settings.arguments;
+      readArguments = true;
+      if (searchText != null && searchText is String) {
+        _controller.text = searchText;
+        _search();
+      }
     }
 
     return Scaffold(
