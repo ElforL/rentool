@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/firebase_init_error_screen.dart';
@@ -89,6 +90,12 @@ class _MyAppState extends State<MyApp> {
           data: ThemeData(
             fontFamily: AppLocalizations.of(context)!.localeName == 'ar' ? 'Almarai' : null,
             appBarTheme: const AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarBrightness: Brightness.light,
+                statusBarIconBrightness: Brightness.dark,
+                systemNavigationBarIconBrightness: Brightness.dark,
+              ),
               foregroundColor: Colors.black87,
               backgroundColor: Colors.transparent,
               elevation: 0,
