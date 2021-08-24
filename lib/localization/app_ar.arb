@@ -103,5 +103,19 @@
     "deliverMeet_pics_help_dialog_title": "التقط صور وفيديوهات",
     "deliverMeet_pics_help_dialog_body": "التقط صور وفيديوهات تبين حالة الأداة. وتحقق من صور وفيديوهات {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}} وتأكد من أنك توافق عليها.",
 
+    "role_id_number_is": "رقم هوية {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}}",
+    "meeting_id_checklist": "تأكد أن:\n1- رقم أصل الهوية يطابق الرقم أعلاه\n2- الصورة على أصل الهوية تطابق صورة الشخص الذي تقابله\n3- الهوية غير منتهية الصلاحية او على وشك أن تكون",
+    "a_match": "تطابق",
+    "doesnt_match": "لا تتطابق",
+    "id_unknow_error": "رقم الهوية غير معروف\nلايمكن الاستمرار",
+
+    "deliverMeet_ids_help_dialog_title": "أكد رقم هوية {role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}}",
+    "deliverMeet_ids_help_dialog_body": "هذه أخر خطوة، وسيبدأ الأيجار بعد التأكيد.\n\nاطلب أصل الهوية من الشخص الذي تقابله و تأكد ان رقم الأصل يطابق الرقم الظاهر على الشاشة، أن الصورة على أصل الهوية تطابق صورة الشخص الذي تقابله، وأن الهوية غير منتهية الصلاحية أو على وشك أن تكون.",
+    "deliverMeet_ids_help_dialog_important": "أرقام الهوية مستخدمة لحمايتك و{role, select, owner{المالك} renter{المستأجر} other{الطرف الآخر}} في حال حصول اي مشكلة. احرص على التأكيد انها متطابقة ولا تكمل إن لم تكن.",
+
+    
+    "deliverMeet_ids_confirm_dialog_body": "هل يطابق رقم هوية الشخص الذي تقابله {idNum}؟",
+    "deliverMeet_ids_confirm_dialog_note": "يبدأ الأيجار بعد تأكيد كل منكما هوية الآخر",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

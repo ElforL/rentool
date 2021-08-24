@@ -194,6 +194,51 @@
         }
     },
 
+    "role_id_number_is": "The {role, select, owner{owner} renter{renter} other{other preson}}'s ID number is",
+    "@role_id_number_is": {
+        "placeholders": {
+            "role": {
+                "type": "String",
+                "description": "the other user's role. 'renter' or 'owner'."
+            }
+        }
+    },
+    "meeting_id_checklist": "Make sure:\n1- Its number matches the one above.\n2- Its photo matches the person you're meeting.\n3- It's not void or about to be.",
+    "a_match": "A match",
+    "doesnt_match": "Doesn't match",
+    "id_unknow_error": "UNKNOW ID.\nCan't continue",
+
+    "deliverMeet_ids_help_dialog_title": "Confirm {role, select, owner{owner} renter{renter} other{other preson}}'s ID number",
+    "@deliverMeet_ids_help_dialog_title": {
+        "placeholders": {
+            "role": {
+                "type": "String",
+                "description": "the other user's role. 'renter' or 'owner'."
+            }
+        }
+    },
+    "deliverMeet_ids_help_dialog_body": "This is the last step, when both of you confirm the IDs, the rent will start.\n\nAsk the person you're meeting for his/her ID card and make sure its number matches the one on the app, its photo matches the person you're meeting with, and that it's not void or about to be.",
+    "deliverMeet_ids_help_dialog_important": "The ID numbers are to protect you and the {role, select, owner{owner} renter{renter} other{other preson}} incase of any problems. Make sure it's the same. and do not continue if it's not.",
+    "@deliverMeet_ids_help_dialog_important": {
+        "placeholders": {
+            "role": {
+                "type": "String",
+                "description": "the other user's role. 'renter' or 'owner'."
+            }
+        }
+    },
+
+    "deliverMeet_ids_confirm_dialog_body": "Does the ID number of the preson you're meeting matches {idNum}?",
+    "@deliverMeet_ids_confirm_dialog_body": {
+        "placeholders": {
+            "idNum": {
+                "type": "String",
+                "description": "the id number of the other user"
+            }
+        }
+    },
+    "deliverMeet_ids_confirm_dialog_note": "When both of you confirm the IDs the rent will start",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/screens/meetings_screens/deliver_meeting_pics_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
+import 'package:rentool/screens/meetings_screens/meeting_ids_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -82,13 +83,11 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       );
     } else if (data['renter_ids_ok'] != true || data['owner_ids_ok'] != true) {
       final currentValue = data['${userRole}_ids_ok'];
-      return Scaffold(
-        appBar: AppBar(),
-        body: MeetingIdsContainer(
-          data: data,
-          isUserTheOwner: isUserTheOwner,
-          onPressed: () => FirestoreServices.setDeliverMeetingField(tool, '${userRole}_ids_ok', !currentValue),
-        ),
+      return MeetingsIdsScreen(
+        didUserAgree: data['${userRole}_ids_ok'],
+        otherUserID: data['${otherRole}_id'],
+        isUserTheOwner: isUserTheOwner,
+        onPressed: () => FirestoreServices.setDeliverMeetingField(tool, '${userRole}_ids_ok', !currentValue),
       );
     } else {
       if (data['rent_started']) {
@@ -126,49 +125,5 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
     final userRole = isUserTheOwner ? 'owner' : 'renter';
     final arePicsOk = data['${userRole}_pics_ok'];
     FirestoreServices.setDeliverMeetingField(tool, '${userRole}_pics_ok', !arePicsOk);
-  }
-}
-
-class MeetingIdsContainer extends StatelessWidget {
-  const MeetingIdsContainer({Key? key, required this.data, required this.isUserTheOwner, required this.onPressed})
-      : super(key: key);
-
-  final void Function() onPressed;
-  final Map<String, dynamic> data;
-  final bool isUserTheOwner;
-
-  @override
-  Widget build(BuildContext context) {
-    final userRole = isUserTheOwner ? 'owner' : 'renter';
-    final otherRole = !isUserTheOwner ? 'owner' : 'renter';
-    final bool iAgree = data['${userRole}_ids_ok'];
-
-    final String otherIDnumber =
-        data['${otherRole}_id'] ?? "**UNKNOW ID**\nThis is not meant to happen. please cancel and contact support.";
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text("The $otherRole's ID number is:"),
-        Text(
-          otherIDnumber,
-          style: Theme.of(context).textTheme.headline6,
-          textAlign: TextAlign.center,
-        ),
-        Text(
-          "Ask the $otherRole to give you his ID and make sure\n1- it matches him/her.\n2-its number matches the number above.\n3- it's not expired or about to.",
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 30),
-        const Text('Does it match'),
-        ElevatedButton(
-          child: Text(iAgree ? "NOT A MATCH" : 'A MATCH'),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(iAgree ? Colors.redAccent : Colors.green),
-          ),
-          onPressed: onPressed,
-        ),
-      ],
-    );
   }
 }
