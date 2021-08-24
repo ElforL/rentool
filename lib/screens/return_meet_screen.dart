@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rentool/models/return_meeting.dart';
+import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -33,27 +34,27 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
 
     return StreamBuilder(
-        stream: FirestoreServices.getReturnMeetingStream(tool),
-        builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Something went wrong\n${snapshot.error}"),
-            );
-          }
-          if (snapshot.connectionState != ConnectionState.active) {
-            return const Center(
-              child: Text('Getting ready...'),
-            );
-          }
+      stream: FirestoreServices.getReturnMeetingStream(tool),
+      builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text("Something went wrong\n${snapshot.error}"),
+          );
+        }
+        if (snapshot.connectionState != ConnectionState.active) {
+          return const Center(
+            child: Text('Getting ready...'),
+          );
+        }
 
-          var data = snapshot.data!.data()!;
-          meeting = ReturnMeeting.fromJson(data);
-          isUserTheOwner = meeting.isTheOwner(AuthServices.auth.currentUser!.uid);
-          userRole = isUserTheOwner ? 'owner' : 'renter';
-          otherRole = !isUserTheOwner ? 'owner' : 'renter';
+        var data = snapshot.data!.data()!;
+        meeting = ReturnMeeting.fromJson(data);
+        isUserTheOwner = meeting.isTheOwner(AuthServices.auth.currentUser!.uid);
+        userRole = isUserTheOwner ? 'owner' : 'renter';
+        otherRole = !isUserTheOwner ? 'owner' : 'renter';
 
         return rentunAppropiateWidget();
-                      },
+      },
     );
   }
 
@@ -88,7 +89,10 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
           return disagreementCaseCreatedContainer();
         }
       } else if (meeting.toolDamaged == null) {
-        return checkToolContainer();
+        return MeetingCheckToolScreen(
+          tool: tool,
+          isUserTheOwner: isUserTheOwner,
+        );
       } else {
         if (meeting.toolDamaged!) {
           if (meeting.renterAdmitDamage == null) {
@@ -225,36 +229,6 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         Text('Disagreement case ID: ${meeting.disagreementCaseID}'),
       ],
     );
-  }
-
-  Widget checkToolContainer() {
-    if (isUserTheOwner) {
-      return Column(
-        children: [
-          const Text('Check the tool'),
-          ElevatedButton(
-            child: const Text('Not Damaged'),
-            onPressed: () {
-              FirestoreServices.setReturnMeetingField(tool, 'toolDamaged', false);
-            },
-          ),
-          ElevatedButton(
-            child: const Text('Damaged'),
-            onPressed: () {
-              FirestoreServices.setReturnMeetingField(tool, 'toolDamaged', true);
-            },
-          ),
-        ],
-      );
-    } else {
-      return Column(
-        children: const [
-          Text('The owner is checking the tool.'),
-          Text('Please wait.'),
-          //
-        ],
-      );
-    }
   }
 
   Widget admitDamageContainer() {
