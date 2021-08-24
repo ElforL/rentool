@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rentool/models/return_meeting.dart';
+import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -22,14 +23,16 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
   late String otherRole;
 
   @override
+  void dispose() {
+    FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', false);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Return ${tool.name}'),
-      ),
-      body: StreamBuilder(
+    return StreamBuilder(
         stream: FirestoreServices.getReturnMeetingStream(tool),
         builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasError) {
@@ -49,28 +52,8 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
           userRole = isUserTheOwner ? 'owner' : 'renter';
           otherRole = !isUserTheOwner ? 'owner' : 'renter';
 
-          return Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (meeting.bothArrived)
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.arrow_back),
-                      label: const Text('GO BACK'),
-                      onPressed: () {
-                        arriveFunction();
+        return rentunAppropiateWidget();
                       },
-                    ),
-                  const SizedBox(height: 50),
-                  // TODO show dialogs to each agree button
-                  rentunAppropiateWidget(),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 
@@ -78,7 +61,15 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     if (meeting.bothHandedOver) {
       return handoverSuccesContainer();
     } else if (!meeting.bothArrived) {
-      return arriveContainer();
+      var didUserArrive = isUserTheOwner ? meeting.ownerArrived : meeting.renterArrived;
+      return MeetingArrivedContainer(
+        didUserArrive: didUserArrive,
+        didOtherUserArrive: isUserTheOwner ? meeting.renterArrived : meeting.ownerArrived,
+        isUserTheOwner: isUserTheOwner,
+        onPressed: () {
+          FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', !didUserArrive);
+        },
+      );
     } else {
       if (meeting.disagreementCaseSettled != null) {
         if (meeting.disagreementCaseSettled!) {
