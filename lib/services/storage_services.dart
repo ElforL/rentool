@@ -15,4 +15,12 @@ class StorageServices {
     }
     return output;
   }
+
+  static UploadTask uploadDeliverMeetingFile(File file, String toolID, String requestID, String uid) {
+    return _storage.ref('/deliver_meetings/$toolID/$requestID/$uid/${file.hashCode}').putFile(file);
+  }
+
+  static UploadTask uploadReturnMeetingFile(File file, String toolID, String requestID, String uid) {
+    return _storage.ref('/return_meetings/$toolID/$requestID/$uid/${file.hashCode}').putFile(file);
+  }
 }
