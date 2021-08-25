@@ -46,7 +46,9 @@ class _NotificationTileState extends State<NotificationTile> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(widget.visibleDuration - const Duration(milliseconds: 500)).then((value) => _controller.reverse());
+    Future.delayed(widget.visibleDuration - const Duration(milliseconds: 500)).then((value) {
+      if (!_controller.isDismissed) _controller.reverse();
+    });
     assert(widget.data['code'] != null);
     final titleString = getTitle(widget.data['code']);
     final bodyString = getBody(widget.data['code'], widget.data);
@@ -56,6 +58,7 @@ class _NotificationTileState extends State<NotificationTile> with SingleTickerPr
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
         child: Dismissible(
           key: ValueKey(widget.data['code']),
+          onDismissed: (_) => Navigator.pop(context),
           child: Material(
             borderRadius: BorderRadius.circular(2),
             color: Colors.blue,
