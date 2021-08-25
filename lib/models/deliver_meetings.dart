@@ -174,7 +174,7 @@ class DeliverMeeting {
   /// the other user's civil ID number
   ///
   /// other user = the renter if the current user is the owner and vice versa.
-  String? get othreUserID => !isUserTheOwner ? ownerID : renterID;
+  String? get otherUserID => !isUserTheOwner ? ownerID : renterID;
 
   /// update the current user `ids_ok` field in Firestore to [idOk]
   Future<void> setIdOK(bool idOk) {
