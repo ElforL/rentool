@@ -25,7 +25,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
 
   @override
   void dispose() {
-    FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', false);
+    meeting.setArrived(false);
     super.dispose();
   }
 
@@ -117,32 +117,11 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     }
   }
 
-  arriveFunction() {
-    final isUserTheOwner = meeting.isUserTheOwner;
-    final userRole = isUserTheOwner ? 'owner' : 'renter';
-    return FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', false);
-  }
-
   Widget handoverSuccesContainer() {
     return Column(
       children: const [
         Text('Handover successful'),
         Text('Rent concluded'),
-      ],
-    );
-  }
-
-  Widget arriveContainer() {
-    final userArrived = isUserTheOwner ? meeting.ownerArrived : meeting.renterArrived;
-    return Column(
-      children: [
-        const Text('did you arrive?'),
-        ElevatedButton(
-          child: Text(userArrived ? "DIDN'T ARRIVE YET" : 'ARRIVED'),
-          onPressed: () {
-            FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', !userArrived);
-          },
-        ),
       ],
     );
   }

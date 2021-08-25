@@ -15,7 +15,7 @@ class AuthServices {
   static Stream<User?> get authStateChanges => auth.authStateChanges();
 
   static void signOut([String? uuid]) async {
-    if (auth.currentUser == null) return;
+    if (!isSignedIn) return;
 
     await FirebaseMessaging.instance.deleteToken();
 
