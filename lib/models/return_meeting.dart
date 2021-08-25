@@ -52,6 +52,8 @@ class ReturnMeeting {
   List<String> renterMediaUrls;
   List<String> ownerMediaUrls;
 
+  Object? error;
+
   ReturnMeeting(
     this.tool,
     this.ownerUID,
@@ -71,6 +73,7 @@ class ReturnMeeting {
     required this.renterMediaOK,
     this.renterMediaUrls = const [],
     this.ownerMediaUrls = const [],
+    this.error,
   });
 
   factory ReturnMeeting.fromJson(Tool tool, Map<String, dynamic> json) {
@@ -93,6 +96,7 @@ class ReturnMeeting {
       renterMediaOK: json['renterMediaOK'],
       renterMediaUrls: json['renterMediaUrls'] != null ? List<String>.from(json['renterMediaUrls']) : [],
       ownerMediaUrls: json['ownerMediaUrls'] != null ? List<String>.from(json['ownerMediaUrls']) : [],
+      error: json['error'],
     );
   }
 
@@ -116,6 +120,7 @@ class ReturnMeeting {
       'renterMediaOK': renterMediaOK,
       'renterMediaUrls': renterMediaUrls,
       'ownerMediaUrls': ownerMediaUrls,
+      'error': error,
     };
   }
 
