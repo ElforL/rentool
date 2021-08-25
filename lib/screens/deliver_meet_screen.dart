@@ -33,7 +33,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
   @override
   Widget build(BuildContext context) {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
-    isUserTheOwner = tool.ownerUID == AuthServices.auth.currentUser!.uid;
+    isUserTheOwner = tool.ownerUID == AuthServices.currentUid;
 
     return StreamBuilder(
       stream: FirestoreServices.getDeliverMeetingStream(tool),

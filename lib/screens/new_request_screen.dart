@@ -131,7 +131,7 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                       } else {
                         var request = ToolRequest(
                           'TEMP',
-                          AuthServices.auth.currentUser!.uid,
+                          AuthServices.currentUid!,
                           tool.id,
                           _descriptionController.text,
                           daysNum,

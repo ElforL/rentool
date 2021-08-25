@@ -16,7 +16,7 @@ class _PostScreenState extends State<PostScreen> {
   late PageController _mediaController;
 
   /// returns `true` if the tool belongs to the user (i.e., user = owner).
-  bool get isUsersTool => AuthServices.auth.currentUser!.uid == tool.ownerUID;
+  bool get isUsersTool => AuthServices.currentUid == tool.ownerUID;
 
   @override
   void initState() {

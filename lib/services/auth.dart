@@ -10,6 +10,7 @@ class AuthServices {
   static FirebaseAuth auth = FirebaseAuth.instance;
 
   static bool get isSignedIn => auth.currentUser != null;
+  static String? get currentUid => auth.currentUser?.uid;
 
   static Stream<User?> get authStateChanges => auth.authStateChanges();
 
@@ -33,7 +34,7 @@ class AuthServices {
       default:
         return;
     }
-    if (uuid != null) FirestoreServices.deleteDeviceToken(uuid, auth.currentUser!.uid);
+    if (uuid != null) FirestoreServices.deleteDeviceToken(uuid, currentUid!);
 
     /// a list of the user information for each authentication provider.
     var providerData = auth.currentUser!.providerData;

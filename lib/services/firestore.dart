@@ -32,7 +32,7 @@ class FirestoreServices {
     // create a new document to get an ID
     var tool = Tool(
       'tempID',
-      AuthServices.auth.currentUser!.uid,
+      AuthServices.currentUid!,
       name,
       description,
       rentPrice,
