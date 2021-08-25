@@ -48,8 +48,8 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         }
 
         var data = snapshot.data!.data()!;
-        meeting = ReturnMeeting.fromJson(data);
-        isUserTheOwner = meeting.isTheOwner(AuthServices.currentUid!);
+        meeting = ReturnMeeting.fromJson(tool, data);
+        isUserTheOwner = meeting.isUserTheOwner;
         userRole = isUserTheOwner ? 'owner' : 'renter';
         otherRole = !isUserTheOwner ? 'owner' : 'renter';
 
@@ -118,7 +118,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
   }
 
   arriveFunction() {
-    final isUserTheOwner = meeting.isTheOwner(AuthServices.currentUid!);
+    final isUserTheOwner = meeting.isUserTheOwner;
     final userRole = isUserTheOwner ? 'owner' : 'renter';
     return FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', false);
   }

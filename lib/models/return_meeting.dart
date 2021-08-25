@@ -1,4 +1,14 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rentool/services/auth.dart';
+import 'package:rentool/services/firestore.dart';
+import 'package:rentool/services/storage_services.dart';
+import 'package:rentool_sdk/rentool_sdk.dart';
+
 class ReturnMeeting {
+  final Tool tool;
+
   final String ownerUID;
   final String renterUID;
 
@@ -39,10 +49,11 @@ class ReturnMeeting {
   bool renterMediaOK;
 
   /// List of URLs to pictures/videos
-  List<String>? renterMediaUrls;
-  List<String>? ownerMediaUrls;
+  List<String> renterMediaUrls;
+  List<String> ownerMediaUrls;
 
   ReturnMeeting(
+    this.tool,
     this.ownerUID,
     this.renterUID, {
     this.ownerArrived = false,
@@ -58,15 +69,13 @@ class ReturnMeeting {
     this.disagreementCaseResult,
     required this.ownerMediaOK,
     required this.renterMediaOK,
-    this.renterMediaUrls,
-    this.ownerMediaUrls,
-  }) {
-    ownerMediaUrls ??= [];
-    renterMediaUrls ??= [];
-  }
+    this.renterMediaUrls = const [],
+    this.ownerMediaUrls = const [],
+  });
 
-  factory ReturnMeeting.fromJson(Map<String, dynamic> json) {
+  factory ReturnMeeting.fromJson(Tool tool, Map<String, dynamic> json) {
     return ReturnMeeting(
+      tool,
       json['ownerUID'],
       json['renterUID'],
       ownerArrived: json['ownerArrived'],
@@ -87,6 +96,7 @@ class ReturnMeeting {
     );
   }
 
+  /// return a JSON Map of the meeting __Without the [tool] attribute__.
   Map<String, dynamic> toJson() {
     return {
       'ownerUID': ownerUID,
@@ -112,7 +122,123 @@ class ReturnMeeting {
   bool get bothArrived => ownerArrived && renterArrived;
   bool get bothHandedOver => ownerConfirmHandover && renterConfirmHandover;
 
-  bool isTheOwner(String uid) {
-    return uid == ownerUID;
+  bool get isUserTheOwner => AuthServices.currentUid == ownerUID;
+  String get userRole => isUserTheOwner ? 'owner' : 'renter';
+  String get otherUserRole => !isUserTheOwner ? 'owner' : 'renter';
+
+  // Arrival methods
+
+  Future<void> setArrived(bool arrived) {
+    return FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', arrived);
+  }
+
+  /// did the current user arrive to the meeting
+  bool get userArrived => isUserTheOwner ? ownerArrived : renterArrived;
+
+  /// did the other user arrive to the meeting.
+  ///
+  /// other user = the renter if the current user is the owner and vice versa
+  bool get otherUserArrived => !isUserTheOwner ? ownerArrived : renterArrived;
+
+  // Tool damage methods
+
+  /// set _'toolDamaged'_ to [isDamaged]
+  ///
+  /// only available to the owner
+  Future<void>? setToolDamaged(bool isDamaged) {
+    if (isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'toolDamaged', isDamaged);
+  }
+
+  /// set _'renterAdmitDamage'_ to [doAdmit]
+  ///
+  /// only available to the renter
+  Future<void>? setAdmitDamage(bool doAdmit) {
+    if (!isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'renterAdmitDamage', doAdmit);
+  }
+
+  // Compensation price methods
+
+  /// set _'compensationPrice'_ to [price]
+  ///
+  /// only available to the owner
+  Future<void>? setCompensationPrice(double price) {
+    if (isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'compensationPrice', price);
+  }
+
+  /// set _'renterAcceptCompensationPrice'_ to [accepts]
+  ///
+  /// only available to the renter
+  Future<void>? setAcceptCompensationPrice(bool accepts) {
+    if (!isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'renterAcceptCompensationPrice', accepts);
+  }
+
+  // Handover methods
+
+  /// Set the _'ConfirmHandover'_ of the current user to [confirm]
+  Future<void> setConfirmHandover(bool confirm) {
+    return FirestoreServices.setReturnMeetingField(tool, '${userRole}ConfirmHandover', confirm);
+  }
+
+  /// did the current user confirm the handover.
+  bool get userConfirmedHandover => isUserTheOwner ? ownerConfirmHandover : renterConfirmHandover;
+
+  /// did the other user confirm the handover.
+  ///
+  /// other user = the renter if the current user is the owner and vice versa.
+  bool get otherUserConfirmedHandover => !isUserTheOwner ? ownerConfirmHandover : renterConfirmHandover;
+
+  // Media methods
+
+  /// Set the _'MediaOK'_ of the current user to [isOk]
+  ///
+  /// _'{user}MediaOK'_ is set `true` when the user finish uploading thier media.
+  Future<void> setMediaOk(bool isOk) {
+    return FirestoreServices.setReturnMeetingField(tool, '${userRole}MediaOK', isOk);
+  }
+
+  /// Returns the _'MediaOK'_ of the current user
+  ///
+  /// _'{user}MediaOK'_ is set `true` when the user finish uploading thier media.
+  bool get userMediaOK => isUserTheOwner ? ownerMediaOK : renterMediaOK;
+
+  /// Returns the _'MediaOK'_ of the other user
+  /// (i.e., the renter if the current user is the owner and vice versa).
+  ///
+  /// _'{user}MediaOK'_ is set `true` when the user finish uploading thier media.
+  bool get otherUserMediaOK => !isUserTheOwner ? ownerMediaOK : renterMediaOK;
+
+  /// Returns the media urls of the current user
+  List<String> get userMediaUrls => isUserTheOwner ? ownerMediaUrls : renterMediaUrls;
+
+  /// Returns the media urls of the other user
+  /// (i.e., the renter if the current user is the owner and vice versa).
+  List<String> get otherUserMediaUrls => !isUserTheOwner ? ownerMediaUrls : renterMediaUrls;
+
+  /// uploads [file] to Storage and adds its url to the user's `MediaUrls` field in Firestore
+  Future<void> addMedia(File file) async {
+    // upload file
+    final upload = await StorageServices.uploadReturnMeetingFile(
+      file,
+      tool.id,
+      tool.acceptedRequestID!,
+      AuthServices.currentUid!,
+    );
+    final url = await upload.ref.getDownloadURL();
+
+    // update Firestore
+    return FirestoreServices.setReturnMeetingField(
+      tool,
+      '${userRole}MediaUrls',
+      FieldValue.arrayUnion([url]),
+    );
+  }
+
+  /// removes [url] from the user's `MediaUrls` field in Firestore
+  Future<void> removeMedia(String url) {
+    return FirestoreServices.setReturnMeetingField(
+      tool,
+      '${userRole}MediaUrls',
+      FieldValue.arrayRemove([url]),
+    );
   }
 }
