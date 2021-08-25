@@ -64,12 +64,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     } else if (!meeting.bothArrived) {
       var didUserArrive = isUserTheOwner ? meeting.ownerArrived : meeting.renterArrived;
       return MeetingArrivedContainer(
-        didUserArrive: didUserArrive,
-        didOtherUserArrive: isUserTheOwner ? meeting.renterArrived : meeting.ownerArrived,
-        isUserTheOwner: isUserTheOwner,
-        onPressed: () {
-          FirestoreServices.setReturnMeetingField(tool, '${userRole}Arrived', !didUserArrive);
-        },
+        returnMeeting: meeting,
       );
     } else {
       if (meeting.disagreementCaseSettled != null) {

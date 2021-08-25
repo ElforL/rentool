@@ -66,10 +66,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
     final otherRole = !isUserTheOwner ? 'owner' : 'renter';
     if (data['renter_arrived'] != true || data['owner_arrived'] != true) {
       return MeetingArrivedContainer(
-        isUserTheOwner: isUserTheOwner,
-        didUserArrive: data['${userRole}_arrived'] ?? false,
-        didOtherUserArrive: data['${otherRole}_arrived'] ?? false,
-        onPressed: () => arriveFunction(!data['${userRole}_arrived']),
+        deliverMeeting: meeting,
       );
     } else if (data['renter_pics_ok'] != true || data['owner_pics_ok'] != true) {
       return DeliverMeetingPicsContainer(
