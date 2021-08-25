@@ -32,6 +32,8 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
           'renterUID': renterUID,
           'renter_arrived': false,
           'renter_pics_ok': false,
+          'owner_id': null,
+          'renter_id': null,
           'renter_ids_ok': false,
           'renter_pics_urls': [],
           // if the meeting was done and succesful and a rent object/doc was created
