@@ -123,8 +123,8 @@ class FirestoreServices {
     return _toolsRef.doc(tool.id).collection('deliver_meetings').doc(tool.acceptedRequestID).snapshots();
   }
 
-  static Future<void> setDeliverMeetingField(Tool tool, String field, dynamic value) async {
-    return await _toolsRef.doc(tool.id).collection('deliver_meetings').doc(tool.acceptedRequestID).update(
+  static Future<void> setDeliverMeetingField(Tool tool, String field, dynamic value) {
+    return _toolsRef.doc(tool.id).collection('deliver_meetings').doc(tool.acceptedRequestID).update(
       {field: value},
     );
   }
@@ -133,8 +133,8 @@ class FirestoreServices {
     return _toolsRef.doc(tool.id).collection('return_meetings').doc(tool.acceptedRequestID).snapshots();
   }
 
-  static Future<void> setReturnMeetingField(Tool tool, String field, dynamic value) async {
-    return await _toolsRef.doc(tool.id).collection('return_meetings').doc(tool.acceptedRequestID).update(
+  static Future<void> setReturnMeetingField(Tool tool, String field, dynamic value) {
+    return _toolsRef.doc(tool.id).collection('return_meetings').doc(tool.acceptedRequestID).update(
       {field: value},
     );
   }
