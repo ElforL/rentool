@@ -73,10 +73,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       );
     } else if (data['renter_pics_ok'] != true || data['owner_pics_ok'] != true) {
       return DeliverMeetingPicsContainer(
-        didUserAgree: data['${userRole}_pics_ok'],
-        didOtherUserAgree: data['${otherRole}_pics_ok'],
-        isUserTheOwner: isUserTheOwner,
-        onPressed: () => picsFunction(data, isUserTheOwner),
+        meeting: meeting!,
       );
     } else if (data['renter_ids_ok'] != true || data['owner_ids_ok'] != true) {
       final currentValue = data['${userRole}_ids_ok'];

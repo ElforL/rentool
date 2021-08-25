@@ -2,25 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/widgets/dialogs.dart';
 import 'package:rentool/widgets/drag_indicator.dart';
 
 class DeliverMeetingPicsContainer extends StatelessWidget {
   const DeliverMeetingPicsContainer({
     Key? key,
-    required this.didUserAgree,
-    required this.didOtherUserAgree,
-    required this.isUserTheOwner,
-    required this.onPressed,
+    required this.meeting,
   }) : super(key: key);
 
-  final bool didUserAgree;
-  final bool didOtherUserAgree;
-  final bool isUserTheOwner;
-  final Function onPressed;
-
-  String get userRole => isUserTheOwner ? 'owner' : 'renter';
-  String get otherUserRole => !isUserTheOwner ? 'owner' : 'renter';
+  final DeliverMeeting meeting;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +38,7 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
-                AppLocalizations.of(context)!.the_role_pics_n_vids(otherUserRole),
+                AppLocalizations.of(context)!.the_role_pics_n_vids(meeting.otherUserRole),
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),
@@ -82,15 +74,15 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
                 width: 120,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: didUserAgree ? MaterialStateProperty.all(Colors.orange.shade900) : null,
+                    backgroundColor: meeting.userMediaOk ? MaterialStateProperty.all(Colors.orange.shade900) : null,
                   ),
                   child: Text(
-                    (didUserAgree ? AppLocalizations.of(context)!.disagree : AppLocalizations.of(context)!.agree)
+                    (meeting.userMediaOk ? AppLocalizations.of(context)!.disagree : AppLocalizations.of(context)!.agree)
                         .toUpperCase(),
                   ),
                   onPressed: () async {
-                    var isSure = didUserAgree ? true : await showConfirmDialog(context);
-                    if (isSure) onPressed();
+                    var isSure = meeting.userMediaOk ? true : await showConfirmDialog(context);
+                    if (isSure) meeting.setMediaOK(!meeting.userMediaOk);
                   },
                 ),
               ),
@@ -107,9 +99,9 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
       builder: (context) => IconAlertDialog(
         icon: Icons.camera_alt,
         titleText: AppLocalizations.of(context)!.areYouSure,
-        bodyText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_body(otherUserRole),
-        importantText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_important(otherUserRole),
-        noteText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_note(otherUserRole),
+        bodyText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_body(meeting.otherUserRole),
+        importantText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_important(meeting.otherUserRole),
+        noteText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_note(meeting.otherUserRole),
         actions: [
           TextButton(
             child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
@@ -130,8 +122,8 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
       builder: (context) => IconAlertDialog(
         icon: Icons.camera_alt,
         titleText: AppLocalizations.of(context)!.deliverMeet_pics_help_dialog_title,
-        bodyText: AppLocalizations.of(context)!.deliverMeet_pics_help_dialog_body(otherUserRole),
-        importantText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_important(otherUserRole),
+        bodyText: AppLocalizations.of(context)!.deliverMeet_pics_help_dialog_body(meeting.otherUserRole),
+        importantText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_important(meeting.otherUserRole),
         actions: [
           TextButton(
             child: Text(AppLocalizations.of(context)!.ok),
