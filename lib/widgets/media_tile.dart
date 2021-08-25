@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rentool/widgets/media_container.dart';
-import 'package:video_player/video_player.dart';
 
 class MediaTile extends StatefulWidget {
   const MediaTile({Key? key, required this.media}) : super(key: key);
@@ -19,7 +18,6 @@ class MediaTile extends StatefulWidget {
 
 class _MediaTileState extends State<MediaTile> {
   final picker = ImagePicker();
-  final List<VideoPlayerController> _contollers = [];
 
   /// Opens the camera or gallery to import media files (images and/or videos)
   Future _getMedia(MediaInput inputType) async {
@@ -84,14 +82,6 @@ class _MediaTileState extends State<MediaTile> {
         widget.media.remove(file);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _contollers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 
   @override
