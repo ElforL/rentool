@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/screens/meetings_screens/deliver_meeting_pics_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/screens/meetings_screens/meeting_ids_screen.dart';
@@ -18,13 +19,11 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
   late Tool tool;
   late bool isUserTheOwner;
 
-  bool? bothArrived;
-  bool? bothPicsOK;
-  bool? bothIdsOK;
+  DeliverMeeting? meeting;
 
   @override
   void dispose() {
-    if (!(bothIdsOK ?? false)) {
+    if (!(meeting?.bothIdsOk ?? false)) {
       arriveFunction(false);
     }
     super.dispose();
@@ -56,9 +55,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         }
 
         var data = snapshot.data!.data()!;
-        bothArrived = data['renter_arrived'] == true && data['owner_arrived'] == true;
-        bothPicsOK = data['renter_pics_ok'] == true && data['owner_pics_ok'] == true;
-        bothIdsOK = data['renter_ids_ok'] == true && data['owner_ids_ok'] == true;
+        meeting = DeliverMeeting.fromJson(tool, data);
         return rentunAppropiateWidget(data, isUserTheOwner);
       },
     );
