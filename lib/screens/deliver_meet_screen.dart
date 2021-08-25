@@ -76,12 +76,8 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         meeting: meeting!,
       );
     } else if (data['renter_ids_ok'] != true || data['owner_ids_ok'] != true) {
-      final currentValue = data['${userRole}_ids_ok'];
       return MeetingsIdsScreen(
-        didUserAgree: data['${userRole}_ids_ok'],
-        otherUserID: data['${otherRole}_id'],
-        isUserTheOwner: isUserTheOwner,
-        onPressed: () => FirestoreServices.setDeliverMeetingField(tool, '${userRole}_ids_ok', !currentValue),
+        meeting: meeting!,
       );
     } else {
       if (data['rent_started']) {
