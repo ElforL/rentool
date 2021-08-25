@@ -14,13 +14,18 @@ class DeliverMeeting {
 
   bool ownerArrived;
   bool renterArrived;
-  bool ownerPicsOk;
-  bool ownerIdsOk;
-  List<String> ownerPicsUrls;
 
+  bool ownerPicsOk;
   bool renterPicsOk;
-  bool renterIdsOk;
+
+  List<String> ownerPicsUrls;
   List<String> renterPicsUrls;
+
+  String? ownerID;
+  String? renterID;
+
+  bool ownerIdsOk;
+  bool renterIdsOk;
 
   /// if the meeting was done and succesful and a rent object/doc was created
   bool rentStarted;
@@ -41,6 +46,8 @@ class DeliverMeeting {
     this.ownerIdsOk,
     this.renterIdsOk,
     this.rentStarted, {
+    this.ownerID,
+    this.renterID,
     this.error,
   });
 
@@ -58,6 +65,8 @@ class DeliverMeeting {
       json['owner_ids_ok'],
       json['renter_ids_ok'],
       json['rent_started'],
+      ownerID: json['owner_id'],
+      renterID: json['renter_id'],
       error: json['error'],
     );
   }
@@ -75,6 +84,8 @@ class DeliverMeeting {
       'owner_ids_ok': ownerIdsOk,
       'renter_ids_ok': renterIdsOk,
       'rent_started': rentStarted,
+      'owner_id': ownerID,
+      'renter_id': renterID,
       'error': error,
     };
   }
@@ -156,6 +167,14 @@ class DeliverMeeting {
   }
 
   // ID confirmation methods
+
+  /// the current user's civil ID number
+  String? get userID => isUserTheOwner ? ownerID : renterID;
+
+  /// the other user's civil ID number
+  ///
+  /// other user = the renter if the current user is the owner and vice versa.
+  String? get othreUserID => !isUserTheOwner ? ownerID : renterID;
 
   /// update the current user `ids_ok` field in Firestore to [idOk]
   Future<void> setIdOK(bool idOk) {
