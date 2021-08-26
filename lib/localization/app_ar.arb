@@ -124,6 +124,7 @@
     "not_damaged": "غير {isMale, select, true{متضرر} other{متضررة}}",
 
     "backToArrival": "العودة إلى الوصول",
+    "backToMedia": "العودة إلى الصور والفيديوهات",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

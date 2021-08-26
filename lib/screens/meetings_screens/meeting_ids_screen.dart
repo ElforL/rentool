@@ -2,6 +2,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/widgets/dialogs.dart';
+import 'package:rentool/widgets/meeting_appbar.dart';
 
 class MeetingsIdsScreen extends StatelessWidget {
   const MeetingsIdsScreen({
@@ -14,7 +15,9 @@ class MeetingsIdsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: MeetingAppBar(
+        text: AppLocalizations.of(context)!.backToMedia,
+        onPressed: () => meeting.setMediaOK(false),
         actions: [
           IconButton(
             onPressed: () => showHelpDialog(context),

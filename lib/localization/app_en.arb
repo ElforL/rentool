@@ -261,7 +261,8 @@
         }
     },
 
-    "backToArrival": "Go back to arrival",
+    "backToArrival": "Back to arrival",
+    "backToMedia": "Back to pictures and videos",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

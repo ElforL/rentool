@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/widgets/dialogs.dart';
 import 'package:rentool/widgets/drag_indicator.dart';
+import 'package:rentool/widgets/meeting_appbar.dart';
 
 class DeliverMeetingPicsContainer extends StatelessWidget {
   const DeliverMeetingPicsContainer({
@@ -17,7 +18,9 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: MeetingAppBar(
+        text: AppLocalizations.of(context)!.backToArrival,
+        onPressed: () => meeting.setArrived(false),
         actions: [
           IconButton(
             onPressed: () => showHelpDialog(context),
