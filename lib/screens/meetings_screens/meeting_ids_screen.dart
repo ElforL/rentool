@@ -54,7 +54,7 @@ class MeetingsIdsScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          meeting.otherUserID ?? AppLocalizations.of(context)!.id_unknow_error,
+                          meeting.otherUserID ?? AppLocalizations.of(context)!.loading,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.headline4!.apply(
                                 color: Colors.black,
