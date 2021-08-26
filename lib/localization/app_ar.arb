@@ -8,6 +8,7 @@
     "sure": "تأكيد",
     "cancel": "إلغاء",
     "loading": "جار التحميل",
+    "success": "نجاح",
 
     "userNotFoundError": "لا يوجد مستخدم مرتبط بعنوان البريد الالكتروني هذا.",
     "wrongPassword": "كلمة مرور خاطئة.",
@@ -126,6 +127,8 @@
 
     "backToArrival": "العودة إلى الوصول",
     "backToMedia": "العودة إلى الصور والفيديوهات",
+
+    "rentHasStarted": "بدأ الإيجار",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

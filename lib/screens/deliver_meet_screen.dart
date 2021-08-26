@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/screens/meetings_screens/deliver_meeting_pics_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/screens/meetings_screens/meeting_ids_screen.dart';
+import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -76,11 +78,9 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       );
     } else {
       if (data['rent_started']) {
-        return Scaffold(
-          appBar: AppBar(),
-          body: const Center(
-            child: Text('SUCCESS\n Rent has started'),
-          ),
+        return MeetingSuccessScreen(
+          title: AppLocalizations.of(context)!.success,
+          subtitle: AppLocalizations.of(context)!.rentHasStarted,
         );
       } else if (data['error'] != null) {
         return Scaffold(

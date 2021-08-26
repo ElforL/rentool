@@ -12,6 +12,7 @@
     "sure": "Sure",
     "cancel": "Cancel",
     "loading": "Loading",
+    "success": "Success",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {
@@ -264,6 +265,8 @@
 
     "backToArrival": "Back to arrival",
     "backToMedia": "Back to pictures and videos",
+
+    "rentHasStarted": "Rent has started",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
