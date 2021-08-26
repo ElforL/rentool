@@ -62,7 +62,6 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     if (meeting.bothHandedOver) {
       return handoverSuccesContainer();
     } else if (!meeting.bothArrived) {
-      var didUserArrive = isUserTheOwner ? meeting.ownerArrived : meeting.renterArrived;
       return MeetingArrivedContainer(
         returnMeeting: meeting,
       );
