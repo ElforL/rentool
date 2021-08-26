@@ -85,8 +85,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         }
       } else if (meeting.toolDamaged == null) {
         return MeetingCheckToolScreen(
-          tool: tool,
-          isUserTheOwner: isUserTheOwner,
+          meeting: meeting,
         );
       } else {
         if (meeting.toolDamaged!) {

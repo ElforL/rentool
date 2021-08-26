@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:rentool/services/firestore.dart';
-import 'package:rentool/widgets/big_icons.dart';
-import 'package:rentool_sdk/rentool_sdk.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/models/return_meeting.dart';
+import 'package:rentool/widgets/big_icons.dart';
+import 'package:rentool/widgets/meeting_appbar.dart';
 
 class MeetingCheckToolScreen extends StatelessWidget {
   const MeetingCheckToolScreen({
     Key? key,
-    required this.isUserTheOwner,
-    required this.tool,
+    required this.meeting,
   }) : super(key: key);
 
-  final Tool tool;
-  final bool isUserTheOwner;
+  final ReturnMeeting meeting;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,7 @@ class MeetingCheckToolScreen extends StatelessWidget {
               const BigIcon(
                 icon: Icons.build_circle,
               ),
-              if (isUserTheOwner) ...[
+              if (meeting.isUserTheOwner) ...[
                 // "Inspect the tool"
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -55,7 +53,7 @@ class MeetingCheckToolScreen extends StatelessWidget {
                         ),
                         child: Text(AppLocalizations.of(context)!.damaged(false).toUpperCase()),
                         onPressed: () {
-                          FirestoreServices.setReturnMeetingField(tool, 'toolDamaged', true);
+                          meeting.setToolDamaged(true);
                         },
                       ),
                     ),
@@ -68,7 +66,7 @@ class MeetingCheckToolScreen extends StatelessWidget {
                         ),
                         child: Text(AppLocalizations.of(context)!.not_damaged(false).toUpperCase()),
                         onPressed: () {
-                          FirestoreServices.setReturnMeetingField(tool, 'toolDamaged', false);
+                          meeting.setToolDamaged(false);
                         },
                       ),
                     ),
