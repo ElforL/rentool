@@ -82,7 +82,7 @@ class MeetingsIdsScreen extends StatelessWidget {
                     ),
                     onPressed: () async {
                       var isSure = meeting.userIdsOk ? true : await showConfirmDialog(context);
-                      if (isSure) meeting.setIdOK(!meeting.userIdsOk);
+                      if (isSure ?? false) meeting.setIdOK(!meeting.userIdsOk);
                     },
                     child: Text(
                       (meeting.userIdsOk
