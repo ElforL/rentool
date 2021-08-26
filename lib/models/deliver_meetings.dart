@@ -178,7 +178,7 @@ class DeliverMeeting {
 
   /// update the current user `ids_ok` field in Firestore to [idOk]
   Future<void> setIdOK(bool idOk) {
-    return FirestoreServices.setDeliverMeetingField(tool, '${userRole}_pics_ok', idOk);
+    return FirestoreServices.setDeliverMeetingField(tool, '${userRole}_ids_ok', idOk);
   }
 
   /// did the current user confirm the other's id
