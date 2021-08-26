@@ -129,7 +129,7 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
         importantText: AppLocalizations.of(context)!.deliverMeet_pics_confirm_important(meeting.otherUserRole),
         actions: [
           TextButton(
-            child: Text(AppLocalizations.of(context)!.ok),
+            child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
             onPressed: () => Navigator.pop(context),
           ),
         ],

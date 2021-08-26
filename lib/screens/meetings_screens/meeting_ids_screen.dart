@@ -110,7 +110,7 @@ class MeetingsIdsScreen extends StatelessWidget {
           importantText: AppLocalizations.of(context)!.deliverMeet_ids_help_dialog_important(meeting.otherUserRole),
           actions: [
             TextButton(
-              child: Text(AppLocalizations.of(context)!.ok),
+              child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -133,13 +133,13 @@ class MeetingsIdsScreen extends StatelessWidget {
           noteText: AppLocalizations.of(context)!.deliverMeet_ids_confirm_dialog_note,
           actions: [
             TextButton(
-              child: Text(AppLocalizations.of(context)!.sure),
+              child: Text(AppLocalizations.of(context)!.sure.toUpperCase()),
               onPressed: () {
                 Navigator.pop(context, true);
               },
             ),
             TextButton(
-              child: Text(AppLocalizations.of(context)!.cancel),
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
               onPressed: () {
                 Navigator.pop(context, false);
               },
