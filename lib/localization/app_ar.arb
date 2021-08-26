@@ -9,6 +9,8 @@
     "cancel": "إلغاء",
     "loading": "جار التحميل",
     "success": "نجاح",
+    "owner": "المالك",
+    "renter": "المستأجر",
 
     "userNotFoundError": "لا يوجد مستخدم مرتبط بعنوان البريد الالكتروني هذا.",
     "wrongPassword": "كلمة مرور خاطئة.",
@@ -129,6 +131,18 @@
     "backToMedia": "العودة إلى الصور والفيديوهات",
 
     "rentHasStarted": "بدأ الإيجار",
+
+    "noPicsOrVids": "لا يوجد صور أو فيديوهات",
+    "price": "السعر",
+    "sar": "ريال سعودي",
+    "priceADay": "{price} {currency}/اليوم",
+    "status": "الحالة",
+    "available": "متاح",
+    "notAvailable": "غير متاح",
+    "location": "الموقع",
+    "browseRequests": "استعراض الطلبات",
+    "request": "اطلب",
+    "description":"الوصف",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

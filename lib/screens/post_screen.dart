@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -57,8 +58,11 @@ class _PostScreenState extends State<PostScreen> {
                         if (tool.media.isNotEmpty)
                           for (var url in tool.media) Image.network(url)
                         else
-                          const Center(
-                            child: Text('No media'),
+                          Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.noPicsOrVids,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
                           ),
                       ],
                     ),
@@ -96,6 +100,7 @@ class _PostScreenState extends State<PostScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Tool name
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: SelectableText(
@@ -104,14 +109,18 @@ class _PostScreenState extends State<PostScreen> {
                       ),
                     ),
                     const SizedBox(height: 5),
+                    // Tool info
                     Row(
                       children: [
                         Text(
-                          'Price: ',
+                          '${AppLocalizations.of(context)!.price}: ',
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                         ),
                         Text(
-                          'SAR ' + tool.rentPrice.toString() + '/day',
+                          AppLocalizations.of(context)!.priceADay(
+                            AppLocalizations.of(context)!.sar,
+                            tool.rentPrice.toString(),
+                          ),
                           style: const TextStyle(color: Colors.blue),
                         ),
                       ],
@@ -120,11 +129,13 @@ class _PostScreenState extends State<PostScreen> {
                     Row(
                       children: [
                         Text(
-                          'Status: ',
+                          '${AppLocalizations.of(context)!.status}: ',
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                         ),
                         Text(
-                          (tool.isAvailable ? '' : 'Not ') + 'Available',
+                          tool.isAvailable
+                              ? AppLocalizations.of(context)!.available
+                              : AppLocalizations.of(context)!.notAvailable,
                           style: TextStyle(color: tool.isAvailable ? Colors.green : Colors.red),
                         ),
                       ],
@@ -133,17 +144,18 @@ class _PostScreenState extends State<PostScreen> {
                     Row(
                       children: [
                         Text(
-                          'Location: ',
+                          '${AppLocalizations.of(context)!.location}: ',
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                         ),
                         Text(tool.location),
                       ],
                     ),
                     const SizedBox(height: 5),
+                    // TODO crerate future builder to read owner info from `db/Users`
                     Row(
                       children: [
                         Text(
-                          'Owner: ',
+                          '${AppLocalizations.of(context)!.owner}: ',
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                         ),
                         Text(tool.ownerUID),
@@ -152,7 +164,12 @@ class _PostScreenState extends State<PostScreen> {
                     const SizedBox(height: 5),
                     ElevatedButton.icon(
                       icon: Icon(isUsersTool ? Icons.list_rounded : Icons.shopping_cart),
-                      label: Text(isUsersTool ? 'VIEW REQUESTS' : 'REQUEST'),
+                      label: Text(
+                        (isUsersTool
+                                ? AppLocalizations.of(context)!.browseRequests
+                                : AppLocalizations.of(context)!.request)
+                            .toUpperCase(),
+                      ),
                       onPressed: isUsersTool
                           ? /* widget.tool.acceptedRequestID != null
                               ? null
@@ -173,26 +190,32 @@ class _PostScreenState extends State<PostScreen> {
                                 }),
                     ),
                     if (tool.acceptedRequestID != null)
-                      ElevatedButton(
-                        child: const Text('Meet'),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/deliver',
-                            arguments: tool,
-                          );
-                        },
+                      SizedBox(
+                        width: 100,
+                        child: ElevatedButton(
+                          child: const Text('Meet'),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/deliver',
+                              arguments: tool,
+                            );
+                          },
+                        ),
                       ),
                     if (tool.currentRent != null)
-                      ElevatedButton(
-                        child: const Text('Return'),
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/return',
-                            arguments: tool,
-                          );
-                        },
+                      SizedBox(
+                        width: 100,
+                        child: ElevatedButton(
+                          child: const Text('Return'),
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/return',
+                              arguments: tool,
+                            );
+                          },
+                        ),
                       ),
                   ],
                 ),
@@ -205,8 +228,8 @@ class _PostScreenState extends State<PostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Description',
-                      style: Theme.of(context).textTheme.subtitle2,
+                      AppLocalizations.of(context)!.description,
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 15),
                     SelectableText(tool.description),

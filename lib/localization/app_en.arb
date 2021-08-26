@@ -13,6 +13,8 @@
     "cancel": "Cancel",
     "loading": "Loading",
     "success": "Success",
+    "owner": "Owner",
+    "renter": "Renter",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {
@@ -267,6 +269,28 @@
     "backToMedia": "Back to pictures and videos",
 
     "rentHasStarted": "Rent has started",
+
+    "noPicsOrVids": "No pictures or videos",
+    "price": "Price",
+    "sar": "SAR",
+    "priceADay": "{currency} {price}/day",
+    "@priceADay": {
+        "placeholders":{
+            "currency": {
+                "type": "String"
+            },
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "status": "Status",
+    "available": "Available",
+    "notAvailable": "Not available",
+    "location": "Location",
+    "browseRequests": "Browse requests",
+    "request": "Request",
+    "description":"Description",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
