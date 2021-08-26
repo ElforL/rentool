@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BigIcon extends StatelessWidget {
-  const BigIcon({Key? key, this.icon, this.caption, this.child}) : super(key: key);
+  const BigIcon({Key? key, this.icon, this.caption, this.child})
+      : assert(icon != null || child != null),
+        super(key: key);
 
   final IconData? icon;
   final Widget? child;
@@ -10,7 +12,6 @@ class BigIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(icon != null || child != null);
     return Column(
       children: [
         if (icon != null)
