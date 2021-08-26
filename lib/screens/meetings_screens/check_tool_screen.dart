@@ -17,7 +17,12 @@ class MeetingCheckToolScreen extends StatelessWidget {
     const buttonWidth = 170.0;
     const buttonPadding = EdgeInsets.symmetric(horizontal: 10);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: MeetingAppBar(
+        text: AppLocalizations.of(context)!.backToArrival,
+        onPressed: () {
+          meeting.setArrived(false);
+        },
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(

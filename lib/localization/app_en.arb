@@ -261,6 +261,8 @@
         }
     },
 
+    "backToArrival": "Go back to arrival",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

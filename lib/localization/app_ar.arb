@@ -123,5 +123,7 @@
     "damaged": "{isMale, select, true{متضرر} other{متضررة}}",
     "not_damaged": "غير {isMale, select, true{متضرر} other{متضررة}}",
 
+    "backToArrival": "العودة إلى الوصول",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
