@@ -8,7 +8,8 @@ class MeetingAppBar extends AppBar {
     this.icon = const Icon(Icons.arrow_back),
     required this.onPressed,
     Key? key,
-  }) : super(
+  })  : assert(text != null || label != null),
+        super(
           title: TextButton.icon(
             style: ButtonStyle(
               shape: MaterialStateProperty.all(
@@ -25,9 +26,7 @@ class MeetingAppBar extends AppBar {
           ),
           automaticallyImplyLeading: false,
           key: key,
-        ) {
-    assert(text != null || label != null);
-  }
+        );
 
   @override
   // ignore: overridden_fields
