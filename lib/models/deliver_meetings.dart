@@ -159,7 +159,7 @@ class DeliverMeeting {
 
   /// removes [url] from the user's `_pics_urls` field in Firestore
   Future<void> removeMedia(String url) {
-    return FirestoreServices.setReturnMeetingField(
+    return FirestoreServices.setDeliverMeetingField(
       tool,
       '${userRole}_pics_urls',
       FieldValue.arrayRemove([url]),
