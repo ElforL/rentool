@@ -20,7 +20,15 @@ class MediaContainer extends StatelessWidget {
 
   final File? mediaFile;
   final String? mediaURL;
+
+  /// show the red __x__ button
+  ///
+  /// [onDismiss] is called when the button is pressed
   final bool showDismiss;
+
+  /// The callback that is called when the red __x__ button is pressed
+  ///
+  /// [showDismiss] must be `true` for the button to show
   final void Function()? onDismiss;
 
   Future<Uint8List?> _getUrlBytes() async {
