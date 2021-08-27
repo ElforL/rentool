@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/widgets/dialogs.dart';
 import 'package:rentool/widgets/drag_indicator.dart';
+import 'package:rentool/widgets/media_container.dart';
 import 'package:rentool/widgets/meeting_appbar.dart';
 
 class DeliverMeetingPicsContainer extends StatelessWidget {
@@ -32,7 +33,7 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () {},
       ),
-      bottomSheet: const DeliverMeetingPicsBottomSheet(),
+      bottomSheet: DeliverMeetingPicsBottomSheet(meeting: meeting),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,19 +49,20 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
             // The other user media
             SizedBox(
               height: min(MediaQuery.of(context).size.height / 3, 300),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 12,
-                itemBuilder: (context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Placeholder(
-                      fallbackWidth: 100,
-                    ),
-                  );
-                },
-              ),
+              child: meeting.otherUserMediaUrls.isNotEmpty
+                  ? ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: meeting.otherUserMediaUrls.length,
+                      itemBuilder: (context, index) {
+                        return MediaContainer(
+                          mediaURL: meeting.otherUserMediaUrls[index],
+                          showDismiss: false,
+                        );
+                      },
+                    )
+                  : Center(child: Text(AppLocalizations.of(context)!.noPicsOrVids)),
             ),
+            const Divider(),
             SizedBox(
               height: MediaQuery.of(context).size.height / 10,
             ),
@@ -141,7 +143,10 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
 class DeliverMeetingPicsBottomSheet extends StatelessWidget {
   const DeliverMeetingPicsBottomSheet({
     Key? key,
+    required this.meeting,
   }) : super(key: key);
+
+  final DeliverMeeting meeting;
 
   @override
   Widget build(BuildContext context) {
@@ -190,17 +195,19 @@ class DeliverMeetingPicsBottomSheet extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: SizedBox(
                       height: min(MediaQuery.of(context).size.height / 4, 200),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          SizedBox(width: 10),
-                          Placeholder(),
-                          Placeholder(),
-                          Placeholder(),
-                          Placeholder(),
-                          Placeholder(),
-                        ],
-                      ),
+                      child: meeting.userMediaUrls.isNotEmpty
+                          ? ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: meeting.userMediaUrls.length,
+                              itemBuilder: (context, index) {
+                                return MediaContainer(
+                                  mediaURL: meeting.userMediaUrls[index],
+                                  showDismiss: true,
+                                  onDismiss: () => meeting.removeMedia(meeting.userMediaUrls[index]),
+                                );
+                              },
+                            )
+                          : Center(child: Text(AppLocalizations.of(context)!.noPicsOrVids)),
                     ),
                   ),
                 ],
