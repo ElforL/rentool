@@ -18,7 +18,7 @@ class MeetingAppBar extends AppBar {
               padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 20)),
               backgroundColor: MaterialStateProperty.all(Colors.black26),
               foregroundColor: MaterialStateProperty.all(Colors.black),
-              overlayColor: MaterialStateProperty.all(Colors.blue),
+              overlayColor: MaterialStateProperty.all(Colors.orange.shade600.withAlpha(200)),
             ),
             label: label ?? Text(text!),
             icon: icon,
