@@ -56,7 +56,7 @@ class MeetingCheckToolScreen extends StatelessWidget {
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(Colors.red),
                         ),
-                        child: Text(AppLocalizations.of(context)!.damaged(false).toUpperCase()),
+                        child: FittedBox(child: Text(AppLocalizations.of(context)!.damaged(false).toUpperCase())),
                         onPressed: () {
                           meeting.setToolDamaged(true);
                         },
@@ -69,7 +69,7 @@ class MeetingCheckToolScreen extends StatelessWidget {
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(Colors.green),
                         ),
-                        child: Text(AppLocalizations.of(context)!.not_damaged(false).toUpperCase()),
+                        child: FittedBox(child: Text(AppLocalizations.of(context)!.not_damaged(false).toUpperCase())),
                         onPressed: () {
                           meeting.setToolDamaged(false);
                         },
