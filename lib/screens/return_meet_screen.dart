@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
+import 'package:rentool/screens/meetings_screens/handover_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -72,11 +73,11 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
             if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
               return compensationPriceContainer();
             } else {
-              return handOverContainer();
+              return MeetingHandoverScreen(meeting: meeting);
             }
           } else {
             // tool undamaged
-            return handOverContainer();
+            return MeetingHandoverScreen(meeting: meeting);
           }
         } else {
           return disagreementCaseCreatedContainer();
@@ -93,7 +94,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
             if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
               return compensationPriceContainer();
             } else {
-              return handOverContainer();
+              return MeetingHandoverScreen(meeting: meeting);
             }
           } else {
             if (meeting.disagreementCaseID == null) {
@@ -103,7 +104,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
             }
           }
         } else {
-          return handOverContainer();
+          return MeetingHandoverScreen(meeting: meeting);
         }
       }
     }
@@ -167,24 +168,6 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
           ] else
             const Text('Waiting the owner to set the compensation price'),
         ]
-      ],
-    );
-  }
-
-  Widget handOverContainer() {
-    var userConfirmValue = isUserTheOwner ? meeting.ownerConfirmHandover : meeting.renterConfirmHandover;
-    return Column(
-      children: [
-        if (meeting.disagreementCaseSettled ?? false)
-          Text(
-              'After reviewing the case it was decided that the tool was ${meeting.disagreementCaseResult! ? 'indeed' : 'not'} damaged.'),
-        Text(isUserTheOwner ? 'Recive your tool' : 'Hand the tool over to the owner'),
-        ElevatedButton(
-          child: Text(userConfirmValue ? 'HAND-OVER YET TO HAPPEN' : 'CONFIRM HAND-OVER'),
-          onPressed: () {
-            FirestoreServices.setReturnMeetingField(tool, '${userRole}ConfirmHandover', !userConfirmValue);
-          },
-        ),
       ],
     );
   }

@@ -292,6 +292,13 @@
     "request": "Request",
     "description":"Description",
 
+    "handoverTheTool": "Hand the tool over to the owner.",
+    "reciveTool": "Recive your tool from the renter.",
+    "confirmHandOver": "Confirm handover",
+    "didntHandOver": "Didn't handover",
+    "backToCompPrice": "Back to compensation price",
+    "backToInspect": "Back to inspect the tool",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

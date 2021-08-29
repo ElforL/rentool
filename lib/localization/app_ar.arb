@@ -144,5 +144,12 @@
     "request": "اطلب",
     "description":"الوصف",
 
+    "handoverTheTool": "سلم الأداة إلى المالك.",
+    "reciveTool": "استلم الأداة من المستأجر.",
+    "confirmHandOver": "تأكيد التسليم",
+    "didntHandOver": "لم يتم التسليم",
+    "backToCompPrice": "العودة إلى سعر التعويض",
+    "backToInspect": "العودة إلى فحص الأداة",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
