@@ -20,6 +20,7 @@ class CustomIcons {
   static const IconData facebook_square = IconData(0xf082, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData apple = IconData(0xf179, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData google = IconData(0xf1a0, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData handshake = IconData(0xf2b5, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData facebook_f = IconData(0xf39e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData microsoft = IconData(0xf3ca, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
