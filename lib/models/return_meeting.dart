@@ -150,7 +150,7 @@ class ReturnMeeting {
   /// set _'toolDamaged'_ to [isDamaged]
   ///
   /// only available to the owner
-  Future<void>? setToolDamaged(bool isDamaged) {
+  Future<void>? setToolDamaged(bool? isDamaged) {
     if (isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'toolDamaged', isDamaged);
   }
 
