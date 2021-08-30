@@ -15,13 +15,13 @@ class MeetingHandoverScreen extends StatelessWidget {
     void Function() onPressed;
     String text = 'unimplemented';
 
-    if (meeting.isUserTheOwner && !(meeting.toolDamaged ?? true)) {
-      // if it's the owner and the tool was set as not damaged -> set `toolDamaged` to `null`
+    if (meeting.isUserTheOwner && meeting.disagreementCaseID == null) {
+      // if it's the owner and there's no disagreement case go back to inspect -> set `toolDamaged` to `null`
       onPressed = () => meeting.setToolDamaged(null);
       text = AppLocalizations.of(context)!.backToInspect;
-    } else if (meeting.renterAcceptCompensationPrice ?? false) {
+    } else if (!meeting.isUserTheOwner && (meeting.renterAcceptCompensationPrice ?? false)) {
       // if it's the renter and `renterAcceptCompensationPrice` is true set `renterAcceptCompensationPrice` to `false`
-      onPressed = () => meeting.setAcceptCompensationPrice(false);
+      onPressed = () => meeting.setAcceptCompensationPrice(null);
       text = AppLocalizations.of(context)!.backToCompPrice;
     } else {
       onPressed = () => meeting.setArrived(false);
