@@ -157,7 +157,7 @@ class ReturnMeeting {
   /// set _'renterAdmitDamage'_ to [doAdmit]
   ///
   /// only available to the renter
-  Future<void>? setAdmitDamage(bool doAdmit) {
+  Future<void>? setAdmitDamage(bool? doAdmit) {
     if (!isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'renterAdmitDamage', doAdmit);
   }
 
@@ -173,7 +173,7 @@ class ReturnMeeting {
   /// set _'renterAcceptCompensationPrice'_ to [accepts]
   ///
   /// only available to the renter
-  Future<void>? setAcceptCompensationPrice(bool accepts) {
+  Future<void>? setAcceptCompensationPrice(bool? accepts) {
     if (!isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'renterAcceptCompensationPrice', accepts);
   }
 
