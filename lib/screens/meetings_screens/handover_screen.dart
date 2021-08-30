@@ -5,6 +5,7 @@ import 'package:rentool/misc/custom_icons.dart';
 import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/widgets/big_icons.dart';
 import 'package:rentool/widgets/meeting_appbar.dart';
+import 'package:rentool/widgets/note_box.dart';
 
 class MeetingHandoverScreen extends StatelessWidget {
   const MeetingHandoverScreen({Key? key, required this.meeting}) : super(key: key);
@@ -43,14 +44,31 @@ class MeetingHandoverScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              BigIcon(
+              if (meeting.disagreementCaseResult != null)
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: NoteBox(
+                    icon: Icons.gavel_rounded,
+                    text: AppLocalizations.of(context)!.afterReviewingCaseToolWas(meeting.disagreementCaseResult!),
+                  ),
+                ),
+              const BigIcon(
                 // TODO center the icon. it looks BAD
                 icon: CustomIcons.handshake,
-                caption: meeting.isUserTheOwner
+              ),
+              if (meeting.compensationPrice != null && (meeting.renterAcceptCompensationPrice ?? false))
+                Text(
+                  '${AppLocalizations.of(context)!.compensationPrice} = ${AppLocalizations.of(context)!.priceDisplay(AppLocalizations.of(context)!.sar, meeting.compensationPrice!.toString())}',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+              SizedBox(height: MediaQuery.of(context).size.height / 10),
+              Text(
+                meeting.isUserTheOwner
                     ? AppLocalizations.of(context)!.reciveTool
                     : AppLocalizations.of(context)!.handoverTheTool,
+                style: Theme.of(context).textTheme.subtitle2,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 8),
+              const SizedBox(height: 10),
               SizedBox(
                 width: 210,
                 child: ElevatedButton(
