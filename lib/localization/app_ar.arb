@@ -132,6 +132,7 @@
     "backToMedia": "العودة إلى الصور والفيديوهات",
 
     "rentHasStarted": "بدأ الإيجار",
+    "rentHasConcluded": "انتهى الإيجار",
 
     "noPicsOrVids": "لا يوجد صور أو فيديوهات",
     "price": "السعر",
@@ -152,7 +153,7 @@
     "backToCompPrice": "العودة إلى سعر التعويض",
     "backToInspect": "العودة إلى فحص الأداة",
 
-    "informedRenterOfClaims": "ابلغنا المستأجر بإدعائاتك. في انتظار ردهـ/ا",
+    "informedRenterOfClaims": "ابلغنا المستأجر بإدعائاتك. في انتظار الرد",
     "ownerClaimsUDamaged": "يدعي المالك أنك تسببت بأضرار للأداة",
     "doYouAdmitThat": "هل تقر بذلك؟",
     "yesIDamaged": "نعم, لقد تضررت الأداة",

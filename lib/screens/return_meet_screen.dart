@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
 import 'package:rentool/screens/meetings_screens/compensation_price_screen.dart';
 import 'package:rentool/screens/meetings_screens/handover_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
+import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
 import 'package:rentool/screens/meetings_screens/tool_damaged_screen.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -61,7 +63,10 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
 
   Widget rentunAppropiateWidget() {
     if (meeting.bothHandedOver) {
-      return handoverSuccesContainer();
+      return MeetingSuccessScreen(
+        title: AppLocalizations.of(context)!.success,
+        subtitle: AppLocalizations.of(context)!.rentHasConcluded,
+      );
     } else if (!meeting.bothArrived) {
       return MeetingArrivedContainer(
         returnMeeting: meeting,
@@ -111,15 +116,6 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         }
       }
     }
-  }
-
-  Widget handoverSuccesContainer() {
-    return Column(
-      children: const [
-        Text('Handover successful'),
-        Text('Rent concluded'),
-      ],
-    );
   }
 
   Widget disagreementCaseCreatedContainer() {
