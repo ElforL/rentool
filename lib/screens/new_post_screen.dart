@@ -144,7 +144,7 @@ class NewPostScreen extends StatelessWidget {
         controller: controller,
         textInputAction: textInputAction,
         keyboardType: isNumber ? TextInputType.number : null,
-        inputFormatters: isNumber ? [FilteringTextInputFormatter.digitsOnly] : null,
+        inputFormatters: isNumber ? [FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))] : null,
         minLines: 1,
         maxLines: maxLines,
         decoration: InputDecoration(
