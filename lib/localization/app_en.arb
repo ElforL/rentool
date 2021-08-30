@@ -15,6 +15,7 @@
     "success": "Success",
     "owner": "Owner",
     "renter": "Renter",
+    "set": "Set",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {
@@ -306,6 +307,47 @@
     "noIDidntDamage": "No, I didn't damage it",
     "changedYourMind": "Changed your mind?",
     "toolIsNotDamaged": "Tool is not damaged",
+
+    "priceDisplay": "{currency} {price}",
+    "@priceDisplay": {
+        "description": "Displays the price with respct to language order of currency and price (e.g., in arabic price comes beofre the currency)",
+        "placeholders":{
+            "currency": {},
+            "price": {}
+        }
+    },
+    "compensationPrice": "Compensation price",
+    "waitingForOwnerToSetPrice": "Waiting for the owner to set a price",
+    "waitingForOwnerToSetNewPrice": "Waiting for the owner to set a new price",
+    "theOwnerSetPriceAt": "The owner set the price at",
+    "doYouAgreeOnPrice": "Do you agree on this price.",
+    "youRejectedPriceOf": "You rejected the price of {currency} {price}.",
+    "@youRejectedPriceOf": {
+        "placeholders":{
+            "currency": {},
+            "price": {}
+        }
+    },
+
+    "setACompPrice": "Set a compensation price for the tool",
+    "youSetPriceAt": "You set the price at {currency} {price}. waiting for the renter's response",
+    "@youSetPriceAt": {
+        "placeholders":{
+            "currency": {},
+            "price": {}
+        }
+    },
+    "renterRefuesdPrice": "The renter didn't accept the price of {currency} {price}.",
+    "@renterRefuesdPrice": {
+        "placeholders":{
+            "currency": {},
+            "price": {}
+        }
+    },
+    "setAnotherPrice": "Set another price.",
+    "renterRejected": "Renter rejected",
+
+    "backToClaim": "Back to response to claims",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

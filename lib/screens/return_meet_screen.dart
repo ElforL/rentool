@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
+import 'package:rentool/screens/meetings_screens/compensation_price_screen.dart';
 import 'package:rentool/screens/meetings_screens/handover_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/screens/meetings_screens/tool_damaged_screen.dart';
@@ -72,7 +72,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
           if (meeting.disagreementCaseResult!) {
             // tool damaged
             if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
-              return compensationPriceContainer();
+              return MeetingCompensationPriceScreen(meeting: meeting);
             } else {
               return MeetingHandoverScreen(meeting: meeting);
             }
@@ -95,7 +95,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
             );
           } else if (meeting.renterAdmitDamage!) {
             if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
-              return compensationPriceContainer();
+              return MeetingCompensationPriceScreen(meeting: meeting);
             } else {
               return MeetingHandoverScreen(meeting: meeting);
             }
@@ -118,59 +118,6 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
       children: const [
         Text('Handover successful'),
         Text('Rent concluded'),
-      ],
-    );
-  }
-
-  Widget compensationPriceContainer() {
-    var _controller = TextEditingController();
-    if (meeting.compensationPrice != null) _controller.text = meeting.compensationPrice.toString();
-    return Column(
-      children: [
-        if (meeting.disagreementCaseResult ?? false)
-          const Text('After reviewing the case it was decided that the tool was indeed damaged.'),
-        const Text('Agree on a compensation price and confirm it'),
-        Container(
-          constraints: const BoxConstraints(maxWidth: 100),
-          child: TextField(
-            readOnly: !isUserTheOwner,
-            controller: _controller,
-            decoration: const InputDecoration(border: OutlineInputBorder()),
-            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]|\.'))],
-          ),
-        ),
-        if (isUserTheOwner) ...[
-          ElevatedButton(
-            child: const Text('CONFIRM'),
-            onPressed: () {
-              FirestoreServices.setReturnMeetingField(tool, 'compensationPrice', double.parse(_controller.text));
-            },
-          ),
-          if (meeting.compensationPrice != null)
-            if (meeting.renterAcceptCompensationPrice == null)
-              Text('Awaiting renter to accept the price of SAR ${meeting.compensationPrice}')
-            else
-              Text(
-                'The renter ${meeting.renterAcceptCompensationPrice! ? 'accepted' : 'rejected'} the price of SAR ${meeting.compensationPrice}',
-              ),
-        ],
-        if (!isUserTheOwner) ...[
-          if (meeting.compensationPrice != null) ...[
-            ElevatedButton(
-              child: const Text('ACCEPT PRICE'),
-              onPressed: () {
-                FirestoreServices.setReturnMeetingField(tool, 'renterAcceptCompensationPrice', true);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('REJECT PRICE'),
-              onPressed: () {
-                FirestoreServices.setReturnMeetingField(tool, 'renterAcceptCompensationPrice', false);
-              },
-            ),
-          ] else
-            const Text('Waiting the owner to set the compensation price'),
-        ]
       ],
     );
   }

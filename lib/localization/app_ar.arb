@@ -11,6 +11,7 @@
     "success": "نجاح",
     "owner": "المالك",
     "renter": "المستأجر",
+    "set": "حدد",
 
     "userNotFoundError": "لا يوجد مستخدم مرتبط بعنوان البريد الالكتروني هذا.",
     "wrongPassword": "كلمة مرور خاطئة.",
@@ -158,6 +159,22 @@
     "noIDidntDamage": "لا، لم أضر بالأداة",
     "changedYourMind": "هل غيرت رأيك؟",
     "toolIsNotDamaged": "الأداة غير متضررة",
+
+    "priceDisplay": "{price} {currency}",
+    "compensationPrice": "مبلغ التعويض",
+    "waitingForOwnerToSetPrice": "في انتظار تحديد المالك لمبلغ",
+    "waitingForOwnerToSetNewPrice": "في انتظار تحديد المالك لمبلغ جديد",
+    "theOwnerSetPriceAt": "حدد المالك المبلغ على",
+    "doYouAgreeOnPrice": "هل تتفق على هذا المبلغ؟",
+    "youRejectedPriceOf": "رفضت سعر {price} {currency}",
+
+    "setACompPrice": "حدد سعر تعويض للأداة",
+    "youSetPriceAt": "حددت المبلغ على {price} {currency}. في انتظار رد المستأجر",
+    "renterRefuesdPrice": "لم يقبل المستأجر ملبغ {price} {currency}. حدد مبلغًا آخر.",
+    "setAnotherPrice": "حدد مبغا آخر.",
+    "renterRejected": "المستأجر رفض.",
+
+    "backToClaim": "العودة إلى الرد على الإدعائات",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
