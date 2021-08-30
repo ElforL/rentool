@@ -181,5 +181,7 @@
     "disagreementCaseID": "الرقم التعريفي لحالة الخلاف",
     "disagreementCaseIDCopied": "تم نسخ الرقم التعريفي لحالة الخلاف",
 
+    "afterReviewingCaseToolWas": "بعد مراجعة حالة الخلاف، تقرر أن الأداة {wasDamaged, select, true{قد تضررت بالفعل}, other{لم تتضرر}}.",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

@@ -354,6 +354,15 @@
     "disagreementCaseID": "Disagreement-case ID",
     "disagreementCaseIDCopied": "Disagreement-case ID copied",
 
+    "afterReviewingCaseToolWas": "After reviewing the disagreement case it was decided that the tool was {wasDamaged, select, true{indeed}, other{not}} damaged.",
+    "@afterReviewingCaseToolWas":{
+        "placeholders": {
+            "wasDamaged": {
+                "type": "bool"
+            }
+        }
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

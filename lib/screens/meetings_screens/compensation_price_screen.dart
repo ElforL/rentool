@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/widgets/big_icons.dart';
 import 'package:rentool/widgets/meeting_appbar.dart';
+import 'package:rentool/widgets/note_box.dart';
 
 class MeetingCompensationPriceScreen extends StatelessWidget {
   MeetingCompensationPriceScreen({
@@ -53,11 +54,16 @@ class MeetingCompensationPriceScreen extends StatelessWidget {
                       color: Colors.black,
                     ),
               ),
-              // TODO
-              // if(meeting.disagreementCaseSettled ?? false)
-              //   NoteContainer()
-              // else
-              const SizedBox(height: 100),
+              if (meeting.disagreementCaseResult != null)
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: NoteBox(
+                    icon: Icons.gavel_rounded,
+                    text: AppLocalizations.of(context)!.afterReviewingCaseToolWas(meeting.disagreementCaseResult!),
+                  ),
+                )
+              else
+                const SizedBox(height: 100),
               if (meeting.isUserTheOwner) ...[
                 /////// Owner ///////
 
