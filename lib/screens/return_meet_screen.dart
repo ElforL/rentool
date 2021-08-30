@@ -5,6 +5,7 @@ import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
 import 'package:rentool/screens/meetings_screens/handover_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
+import 'package:rentool/screens/meetings_screens/tool_damaged_screen.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 
@@ -89,7 +90,9 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
       } else {
         if (meeting.toolDamaged!) {
           if (meeting.renterAdmitDamage == null) {
-            return admitDamageContainer();
+            return MeetingToolDamagedScreen(
+              meeting: meeting,
+            );
           } else if (meeting.renterAdmitDamage!) {
             if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
               return compensationPriceContainer();
@@ -183,35 +186,6 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         Text('Disagreement case ID: ${meeting.disagreementCaseID}'),
       ],
     );
-  }
-
-  Widget admitDamageContainer() {
-    if (isUserTheOwner) {
-      return Column(
-        children: const [
-          Text('awaiting renter to admit or deny damages'),
-        ],
-      );
-    } else {
-      return Column(
-        children: [
-          const Text('The owner claims the tool is damaged'),
-          const Text("Do you admit you could've damaged the tool?"),
-          ElevatedButton(
-            child: const Text('I DIDN\'T DAMAGE IT'),
-            onPressed: () {
-              FirestoreServices.setReturnMeetingField(tool, 'renterAdmitDamage', false);
-            },
-          ),
-          ElevatedButton(
-            child: const Text('I DID DAMAGE IT'),
-            onPressed: () {
-              FirestoreServices.setReturnMeetingField(tool, 'renterAdmitDamage', true);
-            },
-          ),
-        ],
-      );
-    }
   }
 
   Widget mediaUploadContainer() {

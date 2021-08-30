@@ -151,5 +151,13 @@
     "backToCompPrice": "العودة إلى سعر التعويض",
     "backToInspect": "العودة إلى فحص الأداة",
 
+    "informedRenterOfClaims": "ابلغنا المستأجر بإدعائاتك. في انتظار ردهـ/ا",
+    "ownerClaimsUDamaged": "يدعي المالك أنك تسببت بأضرار للأداة",
+    "doYouAdmitThat": "هل تقر بذلك؟",
+    "yesIDamaged": "نعم, لقد تضررت الأداة",
+    "noIDidntDamage": "لا، لم أضر بالأداة",
+    "changedYourMind": "هل غيرت رأيك؟",
+    "toolIsNotDamaged": "الأداة غير متضررة",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

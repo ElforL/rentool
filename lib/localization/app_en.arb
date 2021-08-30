@@ -299,6 +299,14 @@
     "backToCompPrice": "Back to compensation price",
     "backToInspect": "Back to inspect the tool",
 
+    "informedRenterOfClaims": "We informed the renter of your claims. Awaiting his/her response",
+    "ownerClaimsUDamaged": "The owner claims you damaged the tool.",
+    "doYouAdmitThat": "Do you admit that?",
+    "yesIDamaged": "Yes, I damaged it",
+    "noIDidntDamage": "No, I didn't damage it",
+    "changedYourMind": "Changed your mind?",
+    "toolIsNotDamaged": "Tool is not damaged",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
