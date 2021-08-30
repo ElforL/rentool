@@ -350,6 +350,10 @@
 
     "backToClaim": "Back to response to claims",
 
+    "disagreementCaseCreated": "A disagreement case was created. We will review the images and videos and arrive to a decision soon.",
+    "disagreementCaseID": "Disagreement-case ID",
+    "disagreementCaseIDCopied": "Disagreement-case ID copied",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

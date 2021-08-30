@@ -177,5 +177,9 @@
 
     "backToClaim": "العودة إلى الرد على الإدعائات",
 
+    "disagreementCaseCreated": "تم إنشاء حالة خلاف. سنراجع الصور و الفيديوهات ونتوصل إلى قرار قريبًا.",
+    "disagreementCaseID": "الرقم التعريفي لحالة الخلاف",
+    "disagreementCaseIDCopied": "تم نسخ الرقم التعريفي لحالة الخلاف",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
 import 'package:rentool/screens/meetings_screens/compensation_price_screen.dart';
+import 'package:rentool/screens/meetings_screens/disagreement_case_created_screen.dart';
 import 'package:rentool/screens/meetings_screens/handover_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
@@ -86,7 +87,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
             return MeetingHandoverScreen(meeting: meeting);
           }
         } else {
-          return disagreementCaseCreatedContainer();
+          return MeetingDisagreementCaseCreatedScreen(meeting: meeting);
         }
       } else if (meeting.toolDamaged == null) {
         return MeetingCheckToolScreen(
@@ -108,7 +109,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
             if (meeting.disagreementCaseID == null) {
               return mediaUploadContainer();
             } else {
-              return disagreementCaseCreatedContainer();
+              return MeetingDisagreementCaseCreatedScreen(meeting: meeting);
             }
           }
         } else {
@@ -116,19 +117,6 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         }
       }
     }
-  }
-
-  Widget disagreementCaseCreatedContainer() {
-    return Column(
-      children: [
-        const Text(
-          'a disagreement case was created. We will review the images/videos and arrive to a decission',
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 20),
-        Text('Disagreement case ID: ${meeting.disagreementCaseID}'),
-      ],
-    );
   }
 
   Widget mediaUploadContainer() {
