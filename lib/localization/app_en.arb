@@ -363,6 +363,12 @@
         }
     },
 
+    "disagreement_cases": "Disagreement cases",
+    "disagreement_cases_creation": "Disagreement cases are created when the renter and owner disagree on the tool status after renting it.",
+    "disagreement_cases_after_decision": "After a decision is made you will get a notification of the decision. Then you will need to meet again to agree on a compensation price (if the tool was damaged) and deliver the tool.",
+    "cases_help_dialog_owner_body": "Take pictures and videos of the tool to show the damage. These pictures and videos will then be reviewd by Rentool administrators to determine if the tool was damaged or not.",
+    "cases_help_dialog_renter_body": "Take pictures and videos to show the tool is not damaged as the owner claims. These pictures and videos will then be reviewd by Rentool administrators to determine if the tool was damaged or not.",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
