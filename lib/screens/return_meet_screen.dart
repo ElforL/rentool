@@ -5,6 +5,7 @@ import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
 import 'package:rentool/screens/meetings_screens/compensation_price_screen.dart';
 import 'package:rentool/screens/meetings_screens/disagreement_case_created_screen.dart';
+import 'package:rentool/screens/meetings_screens/disagreement_media_screen.dart';
 import 'package:rentool/screens/meetings_screens/handover_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
@@ -107,7 +108,9 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
             }
           } else {
             if (meeting.disagreementCaseID == null) {
-              return mediaUploadContainer();
+              return DisagreementMediaScreen(
+                meeting: meeting,
+              );
             } else {
               return MeetingDisagreementCaseCreatedScreen(meeting: meeting);
             }
@@ -117,20 +120,5 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         }
       }
     }
-  }
-
-  Widget mediaUploadContainer() {
-    var userValue = isUserTheOwner ? meeting.ownerMediaOK : meeting.renterMediaOK;
-    return Column(
-      children: [
-        const Text('Upload media'),
-        ElevatedButton(
-          child: Text(userValue ? 'NOT DONE' : 'DONE'),
-          onPressed: () {
-            FirestoreServices.setReturnMeetingField(tool, '${userRole}MediaOK', !userValue);
-          },
-        ),
-      ],
-    );
   }
 }

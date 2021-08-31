@@ -183,6 +183,12 @@
 
     "afterReviewingCaseToolWas": "بعد مراجعة حالة الخلاف، تقرر أن الأداة {wasDamaged, select, true{قد تضررت بالفعل}, other{لم تتضرر}}.",
 
+    "disagreementMediaUploadInfoRenter": "حمل صور وفيديوهات تبين أن الأداة غير متضررة كما يدعي المالك.",
+    "disagreementMediaUploadInfoOwner": "حمل صور وفيديوهات تبين الضرر على الأداة.",
+    "finished": "انتهيت",
+    "notFinished": "لم انتهي",
+    "caseMediaCofirmBody": "هل انتهيت من رفع الصور والفيديوهات؟",
+
     "disagreement_cases": "حالات الخلاف",
     "disagreement_cases_creation": "يتم إنشاء حالات الخلاف عندما لا يتفق المستأجر والمالك على حالة الأداة بعد الإيجار.",
     "disagreement_cases_after_decision": "سيصلك إشعار بالقرار عند التوصل اليه. ثم عليكم الإلتقاء مجددًا للاتفاق على سعر تعويض (اذا كانت الأداة متضررة) و تسليم الأداة.",

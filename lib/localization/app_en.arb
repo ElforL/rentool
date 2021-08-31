@@ -363,6 +363,12 @@
         }
     },
 
+    "disagreementMediaUploadInfoRenter": "Upload images and videos showing the tool is not damaged as the owner claims.",
+    "disagreementMediaUploadInfoOwner": "Upload images and videos showing the damage.",
+    "finished": "Finished",
+    "notFinished": "Not finished",
+    "caseMediaCofirmBody": "Did you finish uploading your pictures and videos?",
+
     "disagreement_cases": "Disagreement cases",
     "disagreement_cases_creation": "Disagreement cases are created when the renter and owner disagree on the tool status after renting it.",
     "disagreement_cases_after_decision": "After a decision is made you will get a notification of the decision. Then you will need to meet again to agree on a compensation price (if the tool was damaged) and deliver the tool.",
