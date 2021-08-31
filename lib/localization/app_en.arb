@@ -375,6 +375,8 @@
     "cases_help_dialog_owner_body": "Take pictures and videos of the tool to show the damage. These pictures and videos will then be reviewd by Rentool administrators to determine if the tool was damaged or not.",
     "cases_help_dialog_renter_body": "Take pictures and videos to show the tool is not damaged as the owner claims. These pictures and videos will then be reviewd by Rentool administrators to determine if the tool was damaged or not.",
 
+    "what_is_disagreement_cases": "What is disagreement cases?",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
