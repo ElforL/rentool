@@ -157,7 +157,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
     }
 
     const ownerFinishedMedia = !oldData.ownerMediaOK && newData.ownerMediaOK;
-    const renterLikedMedia = !oldData.renterMediaOK && oldData.renterMediaOK;
+    const renterLikedMedia = !oldData.renterMediaOK && newData.renterMediaOK;
     // when any [mediaOk] change from `false` to `true`
     if (ownerFinishedMedia || renterLikedMedia) {
       // when BOTH [mediaOk] are true
