@@ -207,5 +207,9 @@
     "you_cant_leave_this_empty": "لا يمكن ترك هذه الخانة فارغة",
     "days_must_be_more_than_0": "يجب ان يكون عدد الأيام أكبر من 0",
 
+    "no_description": "لا يوجد وصف",
+    "accept": "اقبل",
+    "reject": "ارفض",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

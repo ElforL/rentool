@@ -387,6 +387,10 @@
     "you_cant_leave_this_empty": "You can't leave this empty",
     "days_must_be_more_than_0": "Days must be 1 or greater",
 
+    "no_description": "There is no description",
+    "accept": "Accept",
+    "reject": "Reject",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
