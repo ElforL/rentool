@@ -88,20 +88,6 @@ class _UserScreenState extends State<UserScreen> {
                 }
                 return ListTile(
                   title: Text(idNum ?? (isDone ? 'NOT CONFIGURED' : 'Loading...')),
-                  trailing: OutlinedButton(
-                    child: const Text('change ID number'),
-                    onPressed: !isDone
-                        ? null
-                        : () async {
-                            // Show dialog
-                            var newID = await _showChangeIdDialog();
-                            if (newID != null) {
-                              print('newID = $newID');
-                              FirestoreServices.updateID(AuthServices.auth.currentUser!.uid, newID);
-                              setState(() {});
-                            }
-                          },
-                  ),
                 );
               }),
           ListTile(

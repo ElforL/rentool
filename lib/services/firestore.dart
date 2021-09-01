@@ -21,6 +21,7 @@ class FirestoreServices {
 
   // ////////////////////////////// Tools //////////////////////////////
 
+  /// Create a tool document in Firestore and return a `Tool` object.
   static Future<Tool> createNewTool(
     String name,
     String description,
@@ -59,16 +60,23 @@ class FirestoreServices {
     return await updateTool(tool);
   }
 
+  /// Returns a `Stream` of the tool document in Firestore.
+  ///
+  /// Notifies of document updates.
+  ///
+  /// An initial event is immediately sent, and further events will be sent whenever the document is modified.
   static Stream<DocumentSnapshot<Object?>> getToolStream(String toolID) {
     return _toolsRef.doc(toolID).snapshots();
   }
 
+  /// Update the tool document in Firestore.
   static Future<Tool> updateTool(Tool updatedTool) async {
     var ref = _toolsRef.doc(updatedTool.id);
     await ref.update(updatedTool.toJson(['id', 'requests']));
     return updatedTool;
   }
 
+  /// Delete the tool document in Firestore.
   static Future<void> deleteTool(String toolID) {
     var ref = _toolsRef.doc(toolID);
     return ref.delete();
@@ -99,10 +107,14 @@ class FirestoreServices {
     return _toolsRef.doc(toolID).collection('requests').doc(request.id).set(requestJson);
   }
 
+  /// Get the content of the tool-request with given [requestID] document.
   static Future<DocumentSnapshot<Map<String, dynamic>>> getToolRequest(toolID, requestID) {
     return _toolsRef.doc(toolID).collection('requests').doc(requestID).get();
   }
 
+  /// Get a number of tool-requests (default = 10)
+  ///
+  /// if [previousDoc] is provided the query will start after it.
   static Future<QuerySnapshot<Map<String, dynamic>>> fetchToolRequests(
     String toolID, {
     int limit = 10,
@@ -115,28 +127,56 @@ class FirestoreServices {
     }
   }
 
+  /// Accept a tool-request with given [requestID] on tool with id [toolID].
+  ///
+  /// this will change the tool's _'acceptedRequestID'_ field to [requestID]
   static Future<void> acceptRequest(String toolID, String requestID) async {
     return await _toolsRef.doc(toolID).update({'acceptedRequestID': requestID});
   }
 
+  /// Delete/reject a tool-request with given [requestID] on tool with id [toolID].
   static Future<void> deleteRequest(String toolID, String requestID) async {
     return await _toolsRef.doc(toolID).collection('requests').doc(requestID).delete();
   }
 
+  /// Returns a `Stream` of the tool's delivery meeting document in Firestore.
+  ///
+  /// Notifies of document updates.
+  ///
+  /// An initial event is immediately sent, and further events will be sent whenever the document is modified.
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getDeliverMeetingStream(Tool tool) {
     return _toolsRef.doc(tool.id).collection('deliver_meetings').doc(tool.acceptedRequestID).snapshots();
   }
 
+  /// Set [field] of a tool's delivery meeting document to [value]
+  ///
+  /// Example:
+  /// ```
+  /// setDeliverMeetingField(tool, 'owner_arrived', true)
+  /// ```
+  /// sets **_'owner_arrived'_** field to true (i.e., owner arrived).
   static Future<void> setDeliverMeetingField(Tool tool, String field, dynamic value) {
     return _toolsRef.doc(tool.id).collection('deliver_meetings').doc(tool.acceptedRequestID).update(
       {field: value},
     );
   }
 
+  /// Returns a `Stream` of the tool's return meeting document in Firestore.
+  ///
+  /// Notifies of document updates.
+  ///
+  /// An initial event is immediately sent, and further events will be sent whenever the document is modified.
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getReturnMeetingStream(Tool tool) {
     return _toolsRef.doc(tool.id).collection('return_meetings').doc(tool.acceptedRequestID).snapshots();
   }
 
+  /// Set [field] of a tool's return meeting document to [value]
+  ///
+  /// Example:
+  /// ```
+  /// setReturnMeetingField(tool, 'ownerArrived', true)
+  /// ```
+  /// sets **_'ownerArrived'_** field to true (i.e., owner arrived).
   static Future<void> setReturnMeetingField(Tool tool, String field, dynamic value) {
     return _toolsRef.doc(tool.id).collection('return_meetings').doc(tool.acceptedRequestID).update(
       {field: value},
@@ -145,6 +185,9 @@ class FirestoreServices {
 
   // ////////////////////////////// User //////////////////////////////
 
+  /// Add [uuid] to the user's devices collection.
+  ///
+  /// Added to document `Users/uid/devices/uuid`.
   static Future<void> addDeviceToken(String token, String uid, String uuid, [String? deviceName]) {
     return _usersRef.doc(uid).collection('devices').doc(uuid).set({
       'token': token,
@@ -152,6 +195,7 @@ class FirestoreServices {
     });
   }
 
+  /// Delete [uuid] from the user's devices collection.
   static Future<void> deleteDeviceToken(String uuid, String uid) {
     return _usersRef.doc(uid).collection('devices').doc(uuid).update({
       'token': null,
@@ -187,10 +231,7 @@ class FirestoreServices {
     }
   }
 
-  static Future<void> updateID(String uid, String newID) {
-    return _usersRef.doc(uid).collection('private').doc('ID').set({'idNumber': newID});
-  }
-
+  /// Get the ID document of the user with the given [uid]
   static Future<DocumentSnapshot<Object>> getID(String uid) {
     return _usersRef.doc(uid).collection('private').doc('ID').get();
   }
