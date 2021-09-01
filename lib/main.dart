@@ -30,7 +30,7 @@ void main() async {
   const emulatorOn = true;
   // Configure emulator settings
   if (emulatorOn && !kReleaseMode) {
-    final localhost = defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost';
+    const localhost = '192.168.3.2';
 
     // //// AUTHENTICATION ////
     await FirebaseAuth.instance.useAuthEmulator(localhost, 9099);
