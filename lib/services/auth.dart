@@ -9,11 +9,16 @@ import 'package:rentool/services/firestore.dart';
 class AuthServices {
   static FirebaseAuth auth = FirebaseAuth.instance;
 
+  /// Returns `true` if the user is signed in and vice versa.
   static bool get isSignedIn => auth.currentUser != null;
+
+  /// Returns the current [User] if they are currently signed-in, or `null` if not.
   static String? get currentUid => auth.currentUser?.uid;
 
+  /// Notifies about changes to the user's sign-in state (such as sign-in or sign-out).
   static Stream<User?> get authStateChanges => auth.authStateChanges();
 
+  /// Sign the user out
   static void signOut([String? uuid]) async {
     if (!isSignedIn) return;
 
@@ -61,6 +66,19 @@ class AuthServices {
 
   /* ------------------ for Email Sign in ------------------ */
 
+  /// Tries to create a new user account with the given email address and
+  /// password and send a verification email.
+  ///
+  /// A [FirebaseAuthException] maybe thrown with the following error code:
+  /// - **email-already-in-use**:
+  ///  - Thrown if there already exists an account with the given email address.
+  /// - **invalid-email**:
+  ///  - Thrown if the email address is not valid.
+  /// - **operation-not-allowed**:
+  ///  - Thrown if email/password accounts are not enabled. Enable
+  ///    email/password accounts in the Firebase Console, under the Auth tab.
+  /// - **weak-password**:
+  ///  - Thrown if the password is not strong enough.
   static Future<UserCredential> createUserWithEmailAndPassword(String inEmail, String inPassword) async {
     var creds = await auth.createUserWithEmailAndPassword(
       email: inEmail,
@@ -70,6 +88,18 @@ class AuthServices {
     return creds;
   }
 
+  /// Sign in a user with the given email address and password.
+  ///
+  /// A [FirebaseAuthException] maybe thrown with the following error code:
+  /// - **invalid-email**:
+  ///  - Thrown if the email address is not valid.
+  /// - **user-disabled**:
+  ///  - Thrown if the user corresponding to the given email has been disabled.
+  /// - **user-not-found**:
+  ///  - Thrown if there is no user corresponding to the given email.
+  /// - **wrong-password**:
+  ///  - Thrown if the password is invalid for the given email, or the account
+  ///    corresponding to the email does not have a password set.
   static Future<UserCredential> signInWithEmailAndPassword(String inEmail, String inPassword) async {
     return await auth.signInWithEmailAndPassword(
       email: inEmail,
