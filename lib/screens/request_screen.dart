@@ -4,17 +4,18 @@ import 'package:rentool_sdk/rentool_sdk.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RequestScreen extends StatelessWidget {
-  const RequestScreen({
-    Key? key,
-    required this.request,
-    this.showAcceptButton = false,
-  }) : super(key: key);
+  // ignore: prefer_const_constructors_in_immutables
+  RequestScreen({Key? key}) : super(key: key);
 
-  final ToolRequest request;
-  final bool showAcceptButton;
+  late final ToolRequest request;
+  late final bool showAcceptButton;
 
   @override
   Widget build(BuildContext context) {
+    assert(ModalRoute.of(context)?.settings.arguments != null, 'RequestScreen was pushed with no arguments');
+    final args = ModalRoute.of(context)!.settings.arguments as RequestScreenArguments;
+    request = args.request;
+    showAcceptButton = args.showAcceptButton;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -130,4 +131,11 @@ class RequestScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class RequestScreenArguments {
+  final ToolRequest request;
+  final bool showAcceptButton;
+
+  RequestScreenArguments(this.request, this.showAcceptButton);
 }

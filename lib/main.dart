@@ -15,6 +15,7 @@ import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/new_post_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
+import 'package:rentool/screens/request_screen.dart';
 import 'package:rentool/screens/requests_list_screen.dart';
 import 'package:rentool/screens/return_meet_screen.dart';
 import 'package:rentool/screens/search_screen.dart';
@@ -119,6 +120,7 @@ class _MyAppState extends State<MyApp> {
         '/newRequest': (context) => const NewRequestScreen(),
         '/toolsRequests': (context) => const RequestsListScreen(),
         '/search': (context) => const SearchScreen(),
+        '/request': (context) => RequestScreen(),
       },
     );
   }
