@@ -26,11 +26,13 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
+          primary: false,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 6),
+              Container(
+                constraints: const BoxConstraints(maxWidth: 400),
+                padding: const EdgeInsets.only(left: 60, right: 60, top: 60),
                 child: Image.asset('assets/images/Logo/primary.png'),
               ),
               const EmailSignContainer(),
