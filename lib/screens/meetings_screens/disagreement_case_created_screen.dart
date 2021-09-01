@@ -21,7 +21,7 @@ class MeetingDisagreementCaseCreatedScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.help_outline_outlined),
             onPressed: () => showDisagreementCasesHelpDialog(context, meeting.isUserTheOwner),
-            tooltip: AppLocalizations.of(context)!.what_is_disagreement_cases,
+            tooltip: AppLocalizations.of(context)!.what_are_disagreement_cases,
           )
         ],
       ),
@@ -45,7 +45,7 @@ class MeetingDisagreementCaseCreatedScreen extends StatelessWidget {
                 ),
                 TextButton(
                   child: Text(
-                    AppLocalizations.of(context)!.what_is_disagreement_cases.toUpperCase(),
+                    AppLocalizations.of(context)!.what_are_disagreement_cases.toUpperCase(),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
