@@ -26,7 +26,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
   @override
   void dispose() {
     if (!(meeting?.bothIdsOk ?? false)) {
-      arriveFunction(false);
+      meeting!.setArrived(false);
     }
     super.dispose();
   }
@@ -40,10 +40,16 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       stream: FirestoreServices.getDeliverMeetingStream(tool),
       builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
+          // TODO
+          // if (snapshot.error is FirebaseException && (snapshot.error as FirebaseException).code == 'permission-denied')
+          //   return FirestorePermissionDeniedScreen();
           return Scaffold(
             appBar: AppBar(),
             body: Center(
-              child: Text("Something went wrong\n${snapshot.error}"),
+              child: Text(
+                "Something went wrong\n${snapshot.error}",
+                textAlign: TextAlign.center,
+              ),
             ),
           );
         }
@@ -64,29 +70,29 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
   }
 
   Widget rentunAppropiateWidget(Map<String, dynamic> data, bool isUserTheOwner) {
-    if (data['renter_arrived'] != true || data['owner_arrived'] != true) {
+    if (!meeting!.bothArrived) {
       return MeetingArrivedContainer(
         deliverMeeting: meeting,
       );
-    } else if (data['renter_pics_ok'] != true || data['owner_pics_ok'] != true) {
+    } else if (!meeting!.bothMediaOk) {
       return DeliverMeetingPicsContainer(
         meeting: meeting!,
       );
-    } else if (data['renter_ids_ok'] != true || data['owner_ids_ok'] != true) {
+    } else if (!meeting!.bothIdsOk) {
       return MeetingsIdsScreen(
         meeting: meeting!,
       );
     } else {
-      if (data['rent_started']) {
+      if (meeting!.rentStarted) {
         return MeetingSuccessScreen(
           title: AppLocalizations.of(context)!.success,
           subtitle: AppLocalizations.of(context)!.rentHasStarted,
         );
-      } else if (data['error'] != null) {
+      } else if (meeting!.error != null) {
         return Scaffold(
           appBar: AppBar(),
           body: Center(
-            child: Text(data['error'].toString()),
+            child: Text(meeting!.error.toString()),
           ),
         );
       } else {
@@ -99,16 +105,5 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         );
       }
     }
-  }
-
-  void arriveFunction(value) {
-    final userRole = isUserTheOwner ? 'owner' : 'renter';
-    FirestoreServices.setDeliverMeetingField(tool, '${userRole}_arrived', value);
-  }
-
-  void picsFunction(Map<String, dynamic> data, bool isUserTheOwner) {
-    final userRole = isUserTheOwner ? 'owner' : 'renter';
-    final arePicsOk = data['${userRole}_pics_ok'];
-    FirestoreServices.setDeliverMeetingField(tool, '${userRole}_pics_ok', !arePicsOk);
   }
 }
