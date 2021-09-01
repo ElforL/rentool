@@ -14,6 +14,7 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   late Tool tool;
+  ToolRequest? acceptedRequest;
   late PageController _mediaController;
 
   /// returns `true` if the tool belongs to the user (i.e., user = owner).
@@ -31,6 +32,17 @@ class _PostScreenState extends State<PostScreen> {
     super.dispose();
   }
 
+  _getRequest() async {
+    print('Fetching accepted request: ${tool.acceptedRequestID}');
+    var docData = await FirestoreServices.getToolRequest(tool.id, tool.acceptedRequestID);
+    if (docData.data() != null) {
+      setState(() {
+        acceptedRequest = ToolRequest.fromJson(docData.data()!..addAll({'id': docData.id}));
+        print('Request ${tool.acceptedRequestID} fetched');
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
@@ -42,59 +54,17 @@ class _PostScreenState extends State<PostScreen> {
           if (snapshot.data != null && snapshot.data!.data() is Map) {
             var map = (snapshot.data!.data() as Map<String, dynamic>)..addAll({'id': snapshot.data!.id});
             tool = Tool.fromJson(map);
+            if (tool.acceptedRequestID != null && tool.acceptedRequestID != acceptedRequest?.id) {
+              _getRequest();
+            }
           }
           return ListView(
+            primary: false,
             children: [
               // media
-              Container(
-                margin: const EdgeInsets.only(top: 5),
-                constraints: const BoxConstraints(maxHeight: 200),
-                child: Stack(
-                  children: [
-                    PageView(
-                      controller: _mediaController,
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        if (tool.media.isNotEmpty)
-                          for (var url in tool.media) Image.network(url)
-                        else
-                          Center(
-                            child: Text(
-                              AppLocalizations.of(context)!.noPicsOrVids,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
-                      ],
-                    ),
-                    if (tool.media.isNotEmpty)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              _mediaController.previousPage(
-                                duration: const Duration(milliseconds: 200),
-                                curve: Curves.ease,
-                              );
-                            },
-                            icon: const Icon(Icons.arrow_back_ios),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              _mediaController.nextPage(
-                                duration: const Duration(milliseconds: 200),
-                                curve: Curves.ease,
-                              );
-                            },
-                            icon: const Icon(Icons.arrow_forward_ios),
-                          ),
-                        ],
-                      )
-                  ],
-                ),
-              ),
+              _buildMediaList(context),
               const Divider(thickness: 1, height: 2),
+              // Tool info
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
                 child: Column(
@@ -110,113 +80,62 @@ class _PostScreenState extends State<PostScreen> {
                     ),
                     const SizedBox(height: 5),
                     // Tool info
-                    Row(
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context)!.price}: ',
+                    RichText(
+                      text: TextSpan(
+                          text: '${AppLocalizations.of(context)!.price}: ',
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.priceADay(
-                            AppLocalizations.of(context)!.sar,
-                            tool.rentPrice.toString(),
-                          ),
-                          style: const TextStyle(color: Colors.blue),
-                        ),
-                      ],
+                          children: [
+                            TextSpan(
+                              text: AppLocalizations.of(context)!.priceADay(
+                                AppLocalizations.of(context)!.sar,
+                                tool.rentPrice.toString(),
+                              ),
+                              style: const TextStyle(color: Colors.blue),
+                            ),
+                          ]),
                     ),
                     const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context)!.status}: ',
+                    RichText(
+                      text: TextSpan(
+                          text: '${AppLocalizations.of(context)!.status}: ',
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          tool.isAvailable
-                              ? AppLocalizations.of(context)!.available
-                              : AppLocalizations.of(context)!.notAvailable,
-                          style: TextStyle(color: tool.isAvailable ? Colors.green : Colors.red),
-                        ),
-                      ],
+                          children: [
+                            TextSpan(
+                              text: tool.isAvailable
+                                  ? AppLocalizations.of(context)!.available
+                                  : AppLocalizations.of(context)!.notAvailable,
+                              style: TextStyle(color: tool.isAvailable ? Colors.green : Colors.red),
+                            ),
+                          ]),
                     ),
                     const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context)!.location}: ',
+                    RichText(
+                      text: TextSpan(
+                          text: '${AppLocalizations.of(context)!.location}: ',
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
-                        ),
-                        Text(tool.location),
-                      ],
+                          children: [
+                            TextSpan(
+                              text: tool.location,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          ]),
                     ),
                     const SizedBox(height: 5),
                     // TODO crerate future builder to read owner info from `db/Users`
-                    Row(
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context)!.owner}: ',
+                    RichText(
+                      text: TextSpan(
+                          text: '${AppLocalizations.of(context)!.owner}: ',
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
-                        ),
-                        Text(tool.ownerUID),
-                      ],
+                          children: [
+                            TextSpan(
+                              text: tool.ownerUID,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          ]),
                     ),
                     const SizedBox(height: 5),
-                    ElevatedButton.icon(
-                      icon: Icon(isUsersTool ? Icons.list_rounded : Icons.shopping_cart),
-                      label: Text(
-                        (isUsersTool
-                                ? AppLocalizations.of(context)!.browseRequests
-                                : AppLocalizations.of(context)!.request)
-                            .toUpperCase(),
-                      ),
-                      onPressed: isUsersTool
-                          ? /* widget.tool.acceptedRequestID != null
-                              ? null
-                              : */
-                          () => Navigator.pushNamed(
-                                context,
-                                '/toolsRequests',
-                                arguments: tool,
-                              )
-                          : (!tool.isAvailable
-                              ? null
-                              : () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/newRequest',
-                                    arguments: tool,
-                                  );
-                                }),
-                    ),
-                    if (tool.acceptedRequestID != null)
-                      SizedBox(
-                        width: 100,
-                        child: ElevatedButton(
-                          child: const Text('Meet'),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/deliver',
-                              arguments: tool,
-                            );
-                          },
-                        ),
-                      ),
-                    if (tool.currentRent != null)
-                      SizedBox(
-                        width: 100,
-                        child: ElevatedButton(
-                          child: const Text('Return'),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/return',
-                              arguments: tool,
-                            );
-                          },
-                        ),
-                      ),
+                    ..._buildMainButton(context),
+                    ..._buildMeetingButtons(context),
                   ],
                 ),
               ), // end of main details
@@ -240,6 +159,113 @@ class _PostScreenState extends State<PostScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  List<Widget> _buildMeetingButtons(BuildContext context) {
+    bool isUserAuthorized =
+        acceptedRequest?.renterUID == AuthServices.currentUid || tool.ownerUID == AuthServices.currentUid;
+    return [
+      if (tool.acceptedRequestID != null && isUserAuthorized && tool.currentRent == null)
+        SizedBox(
+          width: 100,
+          child: ElevatedButton(
+            child: const Text('Deliver'),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                '/deliver',
+                arguments: tool,
+              );
+            },
+          ),
+        ),
+      if (tool.currentRent != null && isUserAuthorized)
+        SizedBox(
+          width: 100,
+          child: ElevatedButton(
+            child: const Text('Return'),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                '/return',
+                arguments: tool,
+              );
+            },
+          ),
+        ),
+    ];
+  }
+
+  List<Widget> _buildMainButton(BuildContext context) {
+    String labelText;
+    void Function()? onPressed;
+
+    if (isUsersTool) {
+      labelText = AppLocalizations.of(context)!.browseRequests.toUpperCase();
+      onPressed = () => Navigator.pushNamed(context, '/toolsRequests', arguments: tool);
+    } else {
+      labelText = AppLocalizations.of(context)!.request.toUpperCase();
+      if (tool.isAvailable) onPressed = () => Navigator.pushNamed(context, '/newRequest', arguments: tool);
+    }
+
+    return [
+      ElevatedButton.icon(
+        icon: Icon(isUsersTool ? Icons.list_rounded : Icons.shopping_cart),
+        label: Text(labelText),
+        onPressed: onPressed,
+      )
+    ];
+  }
+
+  Container _buildMediaList(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 5),
+      constraints: const BoxConstraints(maxHeight: 200),
+      child: Stack(
+        children: [
+          PageView(
+            controller: _mediaController,
+            scrollDirection: Axis.horizontal,
+            children: [
+              if (tool.media.isNotEmpty)
+                for (var url in tool.media) Image.network(url)
+              else
+                Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.noPicsOrVids,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+            ],
+          ),
+          if (tool.media.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    _mediaController.previousPage(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.ease,
+                    );
+                  },
+                  icon: const Icon(Icons.arrow_back_ios),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _mediaController.nextPage(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.ease,
+                    );
+                  },
+                  icon: const Icon(Icons.arrow_forward_ios),
+                ),
+              ],
+            )
+        ],
       ),
     );
   }
