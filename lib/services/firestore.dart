@@ -99,6 +99,10 @@ class FirestoreServices {
     return _toolsRef.doc(toolID).collection('requests').doc(request.id).set(requestJson);
   }
 
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getToolRequest(toolID, requestID) {
+    return _toolsRef.doc(toolID).collection('requests').doc(requestID).get();
+  }
+
   static Future<QuerySnapshot<Map<String, dynamic>>> fetchToolRequests(
     String toolID, {
     int limit = 10,
