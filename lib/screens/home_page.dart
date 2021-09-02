@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/home_page/count_home_page_container.dart';
+import 'package:rentool/widgets/logo_image.dart';
 import 'package:rentool/widgets/rentool_search_bar.dart';
 import 'package:rentool/widgets/user_listtile.dart';
 
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children: [
             DrawerHeader(
-              child: Image.asset('assets/images/Logo/primary.png'),
+              child: LogoImage.primary(),
               margin: EdgeInsets.zero,
             ),
             UserListTile(

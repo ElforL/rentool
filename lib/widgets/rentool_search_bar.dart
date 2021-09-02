@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/widgets/logo_image.dart';
 
 class _RentoolSearchBar extends StatefulWidget {
   const _RentoolSearchBar({Key? key}) : super(key: key);
@@ -79,7 +80,7 @@ class _RentoolSearchBarState extends State<_RentoolSearchBar> {
             Expanded(
               child: SizedBox(
                 height: 13,
-                child: Image.asset('assets/images/Logo/primary_typeface.png'),
+                child: LogoImage.primaryTypeface(),
               ),
             ),
           // ---
