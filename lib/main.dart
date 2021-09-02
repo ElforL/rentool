@@ -22,6 +22,7 @@ import 'package:rentool/screens/search_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/cloud_messaging.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,10 +71,40 @@ class _MyAppState extends State<MyApp> {
 
   CloudMessagingServices? get fcmServices => widget.fcmServices;
 
-  void setLocale(Locale value) {
+  void setLocale(Locale value) async {
     setState(() {
       _locale = value;
     });
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('locale', value.languageCode);
+  }
+
+  void nextLocale(context) {
+    final currentLangCode = AppLocalizations.of(context)?.localeName;
+    if (currentLangCode != null) {
+      final currentLocale = Locale(currentLangCode);
+      final currentIndex = AppLocalizations.supportedLocales.indexOf(currentLocale);
+      final nextIndex = (currentIndex + 1) % AppLocalizations.supportedLocales.length;
+      final nextLocale = AppLocalizations.supportedLocales.elementAt(nextIndex);
+      setLocale(nextLocale);
+    }
+  }
+
+  void _loadLocaleSetting() async {
+    final prefs = await SharedPreferences.getInstance();
+    final langCode = prefs.getString('locale');
+    if (langCode != null) {
+      final locale = Locale(langCode);
+      if (AppLocalizations.supportedLocales.contains(locale)) {
+        setLocale(locale);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    _loadLocaleSetting();
+    super.initState();
   }
 
   @override

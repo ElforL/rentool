@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rentool/main.dart';
 import 'package:rentool/widgets/login/email_sign_screen.dart';
 import 'package:rentool/widgets/login/login_providers_container.dart';
 
@@ -30,6 +31,19 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  IconButton(
+                    color: Theme.of(context).colorScheme.primary,
+                    // tooltip: AppLocalizations.of(context)!.lan,
+                    icon: const Icon(Icons.language),
+                    onPressed: () {
+                      MyApp.of(context)?.nextLocale(context);
+                    },
+                  )
+                ],
+              ),
               Container(
                 constraints: const BoxConstraints(maxWidth: 400),
                 padding: const EdgeInsets.only(left: 60, right: 60, top: 60),
