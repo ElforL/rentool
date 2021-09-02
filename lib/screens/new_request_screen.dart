@@ -54,6 +54,8 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                 children: [
                   TextField(
                     controller: _descriptionController,
+                    minLines: 1,
+                    maxLines: 20,
                     textInputAction: TextInputAction.newline,
                     decoration: InputDecoration(
                       filled: true,
