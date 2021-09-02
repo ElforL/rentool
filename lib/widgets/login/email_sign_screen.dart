@@ -337,6 +337,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       child: TextFormField(
         autofillHints: autofillHints,
         onEditingComplete: autofillHints != null ? () => TextInput.finishAutofillContext() : null,
+        textDirection: TextDirection.ltr,
         onTap: onTap,
         readOnly: readOnly,
         controller: controller,
