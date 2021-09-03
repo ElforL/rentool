@@ -48,11 +48,10 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               title: Text(AppLocalizations.of(context)!.notifications),
-              trailing: Text(
-                '13',
-                style: TextStyle(color: Colors.amber.shade900),
-              ),
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).pushNamed('/myNotifications');
+              },
             ),
             ListTile(
               leading: const Icon(Icons.inventory_rounded),
