@@ -17,6 +17,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
   final TextEditingController _confirmPasswordContoller = TextEditingController();
 
   bool? _isLogin;
+  bool _showPasswords = false;
 
   String? emailError;
   String? passwordError;
@@ -337,7 +338,6 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       child: TextFormField(
         autofillHints: autofillHints,
         onEditingComplete: autofillHints != null ? () => TextInput.finishAutofillContext() : null,
-        textDirection: TextDirection.ltr,
         onTap: onTap,
         readOnly: readOnly,
         controller: controller,
@@ -345,8 +345,18 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         autofocus: autofocus,
         enableSuggestions: !isPassword,
         autocorrect: !isPassword,
-        obscureText: isPassword,
+        obscureText: !_showPasswords && isPassword,
         decoration: InputDecoration(
+          suffixIcon: !isPassword
+              ? null
+              : IconButton(
+                  icon: Icon(_showPasswords ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () {
+                    setState(() {
+                      _showPasswords = !_showPasswords;
+                    });
+                  },
+                ),
           errorText: errorText,
           labelText: labelText,
           border: const OutlineInputBorder(),
