@@ -241,4 +241,21 @@ class FirestoreServices {
     return _usersRef.doc(uid).collection('notifications').doc(notificationId).update({'isRead': isRead});
   }
 
+  static Future<QuerySnapshot<Map<String, dynamic>>> getNotifications(
+    String uid, {
+    int limit = 10,
+    DocumentSnapshot<Object?>? previousDoc,
+  }) {
+    if (previousDoc != null) {
+      return _usersRef
+          .doc(uid)
+          .collection('notifications')
+          .orderBy('time', descending: true)
+          .limit(limit)
+          .startAfterDocument(previousDoc)
+          .get();
+    } else {
+      return _usersRef.doc(uid).collection('notifications').orderBy('time', descending: true).limit(limit).get();
+    }
+  }
 }
