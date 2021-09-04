@@ -13,6 +13,7 @@ import 'package:rentool/screens/firebase_init_error_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/my_notifications.dart';
+import 'package:rentool/screens/my_requests.dart';
 import 'package:rentool/screens/new_post_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
@@ -154,6 +155,7 @@ class _MyAppState extends State<MyApp> {
         '/search': (context) => const SearchScreen(),
         '/request': (context) => RequestScreen(),
         '/myNotifications': (context) => const MyNotificationsScreen(),
+        '/myRequest': (context) => const MyRequestsScreen(),
       },
     );
   }

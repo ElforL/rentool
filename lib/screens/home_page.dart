@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(AppLocalizations.of(context)!.myRequests),
               onTap: () {
                 Navigator.pop(context);
-                // TODO navigate to my orders screen
+                Navigator.of(context).pushNamed('/myRequest');
               },
             ),
             ListTile(
@@ -106,24 +106,6 @@ class _HomePageState extends State<HomePage> {
               child: Text(AppLocalizations.of(context)!.offeredTools),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Container buildSearchBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.blue[300],
-      ),
-      width: 500,
-      child: TextField(
-        controller: _searchController,
-        decoration: const InputDecoration(
-          icon: Icon(Icons.search),
-          border: InputBorder.none,
         ),
       ),
     );
