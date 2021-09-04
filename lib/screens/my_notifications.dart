@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:rentool/models/notification.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -41,8 +42,9 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
       body: FutureBuilder(
         future: _getNotifications(),
         builder: (context, snapshot) {
-          return ListView.builder(
-            itemCount: notifications.length + 1,
+          return ListView.separated(
+            itemCount: notifications.length,
+            separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               if (index >= notifications.length) {
                 _getNotifications().then((value) {
@@ -52,6 +54,11 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
               }
               final notification = notifications[index];
               return ListTile(
+                trailing: Text(
+                  DateFormat('h:mm a\ndd/MM/yyyy').format(notification.time.toLocal()),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.overline,
+                ),
                 title: Text(
                   notification.getTitle(context),
                   style: notification.isRead ? null : const TextStyle(fontWeight: FontWeight.bold),
