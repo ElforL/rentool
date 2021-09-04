@@ -7,9 +7,11 @@ class UserListTile extends StatelessWidget {
   const UserListTile({
     Key? key,
     required this.user,
+    this.onTap,
   }) : super(key: key);
 
   final User user;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class UserListTile extends StatelessWidget {
             : null,
         backgroundColor: user.photoURL == null ? Colors.black12 : Colors.transparent,
       ),
+      onTap: onTap,
       title: Text(user.displayName ?? 'Account'),
       trailing: TextButton(
         child: Text(AppLocalizations.of(context)!.signOut),
