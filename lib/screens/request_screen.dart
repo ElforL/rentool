@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,9 +20,41 @@ class RequestScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
+          PopupMenuButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () {},
+            itemBuilder: (context) => [
+              if (request.renterUID == AuthServices.currentUid)
+                PopupMenuItem(
+                  padding: EdgeInsets.zero,
+                  child: ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: Text(AppLocalizations.of(context)!.edit),
+                    onTap: () {
+                      // TODO
+                      // Navigator.pushNamed(context, '/editRequest');
+                    },
+                  ),
+                ),
+              PopupMenuItem(
+                padding: EdgeInsets.zero,
+                child: ListTile(
+                  leading: const Icon(Icons.delete),
+                  title: Text(
+                    request.renterUID == AuthServices.currentUid
+                        ? AppLocalizations.of(context)!.delete
+                        : AppLocalizations.of(context)!.reject,
+                  ),
+                  onTap: () async {
+                    final isSure = await _showDeleteConfirmButton(context);
+                    if (isSure) {
+                      FirestoreServices.deleteRequest(request.toolID, request.id);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -32,6 +65,7 @@ class RequestScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               primary: false,
               children: [
+                // Number of days
                 Text(
                   AppLocalizations.of(context)!.number_of_days,
                   style: Theme.of(context).textTheme.headline6,
@@ -39,6 +73,7 @@ class RequestScreen extends StatelessWidget {
                 const SizedBox(height: 15),
                 Text(request.numOfDays.toString()),
                 const SizedBox(height: 25),
+                // Description
                 Text(
                   AppLocalizations.of(context)!.description,
                   style: Theme.of(context).textTheme.headline6,
@@ -52,6 +87,7 @@ class RequestScreen extends StatelessWidget {
                     style: TextStyle(color: Colors.red.shade300),
                   ),
                 const SizedBox(height: 25),
+                // The renter info
                 Text(
                   AppLocalizations.of(context)!.renter,
                   style: Theme.of(context).textTheme.headline6,
@@ -59,11 +95,13 @@ class RequestScreen extends StatelessWidget {
                 const SizedBox(height: 15),
                 Text(request.renterUID),
                 const SizedBox(height: 25),
+                // Price summary
                 Text(
                   AppLocalizations.of(context)!.price,
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 15),
+                // Rent price
                 Text(
                   AppLocalizations.of(context)!.rentPrice,
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
@@ -78,6 +116,7 @@ class RequestScreen extends StatelessWidget {
                   )}',
                 ),
                 const SizedBox(height: 15),
+                // Insurance price
                 Text(
                   AppLocalizations.of(context)!.insurancePrice,
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
@@ -89,6 +128,7 @@ class RequestScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 15),
+                // Total price
                 Text(
                   AppLocalizations.of(context)!.total,
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
@@ -130,6 +170,34 @@ class RequestScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<dynamic> _showDeleteConfirmButton(context) {
+    try {
+      return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(AppLocalizations.of(context)!.areYouSure),
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.sure),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      print('Error $e');
+      return Future.value(1);
+    }
   }
 }
 
