@@ -17,6 +17,8 @@
     "renter": "Renter",
     "set": "Set",
     "send": "Send",
+    "edit": "Edit",
+    "delete": "Delete",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {
