@@ -127,6 +127,19 @@ class FirestoreServices {
     }
   }
 
+  /// Get a user's sent requests
+  static Future<QuerySnapshot<Map<String, dynamic>>> getUserRequests(
+    String uid, {
+    int limit = 10,
+    DocumentSnapshot<Object?>? previousDoc,
+  }) {
+    if (previousDoc != null) {
+      return _usersRef.doc(uid).collection('requests').limit(limit).startAfterDocument(previousDoc).get();
+    } else {
+      return _usersRef.doc(uid).collection('requests').limit(limit).get();
+    }
+  }
+
   /// Accept a tool-request with given [requestID] on tool with id [toolID].
   ///
   /// this will change the tool's _'acceptedRequestID'_ field to [requestID]
