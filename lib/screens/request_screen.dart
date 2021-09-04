@@ -3,12 +3,12 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class RequestScreen extends StatelessWidget {
-  // ignore: prefer_const_constructors_in_immutables
   RequestScreen({Key? key}) : super(key: key);
 
-  late final ToolRequest request;
-  late final bool showAcceptButton;
+  late ToolRequest request;
+  late bool showAcceptButton;
 
   @override
   Widget build(BuildContext context) {
