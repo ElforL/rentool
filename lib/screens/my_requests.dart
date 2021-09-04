@@ -25,7 +25,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
     isLoading = true;
     final result = await FirestoreServices.getUserRequests(AuthServices.currentUid!, previousDoc: previousDoc);
     for (var doc in result.docs) {
-      final request = ToolRequest.fromJson(doc.data()..addAll({'id': doc.id}));
+      final request = ToolRequest.fromJson(doc.data());
       requests.add(request);
     }
     previousDoc = result.docs.last;
