@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:rentool/screens/edit_request.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// ignore: must_be_immutable
-class RequestScreen extends StatelessWidget {
-  RequestScreen({Key? key}) : super(key: key);
+class RequestScreen extends StatefulWidget {
+  const RequestScreen({Key? key}) : super(key: key);
 
+  @override
+  State<RequestScreen> createState() => _RequestScreenState();
+}
+
+class _RequestScreenState extends State<RequestScreen> {
   late ToolRequest request;
+
   late bool showAcceptButton;
 
   @override
@@ -29,9 +35,14 @@ class RequestScreen extends StatelessWidget {
                   child: ListTile(
                     leading: const Icon(Icons.edit),
                     title: Text(AppLocalizations.of(context)!.edit),
-                    onTap: () {
-                      // TODO
-                      // Navigator.pushNamed(context, '/editRequest');
+                    onTap: () async {
+                      Navigator.pop(context);
+                      await Navigator.pushNamed(
+                        context,
+                        '/editRequest',
+                        arguments: EditRequestScreenArguments(request),
+                      );
+                      setState(() {});
                     },
                   ),
                 ),

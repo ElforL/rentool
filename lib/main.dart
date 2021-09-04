@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/screens/deliver_meet_screen.dart';
+import 'package:rentool/screens/edit_request.dart';
 import 'package:rentool/screens/firebase_init_error_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
@@ -153,9 +154,10 @@ class _MyAppState extends State<MyApp> {
         '/newRequest': (context) => const NewRequestScreen(),
         '/toolsRequests': (context) => const RequestsListScreen(),
         '/search': (context) => const SearchScreen(),
-        '/request': (context) => RequestScreen(),
+        '/request': (context) => const RequestScreen(),
         '/myNotifications': (context) => const MyNotificationsScreen(),
         '/myRequest': (context) => const MyRequestsScreen(),
+        '/editRequest': (context) => const EditRequestScreen(),
       },
     );
   }
