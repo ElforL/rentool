@@ -37,16 +37,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(height: 2),
             ListTile(
-              leading: Stack(
-                children: [
-                  const Icon(Icons.notifications),
-                  Icon(
-                    Icons.circle,
-                    size: 10,
-                    color: Colors.amber.shade900,
-                  ),
-                ],
-              ),
+              leading: const Icon(Icons.notifications),
               title: Text(AppLocalizations.of(context)!.notifications),
               onTap: () {
                 Navigator.pop(context);
