@@ -34,6 +34,10 @@ class _HomePageState extends State<HomePage> {
             ),
             UserListTile(
               user: AuthServices.auth.currentUser!,
+              onTap: () {
+                Navigator.pop(context);
+                // TODO navigate to user screen
+              },
             ),
             const Divider(height: 2),
             ListTile(
@@ -47,23 +51,35 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: const Icon(Icons.inventory_rounded),
               title: Text(AppLocalizations.of(context)!.myOrders),
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                // TODO navigate to my orders screen
+              },
             ),
             ListTile(
               leading: const Icon(Icons.build_circle),
               title: Text(AppLocalizations.of(context)!.myTools),
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                // TODO navigate to my tools screen
+              },
             ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.settings),
               title: Text(AppLocalizations.of(context)!.settings),
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                // TODO navigate to settings screen
+              },
             ),
             ListTile(
               leading: const Icon(Icons.help_outline),
               title: Text(AppLocalizations.of(context)!.helpNSupport),
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                // TODO navigate to help screen
+              },
             ),
           ],
         ),
