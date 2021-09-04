@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/request_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -71,8 +72,12 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                 subtitle: Text(
                   '${request.numOfDays} ${AppLocalizations.of(context)!.days}',
                 ),
-                onTap: () {
-                  // TODO navigate to request screen.
+                onTap: () async {
+                  await Navigator.of(context).pushNamed(
+                    '/request',
+                    arguments: RequestScreenArguments(request, false),
+                  );
+                  setState(() {});
                 },
               );
             },
