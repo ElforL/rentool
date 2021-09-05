@@ -43,6 +43,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
         future: _getRequests(),
         builder: (context, snapshot) {
           return ListView.builder(
+            primary: false,
             itemCount: requests.length + 1,
             itemBuilder: (context, index) {
               if (index >= requests.length) {

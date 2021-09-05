@@ -50,6 +50,7 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
         future: _getTools(),
         builder: (context, snapshot) {
           return ListView.separated(
+            primary: false,
             itemCount: tools.length + 1,
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {

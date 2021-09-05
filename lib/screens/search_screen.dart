@@ -67,6 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
         automaticallyImplyLeading: false,
       ),
       body: ListView(
+        primary: false,
         children: [
           Padding(
             padding: const EdgeInsets.all(20),
