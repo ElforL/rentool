@@ -38,7 +38,7 @@ class CloudMessagingServices {
           entry.remove();
         } on ArgumentError catch (e) {
           debugPrint(
-            "failed to show notification tile. this usually happens if `NotificationTile` couldn't parse the notification code",
+            "failed to show notification tile. this usually happens if `NotificationTile` couldn't parse the notification code\n${e.toString()}",
           );
         }
       }

@@ -71,7 +71,7 @@ class _MediaTileState extends State<MediaTile> {
             ),
           ),
         );
-      } catch (e) {}
+      } catch (_) {}
     });
   }
 
