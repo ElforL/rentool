@@ -57,7 +57,6 @@ class CloudMessagingServices {
           false,
           DateTime.now(),
         );
-        print('Data = ${notification.code}');
 
         flutterLocalNotificationsPlugin.show(
           message.hashCode,
