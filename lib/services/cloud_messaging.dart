@@ -1,9 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:rentool/widgets/notification_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rentool/models/notification.dart';
 
 class CloudMessagingServices {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+
+  late final AndroidNotificationChannel channel;
+
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   /// was `init()` called
   bool initialized = false;
@@ -14,33 +20,57 @@ class CloudMessagingServices {
     initialized = true;
     NotificationSettings settings = await _fcm.requestPermission();
 
+    // Initialize flutterLocalNotificationsPlugin
+    const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const initializationSettingsIOS = IOSInitializationSettings();
+    const initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // Create and add the channel
+    channel = AndroidNotificationChannel(
+      // id
+      'tools_notifications_channel',
+      // title
+      context == null ? 'Tools Notifications' : AppLocalizations.of(context)!.tools_notifications,
+      // description
+      context == null
+          ? 'This channel is used for tools notifications such as reciving a request, accepted request, or rent starting.'
+          : AppLocalizations.of(context)!.tools_notifications_channel_desc,
+    );
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       deviceToken = await _fcm.getToken();
     }
 
     FirebaseMessaging.onMessage.listen((message) async {
       if (context != null) {
-        try {
-          const duration = Duration(seconds: 5);
-          final entry = OverlayEntry(
-            builder: (context) {
-              return Align(
-                alignment: Alignment.topCenter,
-                child: NotificationTile(
-                  visibleDuration: duration,
-                  data: message.data,
-                ),
-              );
-            },
-          );
-          Overlay.of(context)!.insert(entry);
-          await Future.delayed(duration);
-          entry.remove();
-        } on ArgumentError catch (e) {
-          debugPrint(
-            "failed to show notification tile. this usually happens if `NotificationTile` couldn't parse the notification code\n${e.toString()}",
-          );
-        }
+        final notification = RentoolNotification(
+          message.hashCode.toString(),
+          message.data['code'],
+          message.data,
+          false,
+          DateTime.now(),
+        );
+        print('Data = ${notification.code}');
+
+        flutterLocalNotificationsPlugin.show(
+          message.hashCode,
+          notification.getTitle(context),
+          notification.getBody(context),
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+            ),
+          ),
+        );
       }
     });
 

@@ -394,6 +394,9 @@
     "accept": "Accept",
     "reject": "Reject",
 
+    "tools_notifications": "Tools Notifications",
+    "tools_notifications_channel_desc": "This channel is used for tools notifications such as reciving a request, accepted request, or rent starting.",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
