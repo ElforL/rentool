@@ -124,10 +124,6 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return Theme(
           data: ThemeData(
-            colorScheme: Theme.of(context).colorScheme.copyWith(
-                  secondary: Colors.orange.shade600,
-                  onSecondary: Colors.black,
-                ),
             fontFamily: AppLocalizations.of(context)!.localeName == 'ar' ? 'Almarai' : null,
             appBarTheme: const AppBarTheme(
               systemOverlayStyle: SystemUiOverlayStyle(

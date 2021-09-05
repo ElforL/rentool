@@ -40,6 +40,8 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
         title: Text(AppLocalizations.of(context)!.myTools),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.black,
         child: const Icon(Icons.add),
         onPressed: () async {
           await Navigator.pushNamed(context, '/newPost');
