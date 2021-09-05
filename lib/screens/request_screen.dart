@@ -56,7 +56,7 @@ class _RequestScreenState extends State<RequestScreen> {
                         : AppLocalizations.of(context)!.reject,
                   ),
                   onTap: () async {
-                    final isSure = await _showDeleteConfirmButton(context);
+                    final isSure = await _showConfirmDialog(context);
                     if (isSure) {
                       FirestoreServices.deleteRequest(request.toolID, request.id);
                       Navigator.pop(context);
@@ -161,17 +161,23 @@ class _RequestScreenState extends State<RequestScreen> {
                 children: [
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.reject.toUpperCase()),
-                    onPressed: () {
-                      FirestoreServices.deleteRequest(request.toolID, request.id);
-                      Navigator.pop(context, 'Deleted');
+                    onPressed: () async {
+                      final isSure = await _showConfirmDialog(context);
+                      if (isSure) {
+                        FirestoreServices.deleteRequest(request.toolID, request.id);
+                        Navigator.pop(context, 'Deleted');
+                      }
                     },
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.accept.toUpperCase()),
-                    onPressed: () {
-                      FirestoreServices.acceptRequest(request.toolID, request.id);
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      final isSure = await _showConfirmDialog(context);
+                      if (isSure) {
+                        FirestoreServices.acceptRequest(request.toolID, request.id);
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 ],
@@ -183,7 +189,7 @@ class _RequestScreenState extends State<RequestScreen> {
     );
   }
 
-  Future<dynamic> _showDeleteConfirmButton(context) {
+  Future<dynamic> _showConfirmDialog(context) {
     try {
       return showDialog(
         context: context,
