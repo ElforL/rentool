@@ -43,7 +43,7 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
         future: _getNotifications(),
         builder: (context, snapshot) {
           return ListView.separated(
-            itemCount: notifications.length,
+            itemCount: notifications.length + 1,
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               if (index >= notifications.length) {

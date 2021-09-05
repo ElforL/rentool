@@ -43,15 +43,13 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
         future: _getRequests(),
         builder: (context, snapshot) {
           return ListView.builder(
-            itemCount: requests.length,
+            itemCount: requests.length + 1,
             itemBuilder: (context, index) {
               if (index >= requests.length) {
                 _getRequests().then((value) {
                   setState(() {});
                 });
-                return const ListTile(
-                  title: LinearProgressIndicator(),
-                );
+                return const ListTile();
               }
               final request = requests[index];
               return ListTile(
