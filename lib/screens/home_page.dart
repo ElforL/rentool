@@ -14,12 +14,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RentoolSearchAppBar(),
+      appBar: RentoolSearchAppBar(
+        onSubmitted: (value) {
+          Navigator.pushNamed(
+            context,
+            '/search',
+            arguments: value,
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, '/newPost');

@@ -180,7 +180,7 @@ class FirstScreen extends StatelessWidget {
           print('User signed out');
           return const LoginScreen();
         } else {
-          print('Signed in as ${user.displayName ?? '[Unser Name]'} ');
+          print('Signed in as ${user.displayName ?? '[Unset Name]'} ');
           if (!user.emailVerified) {
             print('Email address not verified.');
           }

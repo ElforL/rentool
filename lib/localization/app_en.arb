@@ -19,6 +19,7 @@
     "send": "Send",
     "edit": "Edit",
     "delete": "Delete",
+    "results": "Results",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {
