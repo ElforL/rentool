@@ -63,10 +63,17 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
               return ListTile(
                 title: Text('${request.numOfDays} ${AppLocalizations.of(context)!.days}'),
                 subtitle: Text(request.renterUID),
-                onTap: () => Navigator.of(context).pushNamed(
-                  '/request',
-                  arguments: RequestScreenArguments(request, true),
-                ),
+                onTap: () async {
+                  final result = await Navigator.of(context).pushNamed(
+                    '/request',
+                    arguments: RequestScreenArguments(request, true),
+                  );
+                  print('result = $result');
+                  if (result == 'Deleted') {
+                    list.remove(request);
+                    setState(() {});
+                  }
+                },
               );
             },
           );

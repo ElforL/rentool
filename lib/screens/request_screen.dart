@@ -60,7 +60,7 @@ class _RequestScreenState extends State<RequestScreen> {
                     if (isSure) {
                       FirestoreServices.deleteRequest(request.toolID, request.id);
                       Navigator.pop(context);
-                      Navigator.pop(context);
+                      Navigator.pop(context, 'Deleted');
                     }
                   },
                 ),
@@ -163,7 +163,7 @@ class _RequestScreenState extends State<RequestScreen> {
                     child: Text(AppLocalizations.of(context)!.reject.toUpperCase()),
                     onPressed: () {
                       FirestoreServices.deleteRequest(request.toolID, request.id);
-                      Navigator.pop(context);
+                      Navigator.pop(context, 'Deleted');
                     },
                   ),
                   const SizedBox(width: 20),
