@@ -26,11 +26,6 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/newPost');
-        },
-      ),
       drawer: Drawer(
         child: ListView(
           children: [

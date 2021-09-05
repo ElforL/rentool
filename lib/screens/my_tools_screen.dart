@@ -39,6 +39,13 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.myTools),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () async {
+          await Navigator.pushNamed(context, '/newPost');
+          setState(() {});
+        },
+      ),
       body: FutureBuilder(
         future: _getTools(),
         builder: (context, snapshot) {
@@ -56,7 +63,10 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
               final tool = tools[index];
               return ToolTile(
                 tool: tool,
-                onTap: () => Navigator.pushNamed(context, '/post', arguments: tool),
+                onTap: () async {
+                  await Navigator.pushNamed(context, '/post', arguments: tool);
+                  setState(() {});
+                },
               );
             },
           );
