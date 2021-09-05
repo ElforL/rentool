@@ -87,6 +87,14 @@ class FirestoreServices {
     return _toolsRef.doc(toolID).get();
   }
 
+  static Future<QuerySnapshot<Object?>> getUserTool(String uid, {int limit = 10, DocumentSnapshot? previousDoc}) {
+    if (previousDoc != null) {
+      return _toolsRef.where('ownerUID', isEqualTo: uid).limit(limit).startAfterDocument(previousDoc).get();
+    } else {
+      return _toolsRef.where('ownerUID', isEqualTo: uid).limit(limit).get();
+    }
+  }
+
   static Future<List<QueryDocumentSnapshot<Object?>>> searchForTool(String searchkey) async {
     // https://stackoverflow.com/a/56747021/12571630
     var out = await _toolsRef.orderBy('name').startAt([searchkey]).endAt([searchkey + '\uf8ff']).limit(10).get();
