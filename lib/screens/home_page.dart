@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(AppLocalizations.of(context)!.myTools),
               onTap: () {
                 Navigator.pop(context);
-                // TODO navigate to my tools screen
+                Navigator.of(context).pushNamed('/myTools');
               },
             ),
             const Divider(),

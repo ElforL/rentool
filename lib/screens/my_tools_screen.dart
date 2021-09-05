@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/tool_tile.dart';
@@ -35,7 +36,9 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.myTools),
+      ),
       body: FutureBuilder(
         future: _getTools(),
         builder: (context, snapshot) {

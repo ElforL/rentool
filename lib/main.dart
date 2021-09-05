@@ -15,6 +15,7 @@ import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
+import 'package:rentool/screens/my_tools_screen.dart';
 import 'package:rentool/screens/new_post_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
@@ -157,6 +158,7 @@ class _MyAppState extends State<MyApp> {
         '/request': (context) => const RequestScreen(),
         '/myNotifications': (context) => const MyNotificationsScreen(),
         '/myRequest': (context) => const MyRequestsScreen(),
+        '/myTools': (context) => const MyToolsScreen(),
         '/editRequest': (context) => const EditRequestScreen(),
       },
     );
