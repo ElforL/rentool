@@ -39,7 +39,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Requests for ${tool.name}'),
+        title: Text(AppLocalizations.of(context)!.requests_on(tool.name)),
       ),
       body: FutureBuilder(
         future: _getRequests(),
