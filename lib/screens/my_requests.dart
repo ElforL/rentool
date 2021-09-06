@@ -57,7 +57,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                 title: FutureBuilder(
                   future: FirestoreServices.getTool(request.toolID),
                   builder: (context, AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done) {
+                    if (snapshot.connectionState != ConnectionState.done && snapshot.data == null) {
                       return const LinearProgressIndicator();
                     }
                     final tool = Tool.fromJson(
