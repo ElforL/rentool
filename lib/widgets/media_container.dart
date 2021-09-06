@@ -60,7 +60,8 @@ class MediaContainer extends StatelessWidget {
     } else if (type == 'video') {
       future = VideoThumbnail.thumbnailData(video: mediaURL ?? mediaFile!.path);
     } else {
-      return _buildErrorAndPrintException(Exception('Media type is not an image nor a video: $type.'), context);
+      print('Media type is not an image nor a video: $type.');
+      return _buildError(context);
     }
 
     // build using `FutureBuilder`
@@ -78,10 +79,8 @@ class MediaContainer extends StatelessWidget {
                   return _buildLoading();
                 }
                 if (snapshot.data == null) {
-                  return _buildErrorAndPrintException(
-                    Exception('Image bytes were null for file "${mediaFile?.path ?? mediaURL}"'),
-                    context,
-                  );
+                  print('Image bytes were null for file "${mediaFile?.path ?? mediaURL}"');
+                  return _buildError(context);
                 }
 
                 return Stack(
@@ -129,18 +128,6 @@ class MediaContainer extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// this method prints the exception and stacktrace then returns an error container (`_buildError()`).
-  Widget _buildErrorAndPrintException(Exception e, BuildContext context) {
-    // I surronded the thorw with a try-catch to get the stack trace so i can print it.
-    try {
-      throw e;
-    } catch (e, stack) {
-      debugPrint(e.toString());
-      debugPrint(stack.toString());
-      return _buildError(context);
-    }
   }
 
   /// Returns a container with `CircularProgressIndicator`
