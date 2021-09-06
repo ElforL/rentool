@@ -180,13 +180,14 @@ class DeliverMeetingPicsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget? child;
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.11,
       minChildSize: 0.11,
       maxChildSize: 0.5,
       builder: (context, scrollController) {
-        return Container(
+        child ??= Container(
           decoration: BoxDecoration(
             boxShadow: const [
               BoxShadow(
@@ -245,6 +246,7 @@ class DeliverMeetingPicsBottomSheet extends StatelessWidget {
             ],
           ),
         );
+        return child!;
       },
     );
   }
