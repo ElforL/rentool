@@ -17,10 +17,10 @@ class StorageServices {
   }
 
   static UploadTask uploadDeliverMeetingFile(File file, String toolID, String requestID, String uid) {
-    return _storage.ref('/deliver_meetings/$toolID/$requestID/$uid/${file.hashCode}').putFile(file);
+    return _storage.ref('/deliver_meetings/$toolID/$requestID/$uid/${file.path}').putFile(file);
   }
 
   static UploadTask uploadReturnMeetingFile(File file, String toolID, String requestID, String uid) {
-    return _storage.ref('/return_meetings/$toolID/$requestID/$uid/${file.hashCode}').putFile(file);
+    return _storage.ref('/return_meetings/$toolID/$requestID/$uid/${file.path}').putFile(file);
   }
 }
