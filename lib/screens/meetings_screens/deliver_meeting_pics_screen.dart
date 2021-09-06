@@ -1,10 +1,13 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rentool/models/deliver_meetings.dart';
-import 'package:rentool/widgets/icon_alert_dialog.dart';
 import 'package:rentool/widgets/drag_indicator.dart';
+import 'package:rentool/widgets/expandable_fab.dart';
+import 'package:rentool/widgets/icon_alert_dialog.dart';
 import 'package:rentool/widgets/media_container.dart';
 import 'package:rentool/widgets/meeting_appbar.dart';
 
@@ -15,6 +18,20 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
   }) : super(key: key);
 
   final DeliverMeeting meeting;
+
+  _uploadMedia(bool isVideo) async {
+    ImagePicker picker = ImagePicker();
+    XFile? file;
+    if (isVideo) {
+      file = await picker.pickVideo(source: ImageSource.camera);
+    } else {
+      file = await picker.pickImage(source: ImageSource.camera);
+    }
+
+    if (file != null) {
+      meeting.addMedia(File(file.path));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +46,22 @@ class DeliverMeetingPicsContainer extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {},
+      floatingActionButton: ExpandableFab(
+        distance: 100,
+        children: [
+          ActionButton(
+            icon: const Icon(Icons.camera_alt),
+            onPressed: () {
+              _uploadMedia(false);
+            },
+          ),
+          ActionButton(
+            icon: const Icon(Icons.videocam),
+            onPressed: () {
+              _uploadMedia(true);
+            },
+          ),
+        ],
       ),
       bottomSheet: DeliverMeetingPicsBottomSheet(meeting: meeting),
       body: SingleChildScrollView(
