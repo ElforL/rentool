@@ -81,27 +81,6 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
       onPressed: _toggle,
       child: const Icon(Icons.close),
     );
-    return SizedBox(
-      width: 56.0,
-      height: 56.0,
-      child: Center(
-        child: Material(
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          elevation: 4.0,
-          child: InkWell(
-            onTap: _toggle,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.close,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   List<Widget> _buildExpandingActionButtons() {
