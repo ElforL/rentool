@@ -32,6 +32,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
   }
 
   submit() async {
+    if (_emailContoller.text.isEmpty) return;
     clearErrors();
     if (_isLogin == null) {
       // not determined if login or signup
@@ -39,6 +40,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
     } else if (_isLogin!) {
       // login
       try {
+        if (_emailContoller.text.isEmpty || _passwordContoller.text.isEmpty) return;
         await AuthServices.signInWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
@@ -67,9 +69,12 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       }
     } else {
       // signup
+      if (_emailContoller.text.isEmpty || _passwordContoller.text.isEmpty || _confirmPasswordContoller.text.isEmpty) {
+        return;
+      }
       if (_passwordContoller.text != _confirmPasswordContoller.text) {
         // unmatched passwords
-        setState(() {
+        return setState(() {
           confirmPasswordError = AppLocalizations.of(context)!.pass_not_match;
         });
       }
