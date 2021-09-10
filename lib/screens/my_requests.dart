@@ -18,6 +18,11 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
   ///
   /// used to prevent multiple calls for Firestore.
   bool isLoading = false;
+
+  /// there is no more docs other than the one loaded
+  ///
+  /// defaults to `false` and turns `true` when [_getRequests()] doesn't return any docs
+  bool noMoreDocs = false;
   List<ToolRequest> requests = [];
   DocumentSnapshot<Object?>? previousDoc;
 
@@ -25,11 +30,15 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
     if (isLoading) return;
     isLoading = true;
     final result = await FirestoreServices.getUserRequests(AuthServices.currentUid!, previousDoc: previousDoc);
-    for (var doc in result.docs) {
-      final request = ToolRequest.fromJson(doc.data());
-      requests.add(request);
+    if (result.docs.isEmpty) {
+      noMoreDocs = true;
+    } else {
+      for (var doc in result.docs) {
+        final request = ToolRequest.fromJson(doc.data());
+        requests.add(request);
+      }
+      previousDoc = result.docs.last;
     }
-    previousDoc = result.docs.last;
     isLoading = false;
   }
 
@@ -42,6 +51,34 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
       body: FutureBuilder(
         future: _getRequests(),
         builder: (context, snapshot) {
+          if (noMoreDocs && requests.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      Icon(
+                        Icons.send_rounded,
+                        size: 70,
+                        color: Colors.grey.shade700,
+                      ),
+                      Icon(
+                        Icons.do_not_disturb,
+                        size: 150,
+                        color: Colors.grey.shade800,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.no_requests_sent,
+                    style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black54),
+                  ),
+                ],
+              ),
+            );
+          }
           return ListView.builder(
             primary: false,
             itemCount: requests.length + 1,
@@ -50,7 +87,9 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                 _getRequests().then((value) {
                   setState(() {});
                 });
-                return const ListTile();
+                return const ListTile(
+                  title: LinearProgressIndicator(),
+                );
               }
               final request = requests[index];
               return ListTile(

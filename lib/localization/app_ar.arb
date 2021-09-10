@@ -218,6 +218,7 @@
     "tools_notifications_channel_desc": "هذه القناة تستخدم لإشعارات الأدوات مثال: استلام طلب، قبول طلب، او بدء الإيجار.",
 
     "requests_on": "طلبات على {toolName}",
+    "no_requests_sent": "لا توجد طلبات مرسلة",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
