@@ -212,7 +212,7 @@ class _PostScreenState extends State<PostScreen> {
 
     return [
       ElevatedButton.icon(
-        icon: Icon(isUsersTool ? Icons.list_rounded : Icons.shopping_cart),
+        icon: Icon(isUsersTool ? Icons.send_and_archive_rounded : Icons.shopping_cart),
         label: Text(labelText),
         onPressed: onPressed,
       )
