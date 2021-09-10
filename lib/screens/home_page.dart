@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.inventory_rounded),
+              leading: const Icon(Icons.send_rounded),
               title: Text(AppLocalizations.of(context)!.myRequests),
               onTap: () {
                 Navigator.pop(context);
