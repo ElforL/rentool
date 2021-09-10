@@ -68,7 +68,6 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
                     '/request',
                     arguments: RequestScreenArguments(request, true),
                   );
-                  print('result = $result');
                   if (result == 'Deleted') {
                     list.remove(request);
                     setState(() {});
