@@ -43,10 +43,11 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
   }
 
   _refresh() {
-    tools.clear();
-    noMoreDocs = false;
-    previousDoc = null;
-    setState(() {});
+    setState(() {
+      tools.clear();
+      noMoreDocs = false;
+      previousDoc = null;
+    });
   }
 
   @override
