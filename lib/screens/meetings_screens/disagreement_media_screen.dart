@@ -55,15 +55,19 @@ class DisagreementMediaScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: ExpandableFab(
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.black,
         distance: 100,
         children: [
           ActionButton(
+            backgroundColor: Colors.orange,
             icon: const Icon(Icons.camera_alt),
             onPressed: () {
               _uploadMedia(false);
             },
           ),
           ActionButton(
+            backgroundColor: Colors.orange,
             icon: const Icon(Icons.videocam),
             onPressed: () {
               _uploadMedia(true);
