@@ -124,6 +124,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return Theme(
           data: ThemeData(
+            inputDecorationTheme: InputDecorationTheme(
+              fillColor: Colors.blue.withAlpha(50),
+            ),
             fontFamily: AppLocalizations.of(context)!.localeName == 'ar' ? 'Almarai' : null,
             appBarTheme: const AppBarTheme(
               systemOverlayStyle: SystemUiOverlayStyle(
@@ -167,7 +170,6 @@ class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      // Initialize FlutterFire:
       stream: AuthServices.authStateChanges,
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error!);
