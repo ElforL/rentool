@@ -220,5 +220,7 @@
     "requests_on": "طلبات على {toolName}",
     "no_requests_sent": "لا توجد طلبات مرسلة",
 
+    "comp_price_must_be_less_than_insurance": "مبلغ التعويض يجب ان يكون أقل من أو يساوي مبلغ التأمين",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

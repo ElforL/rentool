@@ -6,14 +6,23 @@ import 'package:rentool/widgets/big_icons.dart';
 import 'package:rentool/widgets/meeting_appbar.dart';
 import 'package:rentool/widgets/note_box.dart';
 
-class MeetingCompensationPriceScreen extends StatelessWidget {
-  MeetingCompensationPriceScreen({
+class MeetingCompensationPriceScreen extends StatefulWidget {
+  const MeetingCompensationPriceScreen({
     Key? key,
     required this.meeting,
   }) : super(key: key);
 
   final ReturnMeeting meeting;
+
+  @override
+  State<MeetingCompensationPriceScreen> createState() => _MeetingCompensationPriceScreenState();
+}
+
+class _MeetingCompensationPriceScreenState extends State<MeetingCompensationPriceScreen> {
   final _priceController = TextEditingController();
+  String? errorText;
+
+  ReturnMeeting get meeting => widget.meeting;
 
   @override
   Widget build(BuildContext context) {
@@ -89,14 +98,28 @@ class MeetingCompensationPriceScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (errorText != null)
+                  Text(
+                    errorText!,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
                 SizedBox(
                   width: 120,
                   child: ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.set.toUpperCase()),
                     onPressed: () {
+                      errorText = null;
                       try {
                         final price = double.parse(_priceController.text);
-                        meeting.setCompensationPrice(price);
+                        if (price <= meeting.tool.insuranceAmount) {
+                          meeting.setCompensationPrice(price);
+                        } else {
+                          setState(() {
+                            errorText = AppLocalizations.of(context)!.comp_price_must_be_less_than_insurance;
+                          });
+                        }
                       } catch (e) {
                         _priceController.clear();
                       }

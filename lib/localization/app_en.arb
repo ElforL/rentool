@@ -409,6 +409,11 @@
         "description": "Used in `MyRequestsScreen` when there are no sent requests"
     },
 
+    "comp_price_must_be_less_than_insurance": "Compensation price can't be greater than the insurance amount",
+    "@comp_price_must_be_less_than_insurance": {
+        "description": "Used in `MeetingCompensationPriceScreen` when setting a compensation price greater than the insurance amount"
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
