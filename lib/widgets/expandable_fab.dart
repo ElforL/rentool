@@ -63,16 +63,20 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        clipBehavior: Clip.none,
-        children: [
-          _buildTapToCloseFab(),
-          ..._buildExpandingActionButtons(),
-          _buildTapToOpenFab(),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              _buildTapToCloseFab(),
+              ..._buildExpandingActionButtons(),
+              _buildTapToOpenFab(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
