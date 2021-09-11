@@ -13,11 +13,15 @@ class ExpandableFab extends StatefulWidget {
     this.initialOpen,
     required this.distance,
     required this.children,
+    this.backgroundColor,
+    this.foregroundColor,
   }) : super(key: key);
 
   final bool? initialOpen;
   final double distance;
   final List<Widget> children;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   @override
   _ExpandableFabState createState() => _ExpandableFabState();
@@ -82,6 +86,8 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
 
   Widget _buildTapToCloseFab() {
     return FloatingActionButton(
+      backgroundColor: widget.backgroundColor,
+      foregroundColor: widget.foregroundColor,
       onPressed: _toggle,
       child: const Icon(Icons.close),
     );
@@ -121,6 +127,8 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
+            backgroundColor: widget.backgroundColor,
+            foregroundColor: widget.foregroundColor,
             onPressed: _toggle,
             child: const Icon(Icons.add),
           ),
@@ -173,25 +181,26 @@ class ActionButton extends StatelessWidget {
     Key? key,
     this.onPressed,
     required this.icon,
+    this.backgroundColor,
+    this.foregroundColor,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
   final Widget icon;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Material(
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
-      color: theme.accentColor,
+      color: backgroundColor,
       elevation: 4.0,
-      child: IconTheme.merge(
-        data: theme.accentIconTheme,
-        child: IconButton(
-          onPressed: onPressed,
-          icon: icon,
-        ),
+      child: IconButton(
+        color: foregroundColor,
+        onPressed: onPressed,
+        icon: icon,
       ),
     );
   }
