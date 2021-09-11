@@ -67,8 +67,12 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
               return ToolTile(
                 tool: tool,
                 onTap: () async {
-                  await Navigator.pushNamed(context, '/post', arguments: tool);
-                  setState(() {});
+                  final result = await Navigator.pushNamed(context, '/post', arguments: tool);
+                  setState(() {
+                    if (result == 'Deleted') {
+                      tools.remove(tool);
+                    }
+                  });
                 },
               );
             },

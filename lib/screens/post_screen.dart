@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool_sdk/rentool_sdk.dart';
@@ -47,7 +48,44 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () {
+              // TODO implement share and url parsing
+            },
+          ),
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              if (isUsersTool) ...[
+                PopupMenuItem(
+                  padding: EdgeInsets.zero,
+                  child: ListTile(
+                    title: Text(AppLocalizations.of(context)!.edit),
+                    // TODO
+                    // onTap: () => Navigator.of(context).pushReplacementNamed('/editPost'),
+                  ),
+                ),
+                PopupMenuItem(
+                  padding: EdgeInsets.zero,
+                  child: ListTile(
+                    title: Text(AppLocalizations.of(context)!.delete),
+                    onTap: () async {
+                      final isSure = await showConfirmDialog(context);
+                      if (isSure ?? false) {
+                        FirestoreServices.deleteTool(tool.id);
+                        Navigator.of(context).popUntil(ModalRoute.withName('/post'));
+                        Navigator.pop(context, 'Deleted');
+                      }
+                    },
+                  ),
+                ),
+              ]
+            ],
+          ),
+        ],
+      ),
       body: StreamBuilder(
         stream: FirestoreServices.getToolStream(tool.id),
         builder: (context, AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
