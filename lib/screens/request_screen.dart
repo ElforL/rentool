@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/screens/edit_request.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -56,8 +57,8 @@ class _RequestScreenState extends State<RequestScreen> {
                         : AppLocalizations.of(context)!.reject,
                   ),
                   onTap: () async {
-                    final isSure = await _showConfirmDialog(context);
-                    if (isSure) {
+                    final isSure = await showConfirmDialog(context);
+                    if (isSure ?? false) {
                       FirestoreServices.deleteRequest(request.toolID, request.id);
                       Navigator.pop(context);
                       Navigator.pop(context, 'Deleted');
@@ -162,8 +163,8 @@ class _RequestScreenState extends State<RequestScreen> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.reject.toUpperCase()),
                     onPressed: () async {
-                      final isSure = await _showConfirmDialog(context);
-                      if (isSure) {
+                      final isSure = await showConfirmDialog(context);
+                      if (isSure ?? false) {
                         FirestoreServices.deleteRequest(request.toolID, request.id);
                         Navigator.pop(context, 'Deleted');
                       }
@@ -173,8 +174,8 @@ class _RequestScreenState extends State<RequestScreen> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.accept.toUpperCase()),
                     onPressed: () async {
-                      final isSure = await _showConfirmDialog(context);
-                      if (isSure) {
+                      final isSure = await showConfirmDialog(context);
+                      if (isSure ?? false) {
                         FirestoreServices.acceptRequest(request.toolID, request.id);
                         Navigator.pop(context);
                       }
@@ -187,34 +188,6 @@ class _RequestScreenState extends State<RequestScreen> {
         ],
       ),
     );
-  }
-
-  Future<dynamic> _showConfirmDialog(context) {
-    try {
-      return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(AppLocalizations.of(context)!.areYouSure),
-          actions: [
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.cancel),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-            ),
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.sure),
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-            ),
-          ],
-        ),
-      );
-    } catch (e) {
-      print('Error $e');
-      return Future.value(1);
-    }
   }
 }
 

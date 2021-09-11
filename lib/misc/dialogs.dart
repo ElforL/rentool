@@ -20,3 +20,39 @@ Future<dynamic> showDisagreementCasesHelpDialog(BuildContext context, bool isUse
     ),
   );
 }
+
+/// Shows a dialog with the title: "_Are you sure?_"
+/// and two buttons: '_CANCEL_' and '_SURE_'
+///
+/// Returns:
+/// - `true` if the user taps on '_SURE_'
+/// - `false` if the user taps on '_CANCEL_'.
+/// - `null` if it was popped without pressing one the buttons.
+///
+/// Usage:
+/// ```dart
+///   final isSure = await showConfirmDialog(context);
+///   if(isSure ?? false) doSomething();
+/// ```
+Future<bool?> showConfirmDialog(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(AppLocalizations.of(context)!.areYouSure),
+      actions: [
+        TextButton(
+          child: Text(AppLocalizations.of(context)!.cancel),
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+        ),
+        TextButton(
+          child: Text(AppLocalizations.of(context)!.sure),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+      ],
+    ),
+  );
+}
