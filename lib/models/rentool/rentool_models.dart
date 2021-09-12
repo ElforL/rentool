@@ -1,7 +1,7 @@
 library rentool_models;
 
-export 'Tool.dart';
-export 'Rent.dart';
-export 'RentoolUser.dart';
-export 'ToolRequest.dart';
-export 'UserReview.dart';
+export 'tool.dart';
+export 'rent.dart';
+export 'rentool_user.dart';
+export 'tool_request.dart';
+export 'user_review.dart';
