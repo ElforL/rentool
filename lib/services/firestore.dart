@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:rentool/services/storage_services.dart';
 import 'package:rentool/services/auth.dart';
-import 'package:rentool_sdk/rentool_sdk.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 
 class FirestoreServices {
   /// Firestore instance

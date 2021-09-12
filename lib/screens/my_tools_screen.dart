@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/tool_tile.dart';
-import 'package:rentool_sdk/rentool_sdk.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 
 class MyToolsScreen extends StatefulWidget {
   const MyToolsScreen({Key? key}) : super(key: key);

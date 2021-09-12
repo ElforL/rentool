@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/services/storage_services.dart';
-import 'package:rentool_sdk/rentool_sdk.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 
 class DeliverMeeting {
   final Tool tool;

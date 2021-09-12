@@ -11,7 +11,7 @@ import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart'
 import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
 import 'package:rentool/screens/meetings_screens/tool_damaged_screen.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool_sdk/rentool_sdk.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 
 class ReturnMeetScreen extends StatefulWidget {
   const ReturnMeetScreen({Key? key}) : super(key: key);

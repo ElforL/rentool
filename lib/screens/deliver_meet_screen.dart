@@ -8,7 +8,7 @@ import 'package:rentool/screens/meetings_screens/meeting_ids_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool_sdk/rentool_sdk.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 
 class DeliverMeetScreen extends StatefulWidget {
   const DeliverMeetScreen({Key? key}) : super(key: key);

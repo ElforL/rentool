@@ -14,9 +14,6 @@ dependencies:
   flutter_localizations: 
     sdk: flutter
   
-  rentool_sdk:
-    git: git@github.com:ElforL/Rentool_sdk.git
-  
   # Firebase
   firebase_core: ^1.3.0
   cloud_firestore: ^2.2.2

@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool_sdk/rentool_sdk.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 
 class NewRequestScreen extends StatefulWidget {
   const NewRequestScreen({Key? key}) : super(key: key);

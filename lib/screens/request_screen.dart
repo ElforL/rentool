@@ -3,7 +3,7 @@ import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/screens/edit_request.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool_sdk/rentool_sdk.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RequestScreen extends StatefulWidget {
