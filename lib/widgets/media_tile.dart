@@ -22,6 +22,7 @@ class _MediaTileState extends State<MediaTile> {
   /// Opens the camera or gallery to import media files (images and/or videos)
   Future _getMedia(MediaInput inputType) async {
     try {
+      // ignore: prefer_typing_uninitialized_variables
       var res;
       if (inputType == MediaInput.gallery) {
         res = await FilePicker.platform.pickFiles(

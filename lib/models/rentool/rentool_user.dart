@@ -22,7 +22,9 @@ class RentoolUser {
   }
 
   factory RentoolUser.fromJson(Map<String, dynamic> json) {
-    var _reviews, _tools, _requests;
+    List<UserReview>? _reviews;
+    List<Tool>? _tools;
+    List<ToolRequest>? _requests;
     if (json['reviews'] != null) _reviews = (json['reviews'] as List).map((e) => UserReview.fromJson(e)).toList();
     if (json['tools'] != null) (json['tools'] as List).map((e) => Tool.fromJson(e)).toList();
     if (json['requests'] != null) (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList();
