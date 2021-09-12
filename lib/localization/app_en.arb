@@ -424,6 +424,10 @@
 
     "refresh": "Refresh",
 
+    "tool_name": "Tool name",
+    "create": "Create",
+    "new_post": "New post",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

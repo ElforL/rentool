@@ -222,9 +222,12 @@
     "no_notifications": "لا يوجد إشعارات",
     "no_tools": "لا يوجد أدوات",
 
-    "refresh": "تحديث",
-
     "comp_price_must_be_less_than_insurance": "مبلغ التعويض يجب ان يكون أقل من أو يساوي مبلغ التأمين",
+
+    "refresh": "تحديث",
+    "tool_name": "إسم الأداة",
+    "create": "إنشاء",
+    "new_post": "منشور جديد",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

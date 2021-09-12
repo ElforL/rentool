@@ -56,7 +56,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Post'),
+        title: Text(AppLocalizations.of(context)!.new_post),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -66,13 +66,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
             // name
             _buildTextField(
               controller: _nameContoller,
-              labelText: 'Tool name',
+              labelText: AppLocalizations.of(context)!.tool_name,
               textInputAction: TextInputAction.next,
             ),
             // description
             _buildTextField(
               controller: _descriptionContoller,
-              labelText: 'Description',
+              labelText: AppLocalizations.of(context)!.description,
               // textInputAction: TextInputAction.next,
               maxLines: 20,
             ),
@@ -82,7 +82,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 Expanded(
                   child: _buildTextField(
                     controller: _priceContoller,
-                    labelText: 'Price',
+                    labelText: AppLocalizations.of(context)!.rentPrice,
                     textInputAction: TextInputAction.next,
                     isNumber: true,
                   ),
@@ -92,7 +92,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 Expanded(
                   child: _buildTextField(
                     controller: _insuranceContoller,
-                    labelText: 'Insurance Price',
+                    labelText: AppLocalizations.of(context)!.insurancePrice,
                     textInputAction: TextInputAction.next,
                     isNumber: true,
                   ),
@@ -102,7 +102,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
             // location
             _buildTextField(
               controller: _locationContoller,
-              labelText: 'City/Location',
+              labelText: AppLocalizations.of(context)!.location,
               textInputAction: TextInputAction.done,
             ),
 
@@ -128,14 +128,15 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    child: const Text('CANCEL'),
+                    child: Text(AppLocalizations.of(context)!.cancel),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
-                    child: const Text('CREATE'),
+                    child: Text(
+                        widget.isEditing ? AppLocalizations.of(context)!.edit : AppLocalizations.of(context)!.create),
                     onPressed: () async {
                       if (_nameContoller.text.trim().isEmpty ||
                           _descriptionContoller.text.trim().isEmpty ||
