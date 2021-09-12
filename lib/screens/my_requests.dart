@@ -42,11 +42,29 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
     isLoading = false;
   }
 
+  _refresh() {
+    setState(() {
+      requests.clear();
+      noMoreDocs = false;
+      previousDoc = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.myRequests),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text(AppLocalizations.of(context)!.refresh),
+                onTap: () => _refresh(),
+              ),
+            ],
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: _getRequests(),
@@ -79,46 +97,50 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
               ),
             );
           }
-          return ListView.builder(
-            primary: false,
-            itemCount: requests.length + 1,
-            itemBuilder: (context, index) {
-              if (index >= requests.length) {
-                _getRequests().then((value) {
-                  setState(() {});
-                });
-                return const ListTile(
-                  title: LinearProgressIndicator(),
-                );
-              }
-              final request = requests[index];
-              return ListTile(
-                title: FutureBuilder(
-                  future: FirestoreServices.getTool(request.toolID),
-                  builder: (context, AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done && snapshot.data == null) {
-                      return const LinearProgressIndicator();
-                    }
-                    final tool = Tool.fromJson(
-                      (snapshot.data!.data() as Map<String, dynamic>)..addAll({'id': snapshot.data!.id}),
-                    );
-                    return Text(
-                      tool.name,
-                    );
-                  },
-                ),
-                subtitle: Text(
-                  '${request.numOfDays} ${AppLocalizations.of(context)!.days}',
-                ),
-                onTap: () async {
-                  await Navigator.of(context).pushNamed(
-                    '/request',
-                    arguments: RequestScreenArguments(request, false),
+          return RefreshIndicator(
+            onRefresh: () async => _refresh(),
+            child: ListView.builder(
+              itemCount: requests.length + 1,
+              itemBuilder: (context, index) {
+                if (index >= requests.length) {
+                  if (!noMoreDocs) {
+                    _getRequests().then((value) {
+                      setState(() {});
+                    });
+                  }
+                  return ListTile(
+                    title: noMoreDocs ? null : const LinearProgressIndicator(),
                   );
-                  setState(() {});
-                },
-              );
-            },
+                }
+                final request = requests[index];
+                return ListTile(
+                  title: FutureBuilder(
+                    future: FirestoreServices.getTool(request.toolID),
+                    builder: (context, AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
+                      if (snapshot.connectionState != ConnectionState.done && snapshot.data == null) {
+                        return const LinearProgressIndicator();
+                      }
+                      final tool = Tool.fromJson(
+                        (snapshot.data!.data() as Map<String, dynamic>)..addAll({'id': snapshot.data!.id}),
+                      );
+                      return Text(
+                        tool.name,
+                      );
+                    },
+                  ),
+                  subtitle: Text(
+                    '${request.numOfDays} ${AppLocalizations.of(context)!.days}',
+                  ),
+                  onTap: () async {
+                    await Navigator.of(context).pushNamed(
+                      '/request',
+                      arguments: RequestScreenArguments(request, false),
+                    );
+                    setState(() {});
+                  },
+                );
+              },
+            ),
           );
         },
       ),

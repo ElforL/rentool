@@ -422,6 +422,8 @@
         "description": "Used in `MeetingCompensationPriceScreen` when setting a compensation price greater than the insurance amount"
     },
 
+    "refresh": "Refresh",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

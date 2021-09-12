@@ -222,6 +222,8 @@
     "no_notifications": "لا يوجد إشعارات",
     "no_tools": "لا يوجد أدوات",
 
+    "refresh": "تحديث",
+
     "comp_price_must_be_less_than_insurance": "مبلغ التعويض يجب ان يكون أقل من أو يساوي مبلغ التأمين",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
