@@ -57,7 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         foregroundColor: Theme.of(context).primaryColor,
         title: RentoolSearchBar(
-          textFieldText: _controller.text,
+          textFieldContoller: _controller,
           onSubmitted: (searchText) {
             _controller.text = searchText;
             _search();

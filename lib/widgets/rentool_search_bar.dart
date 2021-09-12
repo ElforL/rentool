@@ -5,11 +5,11 @@ import 'package:rentool/widgets/logo_image.dart';
 class RentoolSearchBar extends StatefulWidget {
   const RentoolSearchBar({
     Key? key,
-    this.textFieldText,
+    this.textFieldContoller,
     this.onSubmitted,
   }) : super(key: key);
 
-  final String? textFieldText;
+  final TextEditingController? textFieldContoller;
   final void Function(String)? onSubmitted;
 
   @override
@@ -27,14 +27,14 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
     _searchTfFocusNode.addListener(() {
       setState(() {});
     });
-    _searchController = TextEditingController(text: widget.textFieldText);
+    _searchController = widget.textFieldContoller ?? TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _searchTfFocusNode.dispose();
-    _searchController.dispose();
+    if (widget.textFieldContoller == null) _searchController.dispose();
     super.dispose();
   }
 
@@ -128,11 +128,11 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
 class RentoolSearchAppBar extends AppBar {
   RentoolSearchAppBar({
     Key? key,
-    this.textFieldText,
+    this.textFieldContoller,
     this.onSubmitted,
   }) : super(key: key);
 
-  final String? textFieldText;
+  final TextEditingController? textFieldContoller;
   final void Function(String)? onSubmitted;
 
   @override
@@ -145,7 +145,7 @@ class _RentoolSearchAppBarState extends State<RentoolSearchAppBar> {
     return AppBar(
       foregroundColor: Theme.of(context).primaryColor,
       title: RentoolSearchBar(
-        textFieldText: widget.textFieldText,
+        textFieldContoller: widget.textFieldContoller,
         onSubmitted: widget.onSubmitted,
       ),
       centerTitle: true,
