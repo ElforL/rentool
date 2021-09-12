@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:rentool/models/notification.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/widgets/big_icons.dart';
 
 class MyNotificationsScreen extends StatefulWidget {
   const MyNotificationsScreen({Key? key}) : super(key: key);
@@ -18,6 +19,11 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
   ///
   /// used to prevent multiple calls for Firestore.
   bool isLoading = false;
+
+  /// there is no more docs other than the one loaded
+  ///
+  /// defaults to `false` and turns `true` when [_getNotifications()] doesn't return any docs
+  bool noMoreDocs = false;
   List<RentoolNotification> notifications = [];
   DocumentSnapshot<Object?>? previousDoc;
 
@@ -25,11 +31,15 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
     if (isLoading) return;
     isLoading = true;
     final result = await FirestoreServices.getNotifications(AuthServices.currentUid!, previousDoc: previousDoc);
-    for (var doc in result.docs) {
-      final notification = RentoolNotification.fromJson(doc.id, doc.data());
-      notifications.add(notification);
+    if (result.docs.isEmpty) {
+      noMoreDocs = true;
+    } else {
+      for (var doc in result.docs) {
+        final notification = RentoolNotification.fromJson(doc.id, doc.data());
+        notifications.add(notification);
+      }
+      previousDoc = result.docs.last;
     }
-    previousDoc = result.docs.last;
     isLoading = false;
   }
 
@@ -42,16 +52,38 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
       body: FutureBuilder(
         future: _getNotifications(),
         builder: (context, snapshot) {
+          if (noMoreDocs && notifications.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BigIcon(
+                    icon: Icons.notifications_off_outlined,
+                    color: Colors.grey.shade700,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.no_notifications,
+                    style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black54),
+                  ),
+                ],
+              ),
+            );
+          }
+
           return ListView.separated(
             primary: false,
             itemCount: notifications.length + 1,
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               if (index >= notifications.length) {
-                _getNotifications().then((value) {
-                  setState(() {});
-                });
-                return const ListTile();
+                if (!noMoreDocs) {
+                  _getNotifications().then((value) {
+                    setState(() {});
+                  });
+                }
+                return ListTile(
+                  title: noMoreDocs ? null : const LinearProgressIndicator(),
+                );
               }
               final notification = notifications[index];
               return ListTile(
