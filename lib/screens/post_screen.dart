@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/dialogs.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/widgets/media_container.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({Key? key}) : super(key: key);
@@ -63,8 +64,10 @@ class _PostScreenState extends State<PostScreen> {
                   padding: EdgeInsets.zero,
                   child: ListTile(
                     title: Text(AppLocalizations.of(context)!.edit),
-                    // TODO
-                    // onTap: () => Navigator.of(context).pushReplacementNamed('/editPost'),
+                    onTap: () => Navigator.of(context).pushReplacementNamed(
+                      '/editPost',
+                      arguments: tool,
+                    ),
                   ),
                 ),
                 PopupMenuItem(
@@ -268,7 +271,13 @@ class _PostScreenState extends State<PostScreen> {
             scrollDirection: Axis.horizontal,
             children: [
               if (tool.media.isNotEmpty)
-                for (var url in tool.media) Image.network(url)
+                for (var url in tool.media)
+                  Center(
+                    child: MediaContainer(
+                      mediaURL: url,
+                      showDismiss: false,
+                    ),
+                  )
               else
                 Center(
                   child: Text(

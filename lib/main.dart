@@ -148,7 +148,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const FirstScreen(),
         '/post': (context) => const PostScreen(),
-        '/newPost': (context) => NewPostScreen(),
+        '/newPost': (context) => const NewPostScreen(),
+        '/editPost': (context) => const NewPostScreen(isEditing: true),
         '/deliver': (context) => const DeliverMeetScreen(),
         '/return': (context) => const ReturnMeetScreen(),
         '/newRequest': (context) => const NewRequestScreen(),
