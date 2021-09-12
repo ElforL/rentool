@@ -33,8 +33,8 @@ class ToolRequest {
       json['toolID'],
       json['description'],
       json['numOfDays'],
-      json['rentPrice'],
-      json['insuranceAmount'],
+      json['rentPrice'].toDouble(),
+      json['insuranceAmount'].toDouble(),
       json['isAccepted'],
       json['isRented'],
     );
