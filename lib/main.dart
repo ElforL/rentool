@@ -16,7 +16,7 @@ import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
 import 'package:rentool/screens/my_tools_screen.dart';
-import 'package:rentool/screens/new_post_screen.dart';
+import 'package:rentool/screens/edit_post_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/request_screen.dart';
@@ -148,8 +148,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => const FirstScreen(),
         '/post': (context) => const PostScreen(),
-        '/newPost': (context) => const NewPostScreen(),
-        '/editPost': (context) => const NewPostScreen(isEditing: true),
+        '/newPost': (context) => const EditPostScreen(),
+        '/editPost': (context) => const EditPostScreen(isEditing: true),
         '/deliver': (context) => const DeliverMeetScreen(),
         '/return': (context) => const ReturnMeetScreen(),
         '/newRequest': (context) => const NewRequestScreen(),

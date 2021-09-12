@@ -10,16 +10,19 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool/services/storage_services.dart';
 import 'package:rentool/widgets/media_tile.dart';
 
-class NewPostScreen extends StatefulWidget {
-  const NewPostScreen({Key? key, this.isEditing = false}) : super(key: key);
+/// Screen to edit or create a new tool
+///
+/// if [isEditing] is `false` it's used to create a new tool
+class EditPostScreen extends StatefulWidget {
+  const EditPostScreen({Key? key, this.isEditing = false}) : super(key: key);
 
   final bool isEditing;
 
   @override
-  State<NewPostScreen> createState() => _NewPostScreenState();
+  State<EditPostScreen> createState() => _EditPostScreenState();
 }
 
-class _NewPostScreenState extends State<NewPostScreen> {
+class _EditPostScreenState extends State<EditPostScreen> {
   Tool? tool;
 
   final _nameContoller = TextEditingController();
