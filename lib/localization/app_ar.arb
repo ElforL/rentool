@@ -220,6 +220,7 @@
     "requests_on": "طلبات على {toolName}",
     "no_requests_sent": "لا توجد طلبات مرسلة",
     "no_notifications": "لا يوجد إشعارات",
+    "no_tools": "لا يوجد أدوات",
 
     "comp_price_must_be_less_than_insurance": "مبلغ التعويض يجب ان يكون أقل من أو يساوي مبلغ التأمين",
 

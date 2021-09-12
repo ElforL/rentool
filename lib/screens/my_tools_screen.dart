@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -68,6 +70,39 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
       body: FutureBuilder(
         future: _getTools(),
         builder: (context, snapshot) {
+          if (noMoreDocs && tools.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.rotationY(pi),
+                        child: Icon(
+                          Icons.build,
+                          size: 70,
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
+                      Icon(
+                        Icons.do_not_disturb,
+                        size: 150,
+                        color: Colors.grey.shade800,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.no_tools,
+                    style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black54),
+                  ),
+                ],
+              ),
+            );
+          }
+
           return RefreshIndicator(
             onRefresh: () async => _refresh(),
             child: ListView.separated(
