@@ -43,11 +43,29 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
     isLoading = false;
   }
 
+  _refresh() {
+    setState(() {
+      notifications.clear();
+      noMoreDocs = false;
+      previousDoc = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.notifications),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text(AppLocalizations.of(context)!.refresh),
+                onTap: () => _refresh(),
+              ),
+            ],
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: _getNotifications(),
@@ -70,43 +88,45 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
             );
           }
 
-          return ListView.separated(
-            primary: false,
-            itemCount: notifications.length + 1,
-            separatorBuilder: (context, index) => const Divider(),
-            itemBuilder: (context, index) {
-              if (index >= notifications.length) {
-                if (!noMoreDocs) {
-                  _getNotifications().then((value) {
-                    setState(() {});
-                  });
+          return RefreshIndicator(
+            onRefresh: () async => _refresh(),
+            child: ListView.separated(
+              itemCount: notifications.length + 1,
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) {
+                if (index >= notifications.length) {
+                  if (!noMoreDocs) {
+                    _getNotifications().then((value) {
+                      setState(() {});
+                    });
+                  }
+                  return ListTile(
+                    title: noMoreDocs ? null : const LinearProgressIndicator(),
+                  );
                 }
+                final notification = notifications[index];
                 return ListTile(
-                  title: noMoreDocs ? null : const LinearProgressIndicator(),
+                  trailing: Text(
+                    DateFormat('h:mm a\ndd/MM/yyyy').format(notification.time.toLocal()),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.overline,
+                  ),
+                  title: Text(
+                    notification.getTitle(context),
+                    style: notification.isRead ? null : const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    notification.getBody(context),
+                    style: notification.isRead ? null : const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      notification.setIsRead();
+                    });
+                  },
                 );
-              }
-              final notification = notifications[index];
-              return ListTile(
-                trailing: Text(
-                  DateFormat('h:mm a\ndd/MM/yyyy').format(notification.time.toLocal()),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.overline,
-                ),
-                title: Text(
-                  notification.getTitle(context),
-                  style: notification.isRead ? null : const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                  notification.getBody(context),
-                  style: notification.isRead ? null : const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  setState(() {
-                    notification.setIsRead();
-                  });
-                },
-              );
-            },
+              },
+            ),
           );
         },
       ),
