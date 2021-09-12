@@ -70,59 +70,54 @@ class MediaContainer extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: FutureBuilder(
-          future: Future(() => null),
-          builder: (context, snapshot) {
-            return FutureBuilder(
-              future: future,
-              builder: (context, AsyncSnapshot<Uint8List?> snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return _buildLoading();
-                }
-                if (snapshot.data == null) {
-                  print('Image bytes were null for file "${mediaFile?.path ?? mediaURL}"');
-                  return _buildError(context);
-                }
+          future: future,
+          builder: (context, AsyncSnapshot<Uint8List?> snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return _buildLoading();
+            }
+            if (snapshot.data == null) {
+              print('Image bytes were null for file "${mediaFile?.path ?? mediaURL}"');
+              return _buildError(context);
+            }
 
-                return Stack(
+            return Stack(
+              children: [
+                Image.memory(
+                  snapshot.data!,
+                  errorBuilder: (context, error, stackTrace) => _buildError(context),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.memory(
-                      snapshot.data!,
-                      errorBuilder: (context, error, stackTrace) => _buildError(context),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        if (showDismiss)
-                          _buildIconOnFog(
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(maxHeight: 35),
-                              icon: const Icon(
-                                Icons.close,
-                                size: 19,
-                                color: Colors.red,
-                              ),
-                              onPressed: onDismiss,
-                            ),
-                            spreadRadius: -3,
-                          )
-                        else
-                          const Spacer(),
-                        _buildIconOnFog(
-                          Icon(
-                            type == 'image'
-                                ? Icons.camera_alt
-                                : type == 'video'
-                                    ? Icons.videocam
-                                    : Icons.image_not_supported,
-                            color: Colors.white70,
+                    if (showDismiss)
+                      _buildIconOnFog(
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(maxHeight: 35),
+                          icon: const Icon(
+                            Icons.close,
+                            size: 19,
+                            color: Colors.red,
                           ),
+                          onPressed: onDismiss,
                         ),
-                      ],
+                        spreadRadius: -3,
+                      )
+                    else
+                      const Spacer(),
+                    _buildIconOnFog(
+                      Icon(
+                        type == 'image'
+                            ? Icons.camera_alt
+                            : type == 'video'
+                                ? Icons.videocam
+                                : Icons.image_not_supported,
+                        color: Colors.white70,
+                      ),
                     ),
                   ],
-                );
-              },
+                ),
+              ],
             );
           },
         ),

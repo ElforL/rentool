@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class ToolTile extends StatelessWidget {
   const ToolTile({
@@ -21,7 +24,22 @@ class ToolTile extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: tool.media.isNotEmpty ? Image.network(tool.media.first) : const Icon(Icons.image_not_supported),
+              child: tool.media.isNotEmpty
+                  ? Image.network(
+                      tool.media.first,
+                      errorBuilder: (context, error, stackTrace) {
+                        return FutureBuilder(
+                          future: VideoThumbnail.thumbnailData(video: tool.media.first),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState != ConnectionState.done) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            return Image.memory(snapshot.data as Uint8List);
+                          },
+                        );
+                      },
+                    )
+                  : const Icon(Icons.image_not_supported),
             ),
             const SizedBox(width: 10),
             Expanded(
