@@ -5,11 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/widgets/media_container.dart';
 
 class MediaTile extends StatefulWidget {
-  const MediaTile({Key? key, required this.media}) : super(key: key);
+  const MediaTile({Key? key, required this.media, this.tool}) : super(key: key);
 
+  final Tool? tool;
   final List<File> media;
 
   @override
@@ -92,16 +94,29 @@ class _MediaTileState extends State<MediaTile> {
       height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: widget.media.length + 1,
+        itemCount: widget.media.length + (widget.tool?.media.length ?? 0) + 1,
         itemBuilder: (BuildContext context, int i) {
           var index = i - 1;
           if (i == 0) return _buildAddTile();
-          final mediaFile = widget.media[index];
-          return MediaContainer(
-            mediaFile: mediaFile,
-            showDismiss: true,
-            onDismiss: () => _removeMedia([mediaFile]),
-          );
+          if (index < widget.media.length) {
+            final mediaFile = widget.media[index];
+            return MediaContainer(
+              mediaFile: mediaFile,
+              showDismiss: true,
+              onDismiss: () => _removeMedia([mediaFile]),
+            );
+          } else {
+            final mediaUrl = widget.tool!.media[index - widget.media.length];
+            return MediaContainer(
+              mediaURL: mediaUrl,
+              showDismiss: true,
+              onDismiss: () {
+                setState(() {
+                  widget.tool!.media.remove(mediaUrl);
+                });
+              },
+            );
+          }
         },
       ),
     );

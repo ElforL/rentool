@@ -5,11 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/services/storage_services.dart';
 import 'package:rentool/widgets/media_tile.dart';
 
-class NewPostScreen extends StatelessWidget {
-  NewPostScreen({Key? key}) : super(key: key);
+class NewPostScreen extends StatefulWidget {
+  const NewPostScreen({Key? key, this.isEditing = false}) : super(key: key);
+
+  final bool isEditing;
+
+  @override
+  State<NewPostScreen> createState() => _NewPostScreenState();
+}
+
+class _NewPostScreenState extends State<NewPostScreen> {
+  Tool? tool;
 
   final _nameContoller = TextEditingController();
   final _descriptionContoller = TextEditingController();
@@ -20,7 +31,26 @@ class NewPostScreen extends StatelessWidget {
   final List<File> media = [];
 
   @override
+  void dispose() {
+    _nameContoller.dispose();
+    _descriptionContoller.dispose();
+    _priceContoller.dispose();
+    _insuranceContoller.dispose();
+    _locationContoller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (widget.isEditing) {
+      assert(ModalRoute.of(context)?.settings.arguments != null);
+      tool = ModalRoute.of(context)?.settings.arguments as Tool;
+      _nameContoller.text = tool!.name;
+      _descriptionContoller.text = tool!.description;
+      _priceContoller.text = tool!.rentPrice.toString();
+      _insuranceContoller.text = tool!.insuranceAmount.toString();
+      _locationContoller.text = tool!.location;
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Post'),
@@ -86,6 +116,7 @@ class NewPostScreen extends StatelessWidget {
             // media
             MediaTile(
               media: media,
+              tool: tool,
             ),
 
             Padding(
@@ -111,14 +142,27 @@ class NewPostScreen extends StatelessWidget {
                         print('Missing fields');
                         return;
                       }
-                      await FirestoreServices.createNewTool(
-                        _nameContoller.text.trim(),
-                        _descriptionContoller.text.trim(),
-                        double.parse(_priceContoller.text.trim()),
-                        double.parse(_insuranceContoller.text.trim()),
-                        media,
-                        _locationContoller.text.trim(),
-                      );
+                      if (widget.isEditing) {
+                        tool!.name = _nameContoller.text;
+                        tool!.description = _descriptionContoller.text;
+                        tool!.rentPrice = double.parse(_priceContoller.text);
+                        tool!.insuranceAmount = double.parse(_insuranceContoller.text);
+                        tool!.location = _locationContoller.text;
+
+                        final urls = await StorageServices.uploadMediaOfTool(media, tool!.id);
+                        tool!.media.addAll(urls);
+
+                        await FirestoreServices.updateTool(tool!);
+                      } else {
+                        await FirestoreServices.createNewTool(
+                          _nameContoller.text.trim(),
+                          _descriptionContoller.text.trim(),
+                          double.parse(_priceContoller.text.trim()),
+                          double.parse(_insuranceContoller.text.trim()),
+                          media,
+                          _locationContoller.text.trim(),
+                        );
+                      }
                       Navigator.pop(context);
                     },
                   ),
