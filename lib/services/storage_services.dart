@@ -10,7 +10,7 @@ class StorageServices {
   static Future<List<String>> uploadMediaOfTool(List<File> files, String toolID) async {
     var output = <String>[];
     for (var file in files) {
-      var upload = await _storage.ref('/tools_media/$toolID/${files.indexOf(file)}').putFile(file);
+      var upload = await _storage.ref('/tools_media/$toolID/${file.uri.pathSegments.last}').putFile(file);
       output.add(await upload.ref.getDownloadURL());
     }
     return output;
