@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/media_container.dart';
@@ -15,6 +16,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
+  RentoolUser? owner;
   late Tool tool;
   ToolRequest? acceptedRequest;
   late PageController _mediaController;
@@ -48,6 +50,9 @@ class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
+
+    Future<RentoolUser> ownerFuture = owner == null ? FirestoreServices.getUser(tool.ownerUID) : Future.value(owner);
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -163,16 +168,54 @@ class _PostScreenState extends State<PostScreen> {
                     ),
                     const SizedBox(height: 5),
                     // TODO crerate future builder to read owner info from `db/Users`
-                    RichText(
-                      text: TextSpan(
-                          text: '${AppLocalizations.of(context)!.owner}: ',
-                          style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
-                          children: [
-                            TextSpan(
-                              text: tool.ownerUID,
-                              style: Theme.of(context).textTheme.bodyText2,
+                    FutureBuilder(
+                      future: ownerFuture,
+                      builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
+                        owner = snapshot.data;
+                        if (owner == null) {
+                          return const LinearProgressIndicator();
+                        }
+
+                        final fullStars = owner!.rating.floor();
+                        final halfStars = owner!.rating - fullStars > 0;
+                        final emptyStars = 5 - fullStars - (halfStars ? 1 : 0);
+
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(5),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              '/user',
+                              arguments: UserScreenArguments(user: owner),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Row(
+                              children: [
+                                Text(
+                                  '${AppLocalizations.of(context)!.owner}: ',
+                                  style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
+                                ),
+                                Text(
+                                  owner!.name,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                                const Spacer(),
+                                Text(
+                                  owner!.rating.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.orange.shade700,
+                                  ),
+                                ),
+                                for (var i = 0; i < fullStars; i++) _buildStarIcon(Icons.star),
+                                if (halfStars) _buildStarIcon(Icons.star_half),
+                                for (var i = 0; i < emptyStars; i++) _buildStarIcon(Icons.star_border),
+                              ],
                             ),
-                          ]),
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 5),
                     ..._buildMainButton(context),
@@ -201,6 +244,14 @@ class _PostScreenState extends State<PostScreen> {
           );
         },
       ),
+    );
+  }
+
+  Icon _buildStarIcon(IconData? icon) {
+    return Icon(
+      icon,
+      size: 20,
+      color: Colors.orange.shade700,
     );
   }
 
