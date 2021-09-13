@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
         '/search': (context) => const SearchScreen(),
         '/request': (context) => const RequestScreen(),
         '/myNotifications': (context) => const MyNotificationsScreen(),
-        '/myRequest': (context) => const MyRequestsScreen(),
+        '/myRequests': (context) => const MyRequestsScreen(),
         '/myTools': (context) => const MyToolsScreen(),
         '/editRequest': (context) => const EditRequestScreen(),
       },

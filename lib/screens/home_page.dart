@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(AppLocalizations.of(context)!.myRequests),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).pushNamed('/myRequest');
+                Navigator.of(context).pushNamed('/myRequests');
               },
             ),
             ListTile(

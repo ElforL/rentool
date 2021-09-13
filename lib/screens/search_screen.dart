@@ -21,7 +21,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   _search() async {
     var searchKey = _controller.text;
-    print('searching for $searchKey');
     var res = await FirestoreServices.searchForTool(searchKey);
     setState(() {
       if (res is List<QueryDocumentSnapshot<Object>>) results = res;
