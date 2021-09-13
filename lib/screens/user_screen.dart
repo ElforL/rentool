@@ -39,7 +39,7 @@ class _UserScreenState extends State<UserScreen> {
   Future<void> _getTools() async {
     if (isLoadingTools) return;
     isLoadingTools = true;
-    final result = await FirestoreServices.getUserTool(AuthServices.currentUid!, previousDoc: previousToolDoc);
+    final result = await FirestoreServices.getUserTool(user!.uid, previousDoc: previousToolDoc);
     if (result.docs.isEmpty) {
       noMoreToolsDocs = true;
     } else {
