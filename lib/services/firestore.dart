@@ -284,4 +284,12 @@ class FirestoreServices {
       return _usersRef.doc(uid).collection('notifications').orderBy('time', descending: true).limit(limit).get();
     }
   }
+
+  static Future<RentoolUser> getUser(String uid) async {
+    final doc = await _usersRef.doc(uid).get();
+    final user = RentoolUser.fromJson(
+      (doc.data() as Map<String, dynamic>)..addAll({'uid': uid}),
+    );
+    return user;
+  }
 }
