@@ -235,7 +235,7 @@ class FirestoreServices {
   static Future<bool> ensureUserExist(User user) async {
     var userExists = (await _usersRef.doc(user.uid).get()).exists;
     if (!userExists) {
-      return await addUser(RentoolUser(user.uid, user.displayName ?? 'NOT-SET', 0));
+      return await addUser(RentoolUser(user.uid, user.displayName ?? 'NOT-SET', 0, 0));
     }
     return true;
   }

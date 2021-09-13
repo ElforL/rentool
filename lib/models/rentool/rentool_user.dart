@@ -5,6 +5,7 @@ class RentoolUser {
   String? photoURL;
   String name;
   double rating;
+  int numOfReviews;
   List<UserReview>? reviews;
   List<Tool>? tools;
   List<ToolRequest>? requests;
@@ -12,7 +13,8 @@ class RentoolUser {
   RentoolUser(
     this.uid,
     this.name,
-    this.rating, {
+    this.rating,
+    this.numOfReviews, {
     this.photoURL,
     this.reviews,
     this.tools,
@@ -34,6 +36,7 @@ class RentoolUser {
       json['uid'],
       json['name'],
       json['rating'].toDouble(),
+      json['numOfReviews'],
       photoURL: json['photoURL'],
       reviews: _reviews,
       tools: _tools,
@@ -47,6 +50,7 @@ class RentoolUser {
       'name': name,
       'rating': rating,
       'photoURL': photoURL,
+      'numOfReviews': numOfReviews,
       if (reviews != null && withLists) 'reviews': reviews,
       if (tools != null && withLists) 'tools': tools,
       if (requests != null && withLists) 'requests': requests,
