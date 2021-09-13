@@ -41,12 +41,15 @@ class RentoolUser {
     );
   }
 
-  Map<String, dynamic> toJson([List<String>? removedKeys]) {
+  Map<String, dynamic> toJson([List<String>? removedKeys, bool withLists = false]) {
     return {
       'uid': uid,
       'name': name,
       'rating': rating,
       'photoURL': photoURL,
+      if (reviews != null && withLists) 'reviews': reviews,
+      if (tools != null && withLists) 'tools': tools,
+      if (requests != null && withLists) 'requests': requests,
     }..removeWhere((key, value) => removedKeys?.contains(key) ?? false);
   }
 }
