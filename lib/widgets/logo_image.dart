@@ -13,3 +13,9 @@ class LogoImage extends Image {
   LogoImage.whiteTypeface({Key? key}) : super.asset('assets/images/Logo/white_typeface.png', key: key);
   LogoImage.whiteIcon({Key? key}) : super.asset('assets/images/Logo/white_icon.png', key: key);
 }
+
+enum LogoColor {
+  primary,
+  black,
+  white,
+}
