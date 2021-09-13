@@ -2,6 +2,7 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 
 class RentoolUser {
   final String uid;
+  String? photoURL;
   String name;
   double rating;
   List<UserReview>? reviews;
@@ -12,6 +13,7 @@ class RentoolUser {
     this.uid,
     this.name,
     this.rating, {
+    this.photoURL,
     this.reviews,
     this.tools,
     this.requests,
@@ -31,7 +33,7 @@ class RentoolUser {
     return RentoolUser(
       json['uid'],
       json['name'],
-      json['rating'],
+      photoURL: json['photoURL'],
       reviews: _reviews,
       tools: _tools,
       requests: _requests,
@@ -43,9 +45,7 @@ class RentoolUser {
       'uid': uid,
       'name': name,
       'rating': rating,
-      if (reviews != null) 'reviews': reviews,
-      if (tools != null) 'tools': tools,
-      if (requests != null) 'requests': requests,
+      'photoURL': photoURL,
     }..removeWhere((key, value) => removedKeys?.contains(key) ?? false);
   }
 }
