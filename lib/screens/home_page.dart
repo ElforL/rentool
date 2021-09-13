@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/home_page/count_home_page_container.dart';
 import 'package:rentool/widgets/logo_image.dart';
@@ -43,7 +44,10 @@ class _HomePageState extends State<HomePage> {
               user: AuthServices.auth.currentUser!,
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).pushNamed('/user', arguments: AuthServices.currentUid!);
+                Navigator.of(context).pushNamed(
+                  '/user',
+                  arguments: UserScreenArguments(uid: AuthServices.currentUid!),
+                );
               },
             ),
             const Divider(height: 2),

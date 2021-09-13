@@ -69,9 +69,12 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final uid = ModalRoute.of(context)!.settings.arguments as String;
+    final args = ModalRoute.of(context)!.settings.arguments as UserScreenArguments;
 
-    Future<RentoolUser> future = user == null ? FirestoreServices.getUser(uid) : Future.value(user);
+    if (args.user != null) {
+      user = args.user;
+    }
+    Future<RentoolUser> future = user == null ? FirestoreServices.getUser(args.uid!) : Future.value(user);
 
     return Scaffold(
       appBar: AppBar(),
@@ -322,4 +325,11 @@ class _UserScreenState extends State<UserScreen> {
       ),
     );
   }
+}
+
+class UserScreenArguments {
+  final RentoolUser? user;
+  final String? uid;
+
+  UserScreenArguments({this.user, this.uid}) : assert(user != null || uid != null);
 }
