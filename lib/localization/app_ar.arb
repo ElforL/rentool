@@ -229,5 +229,11 @@
     "create": "إنشاء",
     "new_post": "منشور جديد",
 
+    "loading_user_info": "تحميل معلومات المستخدم",
+    "ratings_and_reviews": "التقييمات والمراجعات",
+    "tools": "الأدوات",
+    "rate_this_user": "قييم هذا المستخدم",
+    "account_settings": "إعدادات الحساب",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

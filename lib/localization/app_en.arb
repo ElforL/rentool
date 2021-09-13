@@ -428,6 +428,12 @@
     "create": "Create",
     "new_post": "New post",
 
+    "loading_user_info": "Loading user info",
+    "ratings_and_reviews": "Ratings and reviews",
+    "tools": "Tools",
+    "rate_this_user": "Rate this user",
+    "account_settings": "Account settings",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

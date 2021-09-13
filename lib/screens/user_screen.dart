@@ -1,101 +1,195 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:rentool/main.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/widgets/loading_indicator.dart';
+import 'package:rentool/widgets/rating.dart';
+import 'package:rentool/widgets/tool_tile.dart';
 
 class UserScreen extends StatefulWidget {
-  const UserScreen({Key? key}) : super(key: key);
+  const UserScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<UserScreen> createState() => _UserScreenState();
 }
 
 class _UserScreenState extends State<UserScreen> {
-  String? idNum;
+  RentoolUser? user;
+  final _scrollController = ScrollController();
+
+  /// is loading from Firestore?
+  ///
+  /// used to prevent multiple calls for Firestore.
+  bool isLoadingTools = false;
+
+  /// there is no more docs other than the one loaded
+  ///
+  /// defaults to `false` and turns `true` when [_getTools()] doesn't return any docs
+  bool noMoreToolsDocs = false;
+  List<Tool> tools = [];
+  DocumentSnapshot<Object?>? previousToolDoc;
+
+  Future<void> _getTools() async {
+    if (isLoadingTools) return;
+    isLoadingTools = true;
+    final result = await FirestoreServices.getUserTool(AuthServices.currentUid!, previousDoc: previousToolDoc);
+    if (result.docs.isEmpty) {
+      noMoreToolsDocs = true;
+    } else {
+      for (var doc in result.docs) {
+        final tool = Tool.fromJson((doc.data() as Map<String, dynamic>)..addAll({'id': doc.id}));
+        tools.add(tool);
+      }
+      previousToolDoc = result.docs.last;
+    }
+    isLoadingTools = false;
+  }
+
+  void _refresh() {
+    setState(() {
+      tools.clear();
+      noMoreToolsDocs = false;
+      previousToolDoc = null;
+      user = null;
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final uid = ModalRoute.of(context)!.settings.arguments as String;
+
+    Future<RentoolUser> future = user == null ? FirestoreServices.getUser(uid) : Future.value(user);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Screen'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.language),
-            onPressed: () {
-              final currentLocale = Locale(AppLocalizations.of(context)!.localeName);
-              final currentIndex = AppLocalizations.supportedLocales.indexOf(currentLocale);
-              final nextLocaleIndex = (currentIndex + 1) % AppLocalizations.supportedLocales.length;
-              MyApp.of(context)!.setLocale(
-                AppLocalizations.supportedLocales.elementAt(nextLocaleIndex),
-              );
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          ListTile(
-            title: const Text('Name:'),
-            trailing: Text(
-              AuthServices.auth.currentUser!.displayName ?? '[NONE]',
-              style: TextStyle(
-                color: AuthServices.auth.currentUser!.displayName == null ? Colors.red : null,
+      appBar: AppBar(),
+      body: FutureBuilder(
+          future: future,
+          builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
+            if (snapshot.hasError) print('error getting user info: ${snapshot.error}');
+
+            user = snapshot.data;
+
+            if (user == null) {
+              return _buildLoadingContainer(context);
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async => _refresh(),
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: _scrollController,
+                children: [
+                  _buildUserTopTile(user!, context),
+                  const Divider(color: Colors.black26, height: 20),
+
+                  // Ratings
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      AppLocalizations.of(context)!.ratings_and_reviews,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RatingDisplay(
+                            rating: user!.rating,
+                            color: Colors.orange.shade700,
+                            onTap: () {
+                              // TODO navigate to reviews list
+                            },
+                          ),
+                        ),
+                        if (user!.uid != AuthServices.currentUid) ...[
+                          const SizedBox(width: 10),
+                          Expanded(
+                            flex: 3,
+                            // TODO replace with 'yourReview' if user has a review
+                            child: _buildRateUser(context),
+                          ),
+                        ]
+                      ],
+                    ),
+                  ),
+                  const Divider(color: Colors.black26),
+
+                  // Tools
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      AppLocalizations.of(context)!.tools,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
+                      ),
+                    ),
+                  ),
+                  _buildToolsList(context),
+                ],
               ),
-            ),
+            );
+          }),
+    );
+  }
+
+  Padding _buildUserTopTile(RentoolUser user, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        children: [
+          CircleAvatar(
+            maxRadius: 35,
+            backgroundImage: user.photoURL == null ? null : NetworkImage(user.photoURL!),
+            child: user.photoURL == null
+                ? Icon(
+                    Icons.person,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  )
+                : null,
+            backgroundColor: user.photoURL == null ? Colors.black12 : Colors.transparent,
           ),
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.emailAddress),
-            trailing: Text(AuthServices.auth.currentUser!.email!),
-          ),
-          ListTile(
-            title: const Text('uid'),
-            trailing: Text(AuthServices.auth.currentUser!.uid),
-          ),
-          ListTile(
-            title: const Text('verified'),
-            trailing: Text(AuthServices.auth.currentUser!.emailVerified.toString()),
-          ),
-          const Divider(),
-          ListTile(
-            trailing: OutlinedButton(
-              child: const Text('SEARCH'),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/search',
-                );
-              },
-            ),
-          ),
-          ListTile(
-            trailing: OutlinedButton(
-              child: const Text('CREATE POST'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/newPost');
-              },
-            ),
-          ),
-          // ID NUMBER
-          FutureBuilder(
-              future: FirestoreServices.getID(AuthServices.auth.currentUser!.uid),
-              builder: (context, AsyncSnapshot<DocumentSnapshot<Object>> snapshot) {
-                bool isDone = snapshot.connectionState == ConnectionState.done;
-                if (isDone) {
-                  if (snapshot.data != null && snapshot.data!.exists) idNum = snapshot.data!['idNumber'];
-                }
-                return ListTile(
-                  title: Text(idNum ?? (isDone ? 'NOT CONFIGURED' : 'Loading...')),
-                );
-              }),
-          ListTile(
-            title: ElevatedButton(
-              child: const Text('Sign out'),
-              onPressed: () {
-                AuthServices.signOut();
-              },
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  user.name,
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                ),
+                if (user.uid == AuthServices.currentUid)
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 30,
+                    child: OutlinedButton(
+                      child: Text(AppLocalizations.of(context)!.account_settings.toUpperCase()),
+                      onPressed: () {
+                        // TODO push account settings
+                      },
+                    ),
+                  ),
+              ],
             ),
           ),
         ],
@@ -103,26 +197,129 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  Future _showChangeIdDialog() async {
-    var _idController = TextEditingController();
-    var dialog = AlertDialog(
-      title: const Text('Change your ID number'),
-      content: TextField(
-        controller: _idController,
-        decoration: const InputDecoration(hintText: 'Enter a new ID number'),
-        keyboardType: TextInputType.number,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      ),
-      actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('CANCEL')),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context, _idController.text);
-          },
-          child: const Text('CHANGE'),
+  Column _buildRateUser(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          AppLocalizations.of(context)!.rate_this_user,
+          style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w500),
+        ),
+        Row(
+          children: [
+            for (var i = 0; i < 5; i++)
+              Expanded(
+                child: IconButton(
+                  icon: const Icon(Icons.star_border),
+                  iconSize: 32,
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  splashRadius: 25,
+                  onPressed: () {
+                    // TODO create review screen
+                    // Navigator.of(context).pushNamed(
+                    //   '/review',
+                    //   arguments: {
+                    //     'user': user,
+                    //     'value': i + 1,
+                    //   },
+                    // );
+                  },
+                ),
+              ),
+          ],
         ),
       ],
     );
-    return showDialog(context: context, builder: (_) => dialog);
+  }
+
+  Widget _buildToolsList(BuildContext context) {
+    return FutureBuilder(
+      future: _getTools(),
+      builder: (context, snapshot) {
+        if (noMoreToolsDocs && tools.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi),
+                      child: Icon(
+                        Icons.build,
+                        size: 40,
+                        color: Colors.grey.shade400,
+                      ),
+                    ),
+                    Icon(
+                      Icons.do_not_disturb,
+                      size: 100,
+                      color: Colors.grey.shade500,
+                    ),
+                  ],
+                ),
+                Text(
+                  AppLocalizations.of(context)!.no_tools,
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.grey.shade400),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return ListView.separated(
+          shrinkWrap: true,
+          controller: _scrollController,
+          itemCount: tools.length + 1,
+          separatorBuilder: (context, index) => const Divider(
+            indent: 120,
+            endIndent: 120,
+            height: 2,
+          ),
+          itemBuilder: (context, index) {
+            if (index >= tools.length) {
+              if (!noMoreToolsDocs) {
+                _getTools().then((value) {
+                  setState(() {});
+                });
+              }
+              return ListTile(
+                title: noMoreToolsDocs ? null : const LinearProgressIndicator(),
+              );
+            }
+
+            final tool = tools[index];
+            return ToolTile(
+              tool: tool,
+              onTap: () async {
+                final result = await Navigator.pushNamed(context, '/post', arguments: tool);
+                setState(() {
+                  if (result == 'Deleted') {
+                    tools.remove(tool);
+                  }
+                });
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Center _buildLoadingContainer(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const LoadingIndicator(height: 75, strokeWidth: 6),
+          const SizedBox(height: 20),
+          Text(
+            AppLocalizations.of(context)!.loading_user_info,
+            style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold, color: Colors.black54),
+          ),
+        ],
+      ),
+    );
   }
 }
