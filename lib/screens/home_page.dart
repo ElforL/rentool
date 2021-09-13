@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
               user: AuthServices.auth.currentUser!,
               onTap: () {
                 Navigator.pop(context);
-                // TODO navigate to user screen
+                Navigator.of(context).pushNamed('/user', arguments: AuthServices.currentUid!);
               },
             ),
             const Divider(height: 2),
