@@ -28,11 +28,12 @@ class RentoolUser {
     List<Tool>? _tools;
     List<ToolRequest>? _requests;
     if (json['reviews'] != null) _reviews = (json['reviews'] as List).map((e) => UserReview.fromJson(e)).toList();
-    if (json['tools'] != null) (json['tools'] as List).map((e) => Tool.fromJson(e)).toList();
-    if (json['requests'] != null) (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList();
+    if (json['tools'] != null) _tools = (json['tools'] as List).map((e) => Tool.fromJson(e)).toList();
+    if (json['requests'] != null) _requests = (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList();
     return RentoolUser(
       json['uid'],
       json['name'],
+      json['rating'].toDouble(),
       photoURL: json['photoURL'],
       reviews: _reviews,
       tools: _tools,
