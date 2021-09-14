@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
 export const authChange = functions.auth.user().onCreate((user, context) => {
-  admin.firestore().doc(`Users/${user.uid}`).set({
+  return admin.firestore().doc(`Users/${user.uid}`).set({
     'name': user.displayName,
     'photoURL': user.photoURL,
     'rating': 0,
@@ -14,7 +14,7 @@ export const userDocChange = functions.firestore.document('Users/{userID}').onUp
   const uid = context.params.userID;
   const afterData = change.after.data();
 
-  console.log(afterData);
+  console.log(`changing user(${uid})'s displayName to ${afterData.name}`);
 
   return admin.auth().updateUser(uid, {
     displayName: afterData.name,
