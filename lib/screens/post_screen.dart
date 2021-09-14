@@ -167,7 +167,6 @@ class _PostScreenState extends State<PostScreen> {
                           ]),
                     ),
                     const SizedBox(height: 5),
-                    // TODO crerate future builder to read owner info from `db/Users`
                     FutureBuilder(
                       future: ownerFuture,
                       builder: (context, AsyncSnapshot<RentoolUser> snapshot) {

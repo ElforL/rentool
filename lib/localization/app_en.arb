@@ -435,6 +435,8 @@
     "account_settings": "Account settings",
     "username": "Username",
 
+    "edit_request": "Edit request",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

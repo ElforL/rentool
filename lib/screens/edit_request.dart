@@ -60,8 +60,7 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        // TODO create other text
-        title: Text('${AppLocalizations.of(context)!.edit} ${AppLocalizations.of(context)!.request}'),
+        title: Text(AppLocalizations.of(context)!.edit_request),
       ),
       body: FutureBuilder(
           future: future,

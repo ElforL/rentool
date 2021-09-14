@@ -236,5 +236,7 @@
     "account_settings": "إعدادات الحساب",
     "username": "اسم المستخدم",
 
+    "edit_request": "تعديل الطلب",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
