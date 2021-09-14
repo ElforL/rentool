@@ -9,5 +9,6 @@ admin.initializeApp();
 
 export * from './other_firestore_triggers';
 export * from './meetings';
+export * from './users';
 if (!isOnGithubActions)
     exports.fcm = require('./fcm');

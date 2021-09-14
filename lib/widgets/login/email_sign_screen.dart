@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rentool/main.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/services/firestore.dart';
 
 class EmailSignContainer extends StatefulWidget {
   const EmailSignContainer({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class EmailSignContainer extends StatefulWidget {
 
 class _EmailSignContainerState extends State<EmailSignContainer> {
   final TextEditingController _emailContoller = TextEditingController();
+  final TextEditingController _usernameContoller = TextEditingController();
   final TextEditingController _passwordContoller = TextEditingController();
   final TextEditingController _confirmPasswordContoller = TextEditingController();
 
@@ -22,10 +25,12 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
   String? emailError;
   String? passwordError;
   String? confirmPasswordError;
+  String? usernameError;
 
   @override
   void dispose() {
     _emailContoller.dispose();
+    _usernameContoller.dispose();
     _passwordContoller.dispose();
     _confirmPasswordContoller.dispose();
     super.dispose();
@@ -81,7 +86,15 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
 
       // matched passwords
       try {
-        await AuthServices.createUserWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
+        await AuthServices.createUserWithEmailAndPassword(
+          _emailContoller.text,
+          _passwordContoller.text,
+        );
+        await FirestoreServices.updateUserName(
+          AuthServices.currentUid!,
+          _usernameContoller.text.trim(),
+        );
+        MyApp.of(context)?.setState(() {});
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           setState(() {
@@ -273,6 +286,13 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
                 }
               },
             ),
+            if (!(_isLogin ?? true))
+              _buildTextField(
+                controller: _usernameContoller,
+                labelText: AppLocalizations.of(context)!.username,
+                errorText: usernameError,
+                autofillHints: [AutofillHints.username],
+              ),
             if (_isLogin != null)
               _buildTextField(
                 controller: _passwordContoller,

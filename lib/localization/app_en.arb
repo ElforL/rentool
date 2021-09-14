@@ -433,6 +433,7 @@
     "tools": "Tools",
     "rate_this_user": "Rate this user",
     "account_settings": "Account settings",
+    "username": "Username",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

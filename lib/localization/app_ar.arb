@@ -234,6 +234,7 @@
     "tools": "الأدوات",
     "rate_this_user": "قييم هذا المستخدم",
     "account_settings": "إعدادات الحساب",
+    "username": "اسم المستخدم",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

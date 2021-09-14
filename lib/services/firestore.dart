@@ -233,9 +233,15 @@ class FirestoreServices {
   /// A [FirebaseException] maybe thrown with the following error code:
   /// - **permission-denied**: Missing or insufficient permissions.
   static Future<bool> ensureUserExist(User user) async {
-    var userExists = (await _usersRef.doc(user.uid).get()).exists;
+    var doc = await _usersRef.doc(user.uid).get();
+    var userExists = doc.exists;
+
     if (!userExists) {
       return await addUser(RentoolUser(user.uid, user.displayName ?? 'NOT-SET', 0, 0));
+    } else {
+      if ((doc.data() as Map)['name'] != user.displayName && user.displayName != null) {
+        FirestoreServices.updateUserName(user.uid, user.displayName!);
+      }
     }
     return true;
   }
@@ -255,6 +261,20 @@ class FirestoreServices {
       print(e);
       return false;
     }
+  }
+
+  /// Updates user's name
+  static Future<void> updateUserName(String uid, String name) {
+    return _usersRef.doc(uid).update({
+      'name': name,
+    });
+  }
+
+  /// Updates user's photoURL
+  static Future<void> updateUserPhotoURL(String uid, String photoURL) {
+    return _usersRef.doc(uid).update({
+      'photoURL': photoURL,
+    });
   }
 
   /// Get the ID document of the user with the given [uid]
