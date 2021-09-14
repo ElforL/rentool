@@ -436,6 +436,7 @@
     "username": "Username",
 
     "edit_request": "Edit request",
+    "my_request": "My request",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

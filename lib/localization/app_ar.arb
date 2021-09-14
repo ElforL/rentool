@@ -237,6 +237,7 @@
     "username": "اسم المستخدم",
 
     "edit_request": "تعديل الطلب",
+    "my_request": "طلبي",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

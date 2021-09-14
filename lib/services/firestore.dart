@@ -125,6 +125,11 @@ class FirestoreServices {
     return _toolsRef.doc(toolID).collection('requests').doc(requestID).get();
   }
 
+  /// Get the content of the tool-request of the renter with [uid]
+  static Future<QuerySnapshot<Map<String, dynamic>>> getUserToolRequest(String toolID, String uid) {
+    return _toolsRef.doc(toolID).collection('requests').where('renterUID', isEqualTo: uid).limit(1).get();
+  }
+
   /// Get a number of tool-requests (default = 10)
   ///
   /// if [previousDoc] is provided the query will start after it.

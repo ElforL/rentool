@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/request_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -20,6 +21,8 @@ class _PostScreenState extends State<PostScreen> {
   late Tool tool;
   ToolRequest? acceptedRequest;
   late PageController _mediaController;
+  ToolRequest? userRequest;
+  bool loadedUserRequest = false;
 
   /// returns `true` if the tool belongs to the user (i.e., user = owner).
   bool get isUsersTool => AuthServices.currentUid == tool.ownerUID;
@@ -217,7 +220,7 @@ class _PostScreenState extends State<PostScreen> {
                       },
                     ),
                     const SizedBox(height: 5),
-                    ..._buildMainButton(context),
+                    _buildMainButton(context),
                     ..._buildMeetingButtons(context),
                   ],
                 ),
@@ -289,25 +292,56 @@ class _PostScreenState extends State<PostScreen> {
     ];
   }
 
-  List<Widget> _buildMainButton(BuildContext context) {
-    String labelText;
-    void Function()? onPressed;
-
-    if (isUsersTool) {
-      labelText = AppLocalizations.of(context)!.browseRequests.toUpperCase();
-      onPressed = () => Navigator.pushNamed(context, '/toolsRequests', arguments: tool);
+  Future<ToolRequest?> _getUserRequest() async {
+    if (loadedUserRequest) return userRequest;
+    loadedUserRequest = true;
+    final result = await FirestoreServices.getUserToolRequest(tool.id, AuthServices.currentUid!);
+    if (result.docs.isNotEmpty) {
+      final doc = result.docs.first;
+      final request = ToolRequest.fromJson(doc.data()..addAll({'id': doc.id}));
+      return request;
     } else {
-      labelText = AppLocalizations.of(context)!.request.toUpperCase();
-      if (tool.isAvailable) onPressed = () => Navigator.pushNamed(context, '/newRequest', arguments: tool);
+      return null;
     }
+  }
 
-    return [
-      ElevatedButton.icon(
-        icon: Icon(isUsersTool ? Icons.send_and_archive_rounded : Icons.shopping_cart),
-        label: Text(labelText),
-        onPressed: onPressed,
-      )
-    ];
+  Widget _buildMainButton(BuildContext context) {
+    if (isUsersTool) {
+      return ElevatedButton.icon(
+        icon: const Icon(Icons.send_and_archive_rounded),
+        label: Text(AppLocalizations.of(context)!.browseRequests.toUpperCase()),
+        onPressed: () => Navigator.pushNamed(context, '/toolsRequests', arguments: tool),
+      );
+    } else {
+      return FutureBuilder(
+        future: userRequest != null ? Future.value(userRequest) : _getUserRequest(),
+        builder: (context, AsyncSnapshot<ToolRequest?> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const LinearProgressIndicator();
+          }
+
+          userRequest = snapshot.data;
+
+          if (userRequest == null) {
+            return ElevatedButton.icon(
+              icon: const Icon(Icons.shopping_cart),
+              label: Text(AppLocalizations.of(context)!.request.toUpperCase()),
+              onPressed: () => Navigator.pushNamed(context, '/newRequest', arguments: tool),
+            );
+          } else {
+            return ElevatedButton(
+              child: Text(AppLocalizations.of(context)!.my_request.toUpperCase()),
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  '/request',
+                  arguments: RequestScreenArguments(userRequest!, false),
+                );
+              },
+            );
+          }
+        },
+      );
+    }
   }
 
   Container _buildMediaList(BuildContext context) {
