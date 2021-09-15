@@ -1,7 +1,7 @@
 class UserReview {
   final String creatorUID;
   final String targetUID;
-  double value;
+  int value;
   String description;
 
   UserReview(
