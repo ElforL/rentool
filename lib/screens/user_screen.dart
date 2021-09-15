@@ -8,6 +8,7 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
+import 'package:rentool/widgets/rate_user.dart';
 import 'package:rentool/widgets/rating.dart';
 import 'package:rentool/widgets/tool_tile.dart';
 
@@ -52,12 +53,14 @@ class _UserScreenState extends State<UserScreen> {
     isLoadingTools = false;
   }
 
-  void _refresh() {
+  Future<void> _refresh() async {
+    user = await FirestoreServices.getUser(user!.uid);
+    print('user in ${user?.rating}');
     setState(() {
       tools.clear();
       noMoreToolsDocs = false;
       previousToolDoc = null;
-      user = null;
+      tools = [];
     });
   }
 
@@ -71,7 +74,8 @@ class _UserScreenState extends State<UserScreen> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as UserScreenArguments;
 
-    if (args.user != null) {
+    if (user == null && args.user != null) {
+      print('taking ');
       user = args.user;
     }
     Future<RentoolUser> future = user == null ? FirestoreServices.getUser(args.uid!) : Future.value(user);
@@ -90,7 +94,7 @@ class _UserScreenState extends State<UserScreen> {
             }
 
             return RefreshIndicator(
-              onRefresh: () async => _refresh(),
+              onRefresh: () => _refresh(),
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 controller: _scrollController,
@@ -125,11 +129,7 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                         if (user!.uid != AuthServices.currentUid) ...[
                           const SizedBox(width: 10),
-                          Expanded(
-                            flex: 3,
-                            // TODO replace with 'yourReview' if user has a review
-                            child: _buildRateUser(context),
-                          ),
+                          RateUser(user: user!),
                         ]
                       ],
                     ),
@@ -197,40 +197,6 @@ class _UserScreenState extends State<UserScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Column _buildRateUser(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          AppLocalizations.of(context)!.rate_this_user,
-          style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w500),
-        ),
-        Row(
-          children: [
-            for (var i = 0; i < 5; i++)
-              Expanded(
-                child: IconButton(
-                  icon: const Icon(Icons.star_border),
-                  iconSize: 32,
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  splashRadius: 25,
-                  onPressed: () {
-                    // TODO create review screen
-                    // Navigator.of(context).pushNamed(
-                    //   '/review',
-                    //   arguments: {
-                    //     'user': user,
-                    //     'value': i + 1,
-                    //   },
-                    // );
-                  },
-                ),
-              ),
-          ],
-        ),
-      ],
     );
   }
 
