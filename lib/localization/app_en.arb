@@ -437,6 +437,7 @@
 
     "edit_request": "Edit request",
     "my_request": "My request",
+    "your_review": "Your review",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

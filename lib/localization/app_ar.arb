@@ -140,7 +140,7 @@
 
     "noPicsOrVids": "لا يوجد صور أو فيديوهات",
     "price": "السعر",
-    "sar": "ريال سعودي",
+    "sar": "ر.س",
     "priceADay": "{price} {currency}/اليوم",
     "status": "الحالة",
     "available": "متاح",
@@ -238,6 +238,7 @@
 
     "edit_request": "تعديل الطلب",
     "my_request": "طلبي",
+    "your_review": "مراجعتك",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
