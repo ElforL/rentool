@@ -25,8 +25,8 @@ export const userDocChange = functions.firestore.document('Users/{userID}').onUp
 export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/{reviewID}')
   .onWrite(async (change, context) => {
     const uid = context.params.userID;
-    const isDelete = change.after.exists;
-    const isNew = change.before.exists;
+    const isDelete = !change.after.exists;
+    const isNew = !change.before.exists;
     const beforeData = change.before.data();
     const afterData = change.after.data();
 
