@@ -317,4 +317,22 @@ class FirestoreServices {
     );
     return user;
   }
+
+  static Future<bool> canUserRateUser(String reviewerUid, String targetUid) async {
+    final result = await _usersRef.doc(reviewerUid).collection('previous_users').doc(targetUid).get();
+    return result.exists;
+  }
+
+  static Future<UserReview?> getReviewOnUser(String reviewerUid, String targetUid) async {
+    final result = await _usersRef.doc(targetUid).collection('reviews').doc(reviewerUid).get();
+    if (result.data() != null) {
+      final review = UserReview.fromJson(result.data()!
+        ..addAll({
+          'targetUID': targetUid,
+          'creatorUID': reviewerUid,
+        }));
+      return review;
+    }
+    return null;
+  }
 }
