@@ -22,9 +22,10 @@ export const userDocChange = functions.firestore.document('Users/{userID}').onUp
   });
 });
 
-export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/{reviewID}')
+export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/{reviewerUID}')
   .onWrite(async (change, context) => {
     const uid = context.params.userID;
+    const reviewerUID = context.params.reviewerUID;
     const isDelete = !change.after.exists;
     const isNew = !change.before.exists;
     const beforeData = change.before.data();
