@@ -44,7 +44,8 @@ export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/
         const reviewValue = beforeData!.value;
 
         const totalWithoutVal = (rating * numOfReviews) - reviewValue;
-        const avgAfter = totalWithoutVal / (numOfReviews - 1);
+        var avgAfter = totalWithoutVal / (numOfReviews - 1);
+        if(isNaN(avgAfter)) avgAfter = 0;
 
         // Update
         console.log(`Deleted review on user(${uid}) from user(${reviewerUID})`);
