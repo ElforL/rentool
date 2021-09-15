@@ -14,8 +14,6 @@ export const userDocChange = functions.firestore.document('Users/{userID}').onUp
   const uid = context.params.userID;
   const afterData = change.after.data();
 
-  console.log(`changing user(${uid})'s displayName to ${afterData.name}`);
-
   return admin.auth().updateUser(uid, {
     displayName: afterData.name,
     photoURL: afterData.photoURL,
