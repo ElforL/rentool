@@ -49,6 +49,7 @@ export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/
         const avgAfter = totalWithoutVal / (numOfReviews - 1);
 
         // Update
+        console.log(`Deleted review on user(${uid}) from user(${reviewerUID})`);
         return transaction.update(userDoc, {
           'rating': avgAfter,
           'numOfReviews': numOfReviews - 1,
@@ -70,10 +71,12 @@ export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/
         var newNumOfReviews;
         if (isNew) {
           // New review
+          console.log(`new review on user(${uid}) from user(${reviewerUID})`);
           newAvg = (oldTotal + reviewValue) / (numOfReviews + 1);
           newNumOfReviews = numOfReviews + 1;
         } else {
           // change review value
+          console.log(`Update review on user(${uid}) from user(${reviewerUID})`);
           const oldReviewValue = beforeData!.value;
           newAvg = ((oldTotal - oldReviewValue) + reviewValue) / numOfReviews;
           newNumOfReviews = numOfReviews;
