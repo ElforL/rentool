@@ -25,6 +25,7 @@ service cloud.firestore {
 
       	allow get: if isTHEuser();
         allow create: if isTHEuser() && 
+        request.resource.data.keys().hasOnly(['idNumber']) &&
         isIdNumValid(request.resource.data.idNumber);
       }
 
