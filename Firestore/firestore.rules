@@ -74,6 +74,10 @@ service cloud.firestore {
         isValidReview() &&
         exists(/databases/$(database)/documents/Users/$(request.auth.uid)/previous_users/$(userID));
       }
+
+      match /previous_users/{uid}{
+        allow read: if isTHEuser();
+      }
     }
     ////////////////////////////////// Tools ////////////////////////////////
     match /Tools/{toolID}{
