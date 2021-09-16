@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/edit_request.dart';
+import 'package:rentool/screens/edit_review_screen.dart';
 import 'package:rentool/screens/firebase_init_error_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
@@ -162,6 +163,8 @@ class _MyAppState extends State<MyApp> {
         '/myTools': (context) => const MyToolsScreen(),
         '/editRequest': (context) => const EditRequestScreen(),
         '/user': (context) => const UserScreen(),
+        EditReviewScreen.routeNameNew: (context) => const EditReviewScreen(isNew: true),
+        EditReviewScreen.routeNameEdit: (context) => const EditReviewScreen(isNew: false),
       },
     );
   }
@@ -187,9 +190,7 @@ class FirstScreen extends StatelessWidget {
           if (!user.emailVerified) {
             print('Email address not verified.');
           }
-          FirestoreServices.ensureUserExist(user).then((userDocExists) {
-            if (userDocExists) addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
-          });
+          addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
 
           return const HomePage();
         }

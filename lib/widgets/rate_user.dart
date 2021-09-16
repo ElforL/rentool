@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/edit_review_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 
@@ -90,15 +91,15 @@ class RateUser extends StatelessWidget {
                             iconSize: 32,
                             padding: const EdgeInsets.symmetric(vertical: 5.0),
                             splashRadius: 25,
-                            onPressed: () {
-                              // TODO create review screen
-                              // Navigator.of(context).pushNamed(
-                              //   '/review',
-                              //   arguments: {
-                              //     'user': user,
-                              //     'value': i + 1,
-                              //   },
-                              // );
+                            onPressed: () async {
+                              final didChange = await Navigator.of(context).pushNamed(
+                                EditReviewScreen.routeNameNew,
+                                arguments: EditReviewScreenArguments(
+                                  user,
+                                  rating: i + 1,
+                                ),
+                              );
+                              if (didChange == true && afterChange != null) afterChange!();
                             },
                           ),
                         )
@@ -106,8 +107,15 @@ class RateUser extends StatelessWidget {
                   )
                 else
                   InkWell(
-                    onTap: () {
-                      // TODO create review edit screen
+                    onTap: () async {
+                      final didChange = await Navigator.of(context).pushNamed(
+                        EditReviewScreen.routeNameEdit,
+                        arguments: EditReviewScreenArguments(
+                          user,
+                          oldReview: review,
+                        ),
+                      );
+                      if (didChange == true && afterChange != null) afterChange!();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
