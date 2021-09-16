@@ -405,7 +405,7 @@
     },
 
     "no_requests_sent": "There are no sent requests",
-    "@diff_creds_error": {
+    "@no_requests_sent": {
         "description": "Used in `MyRequestsScreen` when there are no sent requests"
     },
     "no_notifications": "No notifications",
