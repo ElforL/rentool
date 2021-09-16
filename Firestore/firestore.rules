@@ -70,9 +70,9 @@ service cloud.firestore {
           request.resource.data.description is string &&
           request.resource.data.description.size() <= 500) &&
 
-          request.resource.data.creatorUID != request.resource.data.targerUID &&
+          request.resource.data.creatorUID != request.resource.data.targetUID &&
           request.resource.data.creatorUID == reviewerUID &&
-          request.resource.data.targerUID == userID;
+          request.resource.data.targetUID == userID;
         }
 
         allow read: if isTHEuser() || isTheReviewer();
