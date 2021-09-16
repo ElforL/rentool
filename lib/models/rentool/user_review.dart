@@ -25,10 +25,10 @@ class UserReview {
     );
   }
 
-  Map<String, dynamic> toJson([List<String>? removedKeys]) {
+  Map<String, dynamic> toJson({List<String>? removedKeys, bool withUIDs = true}) {
     return {
-      'creatorUID': creatorUID,
-      'targetUID': targetUID,
+      if (withUIDs) 'creatorUID': creatorUID,
+      if (withUIDs) 'targetUID': targetUID,
       'value': value,
       'description': description,
     }..removeWhere((key, value) => removedKeys?.contains(key) ?? false);
