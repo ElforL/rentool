@@ -338,10 +338,6 @@ class FirestoreServices {
 
   /// Create review doc in Firestore
   static Future<void> createReview(UserReview review) {
-    return _usersRef
-        .doc(review.targetUID)
-        .collection('reviews')
-        .doc(review.creatorUID)
-        .set(review.toJson(withUIDs: false));
+    return _usersRef.doc(review.targetUID).collection('reviews').doc(review.creatorUID).set(review.toJson());
   }
 }
