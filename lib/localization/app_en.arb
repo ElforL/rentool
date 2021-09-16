@@ -20,6 +20,7 @@
     "edit": "Edit",
     "delete": "Delete",
     "results": "Results",
+    "discard": "Discard",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {
@@ -438,6 +439,33 @@
     "edit_request": "Edit request",
     "my_request": "My request",
     "your_review": "Your review",
+
+    "post": "Post",
+    "@post": {
+        "description": "A command. in arabic it's \"انشر\""
+    },
+    "give_username_rating": "Give {username} an overall rating.",
+    "@give_username_rating": {
+        "description": "used in [EditReviewScreen]",
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
+    "descripe_your_expierence": "Descripe your expierence (optional).",
+    "@descripe_your_expierence": {
+        "description": "used in [EditReviewScreen]"
+    },
+    "posting_review": "Posting the review",
+    "@posting_review": {
+        "description": "used in [EditReviewScreen]"
+    },
+    "your_review_may_take_while_note": "Note: Your review may take a while to show up and affect the user's rating.",
+    "@your_review_may_take_while_note": {
+        "description": "used in [EditReviewScreen]"
+    },
+    
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

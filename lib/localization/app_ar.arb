@@ -16,6 +16,7 @@
     "edit": "تعديل",
     "delete": "حذف",
     "results": "النتائج",
+    "discard": "تجاهل",
 
     "userNotFoundError": "لا يوجد مستخدم مرتبط بعنوان البريد الالكتروني هذا.",
     "wrongPassword": "كلمة مرور خاطئة.",
@@ -239,6 +240,12 @@
     "edit_request": "تعديل الطلب",
     "my_request": "طلبي",
     "your_review": "مراجعتك",
+
+    "post": "انشر",
+    "give_username_rating": "أعط تقييمك لـ{username}.",
+    "descripe_your_expierence": "صِف تجربتك (اختياري)",
+    "posting_review": "جار نشر المراجعة",
+    "your_review_may_take_while_note": "ملاحظة: مراجعتك قد تستغرق بعد الوقت لتظهر وتؤثر على تقييم المستخدم.",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
