@@ -10,7 +10,11 @@ class UserReview {
     this.value, [
     this.description,
   ])  : assert(creatorUID != targetUID, 'creatorUID must be different from targetUID: $creatorUID == $targetUID.'),
-        assert(value >= 1 && value <= 5, 'Value must be between 1 and 5 inclusive: $value.');
+        assert(value >= 1 && value <= 5, 'Value must be between 1 and 5 inclusive: $value.'),
+        assert(
+          description == null ? true : description.length <= 500,
+          'Description must be 500 characters max: ${description.length}',
+        );
 
   factory UserReview.fromJson(Map<String, dynamic> json) {
     return UserReview(

@@ -65,7 +65,12 @@ service cloud.firestore {
           request.resource.data.value >= 1 &&
           request.resource.data.value <= 5 &&
           
-          (request.resource.data.description == null || request.resource.data.description is string) &&
+          // Validate 'description' is null or a string that is less than 501 characters.
+          (request.resource.data.description == null ||
+          request.resource.data.description is string &&
+          request.resource.data.description.size() <= 500) &&
+
+          request.resource.data.creatorUID != request.resource.data.targerUID &&
           request.resource.data.creatorUID == reviewerUID &&
           request.resource.data.targerUID == userID;
         }
