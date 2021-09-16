@@ -75,7 +75,6 @@ class _UserScreenState extends State<UserScreen> {
     final args = ModalRoute.of(context)!.settings.arguments as UserScreenArguments;
 
     if (user == null && args.user != null) {
-      print('taking ');
       user = args.user;
     }
     Future<RentoolUser> future = user == null ? FirestoreServices.getUser(args.uid!) : Future.value(user);
@@ -129,7 +128,10 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                         if (user!.uid != AuthServices.currentUid) ...[
                           const SizedBox(width: 10),
-                          RateUser(user: user!),
+                          RateUser(
+                            user: user!,
+                            afterChange: () => setState(() {}),
+                          ),
                         ]
                       ],
                     ),

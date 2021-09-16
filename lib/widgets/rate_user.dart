@@ -9,10 +9,12 @@ class RateUser extends StatelessWidget {
   RateUser({
     Key? key,
     required this.user,
+    this.afterChange,
   }) : super(key: key);
 
   final RentoolUser user;
   UserReview? review;
+  void Function()? afterChange;
 
   bool? canRate;
 
