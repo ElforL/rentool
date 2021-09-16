@@ -62,7 +62,7 @@ service cloud.firestore {
 
         function isValidReview(){
           return request.resource.data.value is int && 
-          request.resource.data.value >= 0 &&
+          request.resource.data.value >= 1 &&
           request.resource.data.value <= 5 &&
           
           request.resource.data.description is string &&

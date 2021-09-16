@@ -9,7 +9,7 @@ class UserReview {
     this.targetUID,
     this.value,
     this.description,
-  );
+  ) : assert(value >= 1 && value <= 5, 'Value must be between 1 and 5 inclusive: $value');
 
   factory UserReview.fromJson(Map<String, dynamic> json) {
     return UserReview(
