@@ -65,7 +65,7 @@ service cloud.firestore {
           request.resource.data.value >= 1 &&
           request.resource.data.value <= 5 &&
           
-          request.resource.data.description is string &&
+          (request.resource.data.description == null || request.resource.data.description is string) &&
           request.resource.data.creatorUID == reviewerUID &&
           request.resource.data.targerUID == userID;
         }
