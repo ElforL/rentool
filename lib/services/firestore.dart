@@ -346,11 +346,20 @@ class FirestoreServices {
     String uid, {
     int limit = 10,
     DocumentSnapshot<Object?>? previousDoc,
+    int? reviewValueFilter,
   }) {
-    if (previousDoc != null) {
-      return _usersRef.doc(uid).collection('reviews').limit(limit).startAfterDocument(previousDoc).get();
+    final collection = _usersRef.doc(uid).collection('reviews');
+    Query<Map<String, dynamic>> query;
+    if (reviewValueFilter != null) {
+      query = collection.where('value', isEqualTo: reviewValueFilter);
     } else {
-      return _usersRef.doc(uid).collection('reviews').limit(limit).get();
+      query = collection;
+    }
+
+    if (previousDoc != null) {
+      return query.startAfterDocument(previousDoc).limit(limit).get();
+    } else {
+      return query.limit(limit).get();
     }
   }
 }
