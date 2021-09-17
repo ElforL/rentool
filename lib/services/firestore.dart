@@ -340,4 +340,17 @@ class FirestoreServices {
   static Future<void> createReview(UserReview review) {
     return _usersRef.doc(review.targetUID).collection('reviews').doc(review.creatorUID).set(review.toJson());
   }
+
+  /// Get the reviews on the user with given [uid].
+  static Future<QuerySnapshot<Map<String, dynamic>>> getReviewsOnUser(
+    String uid, {
+    int limit = 10,
+    DocumentSnapshot<Object?>? previousDoc,
+  }) {
+    if (previousDoc != null) {
+      return _usersRef.doc(uid).collection('reviews').limit(limit).startAfterDocument(previousDoc).get();
+    } else {
+      return _usersRef.doc(uid).collection('reviews').limit(limit).get();
+    }
+  }
 }
