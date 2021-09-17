@@ -89,7 +89,7 @@ class FirestoreServices {
 
   static Future<QuerySnapshot<Object?>> getUserTool(String uid, {int limit = 10, DocumentSnapshot? previousDoc}) {
     if (previousDoc != null) {
-      return _toolsRef.where('ownerUID', isEqualTo: uid).limit(limit).startAfterDocument(previousDoc).get();
+      return _toolsRef.where('ownerUID', isEqualTo: uid).startAfterDocument(previousDoc).limit(limit).get();
     } else {
       return _toolsRef.where('ownerUID', isEqualTo: uid).limit(limit).get();
     }
@@ -141,7 +141,7 @@ class FirestoreServices {
     if (previousDoc == null) {
       return await _toolsRef.doc(toolID).collection('requests').limit(limit).get();
     } else {
-      return await _toolsRef.doc(toolID).collection('requests').limit(limit).startAfterDocument(previousDoc).get();
+      return await _toolsRef.doc(toolID).collection('requests').startAfterDocument(previousDoc).limit(limit).get();
     }
   }
 
@@ -152,7 +152,7 @@ class FirestoreServices {
     DocumentSnapshot<Object?>? previousDoc,
   }) {
     if (previousDoc != null) {
-      return _usersRef.doc(uid).collection('requests').limit(limit).startAfterDocument(previousDoc).get();
+      return _usersRef.doc(uid).collection('requests').startAfterDocument(previousDoc).limit(limit).get();
     } else {
       return _usersRef.doc(uid).collection('requests').limit(limit).get();
     }
@@ -302,8 +302,8 @@ class FirestoreServices {
           .doc(uid)
           .collection('notifications')
           .orderBy('time', descending: true)
-          .limit(limit)
           .startAfterDocument(previousDoc)
+          .limit(limit)
           .get();
     } else {
       return _usersRef.doc(uid).collection('notifications').orderBy('time', descending: true).limit(limit).get();
