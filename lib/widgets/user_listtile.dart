@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/services/auth.dart';
 
 class UserListTile extends StatelessWidget {
@@ -29,8 +30,11 @@ class UserListTile extends StatelessWidget {
       onTap: onTap,
       title: Text(user.displayName ?? 'Account'),
       trailing: TextButton(
-        child: Text(AppLocalizations.of(context)!.signOut),
-        onPressed: () => AuthServices.signOut(),
+        child: Text(AppLocalizations.of(context)!.signOut.toUpperCase()),
+        onPressed: () async {
+          final isSure = await showConfirmDialog(context);
+          if (isSure ?? false) AuthServices.signOut();
+        },
       ),
     );
   }
