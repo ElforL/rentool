@@ -14,9 +14,6 @@ class RatingDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fullStars = rating.floor();
-    final halfStars = rating - fullStars > 0;
-    final emptyStars = 5 - fullStars - (halfStars ? 1 : 0);
     return InkWell(
       borderRadius: BorderRadius.circular(5),
       onTap: onTap,
@@ -39,11 +36,12 @@ class RatingDisplay extends StatelessWidget {
             FittedBox(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < fullStars; i++) _buildIcon(Icons.star),
-                  if (halfStars) _buildIcon(Icons.star_half),
-                  for (var i = 0; i < emptyStars; i++) _buildIcon(Icons.star_border),
-                ],
+                children: getStarsIcons(
+                  rating,
+                  iconSize: 12,
+                  fullColor: color,
+                  emptyColor: color,
+                ),
               ),
             )
           ],
@@ -52,9 +50,36 @@ class RatingDisplay extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon(IconData? icon) => Icon(
-        icon,
-        size: 12,
-        color: color,
-      );
+  /// Return a list of stars [Icon] widgets to represent the [rating]
+  static List<Widget> getStarsIcons(
+    double rating, {
+    double? iconSize,
+    Color? fullColor,
+    Color? emptyColor,
+  }) {
+    final fullStars = rating.floor();
+    final halfStars = rating - fullStars > 0;
+    final emptyStars = 5 - fullStars - (halfStars ? 1 : 0);
+
+    return [
+      for (var i = 0; i < fullStars; i++)
+        Icon(
+          Icons.star,
+          size: iconSize,
+          color: fullColor,
+        ),
+      if (halfStars)
+        Icon(
+          Icons.star_half,
+          size: iconSize,
+          color: fullColor,
+        ),
+      for (var i = 0; i < emptyStars; i++)
+        Icon(
+          Icons.star_border,
+          size: iconSize,
+          color: emptyColor,
+        ),
+    ];
+  }
 }

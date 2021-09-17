@@ -8,6 +8,7 @@ import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/media_container.dart';
+import 'package:rentool/widgets/rating.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({Key? key}) : super(key: key);
@@ -178,10 +179,6 @@ class _PostScreenState extends State<PostScreen> {
                           return const LinearProgressIndicator();
                         }
 
-                        final fullStars = owner!.rating.floor();
-                        final halfStars = owner!.rating - fullStars > 0;
-                        final emptyStars = 5 - fullStars - (halfStars ? 1 : 0);
-
                         return InkWell(
                           borderRadius: BorderRadius.circular(5),
                           onTap: () {
@@ -210,9 +207,12 @@ class _PostScreenState extends State<PostScreen> {
                                     color: Colors.orange.shade700,
                                   ),
                                 ),
-                                for (var i = 0; i < fullStars; i++) _buildStarIcon(Icons.star),
-                                if (halfStars) _buildStarIcon(Icons.star_half),
-                                for (var i = 0; i < emptyStars; i++) _buildStarIcon(Icons.star_border),
+                                ...RatingDisplay.getStarsIcons(
+                                  owner!.rating,
+                                  iconSize: 20,
+                                  fullColor: Colors.orange.shade700,
+                                  emptyColor: Colors.orange.shade700,
+                                ),
                               ],
                             ),
                           ),
@@ -246,14 +246,6 @@ class _PostScreenState extends State<PostScreen> {
           );
         },
       ),
-    );
-  }
-
-  Icon _buildStarIcon(IconData? icon) {
-    return Icon(
-      icon,
-      size: 20,
-      color: Colors.orange.shade700,
     );
   }
 
