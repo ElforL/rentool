@@ -21,6 +21,7 @@
     "delete": "Delete",
     "results": "Results",
     "discard": "Discard",
+    "all": "All",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {
@@ -464,6 +465,11 @@
     "your_review_may_take_while_note": "Note: Your review may take a while to show up and affect the user's rating.",
     "@your_review_may_take_while_note": {
         "description": "used in [EditReviewScreen]"
+    },
+
+    "no_reviews": "There are no reviews.",
+    "@no_reviews": {
+        "description": "used in [ReviewsScreen]"
     },
     
 

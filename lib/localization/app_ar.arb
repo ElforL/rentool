@@ -17,6 +17,7 @@
     "delete": "حذف",
     "results": "النتائج",
     "discard": "تجاهل",
+    "all": "الكل",
 
     "userNotFoundError": "لا يوجد مستخدم مرتبط بعنوان البريد الالكتروني هذا.",
     "wrongPassword": "كلمة مرور خاطئة.",
@@ -246,6 +247,8 @@
     "descripe_your_expierence": "صِف تجربتك (اختياري)",
     "posting_review": "جار نشر المراجعة",
     "your_review_may_take_while_note": "ملاحظة: مراجعتك قد تستغرق بعد الوقت لتظهر وتؤثر على تقييم المستخدم.",
+
+    "no_reviews": "لا يوجد مراجعات.",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
