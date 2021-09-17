@@ -204,7 +204,7 @@ class _PostScreenState extends State<PostScreen> {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  owner!.rating.toString(),
+                                  owner!.rating.toStringAsFixed(1),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.orange.shade700,

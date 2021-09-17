@@ -55,7 +55,6 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _refresh() async {
     user = await FirestoreServices.getUser(user!.uid);
-    print('user in ${user?.rating}');
     setState(() {
       tools.clear();
       noMoreToolsDocs = false;

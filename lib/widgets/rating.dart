@@ -26,7 +26,7 @@ class RatingDisplay extends StatelessWidget {
           children: [
             FittedBox(
               child: Text(
-                rating.toString(),
+                rating.toStringAsFixed(1),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: color,
