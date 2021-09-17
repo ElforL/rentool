@@ -75,7 +75,7 @@ service cloud.firestore {
           request.resource.data.targetUID == userID;
         }
 
-        allow read: if isTHEuser() || isTheReviewer();
+        allow read;
         allow write: if isTheReviewer() &&
         isValidReview() &&
         exists(/databases/$(database)/documents/Users/$(request.auth.uid)/previous_users/$(userID));
