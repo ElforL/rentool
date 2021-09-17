@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/reviews_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
@@ -121,7 +122,10 @@ class _UserScreenState extends State<UserScreen> {
                             rating: user!.rating,
                             color: Colors.orange.shade700,
                             onTap: () {
-                              // TODO navigate to reviews list
+                              Navigator.of(context).pushNamed(
+                                ReviewsScreen.routeName,
+                                arguments: ReviewsScreenArguments(user!),
+                              );
                             },
                           ),
                         ),

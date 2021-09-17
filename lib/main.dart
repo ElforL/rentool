@@ -23,6 +23,7 @@ import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/request_screen.dart';
 import 'package:rentool/screens/requests_list_screen.dart';
 import 'package:rentool/screens/return_meet_screen.dart';
+import 'package:rentool/screens/reviews_screen.dart';
 import 'package:rentool/screens/search_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -165,6 +166,7 @@ class _MyAppState extends State<MyApp> {
         '/user': (context) => const UserScreen(),
         EditReviewScreen.routeNameNew: (context) => const EditReviewScreen(isNew: true),
         EditReviewScreen.routeNameEdit: (context) => const EditReviewScreen(isNew: false),
+        ReviewsScreen.routeName: (context) => const ReviewsScreen(),
       },
     );
   }
