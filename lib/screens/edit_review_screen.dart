@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -182,6 +183,26 @@ class _EditReviewScreenState extends State<EditReviewScreen> {
                   ),
                 ),
               ),
+              if (!widget.isNew)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    child: OutlinedButton.icon(
+                      style: ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.red)),
+                      label: Text(AppLocalizations.of(context)!.delete_review.toUpperCase()),
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: () async {
+                        final isSure = await showConfirmDialog(context,
+                            content: Text(AppLocalizations.of(context)!.delete_review_confirm));
+                        if (isSure ?? false) {
+                          await FirestoreServices.deleteReview(oldReview!);
+                          Navigator.pop(context, true);
+                        }
+                      },
+                    ),
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(

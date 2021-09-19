@@ -256,5 +256,8 @@
     "no_requests": "لا يوجد أي طلب",
     "account": "الحساب",
 
+    "delete_review": "حذف المراجعة",
+    "delete_review_confirm": "هل أنت متأكد من أنك تريد حذف مراجعتك؟",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

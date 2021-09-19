@@ -481,6 +481,9 @@
     "no_requests": "There are no requests",
     "account": "Account",
 
+    "delete_review": "Delete review",
+    "delete_review_confirm": "Are you sure you want to delete your review?",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
