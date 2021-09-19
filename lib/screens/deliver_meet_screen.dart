@@ -47,6 +47,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
             appBar: AppBar(),
             body: Center(
               child: Text(
+                // TODO localize
                 "Something went wrong\n${snapshot.error}",
                 textAlign: TextAlign.center,
               ),
@@ -57,6 +58,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
           return Scaffold(
             appBar: AppBar(),
             body: const Center(
+              // TODO localize
               child: Text('Getting ready...'),
             ),
           );
@@ -100,6 +102,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         return Scaffold(
           appBar: AppBar(),
           body: const Center(
+            // TODO localize
             child: Text('Loading... / unemplemented'),
           ),
         );

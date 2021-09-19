@@ -50,8 +50,8 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
             );
           }
           if (list.isEmpty) {
-            return const Center(
-              child: Text('No Requests'),
+            return Center(
+              child: Text(AppLocalizations.of(context)!.no_requests),
             );
           }
           return ListView.builder(

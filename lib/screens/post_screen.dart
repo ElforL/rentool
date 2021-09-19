@@ -257,7 +257,7 @@ class _PostScreenState extends State<PostScreen> {
         SizedBox(
           width: 100,
           child: ElevatedButton(
-            child: const Text('Deliver'),
+            child: Text(AppLocalizations.of(context)!.deliver.toUpperCase()),
             onPressed: () {
               Navigator.pushNamed(
                 context,
@@ -271,7 +271,7 @@ class _PostScreenState extends State<PostScreen> {
         SizedBox(
           width: 100,
           child: ElevatedButton(
-            child: const Text('Return'),
+            child: Text(AppLocalizations.of(context)!.returnn.toUpperCase()),
             onPressed: () {
               Navigator.pushNamed(
                 context,

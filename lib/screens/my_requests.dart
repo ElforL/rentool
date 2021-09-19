@@ -129,6 +129,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                     },
                   ),
                   subtitle: Text(
+                    // TODO improve plurals
                     '${request.numOfDays} ${AppLocalizations.of(context)!.days}',
                   ),
                   onTap: () async {

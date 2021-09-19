@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// TODO improve
 class FirebaseInitErrorScreen extends StatefulWidget {
   final Object error;
 

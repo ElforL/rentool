@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/widgets/media_container.dart';
@@ -65,6 +66,7 @@ class _MediaTileState extends State<MediaTile> {
       try {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            // TODO localize
             content: const Text('files added'),
             action: SnackBarAction(
               label: 'Undo',
@@ -160,15 +162,20 @@ class _MediaTileState extends State<MediaTile> {
       title: Column(
         children: const [
           Icon(Icons.folder),
+          // TODO localize
           Text('Storage permission denied'),
         ],
       ),
+      // TODO localize
       content: const Text(
         "The app was denied access to the gallery. To allow the app to upload media from your device, it needs to have access to the device storage.\n\n"
         "You can give access if a permission dialog pops up, or in the app settings.",
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK')),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(AppLocalizations.of(context)!.ok),
+        ),
       ],
     );
     showDialog(context: context, builder: (_) => dialog);

@@ -251,5 +251,10 @@
 
     "no_reviews": "لا يوجد مراجعات.",
 
+    "deliver": "إيصال",
+    "returnn": "إرجاع",
+    "no_requests": "لا يوجد أي طلب",
+    "account": "الحساب",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

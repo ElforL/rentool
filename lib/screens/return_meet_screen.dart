@@ -43,11 +43,13 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
       builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
           return Center(
+            // TODO localize
             child: Text("Something went wrong\n${snapshot.error}"),
           );
         }
         if (snapshot.connectionState != ConnectionState.active) {
           return const Center(
+            // TODO localize
             child: Text('Getting ready...'),
           );
         }

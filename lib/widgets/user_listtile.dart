@@ -28,7 +28,7 @@ class UserListTile extends StatelessWidget {
         backgroundColor: user.photoURL == null ? Colors.black12 : Colors.transparent,
       ),
       onTap: onTap,
-      title: Text(user.displayName ?? 'Account'),
+      title: Text(user.displayName ?? AppLocalizations.of(context)!.account),
       trailing: TextButton(
         child: Text(AppLocalizations.of(context)!.signOut.toUpperCase()),
         onPressed: () async {

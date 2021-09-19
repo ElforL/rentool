@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// TODO localize & improve
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({Key? key}) : super(key: key);
 

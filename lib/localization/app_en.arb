@@ -472,7 +472,14 @@
     "@no_reviews": {
         "description": "used in [ReviewsScreen]"
     },
-    
+
+    "deliver": "Deliver",
+    "returnn": "Return",
+    "@returnn": {
+        "description": "Intentionally named 'returnn' to avoid the keyword 'return'"
+    },
+    "no_requests": "There are no requests",
+    "account": "Account",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
