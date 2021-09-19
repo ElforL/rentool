@@ -341,6 +341,11 @@ class FirestoreServices {
     return _usersRef.doc(review.targetUID).collection('reviews').doc(review.creatorUID).set(review.toJson());
   }
 
+  /// Create review doc in Firestore
+  static Future<void> deleteReview(UserReview review) {
+    return _usersRef.doc(review.targetUID).collection('reviews').doc(review.creatorUID).delete();
+  }
+
   /// Get the reviews on the user with given [uid].
   static Future<QuerySnapshot<Map<String, dynamic>>> getReviewsOnUser(
     String uid, {
