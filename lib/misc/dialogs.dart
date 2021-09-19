@@ -21,7 +21,7 @@ Future<dynamic> showDisagreementCasesHelpDialog(BuildContext context, bool isUse
   );
 }
 
-/// Shows a dialog with the title: "_Are you sure?_"
+/// Shows a dialog with the default title as "_Are you sure?_"
 /// and two buttons: '_CANCEL_' and '_SURE_'
 ///
 /// Returns:
@@ -34,11 +34,12 @@ Future<dynamic> showDisagreementCasesHelpDialog(BuildContext context, bool isUse
 ///   final isSure = await showConfirmDialog(context);
 ///   if(isSure ?? false) doSomething();
 /// ```
-Future<bool?> showConfirmDialog(BuildContext context) {
+Future<bool?> showConfirmDialog(BuildContext context, {Widget? content, Widget? title}) {
   return showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text(AppLocalizations.of(context)!.areYouSure),
+      title: title ?? Text(AppLocalizations.of(context)!.areYouSure),
+      content: content,
       actions: [
         TextButton(
           child: Text(AppLocalizations.of(context)!.cancel),
