@@ -76,7 +76,8 @@ service cloud.firestore {
         }
 
         allow read;
-        allow write: if isTheReviewer() &&
+        allow delete: if isTheReviewer();
+        allow create, update: if isTheReviewer() &&
         isValidReview() &&
         exists(/databases/$(database)/documents/Users/$(request.auth.uid)/previous_users/$(userID));
       }
