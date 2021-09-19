@@ -22,6 +22,7 @@
     "results": "Results",
     "discard": "Discard",
     "all": "All",
+    "or": "Or",
 
     "userNotFoundError": "There is no user corresponding to the email address.",
     "@userNotFoundError": {

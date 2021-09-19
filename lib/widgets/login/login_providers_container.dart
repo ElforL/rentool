@@ -27,7 +27,7 @@ class AuthProvidersContainer extends StatelessWidget {
           children: [
             _buildHorizontalLine(),
             Text(
-              'OR',
+              AppLocalizations.of(context)!.or.toUpperCase(),
               style: Theme.of(context).textTheme.subtitle2,
             ),
             _buildHorizontalLine(),
