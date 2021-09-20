@@ -79,85 +79,93 @@ class _UserScreenState extends State<UserScreen> {
     }
     Future<RentoolUser> future = user == null ? FirestoreServices.getUser(args.uid!) : Future.value(user);
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: FutureBuilder(
-          future: future,
-          builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
-            if (snapshot.hasError) print('error getting user info: ${snapshot.error}');
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, user);
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: user != null ? Text(user!.name) : null,
+        ),
+        body: FutureBuilder(
+            future: future,
+            builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
+              if (snapshot.hasError) print('error getting user info: ${snapshot.error}');
 
-            user = snapshot.data;
+              user = snapshot.data;
 
-            if (user == null) {
-              return _buildLoadingContainer(context);
-            }
+              if (user == null) {
+                return _buildLoadingContainer(context);
+              }
 
-            return RefreshIndicator(
-              onRefresh: () => _refresh(),
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                controller: _scrollController,
-                children: [
-                  _buildUserTopTile(user!, context),
-                  const Divider(color: Colors.black26, height: 20),
+              return RefreshIndicator(
+                onRefresh: () => _refresh(),
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _scrollController,
+                  children: [
+                    _buildUserTopTile(user!, context),
+                    const Divider(color: Colors.black26, height: 20),
 
-                  // Ratings
+                    // Ratings
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      AppLocalizations.of(context)!.ratings_and_reviews,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: RatingDisplay(
-                            rating: user!.rating,
-                            color: Colors.orange.shade700,
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                ReviewsScreen.routeName,
-                                arguments: ReviewsScreenArguments(user!),
-                              );
-                            },
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        AppLocalizations.of(context)!.ratings_and_reviews,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
                         ),
-                        if (user!.uid != AuthServices.currentUid) ...[
-                          const SizedBox(width: 10),
-                          RateUser(
-                            user: user!,
-                            afterChange: () => setState(() {}),
-                          ),
-                        ]
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.black26),
-
-                  // Tools
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      AppLocalizations.of(context)!.tools,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
                       ),
                     ),
-                  ),
-                  _buildToolsList(context),
-                ],
-              ),
-            );
-          }),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: RatingDisplay(
+                              rating: user!.rating,
+                              color: Colors.orange.shade700,
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  ReviewsScreen.routeName,
+                                  arguments: ReviewsScreenArguments(user!),
+                                );
+                              },
+                            ),
+                          ),
+                          if (user!.uid != AuthServices.currentUid) ...[
+                            const SizedBox(width: 10),
+                            RateUser(
+                              user: user!,
+                              afterChange: () => setState(() {}),
+                            ),
+                          ]
+                        ],
+                      ),
+                    ),
+                    const Divider(color: Colors.black26),
+
+                    // Tools
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        AppLocalizations.of(context)!.tools,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
+                        ),
+                      ),
+                    ),
+                    _buildToolsList(context),
+                  ],
+                ),
+              );
+            }),
+      ),
     );
   }
 

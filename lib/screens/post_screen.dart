@@ -196,11 +196,16 @@ class _PostScreenState extends State<PostScreen> {
 
                         return InkWell(
                           borderRadius: BorderRadius.circular(5),
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
+                          onTap: () async {
+                            final result = await Navigator.of(context).pushNamed(
                               '/user',
                               arguments: UserScreenArguments(user: owner),
                             );
+                            if (result is RentoolUser) {
+                              setState(() {
+                                owner = result;
+                              });
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
