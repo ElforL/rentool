@@ -484,6 +484,8 @@
     "delete_review": "Delete review",
     "delete_review_confirm": "Are you sure you want to delete your review?",
 
+    "cant_delete_rented_tool": "You can't delete a rented tool",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

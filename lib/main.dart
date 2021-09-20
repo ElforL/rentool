@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> {
       locale: _locale,
       title: 'Rentool',
       onGenerateTitle: (_) => AppLocalizations.of(_)!.rentool,
-      // using the builder instead of `theme` so i can access the context to get the locale
+      // using the builder instead of `theme` to access the context, get the locale
       // and change the font family based on the language
       builder: (context, child) {
         return Theme(

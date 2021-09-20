@@ -84,6 +84,21 @@ class _PostScreenState extends State<PostScreen> {
                   child: ListTile(
                     title: Text(AppLocalizations.of(context)!.delete),
                     onTap: () async {
+                      if (tool.currentRent != null) {
+                        return showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.error),
+                            content: Text(AppLocalizations.of(context)!.cant_delete_rented_tool + '.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text(AppLocalizations.of(context)!.ok),
+                              )
+                            ],
+                          ),
+                        );
+                      }
                       final isSure = await showConfirmDialog(context);
                       if (isSure ?? false) {
                         FirestoreServices.deleteTool(tool.id);

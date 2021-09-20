@@ -259,5 +259,7 @@
     "delete_review": "حذف المراجعة",
     "delete_review_confirm": "هل أنت متأكد من أنك تريد حذف مراجعتك؟",
 
+    "cant_delete_rented_tool": "لا يمكن حذف أداة مؤجرة",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
