@@ -14,6 +14,7 @@ class EditRequestScreen extends StatefulWidget {
 class _EditRequestScreenState extends State<EditRequestScreen> {
   late Tool? tool;
   late ToolRequest request;
+  bool initiated = false;
 
   late TextEditingController _descriptionController;
   late TextEditingController _daysController;
@@ -44,12 +45,15 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as EditRequestScreenArguments;
-    if (args.tool != null) tool = args.tool;
-    request = args.request;
+    if (!initiated) {
+      initiated = true;
+      final args = ModalRoute.of(context)!.settings.arguments as EditRequestScreenArguments;
+      if (args.tool != null) tool = args.tool;
+      request = args.request;
 
-    _descriptionController.text = request.description;
-    _daysController.text = request.numOfDays.toString();
+      _descriptionController.text = request.description;
+      _daysController.text = request.numOfDays.toString();
+    }
 
     Future<Tool>? future;
     if (tool == null) {
@@ -65,7 +69,9 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
       body: FutureBuilder(
           future: future,
           builder: (context, AsyncSnapshot<Tool> snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
+            tool ??= snapshot.data;
+
+            if (tool == null) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +83,6 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
                 ),
               );
             }
-            tool ??= snapshot.data;
 
             return Padding(
               padding: const EdgeInsets.all(20),
@@ -102,7 +107,6 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
                               _descriptionErrorText = null;
                               setState(() {});
                             }
-                            request.description = newText;
                           },
                         ),
                         const SizedBox(height: 20),
@@ -120,7 +124,6 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
                           ),
                           onChanged: (_) {
                             if (_daysErrorText != null) _daysErrorText = null;
-                            request.numOfDays = daysNum;
                             setState(() {});
                           },
                         ),
@@ -151,7 +154,17 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
                               _daysErrorText = AppLocalizations.of(context)!.days_must_be_more_than_0;
                             });
                           } else {
-                            await FirestoreServices.updateToolRequest(request, tool!.id);
+                            // TODO handle exception [premission denied] editing request when it's accepted.
+                            await FirestoreServices.updateToolRequest(
+                              request
+                                ..description = _descriptionController.text
+                                ..numOfDays = daysNum,
+                              tool!.id,
+                            );
+                            // I didn't put the code below before Firestore request because if there was an error with
+                            // Firestore, then the code below won't excute and the request object won't change
+                            request.description = _descriptionController.text;
+                            request.numOfDays = daysNum;
                             Navigator.pop(context);
                           }
                         },
