@@ -73,15 +73,66 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
     }
   });
 
+export const toolDeleted = functions.firestore.document('Tools/{toolID}')
+  .onDelete(async (snapshot, context) => {
+    // When the tool is deleted, the requests need to be deleted as well.
+    // deleteCollection() and deleteQueryBatch() are used to delete collection(Tools/${toolID}/requests)
+
+    // Q: why are These functions decalred inside the function instead of outside?
+    // They are placed in this scope to prevent them from being in the other cloud functions containers.
+    // learn more: [How cloud functions work](https://firebase.google.com/docs/functions#how_does_it_work)
+
+    async function deleteCollection(collectionPath: string, batchSize: number) {
+      const collectionRef = admin.firestore().collection(collectionPath);
+      const query = collectionRef.orderBy('__name__').limit(batchSize);
+
+      return new Promise((resolve, reject) => {
+        deleteQueryBatch(query, resolve).catch(reject);
+      });
+    }
+
+
+    async function deleteQueryBatch(query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData>, resolve: (value: unknown) => void) {
+      const snapshot = await query.get();
+
+      const batchSize = snapshot.size;
+      if (batchSize === 0) {
+        // When there are no documents left, we are done
+        resolve(null);
+        return;
+      }
+
+      // Delete documents in a batch
+      const batch = admin.firestore().batch();
+      snapshot.docs.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+
+      // Recurse on the next process tick, to avoid
+      // exploding the stack.
+      process.nextTick(() => {
+        deleteQueryBatch(query, resolve);
+      });
+    }
+
+    const toolID = context.params.toolID;
+    return deleteCollection(`Tools/${toolID}/requests`, 10);
+  });
+
+
 export const requestWrite = functions.firestore.document('Tools/{toolID}/requests/{requestID}')
   .onWrite(async (change, context) => {
     const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`);
+    var toolDocData;
     if (!change.after.exists) {
       // DELETE
       const docData = change.before.data()!;
       // if the request was accepted, remove its ID from `acceptedRequestID`
       if (docData && docData.isAccepted == true) {
-        await toolDoc.update({ 'acceptedRequestID': null });
+        toolDocData = await toolDoc.get();
+        if (toolDocData.exists)
+          await toolDoc.update({ 'acceptedRequestID': null });
       }
 
       // delete the request snippet in the user subcollection
@@ -92,15 +143,19 @@ export const requestWrite = functions.firestore.document('Tools/{toolID}/request
       // send notification to renter
       // IF it wasn't rented before (prevent notification when a rent ends and the request is moved)
       if (!docData.isRented) {
-        const toolDocData = await toolDoc.get();
-        const toolName = toolDocData.data()?.name;
-        return addNotification(docData.renterUID, 'REQ_DEL', {
-          'notificationBodyArgs': [toolName],
-          'toolID': context.params.toolID,
-          'requestID': context.params.requestID,
-          'toolName': toolName,
-        });
-      }else{
+        if (toolDocData == null)
+          toolDocData = await toolDoc.get();
+        if (toolDocData.exists) {
+          const toolName = toolDocData.data()?.name;
+          return addNotification(docData.renterUID, 'REQ_DEL', {
+            'notificationBodyArgs': [toolName],
+            'toolID': context.params.toolID,
+            'requestID': context.params.requestID,
+            'toolName': toolName,
+          });
+        }
+        else return null;
+      } else {
         return null;
       }
     } else {
