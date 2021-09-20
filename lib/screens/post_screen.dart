@@ -333,16 +333,28 @@ class _PostScreenState extends State<PostScreen> {
             return ElevatedButton.icon(
               icon: const Icon(Icons.shopping_cart),
               label: Text(AppLocalizations.of(context)!.request.toUpperCase()),
-              onPressed: () => Navigator.pushNamed(context, '/newRequest', arguments: tool),
+              onPressed: () async {
+                final result = await Navigator.pushNamed(context, '/newRequest', arguments: tool);
+                if (result is ToolRequest) {
+                  setState(() {
+                    userRequest = result;
+                  });
+                }
+              },
             );
           } else {
             return ElevatedButton(
               child: Text(AppLocalizations.of(context)!.my_request.toUpperCase()),
-              onPressed: () {
-                Navigator.of(context).pushNamed(
+              onPressed: () async {
+                final request = await Navigator.of(context).pushNamed(
                   '/request',
                   arguments: RequestScreenArguments(userRequest!, false),
                 );
+                if (request == 'Deleted') {
+                  setState(() {
+                    userRequest = null;
+                  });
+                }
               },
             );
           }

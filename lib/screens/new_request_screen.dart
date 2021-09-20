@@ -165,7 +165,7 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                         false,
                       );
                       await FirestoreServices.sendNewToolRequest(request, tool.id);
-                      Navigator.pop(context);
+                      Navigator.pop(context, request);
                     }
                   },
                 ),
