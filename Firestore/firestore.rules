@@ -148,7 +148,7 @@ service cloud.firestore {
 
       allow read;
       // allow if the user is the owner
-      allow delete: if isTheOwner();
+      allow delete: if isTheOwner() && resource.data.currentRent == null;
       
       // allow if the user is the owner
       allow update: if isTheOwner()
