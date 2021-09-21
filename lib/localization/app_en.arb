@@ -485,6 +485,12 @@
     "delete_review_confirm": "Are you sure you want to delete your review?",
 
     "cant_delete_rented_tool": "You can't delete a rented tool",
+    "chat_with_role": "Chat with the {role, select, owner{owner} renter{renter} other{other preson}}",
+    "@chat_with_role": {
+        "placeholders": {
+            "role": {}
+        }
+    },
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

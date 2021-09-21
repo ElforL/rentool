@@ -248,7 +248,7 @@ class _PostScreenState extends State<PostScreen> {
                     ),
                     const SizedBox(height: 5),
                     _buildMainButton(context),
-                    ..._buildMeetingButtons(context),
+                    _buildMeetingButtons(context),
                   ],
                 ),
               ), // end of main details
@@ -276,39 +276,51 @@ class _PostScreenState extends State<PostScreen> {
     );
   }
 
-  List<Widget> _buildMeetingButtons(BuildContext context) {
+  Widget _buildMeetingButtons(BuildContext context) {
     bool isUserAuthorized =
         acceptedRequest?.renterUID == AuthServices.currentUid || tool.ownerUID == AuthServices.currentUid;
-    return [
-      if (tool.acceptedRequestID != null && isUserAuthorized && tool.currentRent == null)
-        SizedBox(
-          width: 100,
-          child: ElevatedButton(
-            child: Text(AppLocalizations.of(context)!.deliver.toUpperCase()),
+    return Row(
+      children: [
+        if (tool.acceptedRequestID != null && isUserAuthorized) ...[
+          ElevatedButton.icon(
+            icon: const Icon(Icons.chat),
+            label: Text(AppLocalizations.of(context)!.chat_with_role(isUsersTool ? 'renter' : 'owner').toUpperCase()),
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                DeliverMeetScreen.routeName,
-                arguments: tool,
-              );
+              // TODO push chat screen
             },
           ),
-        ),
-      if (tool.currentRent != null && isUserAuthorized)
-        SizedBox(
-          width: 100,
-          child: ElevatedButton(
-            child: Text(AppLocalizations.of(context)!.returnn.toUpperCase()),
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                ReturnMeetScreen.routeName,
-                arguments: tool,
-              );
-            },
+          const SizedBox(width: 10),
+        ],
+        if (tool.acceptedRequestID != null && isUserAuthorized && tool.currentRent == null)
+          SizedBox(
+            width: 100,
+            child: ElevatedButton(
+              child: Text(AppLocalizations.of(context)!.deliver.toUpperCase()),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  DeliverMeetScreen.routeName,
+                  arguments: tool,
+                );
+              },
+            ),
           ),
-        ),
-    ];
+        if (tool.currentRent != null && isUserAuthorized)
+          SizedBox(
+            width: 100,
+            child: ElevatedButton(
+              child: Text(AppLocalizations.of(context)!.returnn.toUpperCase()),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  ReturnMeetScreen.routeName,
+                  arguments: tool,
+                );
+              },
+            ),
+          ),
+      ],
+    );
   }
 
   Future<ToolRequest?> _getUserRequest() async {

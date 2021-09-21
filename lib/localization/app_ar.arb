@@ -260,6 +260,7 @@
     "delete_review_confirm": "هل أنت متأكد من أنك تريد حذف مراجعتك؟",
 
     "cant_delete_rented_tool": "لا يمكن حذف أداة مؤجرة",
+    "chat_with_role": "تواصل مع {role, select, owner{المالك} renter{المستأجر} other{الشخص الآخر}}",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
