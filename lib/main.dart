@@ -60,14 +60,20 @@ void main() async {
   CloudMessagingServices? fcmServices;
   if (!kIsWeb) fcmServices = CloudMessagingServices();
 
-  runApp(MyApp(fcmServices: fcmServices));
+  final prefs = await SharedPreferences.getInstance();
+  final langCode = prefs.getString('locale');
+  final locale = langCode != null ? Locale(langCode) : null;
+
+  runApp(MyApp(fcmServices: fcmServices, locale: locale));
 }
 
 class MyApp extends StatefulWidget {
   static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
-  const MyApp({Key? key, this.fcmServices}) : super(key: key);
+
+  const MyApp({Key? key, this.fcmServices, this.locale}) : super(key: key);
 
   final CloudMessagingServices? fcmServices;
+  final Locale? locale;
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -97,20 +103,9 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void _loadLocaleSetting() async {
-    final prefs = await SharedPreferences.getInstance();
-    final langCode = prefs.getString('locale');
-    if (langCode != null) {
-      final locale = Locale(langCode);
-      if (AppLocalizations.supportedLocales.contains(locale)) {
-        setLocale(locale);
-      }
-    }
-  }
-
   @override
   void initState() {
-    _loadLocaleSetting();
+    _locale = widget.locale;
     super.initState();
   }
 
