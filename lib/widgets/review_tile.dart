@@ -6,6 +6,7 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/rating.dart';
+import 'package:rentool/widgets/rentool_circle_avatar.dart';
 
 // ignore: must_be_immutable
 class ReviewTile extends StatelessWidget {
@@ -45,16 +46,7 @@ class ReviewTile extends StatelessWidget {
             user ??= snapshot.data;
             return Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: user?.photoURL == null ? Colors.black12 : null,
-                  child: user?.photoURL == null
-                      ? const Icon(
-                          Icons.person,
-                          color: Colors.black,
-                        )
-                      : null,
-                  backgroundImage: user?.photoURL != null ? NetworkImage(user!.photoURL!) : null,
-                ),
+                RentoolCircleAvatar(user: user),
                 const SizedBox(width: 20),
                 if (user != null)
                   Text(user!.name)

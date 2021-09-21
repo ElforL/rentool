@@ -12,6 +12,7 @@ import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
 import 'package:rentool/widgets/rate_user.dart';
 import 'package:rentool/widgets/rating.dart';
+import 'package:rentool/widgets/rentool_circle_avatar.dart';
 import 'package:rentool/widgets/tool_tile.dart';
 
 class UserScreen extends StatefulWidget {
@@ -177,16 +178,9 @@ class _UserScreenState extends State<UserScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          CircleAvatar(
+          RentoolCircleAvatar(
+            user: user,
             maxRadius: 35,
-            backgroundImage: user.photoURL == null ? null : NetworkImage(user.photoURL!),
-            child: user.photoURL == null
-                ? Icon(
-                    Icons.person,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  )
-                : null,
-            backgroundColor: user.photoURL == null ? Colors.black12 : Colors.transparent,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:rentool/widgets/rentool_circle_avatar.dart';
 
 class UserListTile extends StatelessWidget {
   const UserListTile({
@@ -17,15 +18,8 @@ class UserListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: user.photoURL == null ? null : NetworkImage(user.photoURL!),
-        child: user.photoURL == null
-            ? Icon(
-                Icons.person,
-                color: Theme.of(context).colorScheme.onSurface,
-              )
-            : null,
-        backgroundColor: user.photoURL == null ? Colors.black12 : Colors.transparent,
+      leading: RentoolCircleAvatar.firebaseUser(
+        user: user,
       ),
       onTap: onTap,
       title: Text(user.displayName ?? AppLocalizations.of(context)!.account),

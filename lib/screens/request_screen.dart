@@ -102,6 +102,7 @@ class _RequestScreenState extends State<RequestScreen> {
                   ),
                 const SizedBox(height: 25),
                 // The renter info
+                // TODO show renter name and rating
                 Text(
                   AppLocalizations.of(context)!.renter,
                   style: Theme.of(context).textTheme.headline6,
