@@ -8,6 +8,8 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 class NewRequestScreen extends StatefulWidget {
   const NewRequestScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/newRequest';
+
   @override
   _NewRequestScreenState createState() => _NewRequestScreenState();
 }

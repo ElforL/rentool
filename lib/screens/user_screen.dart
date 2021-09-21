@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/reviews_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -17,6 +18,8 @@ class UserScreen extends StatefulWidget {
   const UserScreen({
     Key? key,
   }) : super(key: key);
+
+  static const routeName = '/user';
 
   @override
   State<UserScreen> createState() => _UserScreenState();
@@ -275,7 +278,7 @@ class _UserScreenState extends State<UserScreen> {
             return ToolTile(
               tool: tool,
               onTap: () async {
-                final result = await Navigator.pushNamed(context, '/post', arguments: tool);
+                final result = await Navigator.pushNamed(context, PostScreen.routeName, arguments: tool);
                 setState(() {
                   if (result == 'Deleted') {
                     tools.remove(tool);

@@ -1,6 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/my_notifications.dart';
+import 'package:rentool/screens/my_requests.dart';
+import 'package:rentool/screens/my_tools_screen.dart';
+import 'package:rentool/screens/search_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/home_page/count_home_page_container.dart';
@@ -25,7 +29,7 @@ class _HomePageState extends State<HomePage> {
         onSubmitted: (value) async {
           await Navigator.pushNamed(
             context,
-            '/search',
+            SearchScreen.routeName,
             arguments: value,
           );
           setState(() {
@@ -45,7 +49,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).pushNamed(
-                  '/user',
+                  UserScreen.routeName,
                   arguments: UserScreenArguments(uid: AuthServices.currentUid!),
                 );
               },
@@ -56,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(AppLocalizations.of(context)!.notifications),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).pushNamed('/myNotifications');
+                Navigator.of(context).pushNamed(MyNotificationsScreen.routeName);
               },
             ),
             ListTile(
@@ -64,7 +68,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(AppLocalizations.of(context)!.myRequests),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).pushNamed('/myRequests');
+                Navigator.of(context).pushNamed(MyRequestsScreen.routeName);
               },
             ),
             ListTile(
@@ -72,7 +76,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(AppLocalizations.of(context)!.myTools),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).pushNamed('/myTools');
+                Navigator.of(context).pushNamed(MyToolsScreen.routeName);
               },
             ),
             const Divider(),

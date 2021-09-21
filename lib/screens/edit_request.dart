@@ -7,6 +7,8 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 class EditRequestScreen extends StatefulWidget {
   const EditRequestScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/editRequest';
+
   @override
   _EditRequestScreenState createState() => _EditRequestScreenState();
 }

@@ -8,6 +8,8 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 class RequestsListScreen extends StatefulWidget {
   const RequestsListScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/toolsRequests';
+
   @override
   _RequestsListScreenState createState() => _RequestsListScreenState();
 }
@@ -65,7 +67,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
                 subtitle: Text(request.renterUID),
                 onTap: () async {
                   final result = await Navigator.of(context).pushNamed(
-                    '/request',
+                    RequestScreen.routeName,
                     arguments: RequestScreenArguments(request, true),
                   );
                   if (result == 'Deleted') {

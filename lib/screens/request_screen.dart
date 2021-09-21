@@ -9,6 +9,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class RequestScreen extends StatefulWidget {
   const RequestScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/request';
+
   @override
   State<RequestScreen> createState() => _RequestScreenState();
 }
@@ -40,7 +42,7 @@ class _RequestScreenState extends State<RequestScreen> {
                       Navigator.pop(context);
                       await Navigator.pushNamed(
                         context,
-                        '/editRequest',
+                        EditRequestScreen.routeName,
                         arguments: EditRequestScreenArguments(request),
                       );
                       setState(() {});

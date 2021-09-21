@@ -3,13 +3,17 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/edit_post_screen.dart';
+import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/tool_tile.dart';
-import 'package:rentool/models/rentool/rentool_models.dart';
 
 class MyToolsScreen extends StatefulWidget {
   const MyToolsScreen({Key? key}) : super(key: key);
+
+  static const routeName = '/myTools';
 
   @override
   _MyToolsScreenState createState() => _MyToolsScreenState();
@@ -63,7 +67,7 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
         foregroundColor: Colors.black,
         child: const Icon(Icons.add),
         onPressed: () async {
-          await Navigator.pushNamed(context, '/newPost');
+          await Navigator.pushNamed(context, EditPostScreen.routeNameNew);
           setState(() {});
         },
       ),
@@ -124,7 +128,7 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
                 return ToolTile(
                   tool: tool,
                   onTap: () async {
-                    final result = await Navigator.pushNamed(context, '/post', arguments: tool);
+                    final result = await Navigator.pushNamed(context, PostScreen.routeName, arguments: tool);
                     setState(() {
                       if (result == 'Deleted') {
                         tools.remove(tool);

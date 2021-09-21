@@ -9,6 +9,8 @@ import 'package:rentool/services/firestore.dart';
 class MyRequestsScreen extends StatefulWidget {
   const MyRequestsScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/myRequests';
+
   @override
   State<MyRequestsScreen> createState() => _MyRequestsScreenState();
 }
@@ -134,7 +136,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                   ),
                   onTap: () async {
                     await Navigator.of(context).pushNamed(
-                      '/request',
+                      RequestScreen.routeName,
                       arguments: RequestScreenArguments(request, false),
                     );
                     setState(() {});

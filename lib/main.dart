@@ -150,20 +150,20 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         '/': (context) => const FirstScreen(),
-        '/post': (context) => const PostScreen(),
-        '/newPost': (context) => const EditPostScreen(),
-        '/editPost': (context) => const EditPostScreen(isEditing: true),
-        '/deliver': (context) => const DeliverMeetScreen(),
-        '/return': (context) => const ReturnMeetScreen(),
-        '/newRequest': (context) => const NewRequestScreen(),
-        '/toolsRequests': (context) => const RequestsListScreen(),
-        '/search': (context) => const SearchScreen(),
-        '/request': (context) => const RequestScreen(),
-        '/myNotifications': (context) => const MyNotificationsScreen(),
-        '/myRequests': (context) => const MyRequestsScreen(),
-        '/myTools': (context) => const MyToolsScreen(),
-        '/editRequest': (context) => const EditRequestScreen(),
-        '/user': (context) => const UserScreen(),
+        PostScreen.routeName: (context) => const PostScreen(),
+        EditPostScreen.routeNameNew: (context) => const EditPostScreen(),
+        EditPostScreen.routeNameEdit: (context) => const EditPostScreen(isEditing: true),
+        DeliverMeetScreen.routeName: (context) => const DeliverMeetScreen(),
+        ReturnMeetScreen.routeName: (context) => const ReturnMeetScreen(),
+        NewRequestScreen.routeName: (context) => const NewRequestScreen(),
+        RequestsListScreen.routeName: (context) => const RequestsListScreen(),
+        SearchScreen.routeName: (context) => const SearchScreen(),
+        RequestScreen.routeName: (context) => const RequestScreen(),
+        MyNotificationsScreen.routeName: (context) => const MyNotificationsScreen(),
+        MyRequestsScreen.routeName: (context) => const MyRequestsScreen(),
+        MyToolsScreen.routeName: (context) => const MyToolsScreen(),
+        EditRequestScreen.routeName: (context) => const EditRequestScreen(),
+        UserScreen.routeName: (context) => const UserScreen(),
         EditReviewScreen.routeNameNew: (context) => const EditReviewScreen(isNew: true),
         EditReviewScreen.routeNameEdit: (context) => const EditReviewScreen(isNew: false),
         ReviewsScreen.routeName: (context) => const ReviewsScreen(),
@@ -185,6 +185,7 @@ class FirstScreen extends StatelessWidget {
         MyApp.of(context)?.fcmServices?.init(context);
 
         if (user == null) {
+          // TODO delete print statements
           print('User signed out');
           return const LoginScreen();
         } else {

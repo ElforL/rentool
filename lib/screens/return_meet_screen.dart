@@ -16,6 +16,8 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 class ReturnMeetScreen extends StatefulWidget {
   const ReturnMeetScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/return';
+
   @override
   _ReturnMeetScreenState createState() => _ReturnMeetScreenState();
 }

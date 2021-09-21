@@ -32,7 +32,7 @@ class ReviewTile extends StatelessWidget {
       title: InkWell(
         onTap: () {
           Navigator.of(context).pushNamed(
-            '/user',
+            UserScreen.routeName,
             arguments: UserScreenArguments(
               uid: review.creatorUID,
               user: user,

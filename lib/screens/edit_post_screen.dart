@@ -16,6 +16,9 @@ import 'package:rentool/widgets/media_tile.dart';
 class EditPostScreen extends StatefulWidget {
   const EditPostScreen({Key? key, this.isEditing = false}) : super(key: key);
 
+  static const routeNameNew = '/newPost';
+  static const routeNameEdit = '/editPost';
+
   final bool isEditing;
 
   @override

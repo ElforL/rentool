@@ -10,6 +10,8 @@ import 'package:rentool/widgets/big_icons.dart';
 class MyNotificationsScreen extends StatefulWidget {
   const MyNotificationsScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/myNotifications';
+
   @override
   State<MyNotificationsScreen> createState() => _MyNotificationsScreenState();
 }

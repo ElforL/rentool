@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/deliver_meet_screen.dart';
+import 'package:rentool/screens/edit_post_screen.dart';
+import 'package:rentool/screens/new_request_screen.dart';
 import 'package:rentool/screens/request_screen.dart';
+import 'package:rentool/screens/requests_list_screen.dart';
+import 'package:rentool/screens/return_meet_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -12,6 +17,8 @@ import 'package:rentool/widgets/rating.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({Key? key}) : super(key: key);
+
+  static const routeName = '/post';
 
   @override
   _PostScreenState createState() => _PostScreenState();
@@ -74,7 +81,7 @@ class _PostScreenState extends State<PostScreen> {
                   child: ListTile(
                     title: Text(AppLocalizations.of(context)!.edit),
                     onTap: () => Navigator.of(context).pushReplacementNamed(
-                      '/editPost',
+                      EditPostScreen.routeNameEdit,
                       arguments: tool,
                     ),
                   ),
@@ -102,7 +109,7 @@ class _PostScreenState extends State<PostScreen> {
                       final isSure = await showConfirmDialog(context);
                       if (isSure ?? false) {
                         FirestoreServices.deleteTool(tool.id);
-                        Navigator.of(context).popUntil(ModalRoute.withName('/post'));
+                        Navigator.of(context).popUntil(ModalRoute.withName(PostScreen.routeName));
                         Navigator.pop(context, 'Deleted');
                       }
                     },
@@ -198,7 +205,7 @@ class _PostScreenState extends State<PostScreen> {
                           borderRadius: BorderRadius.circular(5),
                           onTap: () async {
                             final result = await Navigator.of(context).pushNamed(
-                              '/user',
+                              UserScreen.routeName,
                               arguments: UserScreenArguments(user: owner),
                             );
                             if (result is RentoolUser) {
@@ -281,7 +288,7 @@ class _PostScreenState extends State<PostScreen> {
             onPressed: () {
               Navigator.pushNamed(
                 context,
-                '/deliver',
+                DeliverMeetScreen.routeName,
                 arguments: tool,
               );
             },
@@ -295,7 +302,7 @@ class _PostScreenState extends State<PostScreen> {
             onPressed: () {
               Navigator.pushNamed(
                 context,
-                '/return',
+                ReturnMeetScreen.routeName,
                 arguments: tool,
               );
             },
@@ -322,7 +329,7 @@ class _PostScreenState extends State<PostScreen> {
       return ElevatedButton.icon(
         icon: const Icon(Icons.send_and_archive_rounded),
         label: Text(AppLocalizations.of(context)!.browseRequests.toUpperCase()),
-        onPressed: () => Navigator.pushNamed(context, '/toolsRequests', arguments: tool),
+        onPressed: () => Navigator.pushNamed(context, RequestsListScreen.routeName, arguments: tool),
       );
     } else {
       return FutureBuilder(
@@ -339,7 +346,7 @@ class _PostScreenState extends State<PostScreen> {
               icon: const Icon(Icons.shopping_cart),
               label: Text(AppLocalizations.of(context)!.request.toUpperCase()),
               onPressed: () async {
-                final result = await Navigator.pushNamed(context, '/newRequest', arguments: tool);
+                final result = await Navigator.pushNamed(context, NewRequestScreen.routeName, arguments: tool);
                 if (result is ToolRequest) {
                   setState(() {
                     userRequest = result;
@@ -352,7 +359,7 @@ class _PostScreenState extends State<PostScreen> {
               child: Text(AppLocalizations.of(context)!.my_request.toUpperCase()),
               onPressed: () async {
                 final request = await Navigator.of(context).pushNamed(
-                  '/request',
+                  RequestScreen.routeName,
                   arguments: RequestScreenArguments(userRequest!, false),
                 );
                 if (request == 'Deleted') {

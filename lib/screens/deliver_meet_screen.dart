@@ -13,6 +13,8 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 class DeliverMeetScreen extends StatefulWidget {
   const DeliverMeetScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/deliver';
+
   @override
   _DeliverMeetScreenState createState() => _DeliverMeetScreenState();
 }

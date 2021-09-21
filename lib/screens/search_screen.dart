@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/rentool_search_bar.dart';
 import 'package:rentool/widgets/tool_tile.dart';
@@ -8,6 +9,8 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
+
+  static const routeName = '/search';
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -92,7 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return ToolTile(
       tool: tool,
       onTap: () {
-        Navigator.pushNamed(context, '/post', arguments: tool);
+        Navigator.pushNamed(context, PostScreen.routeName, arguments: tool);
       },
     );
   }
