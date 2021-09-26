@@ -279,7 +279,7 @@ class _PostScreenState extends State<PostScreen> {
   Widget _buildMeetingButtons(BuildContext context) {
     bool isUserAuthorized =
         acceptedRequest?.renterUID == AuthServices.currentUid || tool.ownerUID == AuthServices.currentUid;
-    return Row(
+    return Wrap(
       children: [
         if (tool.acceptedRequestID != null && isUserAuthorized) ...[
           ElevatedButton.icon(
