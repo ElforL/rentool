@@ -216,7 +216,21 @@ service cloud.firestore {
         
         // if the request is accepted the renter CAN'T update it
         allow update: if (resource.data.isAccepted == true) ? false : (isTheRenter() && isRequestUpdateValid());
-        
+
+        match /messages/{messageID}{
+          function isTheRenterForMessage(){
+            return get(/databases/$(database)/documents/Tools/$(toolID)/requests/$(requestID)).data.renterUID == request.auth.uid;
+          }
+
+          function areMessageFieldsValid(){
+            return request.resource.data.uid == request.auth.uid &&
+            request.resource.data.message is string &&
+            request.resource.data.sentTime == request.time;
+          }
+
+          allow read: if isTheRenterForMessage() || isTheToolOwner();
+          allow create: if areMessageFieldsValid();
+        }
       }
     
       match /deliver_meetings/{requestID}{
@@ -236,6 +250,7 @@ service cloud.firestore {
           return resource.data.owner_pics_ok == true && resource.data.renter_pics_ok == true;
         }
 
+        // TODO #26 ensure owner and renter uids match the request's
         function isTheToolOwner(){
           return request.auth != null && resource.data.ownerUID == request.auth.uid;
         }
