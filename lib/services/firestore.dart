@@ -214,6 +214,24 @@ class FirestoreServices {
     );
   }
 
+  static Future<DocumentReference<Map<String, dynamic>>> sendMessage(String message, String toolId, String requestId) {
+    return _toolsRef.doc(toolId).collection('requests').doc(requestId).collection('messages').add({
+      'uid': AuthServices.currentUid!,
+      'message': message,
+      'sentTime': FieldValue.serverTimestamp(),
+    });
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getChatStream(String toolId, String requestId) {
+    return _toolsRef
+        .doc(toolId)
+        .collection('requests')
+        .doc(requestId)
+        .collection('messages')
+        .orderBy('sentTime', descending: true)
+        .snapshots();
+  }
+
   // ////////////////////////////// User //////////////////////////////
 
   /// Add [uuid] to the user's devices collection.
