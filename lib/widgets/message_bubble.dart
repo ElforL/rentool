@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:rentool/models/chat_message.dart';
 
 /* 
@@ -42,14 +44,27 @@ class MessageBubble extends StatelessWidget {
           Container(
             // set max width
             constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             decoration: BoxDecoration(
-              color: isSent ? Colors.blue.shade300 : Colors.grey.shade400,
+              color: isSent ? Colors.blue.shade300 : Colors.grey.shade300,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Text(
-              message.message,
-              maxLines: null,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  message.message,
+                  textDirection:
+                      intl.Bidi.detectRtlDirectionality(message.message) ? TextDirection.rtl : TextDirection.ltr,
+                  maxLines: null,
+                ),
+                Text(
+                  message.sentTime == null
+                      ? '-'
+                      : intl.DateFormat('h:mm a', AppLocalizations.of(context)!.localeName).format(message.sentTime!),
+                  style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.black54),
+                ),
+              ],
             ),
           ),
         ],

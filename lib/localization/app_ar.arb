@@ -261,6 +261,7 @@
 
     "cant_delete_rented_tool": "لا يمكن حذف أداة مؤجرة",
     "chat_with_role": "تواصل مع {role, select, owner{المالك} renter{المستأجر} other{الشخص الآخر}}",
+    "type_a_message": "اكتب رسالة",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

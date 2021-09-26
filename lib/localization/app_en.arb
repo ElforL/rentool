@@ -491,6 +491,7 @@
             "role": {}
         }
     },
+    "type_a_message": "Type a message",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/chat_screen.dart';
 import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/edit_post_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
@@ -281,12 +282,19 @@ class _PostScreenState extends State<PostScreen> {
         acceptedRequest?.renterUID == AuthServices.currentUid || tool.ownerUID == AuthServices.currentUid;
     return Wrap(
       children: [
-        if (tool.acceptedRequestID != null && isUserAuthorized) ...[
+        if (acceptedRequest != null && isUserAuthorized) ...[
           ElevatedButton.icon(
             icon: const Icon(Icons.chat),
             label: Text(AppLocalizations.of(context)!.chat_with_role(isUsersTool ? 'renter' : 'owner').toUpperCase()),
             onPressed: () {
-              // TODO push chat screen
+              Navigator.of(context).pushNamed(
+                ChatScreen.routeName,
+                arguments: ChatScreenArguments(
+                  acceptedRequest!,
+                  isUsersTool ? acceptedRequest!.renterUID : tool.ownerUID,
+                  otherUser: isUsersTool ? null : owner,
+                ),
+              );
             },
           ),
           const SizedBox(width: 10),
