@@ -19,6 +19,25 @@ class FirestoreServices {
   /// `CollectionReference` of the 'Tools' collection in the database
   static final CollectionReference _toolsRef = _db.collection('Tools');
 
+  /// The current user's ID number.
+  ///
+  /// could be `null` if the user is signed out or if the user didn't set an ID number.
+  static String? userIdNumber;
+
+  /// Gets the ID number of the currently signed in user and sets [FirestoreServices.userIdNumber] accordingly.
+  ///
+  /// returns null if the user is signed out.
+  static Future<String?> getUserIdNumber() async {
+    if (userIdNumber != null) return userIdNumber;
+    if (AuthServices.currentUid == null) return null;
+
+    final doc = await getID(AuthServices.currentUid!);
+    if (doc.exists && doc.data() is Map<String, dynamic>) {
+      return userIdNumber = (doc.data() as Map)['idNumber'];
+    }
+    return null;
+  }
+
   // ////////////////////////////// Tools //////////////////////////////
 
   /// Create a tool document in Firestore and return a `Tool` object.

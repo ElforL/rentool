@@ -184,6 +184,7 @@ class FirstScreen extends StatelessWidget {
         if (user == null) {
           // TODO delete print statements
           print('User signed out');
+          FirestoreServices.userIdNumber = null;
           return const LoginScreen();
         } else {
           print('Signed in as ${user.displayName ?? '[Unset Name]'} ');
@@ -191,6 +192,7 @@ class FirstScreen extends StatelessWidget {
             print('Email address not verified.');
           }
           addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
+          FirestoreServices.getUserIdNumber();
 
           return const HomePage();
         }
