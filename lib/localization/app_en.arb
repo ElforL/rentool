@@ -492,6 +492,35 @@
         }
     },
     "type_a_message": "Type a message",
+    "@type_a_message": {
+        "description": "created to be used as a hint text for chat screen's TextField"
+    },
+
+    "no_id_number": "No ID number",
+    "@no_id_number": {
+        "description": "created to be used in missing ID dialog title"
+    },
+    "you_must_set_ID_number": "You need to set an ID number to perform this action",
+    "@you_must_set_ID_number": {
+        "description": "created to be used in missing ID dialog body"
+    },
+    "set_id": "Set ID",
+    "@set_id": {
+        "description": "created to be used in missing ID dialog actions"
+    },
+
+    "email_address_not_verified": "Email address not verified",
+    "@email_address_not_verified": {
+        "description": "created to be used in email not verified dialog title"
+    },
+    "you_need_to_verify_email": "You need to verify your email address to perform this action.\nCheck your inbox for the verification email. If you can't find it, check the spam folder. If you can't find it press \"Resend email\" below",
+    "@you_need_to_verify_email": {
+        "description": "created to be used in email not verified dialog body"
+    },
+    "resend_email": "Resend email",
+    "@resend_email": {
+        "description": "created to be used in email not verified dialog actions"
+    },
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

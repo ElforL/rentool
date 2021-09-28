@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/icon_alert_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -54,6 +55,58 @@ Future<bool?> showConfirmDialog(BuildContext context, {Widget? content, Widget? 
           },
         ),
       ],
+    ),
+  );
+}
+
+Future<dynamic> showEmailNotVerifiedDialog(BuildContext context, {List<Widget>? actions}) {
+  return showDialog(
+    context: context,
+    builder: (context) => IconAlertDialog(
+      icon: Icons.mark_email_read_rounded,
+      titleText: AppLocalizations.of(context)!.email_address_not_verified,
+      bodyText: AppLocalizations.of(context)!.you_need_to_verify_email,
+      actions: actions ??
+          [
+            if (AuthServices.currentUser != null)
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.resend_email.toUpperCase()),
+                onPressed: () {
+                  AuthServices.currentUser!.sendEmailVerification();
+                  Navigator.pop(context);
+                },
+              ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+    ),
+  );
+}
+
+Future<dynamic> showIdMissingDialog(BuildContext context, {List<Widget>? actions}) {
+  return showDialog(
+    context: context,
+    builder: (context) => IconAlertDialog(
+      icon: Icons.badge,
+      titleText: AppLocalizations.of(context)!.no_id_number,
+      bodyText: AppLocalizations.of(context)!.you_must_set_ID_number,
+      actions: actions ??
+          [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.set_id.toUpperCase()),
+              onPressed: () {
+                // TODO navigate to accout settings when pressing "set ID" in IdMissingDialog
+                //   Navigator.of(context).pushNamed('/accountSettings');
+                Navigator.pop(context);
+              },
+            ),
+          ],
     ),
   );
 }
