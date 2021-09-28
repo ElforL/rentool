@@ -12,6 +12,9 @@ class AuthServices {
   /// Returns `true` if the user is signed in and vice versa.
   static bool get isSignedIn => auth.currentUser != null;
 
+  /// Returns the current [User] if they are currently signed-in, or null if not.
+  static User? get currentUser => auth.currentUser;
+
   /// Returns the current [User] if they are currently signed-in, or `null` if not.
   static String? get currentUid => auth.currentUser?.uid;
 
