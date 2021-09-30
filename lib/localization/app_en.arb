@@ -73,7 +73,7 @@
         "description": "message for FirebaseAuthException code: account-exists-with-different-credential"
     },
     
-    "title_REQ_REC": "Recived a New Request",
+    "title_REQ_REC": "Received a New Request",
     "title_REQ_ACC": "Request Accepted",
     "title_REQ_DEL": "Request Deleted",
     "title_REN_START": "Rent Started",
@@ -81,7 +81,7 @@
     "title_DC_DAM": "Disagreement Case Settled",
     "title_DC_NDAM": "Disagreement Case Settled",
 
-    "body_REQ_REC": "You recived a new request on your {toolName} by {renterName}.",
+    "body_REQ_REC": "You received a new request on your {toolName} by {renterName}.",
     "@body_REQ_REC": {
         "placeholders": {
             "toolName": {},

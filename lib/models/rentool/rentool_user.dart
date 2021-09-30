@@ -21,7 +21,7 @@ class RentoolUser {
     this.requests,
   }) {
     if (rating > 5 || rating < 0) {
-      throw ArgumentError('User rating must be between 0 and 5 inclusive. Recived $rating');
+      throw ArgumentError('User rating must be between 0 and 5 inclusive. Received $rating');
     }
   }
 

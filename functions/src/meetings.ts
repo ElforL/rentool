@@ -507,7 +507,7 @@ function arraysEqual(a: any, b: any) {
  * @param userUID the user's uid
  * @param code
  * Notifications codes:
- * - `REQ_REC`: request recived
+ * - `REQ_REC`: request received
  * - `REQ_ACC`: request accepted
  * - `REQ_DEL`: request deleted
  * - `REN_START`: rent started

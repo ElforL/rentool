@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                   subtitle: '3',
                 ),
                 CountHomePageContainer(
-                  titleText: 'Recived requests',
+                  titleText: 'Received requests',
                   subtitle: '12',
                 ),
               ],

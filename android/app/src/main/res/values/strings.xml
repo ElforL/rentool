@@ -4,7 +4,7 @@
     <string name="facebook_app_id">1941987192620334</string>
     <string name="fb_login_protocol_scheme">fb1941987192620334</string>
     
-    <string name="title_REQ_REC">Recived a New Request</string>
+    <string name="title_REQ_REC">Received a New Request</string>
     <string name="title_REQ_ACC">Request Accepted</string>
     <string name="title_REQ_DEL">Request Deleted</string>
     <string name="title_REN_START">Rent Started</string>
@@ -13,7 +13,7 @@
     <string name="title_DC_NDAM">Disagreement Case Settled</string>
 
     <!-- "toolName", "renterName"  -->
-    <string name="body_REQ_REC">You recived a new request on your %1$s by %2$s.</string>
+    <string name="body_REQ_REC">You received a new request on your %1$s by %2$s.</string>
 
     <!-- "toolName" -->
     <string name="body_REQ_ACC">Your request on %1$s was accepted.</string>
