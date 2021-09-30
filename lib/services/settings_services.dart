@@ -1,3 +1,7 @@
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
+import 'package:rentool/services/auth.dart';
+import 'package:rentool/services/firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsServices {
@@ -40,8 +44,26 @@ class SettingsServices {
     return sharedPreferences.getBool(notificationsEnabledKey);
   }
 
-  Future<bool> setNotificationsEnabled(bool newValue) {
-    // TODO disable sending notification from FCM
+  Future<bool> setNotificationsEnabled(bool newValue) async {
+    if (!newValue) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      String? uuid;
+      switch (defaultTargetPlatform) {
+        case TargetPlatform.android:
+          final androidInfo = await deviceInfo.androidInfo;
+          uuid = androidInfo.androidId;
+          break;
+        case TargetPlatform.iOS:
+          final iosInfo = await deviceInfo.iosInfo;
+          uuid = iosInfo.identifierForVendor;
+          break;
+        default:
+          print("couldn't identify current platfrom in `setNotificationsEnabled()`");
+      }
+      if (uuid != null && AuthServices.currentUid != null) {
+        FirestoreServices.deleteDeviceToken(uuid, AuthServices.currentUid!);
+      }
+    }
     return sharedPreferences.setBool(notificationsEnabledKey, newValue);
   }
 

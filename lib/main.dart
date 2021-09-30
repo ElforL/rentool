@@ -194,7 +194,12 @@ class FirstScreen extends StatelessWidget {
           if (!user.emailVerified) {
             print('Email address not verified.');
           }
-          addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
+          final settings = SettingsServices();
+          settings.init().then((_) {
+            if (settings.getNotificationsEnabled() ?? true) {
+              addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
+            }
+          });
           FirestoreServices.getUserIdNumber();
 
           return const HomePage();
