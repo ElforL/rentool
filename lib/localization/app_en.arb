@@ -522,6 +522,74 @@
         "description": "created to be used in email not verified dialog actions"
     },
 
+    "enable_notifications": "Enable notifications",
+    "@enable_notifications": {
+        "description": "created to be used in settings screen"
+    },
+    "appearance": "Appearance",
+    "@appearance": {
+        "description": "created to be used in settings screen"
+    },
+    "language": "Language",
+    "@language": {
+        "description": "created to be used in settings screen"
+    },
+    "theme": "Theme",
+    "@theme": {
+        "description": "created to be used in settings screen"
+    },
+    "support": "Support",
+    "@support": {
+        "description": "created to be used in settings screen"
+    },
+    "help_center": "Help center",
+    "@help_center": {
+        "description": "created to be used in settings screen"
+    },
+    "report_an_issue": "Report an issue",
+    "@report_an_issue": {
+        "description": "created to be used in settings screen"
+    },
+    "about": "About",
+    "@about": {
+        "description": "created to be used in settings screen"
+    },
+    "privacy_policy": "Privacy policy",
+    "@privacy_policy": {
+        "description": "created to be used in settings screen"
+    },
+    "user_agreement": "User agreement",
+    "@user_agreement": {
+        "description": "created to be used in settings screen"
+    },
+    "software_licenses": "Software licenses",
+    "@software_licenses": {
+        "description": "created to be used in settings screen"
+    },
+    "device_default": "Device's default: {argument}",
+    "@device_default": {
+        "description": "created to be used in settings screen",
+        "placeholders": {
+            "argument": {"type": "String"}
+        }
+    },
+    "english": "English",
+    "@english": {
+        "description": "created to be used in settings screen"
+    },
+    "arabic": "Arabic - العربية",
+    "@english": {
+        "description": "created to be used in settings screen"
+    },
+    "dark": "Dark",
+    "@dark": {
+        "description": "created to be used in settings screen"
+    },
+    "light": "Light",
+    "@light": {
+        "description": "created to be used in settings screen"
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

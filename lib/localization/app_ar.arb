@@ -271,5 +271,22 @@
     "you_need_to_verify_email": "يجب التحقق من عنوان البريد الإلكتروني لتنفيذ هذه العملية.\nابحث عن رسالة التحقق في صندوق بريدك الالكتروني. ان لم تجد الرسالة تحقق من صندوق البريد الوارد غير المرغوب فيه. ان لم تجدها اضغط على \"اعد الإرسال\" ادناه.",
     "resend_email": "اعد الإرسال",
 
+    "enable_notifications": "تفعيل الإشعارات",
+    "appearance": "المظهر",
+    "language": "اللغة",
+    "theme": "السمة",
+    "support": "الدعم",
+    "help_center": "مركز المساعدة",
+    "report_an_issue": "التبليغ عن مشكلة",
+    "about": "عن",
+    "privacy_policy": "سياسة الخصوصية",
+    "user_agreement": "اتفاقية المستخدم",
+    "software_licenses": "تراخيص البرمجيات",
+    "device_default": "الافتراضي للجهاز: {argument}",
+    "english": "الإنجليزية - English",
+    "arabic": "العربية",
+    "dark": "داكن",
+    "light": "فاتح",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
