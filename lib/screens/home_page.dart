@@ -89,14 +89,6 @@ class _HomePageState extends State<HomePage> {
                 Navigator.of(context).pushNamed(SettingsScreen.routeName);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.help_outline),
-              title: Text(AppLocalizations.of(context)!.helpNSupport),
-              onTap: () {
-                Navigator.pop(context);
-                // TODO navigate to help screen
-              },
-            ),
           ],
         ),
       ),
