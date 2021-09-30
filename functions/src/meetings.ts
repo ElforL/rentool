@@ -331,8 +331,6 @@ async function startRent(
       return functions.logger.error(
         `an error occured while starting the rent for tool ${toolID}, request ${requestID}, owner:${ownerUID}, renter${renterUID}`,
         `did the error occur in payment?: ${errorInPayment}`,
-        'error toString = ',
-        error.toString(),
         'error variable:',
         error,
       );
@@ -470,8 +468,6 @@ async function endRent(
       return functions.logger.error(
         `an error occured while ending the rent for tool ${toolID}, request ${requestID}, owner:${ownerUID}, renter${renterUID}`,
         `did the error occur in payment?: ${errorInPayment}`,
-        'error toString = ',
-        error.toString(),
         'error variable:',
         error,
       );
