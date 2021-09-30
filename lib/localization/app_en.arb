@@ -525,6 +525,10 @@
     "@enable_notifications": {
         "description": "created to be used in settings screen"
     },
+    "enable_notifications_subtitle": "Allow Rentool servers to send notifications to this device.",
+    "@enable_notifications_subtitle": {
+        "description": "created to be used in settings screen"
+    },
     "view": "View",
     "@view": {
         "description": "created to be used in settings screen"

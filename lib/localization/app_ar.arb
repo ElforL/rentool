@@ -271,6 +271,7 @@
     "resend_email": "اعد الإرسال",
 
     "enable_notifications": "تفعيل الإشعارات",
+    "enable_notifications_subtitle": "السماح لسيرفرات رينتول بإرسال إشعارات لهذا الجهاز.",
     "view": "العرض",
     "language": "اللغة",
     "theme": "المظهر",
