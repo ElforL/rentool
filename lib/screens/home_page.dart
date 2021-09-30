@@ -5,6 +5,7 @@ import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
 import 'package:rentool/screens/my_tools_screen.dart';
 import 'package:rentool/screens/search_screen.dart';
+import 'package:rentool/screens/settings_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/home_page/count_home_page_container.dart';
@@ -85,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(AppLocalizations.of(context)!.settings),
               onTap: () {
                 Navigator.pop(context);
-                // TODO navigate to settings screen
+                Navigator.of(context).pushNamed(SettingsScreen.routeName);
               },
             ),
             ListTile(

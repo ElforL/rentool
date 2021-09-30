@@ -26,10 +26,12 @@ import 'package:rentool/screens/requests_list_screen.dart';
 import 'package:rentool/screens/return_meet_screen.dart';
 import 'package:rentool/screens/reviews_screen.dart';
 import 'package:rentool/screens/search_screen.dart';
+import 'package:rentool/screens/settings_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/cloud_messaging.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/services/settings_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -85,12 +87,10 @@ class _MyAppState extends State<MyApp> {
 
   CloudMessagingServices? get fcmServices => widget.fcmServices;
 
-  void setLocale(Locale value) async {
+  void setLocale(Locale? locale) async {
     setState(() {
-      _locale = value;
+      _locale = locale;
     });
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('locale', value.languageCode);
   }
 
   void nextLocale(context) {
@@ -101,6 +101,8 @@ class _MyAppState extends State<MyApp> {
       final nextIndex = (currentIndex + 1) % AppLocalizations.supportedLocales.length;
       final nextLocale = AppLocalizations.supportedLocales.elementAt(nextIndex);
       setLocale(nextLocale);
+      final settings = SettingsServices();
+      settings.init().then((_) => settings.setLanguageCode(nextLocale.languageCode));
     }
   }
 
@@ -164,6 +166,7 @@ class _MyAppState extends State<MyApp> {
         EditReviewScreen.routeNameEdit: (context) => const EditReviewScreen(isNew: false),
         ReviewsScreen.routeName: (context) => const ReviewsScreen(),
         ChatScreen.routeName: (context) => const ChatScreen(),
+        SettingsScreen.routeName: (context) => const SettingsScreen(),
       },
     );
   }
