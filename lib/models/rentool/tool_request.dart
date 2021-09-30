@@ -21,7 +21,7 @@ class ToolRequest {
     this.isRented,
   ) {
     if (numOfDays <= 0) {
-      throw ArgumentError('numOfDays must be greater than 0. Recived $numOfDays');
+      throw ArgumentError('numOfDays must be greater than 0. Received $numOfDays');
     }
     // renterUID =/= tool.ownerUID
   }
