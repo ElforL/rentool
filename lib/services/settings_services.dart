@@ -1,4 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
@@ -45,23 +46,36 @@ class SettingsServices {
   }
 
   Future<bool> setNotificationsEnabled(bool newValue) async {
-    if (!newValue) {
+    String? token;
+    if (newValue) {
+      token = await FirebaseMessaging.instance.getToken();
+    }
+
+    if (!newValue || token != null) {
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       String? uuid;
+      String? deviceName;
       switch (defaultTargetPlatform) {
         case TargetPlatform.android:
           final androidInfo = await deviceInfo.androidInfo;
           uuid = androidInfo.androidId;
+          deviceName = androidInfo.model;
           break;
         case TargetPlatform.iOS:
           final iosInfo = await deviceInfo.iosInfo;
           uuid = iosInfo.identifierForVendor;
+          deviceName = iosInfo.model;
           break;
         default:
-          print("couldn't identify current platfrom in `setNotificationsEnabled()`");
+          print("addFcmTokenToDb() couldn't identify current platfrom");
       }
+
       if (uuid != null && AuthServices.currentUid != null) {
-        FirestoreServices.deleteDeviceToken(uuid, AuthServices.currentUid!);
+        if (newValue && token != null) {
+          FirestoreServices.addDeviceToken(token, AuthServices.currentUid!, uuid, deviceName);
+        } else {
+          FirestoreServices.deleteDeviceToken(uuid, AuthServices.currentUid!);
+        }
       }
     }
     return sharedPreferences.setBool(notificationsEnabledKey, newValue);
