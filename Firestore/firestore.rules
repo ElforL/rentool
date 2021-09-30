@@ -32,11 +32,12 @@ service cloud.firestore {
       match /devices/{fcmToken}{
         function areFieldsValid(){
           return request.resource.data.deviceName is string &&
-          request.resource.data.token is string;
+          (request.resource.data.token is string || request.resource.data.token == null);
         }
 
       	allow read: if isTHEuser();
-        allow write: if isTHEuser() && areFieldsValid();
+        allow create, update: if isTHEuser() && areFieldsValid();
+        allow delete: if isTHEuser();
       }
 
       match /notifications/{notificationID}{
