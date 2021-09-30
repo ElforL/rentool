@@ -178,13 +178,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   leading: const Icon(null),
                   title: Text(AppLocalizations.of(context)!.software_licenses),
                   onTap: () {
-                    showLicensePage(
-                      context: context,
-                      applicationIcon: SizedBox(
-                        height: 40,
-                        child: LogoImage.primary(),
-                      ),
-                      applicationName: '',
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            appBarTheme: const AppBarTheme(backgroundColor: Colors.grey),
+                          ),
+                          child: LicensePage(
+                            applicationIcon: SizedBox(
+                              height: 40,
+                              child: LogoImage.primary(),
+                            ),
+                            applicationName: '',
+                          ),
+                        );
+                      }),
                     );
                   },
                 ),
