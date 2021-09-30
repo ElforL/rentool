@@ -57,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const SizedBox(height: 20),
                 ListLabel(
-                  text: AppLocalizations.of(context)!.appearance,
+                  text: AppLocalizations.of(context)!.view,
                 ),
                 ListTile(
                   leading: const Icon(Icons.translate_rounded),

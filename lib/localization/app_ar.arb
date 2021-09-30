@@ -271,9 +271,9 @@
     "resend_email": "اعد الإرسال",
 
     "enable_notifications": "تفعيل الإشعارات",
-    "appearance": "المظهر",
+    "view": "العرض",
     "language": "اللغة",
-    "theme": "السمة",
+    "theme": "المظهر",
     "support": "الدعم",
     "help_center": "مركز المساعدة",
     "report_an_issue": "التبليغ عن مشكلة",

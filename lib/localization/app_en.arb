@@ -525,8 +525,8 @@
     "@enable_notifications": {
         "description": "created to be used in settings screen"
     },
-    "appearance": "Appearance",
-    "@appearance": {
+    "view": "View",
+    "@view": {
         "description": "created to be used in settings screen"
     },
     "language": "Language",
