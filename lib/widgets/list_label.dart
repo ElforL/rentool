@@ -5,15 +5,17 @@ class ListLabel extends StatelessWidget {
     Key? key,
     required this.text,
     this.color,
+    this.hasLeadingSpace = true,
   }) : super(key: key);
 
   final String text;
   final Color? color;
+  final bool hasLeadingSpace;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(null),
+      leading: hasLeadingSpace ? const Icon(null) : null,
       title: Text(
         text,
         style: TextStyle(color: color ?? Theme.of(context).colorScheme.primary),
