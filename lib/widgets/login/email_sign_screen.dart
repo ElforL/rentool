@@ -90,6 +90,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           _emailContoller.text,
           _passwordContoller.text,
         );
+        await Future.delayed(const Duration(seconds: 5));
         await FirestoreServices.updateUserName(
           AuthServices.currentUid!,
           _usernameContoller.text.trim(),
