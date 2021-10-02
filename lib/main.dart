@@ -200,8 +200,8 @@ class FirstScreen extends StatelessWidget {
           }
           final settings = SettingsServices();
           settings.init().then((_) {
-            if (settings.getNotificationsEnabled() ?? true) {
-              addFcmTokenToDb(user, AppLocalizations.of(context)!.localeName);
+            if (settings.getNotificationsEnabled() == null) {
+              settings.setNotificationsEnabled(true);
             }
           });
           FirestoreServices.getUserIdNumber();
