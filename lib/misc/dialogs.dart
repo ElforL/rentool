@@ -59,6 +59,28 @@ Future<bool?> showConfirmDialog(BuildContext context, {Widget? content, Widget? 
   );
 }
 
+Future<dynamic> showIconAlertDialog(BuildContext context,
+    {required IconData icon,
+    required String titleText,
+    String? bodyText,
+    String? importantText,
+    String? noteText,
+    List<Widget>? actions,
+    Key? key}) {
+  return showDialog(
+    context: context,
+    builder: (context) => IconAlertDialog(
+      icon: icon,
+      titleText: titleText,
+      bodyText: bodyText,
+      importantText: importantText,
+      noteText: noteText,
+      actions: actions,
+      key: key,
+    ),
+  );
+}
+
 Future<dynamic> showEmailNotVerifiedDialog(BuildContext context, {List<Widget>? actions}) {
   return showDialog(
     context: context,
