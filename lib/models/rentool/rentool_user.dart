@@ -34,7 +34,7 @@ class RentoolUser {
     if (json['requests'] != null) _requests = (json['requests'] as List).map((e) => ToolRequest.fromJson(e)).toList();
     return RentoolUser(
       json['uid'],
-      json['name'],
+      json['name'] ?? '',
       json['rating'].toDouble(),
       json['numOfReviews'],
       photoURL: json['photoURL'],
