@@ -22,7 +22,7 @@ class UserListTile extends StatelessWidget {
         user: user,
       ),
       onTap: onTap,
-      title: Text(user.displayName ?? AppLocalizations.of(context)!.account),
+      title: Text(AppLocalizations.of(context)!.my_account),
       trailing: TextButton(
         child: Text(AppLocalizations.of(context)!.signOut.toUpperCase()),
         onPressed: () async {

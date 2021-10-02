@@ -253,7 +253,7 @@
     "deliver": "إيصال",
     "returnn": "إرجاع",
     "no_requests": "لا يوجد أي طلب",
-    "account": "الحساب",
+    "my_account": "حسابي",
 
     "delete_review": "حذف المراجعة",
     "delete_review_confirm": "هل أنت متأكد من أنك تريد حذف مراجعتك؟",

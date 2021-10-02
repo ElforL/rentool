@@ -478,7 +478,7 @@
         "description": "Intentionally named 'returnn' to avoid the keyword 'return'"
     },
     "no_requests": "There are no requests",
-    "account": "Account",
+    "my_account": "My account",
 
     "delete_review": "Delete review",
     "delete_review_confirm": "Are you sure you want to delete your review?",
