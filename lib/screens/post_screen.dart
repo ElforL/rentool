@@ -366,11 +366,13 @@ class _PostScreenState extends State<PostScreen> {
               icon: const Icon(Icons.shopping_cart),
               label: Text(AppLocalizations.of(context)!.request.toUpperCase()),
               onPressed: () async {
-                if (AuthServices.currentUser!.emailVerified) {
+                if (!AuthServices.currentUser!.emailVerified) {
                   showEmailNotVerifiedDialog(context);
+                  return;
                 }
                 if (FirestoreServices.userIdNumber == null) {
                   showIdMissingDialog(context);
+                  return;
                 }
                 final result = await Navigator.pushNamed(context, NewRequestScreen.routeName, arguments: tool);
                 if (result is ToolRequest) {
