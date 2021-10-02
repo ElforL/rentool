@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/account_settings_screen.dart';
 import 'package:rentool/screens/chat_screen.dart';
 import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/edit_request.dart';
@@ -171,6 +172,7 @@ class _MyAppState extends State<MyApp> {
         ReviewsScreen.routeName: (context) => const ReviewsScreen(),
         ChatScreen.routeName: (context) => const ChatScreen(),
         SettingsScreen.routeName: (context) => const SettingsScreen(),
+        AccountSettingsScreen.routeName: (context) => AccountSettingsScreen(),
       },
     );
   }

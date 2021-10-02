@@ -324,6 +324,11 @@ class FirestoreServices {
     return _usersRef.doc(uid).collection('private').doc('ID').get();
   }
 
+  static Future<void> setID(String idNumber) async {
+    await _usersRef.doc(AuthServices.currentUid!).collection('private').doc('ID').set({'idNumber': idNumber});
+    userIdNumber = idNumber;
+  }
+
   /// Sets _isRead_ field to [isRead] of the notification with the given [notificationId] of the user with the given [uid].
   static Future<void> setNotificationIsRead(String uid, String notificationId, {bool isRead = true}) {
     return _usersRef.doc(uid).collection('notifications').doc(notificationId).update({'isRead': isRead});

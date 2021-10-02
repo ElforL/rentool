@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/account_settings_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/reviews_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -58,13 +59,13 @@ class _UserScreenState extends State<UserScreen> {
     isLoadingTools = false;
   }
 
-  Future<void> _refresh() async {
+  Future<void> _refresh({bool withTool = true}) async {
     user = await FirestoreServices.getUser(user!.uid);
     setState(() {
       tools.clear();
       noMoreToolsDocs = false;
       previousToolDoc = null;
-      tools = [];
+      if (withTool) tools = [];
     });
   }
 
@@ -95,7 +96,8 @@ class _UserScreenState extends State<UserScreen> {
         body: FutureBuilder(
             future: future,
             builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
-              if (snapshot.hasError) print('error getting user info: ${snapshot.error}');
+              if (snapshot.hasError)
+                print('error getting user info: ${snapshot.error}\n${((snapshot.error as Error).stackTrace)}');
 
               user = snapshot.data;
 
@@ -197,8 +199,14 @@ class _UserScreenState extends State<UserScreen> {
                     height: 30,
                     child: OutlinedButton(
                       child: Text(AppLocalizations.of(context)!.account_settings.toUpperCase()),
-                      onPressed: () {
-                        // TODO push account settings
+                      onPressed: () async {
+                        final newUser = await Navigator.of(context).pushNamed(
+                          AccountSettingsScreen.routeName,
+                          arguments: AccountSettingsScreenArguments(user: user),
+                        );
+                        if (newUser != null && newUser is RentoolUser) {
+                          setState(() => user = newUser);
+                        }
                       },
                     ),
                   ),

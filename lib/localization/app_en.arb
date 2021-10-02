@@ -512,7 +512,7 @@
     "@email_address_not_verified": {
         "description": "created to be used in email not verified dialog title"
     },
-    "you_need_to_verify_email": "You need to verify your email address to perform this action.\nCheck your inbox for the verification email. If you can't find it, check the spam folder. If you can't find it press \"Resend email\" below",
+    "you_need_to_verify_email": "You need to verify your email address to perform this action.\nIf you already verified then try signing out and signing in again.\nOtherwise, check your inbox for the verification email. If you can't find it, check the spam folder. If you can't find it press \"Resend email\" below",
     "@you_need_to_verify_email": {
         "description": "created to be used in email not verified dialog body"
     },
@@ -581,7 +581,7 @@
         "description": "created to be used in settings screen"
     },
     "arabic": "Arabic - العربية",
-    "@english": {
+    "@arabic": {
         "description": "created to be used in settings screen"
     },
     "dark": "Dark",
@@ -591,6 +591,48 @@
     "light": "Light",
     "@light": {
         "description": "created to be used in settings screen"
+    },
+
+    "change_your_photo": "Change your photo",
+    "@change_your_photo": {
+        "description": "created to be used in account settings screen"
+    },
+    "no_email_address": "No email address",
+    "@no_email_address": {
+        "description": "created to be used in account settings screen"
+    },
+    "resend_verification_email": "Resend verification email",
+    "@resend_verification_email": {
+        "description": "created to be used in account settings screen"
+    },
+    "check_inbox_for_verification_email": "We should have sent you a verification email\nIf you already verified then try signing out and signing in again.\nOtherwise, please first check your inbox for the verification email. If you can't find it, check the spam folder. If you can't find it then press \"Resend email\" below",
+    "@check_inbox_for_verification_email": {
+        "description": "created to be used in account settings screen"
+    },
+    "id_number": "ID number",
+    "@id_number": {
+        "description": "created to be used in account settings screen"
+    },
+    "set_id_number": "Set ID number",
+    "@set_id_number": {
+        "description": "created to be used in account settings screen"
+    },
+    "change_your_password": "Change your password",
+    "@change_your_password": {
+        "description": "created to be used in account settings screen"
+    },
+    "you_cant_change_id_number": "You can set your ID number only once. You can't change it later.",
+    "@you_cant_change_id_number": {
+        "description": "created to be used in account settings screen"
+    },
+    "enter_your_id_number": "Enter your ID number",
+    "@enter_your_id_number": {
+        "description": "created to be used in account settings screen"
+    },
+    
+    "id_number_must_be_10_digits": "ID number must be 10 digits long",
+    "@id_number_must_be_10_digits": {
+        "description": "created to be used in SetIdDialog"
     },
 
     "someLocalizedString": "Localized part - {argument}",

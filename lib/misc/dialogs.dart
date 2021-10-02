@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rentool/screens/account_settings_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/icon_alert_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -123,9 +124,8 @@ Future<dynamic> showIdMissingDialog(BuildContext context, {List<Widget>? actions
             TextButton(
               child: Text(AppLocalizations.of(context)!.set_id.toUpperCase()),
               onPressed: () {
-                // TODO navigate to accout settings when pressing "set ID" in IdMissingDialog
-                //   Navigator.of(context).pushNamed('/accountSettings');
                 Navigator.pop(context);
+                Navigator.of(context).pushNamed(AccountSettingsScreen.routeName);
               },
             ),
           ],
