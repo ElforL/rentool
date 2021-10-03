@@ -25,4 +25,9 @@ class StorageServices {
     final fileName = file.uri.pathSegments.last;
     return _storage.ref('/return_meetings/$toolID/$requestID/$uid/$fileName').putFile(file);
   }
+
+  static UploadTask uploadUserPhoto(File file, String uid) {
+    // final type = fileName.substring(fileName.lastIndexOf('.'));
+    return _storage.ref('/userPhotos/$uid').putFile(file);
+  }
 }

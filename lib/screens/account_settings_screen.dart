@@ -1,11 +1,13 @@
-import 'dart:ui';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/services/storage_services.dart';
 import 'package:rentool/widgets/duration_disabled_button.dart';
 import 'package:rentool/widgets/list_label.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
@@ -39,6 +41,20 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
       AuthServices.currentUser!.reload();
     }
     super.initState();
+  }
+
+  Future<void> _uploadPhoto() async {
+    ImagePicker picker = ImagePicker();
+    XFile? xfile;
+    xfile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (xfile != null) {
+      final file = File(xfile.path);
+      final task = await StorageServices.uploadUserPhoto(file, AuthServices.currentUid!);
+      final photoUrl = await task.ref.getDownloadURL();
+      await FirestoreServices.updateUserPhotoURL(AuthServices.currentUid!, photoUrl);
+      setState(() => user!.photoURL = photoUrl);
+    }
   }
 
   @override
@@ -78,9 +94,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 Center(
                   child: TextButton(
                     child: Text(AppLocalizations.of(context)!.change_your_photo),
-                    onPressed: () {
-                      // TODO implement chaniging photo
-                    },
+                    onPressed: () => _uploadPhoto(),
                   ),
                 ),
                 ListLabel(
