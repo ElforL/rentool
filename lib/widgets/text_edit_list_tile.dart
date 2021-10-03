@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TextEditListTile extends StatefulWidget {
   const TextEditListTile({
@@ -61,10 +62,12 @@ class _TextEditListTileState extends State<TextEditListTile> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.cancel_outlined),
+                    tooltip: AppLocalizations.of(context)!.cancel,
                     onPressed: () => _cancel(),
                   ),
                   IconButton(
                     icon: const Icon(Icons.done),
+                    tooltip: AppLocalizations.of(context)!.set,
                     onPressed: () => _set(),
                   ),
                 ],
@@ -72,6 +75,7 @@ class _TextEditListTileState extends State<TextEditListTile> {
             )
           : IconButton(
               icon: const Icon(Icons.edit),
+              tooltip: AppLocalizations.of(context)!.edit,
               onPressed: () {
                 setState(() {
                   isEditing = true;
