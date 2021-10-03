@@ -36,26 +36,27 @@ Future<dynamic> showDisagreementCasesHelpDialog(BuildContext context, bool isUse
 ///   final isSure = await showConfirmDialog(context);
 ///   if(isSure ?? false) doSomething();
 /// ```
-Future<bool?> showConfirmDialog(BuildContext context, {Widget? content, Widget? title}) {
+Future<bool?> showConfirmDialog(BuildContext context, {Widget? content, Widget? title, List<Widget>? actions}) {
   return showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
       title: title ?? Text(AppLocalizations.of(context)!.areYouSure),
       content: content,
-      actions: [
-        TextButton(
-          child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
-          onPressed: () {
-            Navigator.pop(context, false);
-          },
-        ),
-        TextButton(
-          child: Text(AppLocalizations.of(context)!.sure.toUpperCase()),
-          onPressed: () {
-            Navigator.pop(context, true);
-          },
-        ),
-      ],
+      actions: actions ??
+          [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.sure.toUpperCase()),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
     ),
   );
 }
