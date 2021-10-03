@@ -288,6 +288,12 @@
     "dark": "داكن",
     "light": "فاتح",
 
+    "issue_report_form_name": "* اسمك:",
+    "issue_report_form_description": "* إشرح المشكلة\nشرح واضح وموجز للمشكلة.",
+    "issue_report_form_attachments": "* ارفق لقطات للشاشة / مقاطع فيديو",
+    "issue_report_form_fix": "* الحل المتوقع:\nصف حل المشكلة الذي تريده أو كيف تعتقد أنه يجب علينا حل المشكلة.",
+    "issue_report_form_extra": "* معلومات إضافية:",
+
     "change_your_photo": "غير صورتك",
     "no_email_address": "لا يوجد بريد الكتروني",
     "resend_verification_email": "إعادة ارسال بريد التحقق",

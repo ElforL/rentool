@@ -593,6 +593,27 @@
         "description": "created to be used in settings screen"
     },
 
+    "issue_report_form_name": "* Your name:",
+    "@issue_report_form_name": {
+        "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
+    },
+    "issue_report_form_description": "* Describe the problem:\nA clear and concise description of what's wrong.",
+    "@issue_report_form_name": {
+        "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
+    },
+    "issue_report_form_attachments": "* Attach screenshots/videos",
+    "@issue_report_form_name": {
+        "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
+    },
+    "issue_report_form_fix": "* Expected fix:\nDescription of how you think we should fix the problem.",
+    "@issue_report_form_name": {
+        "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
+    },
+    "issue_report_form_extra": "* Additional context:\nAnything else we should know about the problem",
+    "@issue_report_form_name": {
+        "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
+    },
+
     "change_your_photo": "Change your photo",
     "@change_your_photo": {
         "description": "created to be used in account settings screen"
