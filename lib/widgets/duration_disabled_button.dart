@@ -54,9 +54,18 @@ class _DurationDisabledButtonState extends State<DurationDisabledButton> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Text(
-                    (widget.seconds - currentSecond).toString(),
-                    style: const TextStyle(color: Colors.black),
+                  Container(
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(context).colorScheme.surface,
+                        spreadRadius: 10,
+                        blurRadius: 9,
+                      )
+                    ]),
+                    child: Text(
+                      (widget.seconds - currentSecond).toString(),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                    ),
                   ),
                   widget.child
                 ],
