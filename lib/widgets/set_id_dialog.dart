@@ -16,6 +16,12 @@ class _SetIdDialogState extends State<SetIdDialog> {
   String? errorText;
 
   @override
+  void dispose() {
+    _idController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.set_id_number),

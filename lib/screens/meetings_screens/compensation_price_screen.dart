@@ -25,6 +25,12 @@ class _MeetingCompensationPriceScreenState extends State<MeetingCompensationPric
   ReturnMeeting get meeting => widget.meeting;
 
   @override
+  void dispose() {
+    _priceController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     String appBarText;
     void Function() appBarFunc;

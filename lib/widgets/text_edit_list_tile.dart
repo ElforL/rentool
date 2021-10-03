@@ -49,6 +49,12 @@ class _TextEditListTileState extends State<TextEditListTile> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListTile(
       title: isEditing

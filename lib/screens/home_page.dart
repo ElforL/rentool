@@ -23,6 +23,12 @@ class _HomePageState extends State<HomePage> {
   final _searchController = TextEditingController();
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: RentoolSearchAppBar(
