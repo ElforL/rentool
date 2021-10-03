@@ -142,15 +142,35 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                       },
                     ),
                   ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  alignment: AlignmentDirectional.topStart,
-                  child: TextButton(
-                    child: Text(AppLocalizations.of(context)!.change_your_password),
-                    // TODO implement chaniging password
-                    onPressed: null,
+                if (AuthServices.currentUser!.email != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    alignment: AlignmentDirectional.topStart,
+                    child: TextButton(
+                      child: Text(AppLocalizations.of(context)!.change_your_password),
+                      onPressed: () async {
+                        final isSure = await showConfirmDialog(
+                          context,
+                          title: Text(AppLocalizations.of(context)!.areYouSure),
+                          content: Text(AppLocalizations.of(context)!.we_will_send_password_reset_email),
+                        );
+                        if (isSure != true) return;
+                        AuthServices.auth.sendPasswordResetEmail(email: AuthServices.currentUser!.email!);
+                        showIconAlertDialog(
+                          context,
+                          icon: Icons.password,
+                          titleText: AppLocalizations.of(context)!.reset_email_sent,
+                          bodyText: AppLocalizations.of(context)!.we_sent_password_reset_email,
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text(AppLocalizations.of(context)!.ok),
+                            )
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
                 const Divider(),
                 ListLabel(
                   text: AppLocalizations.of(context)!.id_number,

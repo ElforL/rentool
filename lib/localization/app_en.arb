@@ -629,7 +629,20 @@
     "@enter_your_id_number": {
         "description": "created to be used in account settings screen"
     },
-    
+    "we_will_send_password_reset_email": "We'll send you an email to reset your password.",
+    "@we_will_send_password_reset_email": {
+        "description": "created to be used in account settings screen"
+    },
+    "reset_email_sent": "Reset email sent.",
+    "@reset_email_sent": {
+        "description": "created to be used in account settings screen"
+    },
+    "we_sent_password_reset_email": "We sent you a password reset email, check your inbox.",
+    "@we_sent_password_reset_email": {
+        "description": "created to be used in account settings screen"
+    },
+
+
     "id_number_must_be_10_digits": "ID number must be 10 digits long",
     "@id_number_must_be_10_digits": {
         "description": "created to be used in SetIdDialog"
