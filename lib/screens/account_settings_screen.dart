@@ -169,6 +169,19 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                           context,
                           title: Text(AppLocalizations.of(context)!.areYouSure),
                           content: Text(AppLocalizations.of(context)!.we_will_send_password_reset_email),
+                          actions: [
+                            TextButton(
+                              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
+                              onPressed: () {
+                                Navigator.pop(context, false);
+                              },
+                            ),
+                            DurationDisabledButton(
+                              child: Text(AppLocalizations.of(context)!.sure.toUpperCase()),
+                              onPressed: () => Navigator.pop(context, true),
+                              seconds: 3,
+                            ),
+                          ],
                         );
                         if (isSure != true) return;
                         AuthServices.auth.sendPasswordResetEmail(email: AuthServices.currentUser!.email!);
