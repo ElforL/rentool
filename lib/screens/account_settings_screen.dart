@@ -69,9 +69,10 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             }
             return ListView(
               children: [
-                RentoolCircleAvatar(
-                  user: user,
-                  radius: 60,
+                Center(
+                  child: RentoolCircleAvatar(
+                    user: user,
+                    radius: 60,
                 ),
                 Center(
                   child: TextButton(
