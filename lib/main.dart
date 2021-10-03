@@ -14,6 +14,7 @@ import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/edit_request.dart';
 import 'package:rentool/screens/edit_review_screen.dart';
 import 'package:rentool/screens/firebase_init_error_screen.dart';
+import 'package:rentool/screens/forgot_password_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/my_notifications.dart';
@@ -173,6 +174,7 @@ class _MyAppState extends State<MyApp> {
         ChatScreen.routeName: (context) => const ChatScreen(),
         SettingsScreen.routeName: (context) => const SettingsScreen(),
         AccountSettingsScreen.routeName: (context) => AccountSettingsScreen(),
+        ForgotPasswordScreen.routeName: (context) => const ForgotPasswordScreen(),
       },
     );
   }

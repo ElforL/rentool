@@ -23,8 +23,9 @@
     "discard": "Discard",
     "all": "All",
     "or": "Or",
+    "back": "Back",
 
-    "userNotFoundError": "There is no user corresponding to the email address.",
+    "userNotFoundError": "There is no user corresponding to this email address.",
     "@userNotFoundError": {
         "description": "error message for FirebaseAuthException/user-not-found"
     },
@@ -614,19 +615,19 @@
         "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
     },
     "issue_report_form_description": "* Describe the problem:\nA clear and concise description of what's wrong.",
-    "@issue_report_form_name": {
+    "@issue_report_form_description": {
         "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
     },
     "issue_report_form_attachments": "* Attach screenshots/videos",
-    "@issue_report_form_name": {
+    "@issue_report_form_attachments": {
         "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
     },
     "issue_report_form_fix": "* Expected fix:\nDescription of how you think we should fix the problem.",
-    "@issue_report_form_name": {
+    "@issue_report_form_fix": {
         "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
     },
     "issue_report_form_extra": "* Additional context:\nAnything else we should know about the problem",
-    "@issue_report_form_name": {
+    "@issue_report_form_extra": {
         "description": "created to be used in `issueReportFormMailtoLink()` a for for reporting issues."
     },
 
@@ -683,6 +684,15 @@
     "id_number_must_be_10_digits": "ID number must be 10 digits long",
     "@id_number_must_be_10_digits": {
         "description": "created to be used in SetIdDialog"
+    },
+
+    "forgot_your_password": "Forgot your password?",
+    "@forgot_your_password": {
+        "description": "created to be used in Login screen"
+    },
+    "enter_your_email_address": "Enter your email address",
+    "@enter_your_email_address": {
+        "description": "created to be used in ForgotPasswordScreen"
     },
 
     "someLocalizedString": "Localized part - {argument}",

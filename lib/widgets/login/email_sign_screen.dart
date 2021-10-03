@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rentool/main.dart';
-import 'package:rentool/services/auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/main.dart';
+import 'package:rentool/screens/forgot_password_screen.dart';
+import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 
 class EmailSignContainer extends StatefulWidget {
@@ -327,7 +328,13 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
                   onPressed: () => submit(),
                 ),
               ),
-            )
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.forgot_your_password),
+              onPressed: () async {
+                Navigator.pushNamed(context, ForgotPasswordScreen.routeName, arguments: _emailContoller.text.trim());
+              },
+            ),
           ],
         ),
       ),

@@ -19,6 +19,7 @@
     "discard": "تجاهل",
     "all": "الكل",
     "or": "أو",
+    "back": "الرجوع",
 
     "userNotFoundError": "لا يوجد مستخدم مرتبط بعنوان البريد الالكتروني هذا.",
     "wrongPassword": "كلمة مرور خاطئة.",
@@ -312,6 +313,9 @@
     "we_sent_password_reset_email": "تم ارسال رسالة لبريدك الكتروني لإعادة تعيين كلمة المرور.",
 
     "id_number_must_be_10_digits": "يجب أن يكون رقم الهوية من 10 أرقام",
+
+    "forgot_your_password": "نسيت كلمة المرور؟",
+    "enter_your_email_address": "أدخل عنوان بريدك الإلكتروني",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
