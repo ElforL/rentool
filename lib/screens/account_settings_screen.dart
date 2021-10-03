@@ -73,6 +73,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                   child: RentoolCircleAvatar(
                     user: user,
                     radius: 60,
+                  ),
                 ),
                 Center(
                   child: TextButton(
