@@ -44,13 +44,13 @@ Future<bool?> showConfirmDialog(BuildContext context, {Widget? content, Widget? 
       content: content,
       actions: [
         TextButton(
-          child: Text(AppLocalizations.of(context)!.cancel),
+          child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
           onPressed: () {
             Navigator.pop(context, false);
           },
         ),
         TextButton(
-          child: Text(AppLocalizations.of(context)!.sure),
+          child: Text(AppLocalizations.of(context)!.sure.toUpperCase()),
           onPressed: () {
             Navigator.pop(context, true);
           },
