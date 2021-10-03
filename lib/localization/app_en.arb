@@ -592,6 +592,22 @@
     "@light": {
         "description": "created to be used in settings screen"
     },
+    "couldnt_open_email_client": "Could not open email client.",
+    "@couldnt_open_email_client": {
+        "description": "created to be used in settings screen"
+    },
+    "couldnt_open_email_client_desc": "The app was unable to open your email client app.",
+    "@couldnt_open_email_client_desc": {
+        "description": "created to be used in settings screen"
+    },
+    "send_issue_to_this_email_address": "Please send us the issue details to this email address.",
+    "@send_issue_to_this_email_address": {
+        "description": "created to be used in settings screen"
+    },
+    "email_address_copied": "Email address copied.",
+    "@email_address_copied": {
+        "description": "created to be used in settings screen"
+    },
 
     "issue_report_form_name": "* Your name:",
     "@issue_report_form_name": {

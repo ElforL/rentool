@@ -287,6 +287,10 @@
     "arabic": "العربية",
     "dark": "داكن",
     "light": "فاتح",
+    "couldnt_open_email_client": "تعذر فتح برنامج البريد إلكتروني",
+    "couldnt_open_email_client_desc": "لم يتمكن التطبيق من فتح تطبيق البريد الإلكتروني الخاص بك.",
+    "send_issue_to_this_email_address": "فضلًا أرسل لنا تفاصيل المشكلة على عنوان البريد الإلكتروني التالي.",
+    "email_address_copied": "تم نسخ عنوان البريد الإلكتروني.",
 
     "issue_report_form_name": "* اسمك:",
     "issue_report_form_description": "* إشرح المشكلة\nشرح واضح وموجز للمشكلة.",

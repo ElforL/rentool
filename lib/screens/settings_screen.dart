@@ -1,10 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/main.dart';
+import 'package:rentool/misc/misc.dart';
 import 'package:rentool/services/settings_services.dart';
 import 'package:rentool/widgets/list_label.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
 import 'package:rentool/widgets/logo_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -153,7 +157,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   leading: const Icon(Icons.bug_report),
                   title: Text(AppLocalizations.of(context)!.report_an_issue),
                   onTap: () {
-                    // TODO
+                    try {
+                      _launchURL(issueReportFormMailtoLink(defaultTargetPlatform, context));
+                    } catch (e) {
+                      _showCouldntEmailDialog(context);
+                    }
                   },
                 ),
                 const SizedBox(height: 20),
@@ -201,6 +209,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
           }),
     );
   }
+
+  Future<dynamic> _showCouldntEmailDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.couldnt_open_email_client),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(AppLocalizations.of(context)!.couldnt_open_email_client_desc + '\n'),
+            Text(AppLocalizations.of(context)!.send_issue_to_this_email_address),
+            SelectableText(
+              reportIssueEmailAddress,
+              onTap: () {
+                Clipboard.setData(const ClipboardData(text: reportIssueEmailAddress));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(AppLocalizations.of(context)!.email_address_copied),
+                ));
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _launchURL(String _url) async => await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
 
   String _themeSubtitle() {
     final isDark = settings.getdarkTheme();
