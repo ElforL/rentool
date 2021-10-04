@@ -200,10 +200,7 @@ class FirstScreen extends StatelessWidget {
           FirestoreServices.userIdNumber = null;
           return const LoginScreen();
         } else {
-          print('Signed in as ${user.displayName ?? '[Unset Name]'} ');
-          if (!user.emailVerified) {
-            print('Email address not verified.');
-          }
+          print('Signed in as ${user.displayName ?? '[No Username]'} ');
           final settings = SettingsServices();
           settings.init().then((_) {
             if (settings.getNotificationsEnabled() == null) {
