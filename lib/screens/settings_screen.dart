@@ -194,12 +194,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           data: Theme.of(context).copyWith(
                             appBarTheme: const AppBarTheme(backgroundColor: Colors.grey),
                           ),
+                          child: Directionality(
+                            textDirection: TextDirection.ltr,
                             child: LicensePage(
                               applicationIcon: SizedBox(
                                 height: 40,
                                 child: LogoImage.primary(),
                               ),
                               applicationName: '',
+                            ),
                           ),
                         );
                       }),
