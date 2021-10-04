@@ -226,7 +226,7 @@ class FirstScreen extends StatelessWidget {
               }
             });
           });
-          FirestoreServices.getUserIdNumber();
+          FirestoreServices.updateUserIdNumber();
 
           return const HomePage();
         }

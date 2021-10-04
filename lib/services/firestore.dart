@@ -27,7 +27,7 @@ class FirestoreServices {
   /// Gets the ID number of the currently signed in user and sets [FirestoreServices.userIdNumber] accordingly.
   ///
   /// returns null if the user is signed out.
-  static Future<String?> getUserIdNumber() async {
+  static Future<String?> updateUserIdNumber() async {
     if (userIdNumber != null) return userIdNumber;
     if (AuthServices.currentUid == null) return null;
 
