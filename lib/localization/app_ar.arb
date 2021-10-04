@@ -293,11 +293,11 @@
     "send_issue_to_this_email_address": "فضلًا أرسل لنا تفاصيل المشكلة على عنوان البريد الإلكتروني التالي.",
     "email_address_copied": "تم نسخ عنوان البريد الإلكتروني.",
 
-    "issue_report_form_name": "* اسمك:",
-    "issue_report_form_description": "* إشرح المشكلة\nشرح واضح وموجز للمشكلة.",
-    "issue_report_form_attachments": "* ارفق لقطات للشاشة / مقاطع فيديو",
-    "issue_report_form_fix": "* الحل المتوقع:\nصف حل المشكلة الذي تريده أو كيف تعتقد أنه يجب علينا حل المشكلة.",
-    "issue_report_form_extra": "* معلومات إضافية:",
+    "issue_report_form_name": "* اسمك:%0D%0A",
+    "issue_report_form_description": "* إشرح المشكلة%0D%0Aشرح واضح وموجز للمشكلة.%0D%0A",
+    "issue_report_form_attachments": "* ارفق لقطات للشاشة / مقاطع فيديو%0D%0A",
+    "issue_report_form_fix": "* الحل المتوقع:%0D%0Aصف حل المشكلة الذي تريده أو كيف تعتقد أنه يجب علينا حل المشكلة.%0D%0A",
+    "issue_report_form_extra": "* معلومات إضافية:%0D%0A",
 
     "change_your_photo": "غير صورتك",
     "no_email_address": "لا يوجد بريد الكتروني",

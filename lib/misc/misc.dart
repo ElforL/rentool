@@ -36,7 +36,7 @@ String issueReportFormMailtoLink(TargetPlatform platform, BuildContext context) 
   ];
   var body = '';
   for (var part in bodyParts) {
-    body += '$part\n\n';
+    body += '$part%0D%0A';
   }
 
   return "mailto:$reportIssueEmailAddress?subject=$subject&body=$body";
