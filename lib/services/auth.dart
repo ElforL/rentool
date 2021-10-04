@@ -110,6 +110,44 @@ class AuthServices {
     );
   }
 
+  // source: https://firebase.flutter.dev/docs/auth/usage#reauthenticating-a-user
+  /// Re-authenticates the user
+  ///
+  /// Use before operations such as [User.updatePassword] that require tokens
+  /// from recent sign-in attempts.
+  ///
+  /// A [FirebaseAuthException] maybe thrown with the following error code:
+  /// - **user-mismatch**:
+  ///  - Thrown if the credential given does not correspond to the user.
+  /// - **user-not-found**:
+  ///  - Thrown if the credential given does not correspond to any existing
+  ///    user.
+  /// - **invalid-credential**:
+  ///  - Thrown if the provider's credential is not valid. This can happen if it
+  ///    has already expired when calling link, or if it used invalid token(s).
+  ///    See the Firebase documentation for your provider, and make sure you
+  ///    pass in the correct parameters to the credential method.
+  /// - **invalid-email**:
+  ///  - Thrown if the email used in a [EmailAuthProvider.credential] is
+  ///    invalid.
+  /// - **wrong-password**:
+  ///  - Thrown if the password used in a [EmailAuthProvider.credential] is not
+  ///    correct or when the user associated with the email does not have a
+  ///    password.
+  /// - **invalid-verification-code**:
+  ///  - Thrown if the credential is a [PhoneAuthProvider.credential] and the
+  ///    verification code of the credential is not valid.
+  /// - **invalid-verification-id**:
+  ///  - Thrown if the credential is a [PhoneAuthProvider.credential] and the
+  ///    verification ID of the credential is not valid.
+  static Future<UserCredential> reauthenticateEmailAndPassword(String email, String password) {
+    // Create a credential
+    final credential = EmailAuthProvider.credential(email: email, password: password);
+
+    // Reauthenticate
+    return FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+  }
+
   /* ------------------ for Google Sign in ------------------ */
 
   static Future<UserCredential> signInWithGoogle() async {
@@ -156,6 +194,29 @@ class AuthServices {
     // Once signed in, return the UserCredential
     return await auth.signInWithCredential(credential);
   }
+
+  // // TODO make sure this is the correct way
+  // // my main problem was getting the credintials
+  // // TODO if this way is correct it probably won't work for web. check Google sing in methods
+  // static Future<UserCredential> reauthenticateGoogle() async {
+  //   // Create a credential
+  //   // Trigger the authentication flow
+  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  //   if (googleUser == null) throw Exception('Sign in process was aborted');
+
+  //   // Obtain the auth details from the request
+  //   final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+  //   // Create a new credential
+  //   final credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth.accessToken,
+  //     idToken: googleAuth.idToken,
+  //   );
+
+  //   // Reauthenticate
+  //   return FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+  // }
 
   /* ------------------ for Facebook Sign in ------------------ */
 
