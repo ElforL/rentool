@@ -45,22 +45,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
             }
             return ListView(
               children: [
-                ListLabel(
-                  text: AppLocalizations.of(context)!.notifications,
-                ),
-                ListTile(
-                  leading: const Icon(Icons.notifications),
-                  title: Text(AppLocalizations.of(context)!.enable_notifications),
-                  subtitle: Text(AppLocalizations.of(context)!.enable_notifications_subtitle),
-                  trailing: Switch(
-                    value: settings.getNotificationsEnabled() ?? true,
-                    onChanged: (value) async {
-                      await settings.setNotificationsEnabled(value);
-                      setState(() {});
-                    },
+                if (!kIsWeb) ...[
+                  ListLabel(
+                    text: AppLocalizations.of(context)!.notifications,
                   ),
-                ),
-                const SizedBox(height: 20),
+                  ListTile(
+                    leading: const Icon(Icons.notifications),
+                    title: Text(AppLocalizations.of(context)!.enable_notifications),
+                    subtitle: Text(AppLocalizations.of(context)!.enable_notifications_subtitle),
+                    trailing: Switch(
+                      value: settings.getNotificationsEnabled() ?? true,
+                      onChanged: (value) async {
+                        await settings.setNotificationsEnabled(value);
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
                 ListLabel(
                   text: AppLocalizations.of(context)!.view,
                 ),
@@ -192,12 +194,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           data: Theme.of(context).copyWith(
                             appBarTheme: const AppBarTheme(backgroundColor: Colors.grey),
                           ),
-                          child: LicensePage(
-                            applicationIcon: SizedBox(
-                              height: 40,
-                              child: LogoImage.primary(),
-                            ),
-                            applicationName: '',
+                            child: LicensePage(
+                              applicationIcon: SizedBox(
+                                height: 40,
+                                child: LogoImage.primary(),
+                              ),
+                              applicationName: '',
                           ),
                         );
                       }),
