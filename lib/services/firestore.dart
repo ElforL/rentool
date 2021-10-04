@@ -270,6 +270,10 @@ class FirestoreServices {
     });
   }
 
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getDeviceTokenDoc(String uuid, String uid) {
+    return _usersRef.doc(uid).collection('devices').doc(uuid).get();
+  }
+
   /// returns true if the user has a document in the Firestore database.
   ///
   /// A [FirebaseException] maybe thrown with the following error code:

@@ -209,6 +209,25 @@ class FirstScreen extends StatelessWidget {
             if (settings.getNotificationsEnabled() == null) {
               settings.setNotificationsEnabled(true);
             }
+
+            // Delete or add fcm token to db based on [settings.getNotificationsEnabled()]
+            _getDeviceUuidAndName().then((uuidAndName) async {
+              if (uuidAndName[0] == null) return;
+              final doc = await FirestoreServices.getDeviceTokenDoc(uuidAndName[0]!, user.uid);
+
+              // If the user has no device token but has notification enabled in settings
+              // call [settings.setNotificationsEnabled(true)] which will calls [FirestoreService.addDeviceToken()]
+              // and if the user has a token but the setting is set to false
+              // call [settings.setNotificationsEnabled(false)] which will calls [FirestoreService.deleteDeviceToken()]
+              //
+              // P.S: getNotificationsEnabled() is nullable that's why I'm using the '==' operator with bools
+              // the alternative is `bool? != null && bool!` or `!(bool? ?? false)` which is less readable
+              if (doc.data()?['token'] == null && settings.getNotificationsEnabled() == true) {
+                settings.setNotificationsEnabled(true);
+              } else if (doc.data()?['token'] != null && settings.getNotificationsEnabled() == false) {
+                settings.setNotificationsEnabled(false);
+              }
+            });
           });
           FirestoreServices.getUserIdNumber();
 
@@ -216,17 +235,6 @@ class FirstScreen extends StatelessWidget {
         }
       },
     );
-  }
-
-  void addFcmTokenToDb(User user, String languageCode) async {
-    if (kIsWeb) return;
-
-    final token = await FirebaseMessaging.instance.getToken();
-    if (token == null) return;
-
-    final uuidAndName = await _getDeviceUuidAndName();
-
-    if (uuidAndName[0] != null) FirestoreServices.addDeviceToken(token, user.uid, uuidAndName[0]!, uuidAndName[2]);
   }
 
   Future<List<String?>> _getDeviceUuidAndName() async {
