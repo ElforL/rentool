@@ -47,7 +47,7 @@ class SettingsServices {
 
   Future<bool> setNotificationsEnabled(bool newValue) async {
     String? token;
-    if (newValue) {
+    if (newValue && !kIsWeb) {
       token = await FirebaseMessaging.instance.getToken();
     }
 
