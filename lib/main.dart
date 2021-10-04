@@ -224,6 +224,12 @@ class FirstScreen extends StatelessWidget {
     final token = await FirebaseMessaging.instance.getToken();
     if (token == null) return;
 
+    final uuidAndName = await _getDeviceUuidAndName();
+
+    if (uuidAndName[0] != null) FirestoreServices.addDeviceToken(token, user.uid, uuidAndName[0]!, uuidAndName[2]);
+  }
+
+  Future<List<String?>> _getDeviceUuidAndName() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     String? uuid;
     String? deviceName;
@@ -232,17 +238,15 @@ class FirstScreen extends StatelessWidget {
         final androidInfo = await deviceInfo.androidInfo;
         uuid = androidInfo.androidId;
         deviceName = androidInfo.model;
-        break;
+        return [uuid, deviceName];
       case TargetPlatform.iOS:
         final iosInfo = await deviceInfo.iosInfo;
         uuid = iosInfo.identifierForVendor;
         deviceName = iosInfo.model;
-        break;
+        return [uuid, deviceName];
       default:
-        print("addFcmTokenToDb() couldn't identify current platfrom");
-        return;
+        print("_getDeviceUuidAndName() doesn't support current platfrom: $defaultTargetPlatform");
+        return [null, null];
     }
-
-    if (uuid != null) FirestoreServices.addDeviceToken(token, user.uid, uuid, deviceName);
   }
 }
