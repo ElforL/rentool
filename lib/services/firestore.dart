@@ -424,4 +424,21 @@ class FirestoreServices {
       'ResultDescription': description,
     });
   }
+
+  static Future<QuerySnapshot<Map<String, dynamic>>> getDisagreemtnCases({
+    int limit = 10,
+    DocumentSnapshot<Object?>? previousDoc,
+  }) {
+    if (previousDoc != null) {
+      return _db
+          .collection('disagreementCases')
+          // .orderBy('time', descending: true)
+          .startAfterDocument(previousDoc)
+          .limit(limit)
+          .get();
+    } else {
+      // return _db.collection('disagreementCases').orderBy('time', descending: true).limit(limit).get();
+      return _db.collection('disagreementCases').limit(limit).get();
+    }
+  }
 }
