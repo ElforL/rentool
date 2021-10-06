@@ -489,5 +489,23 @@ service cloud.firestore {
         (isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid());
       }
     }
+  
+    match /disagreementCases/{caseId} {
+      allow read: if request.auth.token.admin == true;
+      allow update: if request.auth.token.admin == true && disagreementCasesValidFields();
+
+
+      function disagreementCasesValidFields(){
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['Admin', 'Result_IsToolDamaged', 'ResultDescription'])
+        // can't update other admin's case
+        && (resource.data.Admin == null || resource.data.Admin == request.auth.uid)
+        && request.resource.data.Admin == request.auth.uid
+        // The admin can't be a side in the case
+        && request.resource.data.ownerUID != request.auth.uid
+        && request.resource.data.renterUID != request.auth.uid
+        && request.resource.data.Result_IsToolDamaged is bool
+        && request.resource.data.Result_IsToolDamaged is string;
+      }
+    }
   }
 }
