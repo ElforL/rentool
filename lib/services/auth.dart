@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rentool/services/firestore.dart';
 
 class AuthServices {
+  static bool isAdmin = false;
   static FirebaseAuth auth = FirebaseAuth.instance;
 
   /// Returns `true` if the user is signed in and vice versa.
