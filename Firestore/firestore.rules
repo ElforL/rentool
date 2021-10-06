@@ -1,12 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isAdmin(){
+      return request.auth.token.admin == true;
+    }
     ////////////////////////////////// Users ////////////////////////////////
     match /Users/{userID} {
       function isTHEuser(){
         return request.auth != null && userID == request.auth.uid;
       }
       allow get;
+
+      allow write: if isAdmin();
 
       allow create: if isTHEuser()
       && request.resource.data.rating == 0;
@@ -147,6 +152,7 @@ service cloud.firestore {
         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['acceptedRequestID']));
       }
 
+      allow write: if isAdmin();
       allow read;
       // allow if the user is the owner
       allow delete: if isTheOwner() && resource.data.currentRent == null;
@@ -207,6 +213,7 @@ service cloud.firestore {
           && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
         }
 
+        allow read, write: if isAdmin();
         allow read: if isTheRenter() || isTheToolOwner();
         allow delete: if (isTheRenter() || isTheToolOwner()) && resource.data.isRented == false;
         
@@ -229,6 +236,7 @@ service cloud.firestore {
             request.resource.data.sentTime == request.time;
           }
 
+          allow read, write: if isAdmin();
           allow read: if isTheRenterForMessage() || isTheToolOwner();
           allow create: if areMessageFieldsValid();
         }
@@ -295,6 +303,7 @@ service cloud.firestore {
         }
         
 
+        allow read, write: if isAdmin();
         allow read: if isActive() && (isTheRenter() || isTheToolOwner());
 
         // NOTE: there's a function listening to changes and changing fields as necessary.
@@ -481,6 +490,7 @@ service cloud.firestore {
 
         // TODO validNewVals() e.g., check if compensation price is a double and < resource.data.insuranceAmount
 
+        allow read, write: if isAdmin();
         allow read: if isActive() && (isTheRenter() || isTheToolOwner());
 
         allow update: if isActive() &&
@@ -491,8 +501,8 @@ service cloud.firestore {
     }
   
     match /disagreementCases/{caseId} {
-      allow read: if request.auth.token.admin == true;
-      allow update: if request.auth.token.admin == true && disagreementCasesValidFields();
+      allow read: if isAdmin();
+      allow update: if isAdmin() && disagreementCasesValidFields();
 
 
       function disagreementCasesValidFields(){
