@@ -413,4 +413,15 @@ class FirestoreServices {
       return query.limit(limit).get();
     }
   }
+
+  // Admin functions
+
+  /// Updates the disagreement case with [caseID] document to the result and the sets the [adminUid]
+  static Future<void> setDisagreementCaseResult(String caseID, bool result, String description, String adminUid) {
+    return _db.doc('disagreementCases/$caseID').update({
+      'Admin': adminUid,
+      'Result_IsToolDamaged': result,
+      'ResultDescription': description,
+    });
+  }
 }
