@@ -174,6 +174,7 @@ export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}
           'Admin': null,
           'Result_IsToolDamaged': null,
           'ResultDescription': null,
+          'timeCreated': admin.firestore.FieldValue.serverTimestamp,
         });
 
         // update return meeting doc

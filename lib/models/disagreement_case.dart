@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 
@@ -9,6 +10,7 @@ class DisagreementCase {
   final String renterUid;
   List<String> ownerMedia;
   List<String> renterMedia;
+  DateTime timeCreated;
 
   /// The UID of the admin assigned to this case
   String? admin;
@@ -26,6 +28,7 @@ class DisagreementCase {
     this.toolId,
     this.requestId,
     this.ownerUid,
+    this.timeCreated,
     this.renterUid, {
     this.ownerMedia = const [],
     this.renterMedia = const [],
@@ -41,6 +44,7 @@ class DisagreementCase {
       json['requestID'],
       json['ownerUID'],
       json['renterUID'],
+      json['timeCreated'] is Timestamp ? json['timeCreated'].toDate() : json['timeCreated'],
       ownerMedia: json['ownerMedia'] == null ? [] : List<String>.from(json['ownerMedia']),
       renterMedia: json['renterMedia'] == null ? [] : List<String>.from(json['renterMedia']),
       admin: json['Admin'],
@@ -60,6 +64,7 @@ class DisagreementCase {
       'Admin': admin,
       'Result_IsToolDamaged': resultIsToolDamaged,
       'ResultDescription': resultDescription,
+      'timeCreated': timeCreated,
     };
   }
 
