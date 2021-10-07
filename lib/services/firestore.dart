@@ -432,13 +432,12 @@ class FirestoreServices {
     if (previousDoc != null) {
       return _db
           .collection('disagreementCases')
-          // .orderBy('time', descending: true)
+          .orderBy('timeCreated', descending: true)
           .startAfterDocument(previousDoc)
           .limit(limit)
           .get();
     } else {
-      // return _db.collection('disagreementCases').orderBy('time', descending: true).limit(limit).get();
-      return _db.collection('disagreementCases').limit(limit).get();
+      return _db.collection('disagreementCases').orderBy('timeCreated', descending: true).limit(limit).get();
     }
   }
 }
