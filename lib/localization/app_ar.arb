@@ -20,6 +20,7 @@
     "all": "الكل",
     "or": "أو",
     "back": "الرجوع",
+    "none": "لا يوجد",
 
     "userNotFoundError": "لا يوجد مستخدم مرتبط بعنوان البريد الالكتروني هذا.",
     "wrongPassword": "كلمة مرور خاطئة.",
@@ -316,6 +317,15 @@
 
     "forgot_your_password": "نسيت كلمة المرور؟",
     "enter_your_email_address": "أدخل عنوان بريدك الإلكتروني",
+
+    "admin_panel": "لوحة الادارة",
+    "banned_users": "المستخدمين المحظورين",
+    "banned_ids": "الهويات المحظورة",
+
+    "everyone_is_happy": "Everyone is Happy",
+    "no_disagreement_cases": "No disagreement cases",
+    "tool_id": "رقم الأداة التعريفي",
+    "assigned_admin": "المشرف المعين",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

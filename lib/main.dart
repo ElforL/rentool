@@ -2,15 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/screens/account_settings_screen.dart';
+import 'package:rentool/screens/admin_panel_screen.dart';
 import 'package:rentool/screens/chat_screen.dart';
 import 'package:rentool/screens/deliver_meet_screen.dart';
+import 'package:rentool/screens/edit_post_screen.dart';
 import 'package:rentool/screens/edit_request.dart';
 import 'package:rentool/screens/edit_review_screen.dart';
 import 'package:rentool/screens/firebase_init_error_screen.dart';
@@ -20,7 +21,6 @@ import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
 import 'package:rentool/screens/my_tools_screen.dart';
-import 'package:rentool/screens/edit_post_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/request_screen.dart';
@@ -177,6 +177,7 @@ class _MyAppState extends State<MyApp> {
         SettingsScreen.routeName: (context) => const SettingsScreen(),
         AccountSettingsScreen.routeName: (context) => AccountSettingsScreen(),
         ForgotPasswordScreen.routeName: (context) => const ForgotPasswordScreen(),
+        AdminPanelScreen.routeName: (context) => AdminPanelScreen(),
       },
     );
   }

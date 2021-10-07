@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/admin_panel_screen.dart';
 import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
 import 'package:rentool/screens/my_tools_screen.dart';
@@ -59,6 +61,23 @@ class _HomePageState extends State<HomePage> {
                   UserScreen.routeName,
                   arguments: UserScreenArguments(uid: AuthServices.currentUid!),
                 );
+              },
+            ),
+            FutureBuilder(
+              future: AuthServices.auth.currentUser?.getIdTokenResult(),
+              builder: (context, AsyncSnapshot<IdTokenResult?> snapshot) {
+                AuthServices.isAdmin = snapshot.data?.claims?['admin'] == true;
+                if (AuthServices.isAdmin) {
+                  return ListTile(
+                    leading: const Icon(Icons.admin_panel_settings),
+                    title: Text(AppLocalizations.of(context)!.admin_panel),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).pushNamed(AdminPanelScreen.routeName);
+                    },
+                  );
+                }
+                return Container();
               },
             ),
             const Divider(height: 2),

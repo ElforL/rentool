@@ -24,6 +24,7 @@
     "all": "All",
     "or": "Or",
     "back": "Back",
+    "none": "None",
 
     "userNotFoundError": "There is no user corresponding to this email address.",
     "@userNotFoundError": {
@@ -694,6 +695,38 @@
     "@enter_your_email_address": {
         "description": "created to be used in ForgotPasswordScreen"
     },
+
+    "admin_panel": "Admin Panel",
+    "@admin_panel": {
+        "description": "created to be used in AdminPanelScreen"
+    },
+    "banned_users": "Banned users",
+    "@banned_users": {
+        "description": "created to be used in AdminPanelScreen"
+    },
+    "banned_ids": "Banned IDs",
+    "@banned_ids": {
+        "description": "created to be used in AdminPanelScreen"
+    },
+    
+
+    "everyone_is_happy": "Everyone is Happy",
+    "@everyone_is_happy": {
+        "description": "created to be used in DisagreementCasesListPage"
+    },
+    "no_disagreement_cases": "No disagreement cases",
+    "@no_disagreement_cases": {
+        "description": "created to be used in DisagreementCasesListPage"
+    },
+    "tool_id": "Tool ID",
+    "@tool_id": {
+        "description": "created to be used in DisagreementCasesListPage"
+    },
+    "assigned_admin": "Assigned admin",
+    "@assigned_admin": {
+        "description": "created to be used in DisagreementCasesListPage"
+    },
+
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
