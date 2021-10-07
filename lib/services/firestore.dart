@@ -38,7 +38,13 @@ class FirestoreServices {
     return null;
   }
 
-  // ////////////////////////////// Tools //////////////////////////////
+  // ooooooooooooo                     oooo
+  // 8'   888   `8                     `888
+  //      888       .ooooo.   .ooooo.   888   .oooo.o
+  //      888      d88' `88b d88' `88b  888  d88(  "8
+  //      888      888   888 888   888  888  `"Y88b.
+  //      888      888   888 888   888  888  o.  )88b
+  //     o888o     `Y8bod8P' `Y8bod8P' o888o 8""888P'
 
   /// Create a tool document in Firestore and return a `Tool` object.
   static Future<Tool> createNewTool(
@@ -251,7 +257,13 @@ class FirestoreServices {
         .snapshots();
   }
 
-  // ////////////////////////////// User //////////////////////////////
+  // ooooo     ooo
+  // `888'     `8'
+  //  888       8   .oooo.o  .ooooo.  oooo d8b  .oooo.o
+  //  888       8  d88(  "8 d88' `88b `888""8P d88(  "8
+  //  888       8  `"Y88b.  888ooo888  888     `"Y88b.
+  //  `88.    .8'  o.  )88b 888    .o  888     o.  )88b
+  //    `YbodP'    8""888P' `Y8bod8P' d888b    8""888P'
 
   /// Add [uuid] to the user's devices collection.
   ///
@@ -414,7 +426,13 @@ class FirestoreServices {
     }
   }
 
-  // Admin functions
+  //       .o.             .o8                     o8o
+  //      .888.           "888                     `"'
+  //     .8"888.      .oooo888  ooo. .oo.  .oo.   oooo  ooo. .oo.
+  //    .8' `888.    d88' `888  `888P"Y88bP"Y88b  `888  `888P"Y88b
+  //   .88ooo8888.   888   888   888   888   888   888   888   888
+  //  .8'     `888.  888   888   888   888   888   888   888   888
+  // o88o     o8888o `Y8bod88P" o888o o888o o888o o888o o888o o888o
 
   /// Updates the disagreement case with [caseID] document to the result and the sets the [adminUid]
   static Future<void> setDisagreementCaseResult(String caseID, bool result, String description, String adminUid) {
