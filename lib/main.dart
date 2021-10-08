@@ -37,12 +37,8 @@ import 'package:rentool/services/settings_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  if (kIsWeb) {
-    print('''
-    \u001B[6m\u001B[43m\u001B[31m⚠ WARNING!\u001B[0m
-    \u001B[31mDo not enter or paste any code here.
-    \u001B[31mUsing the console could allow attackers to steal your information using `\u001B[1m\u001B[3m\u001B[21mSelf-XSS\u001B[0m\u001B[31m`.\u001B[0m''');
-  }
+  if (kIsWeb) printSelfXssWarning();
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -76,6 +72,13 @@ void main() async {
   final locale = langCode != null ? Locale(langCode) : null;
 
   runApp(MyApp(fcmServices: fcmServices, locale: locale));
+}
+
+void printSelfXssWarning() {
+  return print('''
+  \u001B[6m\u001B[43m\u001B[31m⚠ WARNING!\u001B[0m
+  \u001B[31mDo not enter or paste any code here.
+  \u001B[31mUsing the console could allow attackers to steal your information using `\u001B[1m\u001B[3m\u001B[21mSelf-XSS\u001B[0m\u001B[31m`.\u001B[0m''');
 }
 
 class MyApp extends StatefulWidget {
