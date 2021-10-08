@@ -36,7 +36,7 @@ class CloudMessagingServices {
       // title
       context == null ? 'Tools Notifications' : AppLocalizations.of(context)!.tools_notifications,
       // description
-      context == null
+      description: context == null
           ? 'This channel is used for tools notifications such as reciving a request, accepted request, or rent starting.'
           : AppLocalizations.of(context)!.tools_notifications_channel_desc,
     );
@@ -66,7 +66,7 @@ class CloudMessagingServices {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
-              channel.description,
+              channelDescription: channel.description,
             ),
           ),
         );
