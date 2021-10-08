@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:rentool/models/disagreement_case.dart';
 import 'package:rentool/screens/disagreement_case_page.dart';
 import 'package:rentool/services/firestore.dart';
@@ -94,6 +95,7 @@ class DisagreementCasesListPage extends StatelessWidget {
           ),
         ],
       ),
+      trailing: Text(DateFormat('dd/MM/yyyy').format(disCase.timeCreated)),
       onTap: onTileTap == null ? null : () => onTileTap!(disCase),
     );
   }
