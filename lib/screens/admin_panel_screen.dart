@@ -72,14 +72,16 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         throw Exception('Invalid AdminPanelPage: $currentPage');
     }
 
+    bool drawerInBody = size.width >= 600;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.admin_panel),
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 4,
       ),
-      drawer: size.width >= 400 ? null : drawer,
-      body: size.width >= 400
+      drawer: drawerInBody ? null : drawer,
+      body: drawerInBody
           ? Row(
               children: [
                 drawer,
