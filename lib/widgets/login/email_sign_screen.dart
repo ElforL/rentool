@@ -6,6 +6,7 @@ import 'package:rentool/main.dart';
 import 'package:rentool/screens/forgot_password_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/services/functions.dart';
 
 class EmailSignContainer extends StatefulWidget {
   const EmailSignContainer({Key? key}) : super(key: key);
@@ -91,11 +92,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           _emailContoller.text,
           _passwordContoller.text,
         );
-        await Future.delayed(const Duration(seconds: 5));
-        await FirestoreServices.updateUserName(
-          AuthServices.currentUid!,
-          _usernameContoller.text.trim(),
-        );
+        await FunctionsServices.updateUsername(_usernameContoller.text.trim());
         MyApp.of(context)?.setState(() {});
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {

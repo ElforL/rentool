@@ -7,6 +7,7 @@ import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/services/functions.dart';
 import 'package:rentool/services/storage_services.dart';
 import 'package:rentool/widgets/duration_disabled_button.dart';
 import 'package:rentool/widgets/list_label.dart';
@@ -52,7 +53,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
       final file = File(xfile.path);
       final task = await StorageServices.uploadUserPhoto(file, AuthServices.currentUid!);
       final photoUrl = await task.ref.getDownloadURL();
-      await FirestoreServices.updateUserPhotoURL(AuthServices.currentUid!, photoUrl);
+      await FunctionsServices.updateUserPhoto(photoUrl);
       setState(() => user!.photoURL = photoUrl);
     }
   }
@@ -106,7 +107,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                   defaultValue: user!.name,
                   title: Text(user!.name),
                   onSet: (newName) async {
-                    await FirestoreServices.updateUserName(AuthServices.currentUid!, newName);
+                    await FunctionsServices.updateUsername(newName);
                     setState(() {
                       user!.name = newName;
                     });

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:rentool/services/functions.dart';
 import 'package:rentool/services/storage_services.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
@@ -298,7 +299,7 @@ class FirestoreServices {
       return await addUser(RentoolUser(user.uid, user.displayName ?? 'NOT-SET', 0, 0));
     } else {
       if ((doc.data() as Map)['name'] != user.displayName && user.displayName != null) {
-        FirestoreServices.updateUserName(user.uid, user.displayName!);
+        FunctionsServices.updateUsername(user.displayName!);
       }
     }
     return true;
@@ -319,20 +320,6 @@ class FirestoreServices {
       print(e);
       return false;
     }
-  }
-
-  /// Updates user's name
-  static Future<void> updateUserName(String uid, String name) {
-    return _usersRef.doc(uid).update({
-      'name': name,
-    });
-  }
-
-  /// Updates user's photoURL
-  static Future<void> updateUserPhotoURL(String uid, String photoURL) {
-    return _usersRef.doc(uid).update({
-      'photoURL': photoURL,
-    });
   }
 
   /// Get the ID document of the user with the given [uid]
