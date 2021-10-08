@@ -322,10 +322,29 @@
     "banned_users": "المستخدمين المحظورين",
     "banned_ids": "الهويات المحظورة",
 
-    "everyone_is_happy": "Everyone is Happy",
-    "no_disagreement_cases": "No disagreement cases",
+    "everyone_is_happy": "الكل سعيد",
+    "no_disagreement_cases": "لايوجد حالات خلاف",
     "tool_id": "رقم الأداة التعريفي",
     "assigned_admin": "المشرف المعين",
+    "case_info": "معلومات الحالة",
+    "case_id": "رقم الحالة التعريفي",
+    "request_id": "رقم الطلب التعريفي",
+    "owner_uid": "رقم المستخدم التعريفي للمالك",
+    "renter_uid": "رقم المستخدم التعريفي للمستأجر",
+
+    "loading_request_info": "جار تحميل معلومات الطلب",
+    "error_loading_request_info": "خطأ في تحميل معلومات الطلب",
+    "error_loading_request_info_body": "حدث خطأ اثناء تحميل معلومات الطلب",
+    "empty": "فارغ",
+    "owner_possession": "للمالك",
+    "renter_possession": "للمستأجر",
+    "before_in_delivery_meeting": "قبل (في لقاء التوصيل)",
+    "after_in_return_meeting": "بعد (في لقاء الإرجاع)",
+    "select": "أختر",
+    "decision": "القرار",
+    "write_desc_in_ar_and_en": "أدخل الوصف باللغة العربية والإنجليزية مع وضع سطر بينهما يحتوي  على الأقل على 40 شرطة (‘-’) متتالية.",
+    "enter_justification_for_decision": "أدخل تبريرك للقرار",
+    "post_decision": "انشر القرار",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

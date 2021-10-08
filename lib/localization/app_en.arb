@@ -718,13 +718,87 @@
     "@no_disagreement_cases": {
         "description": "created to be used in DisagreementCasesListPage"
     },
+
+    "case_info": "Case info",
+    "@case_info": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "case_id": "Case ID",
+    "@case_id": {
+        "description": "created to be used in DisagreementCasePage"
+    },
     "tool_id": "Tool ID",
     "@tool_id": {
-        "description": "created to be used in DisagreementCasesListPage"
+        "description": "created to be used in DisagreementCasesListPage & DisagreementCasePage"
+    },
+    "request_id": "Request ID",
+    "@request_id": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "owner_uid": "Owner UID",
+    "@owner_uid": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "renter_uid": "Renter UID",
+    "@renter_uid": {
+        "description": "created to be used in DisagreementCasePage"
     },
     "assigned_admin": "Assigned admin",
     "@assigned_admin": {
-        "description": "created to be used in DisagreementCasesListPage"
+        "description": "created to be used in DisagreementCasesListPage & DisagreementCasePage"
+    },
+
+    "loading_request_info": "Loading Request Info",
+    "@loading_request_info": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "error_loading_request_info": "Error Loading Request Info",
+    "@error_loading_request_info": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "error_loading_request_info_body": "An error occured while loading the request's info",
+    "@error_loading_request_info_body": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "empty": "Empty",
+    "@empty": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "owner_possession": "Owner's",
+    "@owner_possession": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "renter_possession": "Renter's",
+    "@renter_possession": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "before_in_delivery_meeting": "Before (in delivery meeting)",
+    "@before_in_delivery_meeting": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "after_in_return_meeting": "After (in return meeting)",
+    "@after_in_return_meeting": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "select": "Select",
+    "@select": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "decision": "Decision",
+    "@decision": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "write_desc_in_ar_and_en": "Write the description in Arabic and English with a line of at least 40 dashes (‘-’) in a row between them.",
+    "@write_desc_in_ar_and_en": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "enter_justification_for_decision": "Enter your justification for the decision",
+    "@enter_justification_for_decision": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "post_decision": "Post decision",
+    "@post_decision": {
+        "description": "created to be used in DisagreementCasePage"
     },
 
 
