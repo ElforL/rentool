@@ -121,9 +121,12 @@ class DisagreementCasesListPage extends StatelessWidget {
 }
 
 class DisagreementCasePage extends StatefulWidget {
-  const DisagreementCasePage({Key? key, required this.disCase}) : super(key: key);
+  const DisagreementCasePage({
+    Key? key,
+    required this.disagreementCase,
+  }) : super(key: key);
 
-  final DisagreementCase disCase;
+  final DisagreementCase disagreementCase;
 
   @override
   _DisagreementCasePageState createState() => _DisagreementCasePageState();
@@ -140,7 +143,7 @@ class _DisagreementCasePageState extends State<DisagreementCasePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.disCase.id),
+        title: Text(widget.disagreementCase.id),
       ),
     );
   }
