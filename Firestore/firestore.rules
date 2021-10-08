@@ -514,7 +514,7 @@ service cloud.firestore {
         && request.resource.data.ownerUID != request.auth.uid
         && request.resource.data.renterUID != request.auth.uid
         && request.resource.data.Result_IsToolDamaged is bool
-        && request.resource.data.Result_IsToolDamaged is string;
+        && request.resource.data.ResultDescription is string;
       }
     }
   }
