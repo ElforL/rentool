@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -55,6 +56,9 @@ void main() async {
 
     // STORAGE
     await FirebaseStorage.instance.useStorageEmulator(localhost, 9199);
+
+    // FUNCTIONS
+    FirebaseFunctions.instance.useFunctionsEmulator(localhost, 5001);
   }
   // Turn off persistence (offline access)
   // it's automatically off in web and trying to turn it off manually throws an error
