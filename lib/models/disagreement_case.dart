@@ -20,7 +20,7 @@ class DisagreementCase {
   /// if `null` the case isn't resolved yet.
   bool? resultIsToolDamaged;
 
-  /// The justification of the admin's decission
+  /// The justification of the admin's decision
   String? resultDescription;
 
   DisagreementCase(
@@ -28,8 +28,8 @@ class DisagreementCase {
     this.toolId,
     this.requestId,
     this.ownerUid,
-    this.timeCreated,
-    this.renterUid, {
+    this.renterUid,
+    this.timeCreated, {
     this.ownerMedia = const [],
     this.renterMedia = const [],
     this.admin,
