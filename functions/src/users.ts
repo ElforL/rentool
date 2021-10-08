@@ -10,15 +10,102 @@ export const authChange = functions.auth.user().onCreate((user, context) => {
   });
 });
 
-export const userDocChange = functions.firestore.document('Users/{userID}').onUpdate(async (change, context) => {
-  const uid = context.params.userID;
-  const afterData = change.after.data();
+export const updateUsername = functions.https.onCall(async (data, context) => {
+  const response: {
+    success: boolean;
+    response: string;
+    username: string | undefined;
+  } = {
+    'success': false,
+    'response': '',
+    'username': undefined,
+  }
+  const uid = context.auth?.uid;
 
-  return admin.auth().updateUser(uid, {
-    displayName: afterData.name,
-    photoURL: afterData.photoURL,
-  });
-});
+  if (uid == null) {
+    response.response = 'ERROR: This function must be called by a signed-in user.';
+    return response;
+  }
+
+  if (typeof data === 'string') {
+    try {
+      const username = data.trim()
+      const user = await admin.auth().updateUser(uid, {
+        displayName: username,
+      })
+      admin.firestore().doc(`Users/${uid}`).update({
+        'name': user.displayName,
+      });
+
+      response.success = true;
+      response.response = `SUCCESS`;
+      response.username = user.displayName;
+      return response;
+    } catch (error) {
+      functions.logger.error(`An unexpected error occured while chaning the username of user with uid=${uid}. Data=${data}.`, error);
+      response.response = `ERROR: An unexpected error occured.`;
+      return response;
+    }
+  } else {
+    response.response = `ERROR: Invalid parameter type. This function accepts only 1 string paramater. Recivied: ${typeof data}.`;
+    return response;
+  }
+})
+
+export const updateUserPhoto = functions.https.onCall(async (data, context) => {
+  const response: {
+    success: boolean;
+    response: string;
+    photoUrl: string | undefined;
+  } = {
+    'success': false,
+    'response': '',
+    'photoUrl': undefined,
+  }
+  const uid = context.auth?.uid;
+
+  if (uid == null) {
+    response.response = 'ERROR: This function must be called by a signed-in user.';
+    return response;
+  }
+
+
+  if (typeof data === 'string') {
+    try {
+      var photoUrl = data.trim();
+      // Check the validity of the url
+      // URL constructor will throw an error if it's invalid
+      try {
+        new URL(photoUrl);
+      } catch (_) {
+        response.response = 'ERROR: Invalid url.';
+        return response;
+      }
+
+      // Update
+      const user = await admin.auth().updateUser(uid, {
+        photoURL: photoUrl,
+      })
+      admin.firestore().doc(`Users/${uid}`).update({
+        'photoURL': user.photoURL,
+      });
+      
+      // Response
+      response.success = true;
+      response.response = `SUCCESS`;
+      response.photoUrl = user.photoURL;
+      return response;
+    } catch (error) {
+      functions.logger.error(`An unexpected error occured while chaning the photoUrl of user with uid=${uid}. Data=${data}.`, error);
+      response.response = `ERROR: An unexpected error occured.`;
+      return response;
+    }
+  } else {
+    response.response = `ERROR: Invalid parameter type. This function accepts only 1 string paramater. Recivied: ${typeof data}.`;
+    return response;
+  }
+})
+
 
 export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/{reviewerUID}')
   .onWrite(async (change, context) => {
@@ -45,7 +132,7 @@ export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/
 
         const totalWithoutVal = (rating * numOfReviews) - reviewValue;
         var avgAfter = totalWithoutVal / (numOfReviews - 1);
-        if(isNaN(avgAfter)) avgAfter = 0;
+        if (isNaN(avgAfter)) avgAfter = 0;
 
         // Update
         console.log(`Deleted review on user(${uid}) from user(${reviewerUID})`);
