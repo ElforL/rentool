@@ -32,14 +32,11 @@ class _DisagreementCasesAdminPageState extends State<DisagreementCasesAdminPage>
           },
         ),
         if (currentCase != null)
-          WillPopScope(
-            onWillPop: () {
+          DisagreementCasePage(
+            disagreementCase: currentCase!,
+            onBackButtonPressed: () {
               _setCase(null);
-              return Future.value(false);
             },
-            child: DisagreementCasePage(
-              disCase: currentCase!,
-            ),
           ),
       ],
     );
@@ -124,9 +121,11 @@ class DisagreementCasePage extends StatefulWidget {
   const DisagreementCasePage({
     Key? key,
     required this.disagreementCase,
+    required this.onBackButtonPressed,
   }) : super(key: key);
 
   final DisagreementCase disagreementCase;
+  final void Function()? onBackButtonPressed;
 
   @override
   _DisagreementCasePageState createState() => _DisagreementCasePageState();
@@ -144,6 +143,9 @@ class _DisagreementCasePageState extends State<DisagreementCasePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.disagreementCase.id),
+        leading: BackButton(
+          onPressed: widget.onBackButtonPressed,
+        ),
       ),
     );
   }
