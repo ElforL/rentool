@@ -287,24 +287,6 @@ class FirestoreServices {
     return _usersRef.doc(uid).collection('devices').doc(uuid).get();
   }
 
-  /// returns true if the user has a document in the Firestore database.
-  ///
-  /// A [FirebaseException] maybe thrown with the following error code:
-  /// - **permission-denied**: Missing or insufficient permissions.
-  static Future<bool> ensureUserExist(User user) async {
-    var doc = await _usersRef.doc(user.uid).get();
-    var userExists = doc.exists;
-
-    if (!userExists) {
-      return await addUser(RentoolUser(user.uid, user.displayName ?? 'NOT-SET', 0, 0));
-    } else {
-      if ((doc.data() as Map)['name'] != user.displayName && user.displayName != null) {
-        FunctionsServices.updateUsername(user.displayName!);
-      }
-    }
-    return true;
-  }
-
   /// Creates a Document for [user] in the Firestore database.
   ///
   /// returns true if successful
