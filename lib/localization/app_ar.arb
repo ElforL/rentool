@@ -234,6 +234,7 @@
     "new_post": "منشور جديد",
 
     "loading_user_info": "تحميل معلومات المستخدم",
+    "error_loading_user_info": "حدث خطأ اثناء تحميل معلومات المستخدم",
     "ratings_and_reviews": "التقييمات والمراجعات",
     "tools": "الأدوات",
     "rate_this_user": "قييم هذا المستخدم",

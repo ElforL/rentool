@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -96,9 +95,10 @@ class _UserScreenState extends State<UserScreen> {
         body: FutureBuilder(
             future: future,
             builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
-              if (snapshot.hasError)
-                print('error getting user info: ${snapshot.error}\n${((snapshot.error as Error).stackTrace)}');
-
+              if (snapshot.hasError) {
+                print('error getting user info: ${snapshot.error}}');
+                return _buildErrorContainer(context);
+              }
               user = snapshot.data;
 
               if (user == null) {
@@ -304,6 +304,31 @@ class _UserScreenState extends State<UserScreen> {
           Text(
             AppLocalizations.of(context)!.loading_user_info,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold, color: Colors.black54),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Center _buildErrorContainer(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.warning_rounded,
+            size: 100,
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Text(
+              AppLocalizations.of(context)!.error_loading_user_info,
+              style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+            ),
           ),
         ],
       ),
