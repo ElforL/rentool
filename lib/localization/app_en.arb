@@ -829,6 +829,11 @@
         "description": "created to be used in DisagreementCasePage"
     },
 
+    "playback_speed": "Playback speed",
+    "@playback_speed": {
+        "description": "created to be used in MediaViewScreen"
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
+import 'package:rentool/screens/media_view_screen.dart';
+import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class MediaContainer extends StatelessWidget {
@@ -43,6 +44,7 @@ class MediaContainer extends StatelessWidget {
     // get the image bytes as a `Future<Uint8List?>`
     Future<Uint8List?> future;
     String? type;
+
     if (mediaFile != null) {
       type = lookupMimeType(mediaFile!.path)?.split('/')[0];
     } else {
@@ -82,9 +84,14 @@ class MediaContainer extends StatelessWidget {
 
             return Stack(
               children: [
-                Image.memory(
-                  snapshot.data!,
-                  errorBuilder: (context, error, stackTrace) => _buildError(context),
+                InkWell(
+                  onTap: () {
+                    _pushMediaViewScreen(context, type, snapshot.data);
+                  },
+                  child: Image.memory(
+                    snapshot.data!,
+                    errorBuilder: (context, error, stackTrace) => _buildError(context),
+                  ),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,6 +127,36 @@ class MediaContainer extends StatelessWidget {
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+
+  void _pushMediaViewScreen(BuildContext context, String? type, Uint8List? data) {
+    ImageProvider? imageProvider;
+    VideoPlayerController? videoController;
+
+    if (type == 'image') {
+      if (data != null) {
+        imageProvider = MemoryImage(data);
+      } else if (mediaURL != null) {
+        imageProvider = NetworkImage(mediaURL!);
+      } else if (mediaFile != null) {
+        imageProvider = FileImage(mediaFile!);
+      }
+    } else {
+      if (mediaURL != null) {
+        videoController = VideoPlayerController.network(mediaURL!);
+      } else if (mediaFile != null) {
+        videoController = VideoPlayerController.file(mediaFile!);
+      }
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MediaViewScreen(
+          imageProvider: imageProvider,
+          videoController: videoController,
         ),
       ),
     );

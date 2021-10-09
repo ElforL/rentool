@@ -352,6 +352,7 @@
     "this_user": "هذا المستخدم",
     "the_reason": "السبب",
     "enter_reason_for_ban": "أدخل سبب الحظر",
+    "playback_speed": "سرعة التشغيل",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
