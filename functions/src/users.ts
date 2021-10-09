@@ -89,7 +89,7 @@ export const updateUserPhoto = functions.https.onCall(async (data, context) => {
       admin.firestore().doc(`Users/${uid}`).update({
         'photoURL': user.photoURL,
       });
-      
+
       // Response
       response.success = true;
       response.response = `SUCCESS`;
@@ -106,6 +106,73 @@ export const updateUserPhoto = functions.https.onCall(async (data, context) => {
   }
 })
 
+/// paramaters => ({uid: string, reason: string})
+export const banUser = functions.https.onCall(async (data, context) => {
+  const response: {
+    success: boolean;
+    response: string;
+    value: string | undefined;
+  } = {
+    'success': false,
+    'response': 'ERROR: This function is only callable by admins',
+    'value': undefined,
+  }
+
+  if (context.auth?.token.admin !== true) return response;
+
+  if (typeof data.uid !== 'string' || typeof data.reason !== 'string') {
+    response.response = `ERROR: Invalid parameters. This function accepts a map/object whith the keys 'uid' and 'reason' as: {'uid': string; 'reason': string;}. Recivied type: ${typeof data}.`;
+    return response;
+  }
+
+  const uid = data.uid;
+  const reason = data.reason;
+
+  // Disable the user in auth
+  // This will prevent the user from logging in or refreshing his/her access token.
+  try {
+    await admin.auth().updateUser(uid, {
+      disabled: true,
+    });
+
+  } catch (error) {
+    // This function's here to prevent the error:
+    // `error TS1196: Catch clause variable cannot have a type annotation.`
+    function handleError(e: any) {
+      if (e.code === 'auth/user-not-found') {
+        response.response = 'ERROR: There is no user record corresponding to the provided uid';
+        return response;
+      }
+      functions.logger.error(`An unexpected error occured while banning the user with uid=${uid}. Data=${data}.`, error);
+      response.response = 'ERROR: An unexpected error occured';
+      return response;
+    }
+
+    return handleError(error);
+  }
+
+  // Add the user's id number (if found) to the bannedList collection
+  try {
+    const doc = await admin.firestore().doc(`Users/${uid}/private/ID/`).get();
+    const idNumber = doc.data()?.idNumber;
+    if (idNumber != null) {
+      await admin.firestore().doc(`bannedList/${idNumber}/`).set({
+        'idNumber': idNumber,
+        'uid': uid,
+        'reason': reason,
+        'ban_time': admin.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+  } catch (error) {
+    functions.logger.error(`An unexpected error occured while banning the user ID number with uid=${uid}. Data=${data}.`, error);
+    response.response = "ERROR: The user was banned but there was a problem banning the user's ID number";
+    return response;
+  }
+
+  response.success = true;
+  response.response = 'SUCCESS';
+  return response;
+});
 
 export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/{reviewerUID}')
   .onWrite(async (change, context) => {
