@@ -437,6 +437,10 @@
     "@error_loading_user_info": {
         "description": "created to be used in UserScreen"
     },
+    "ban_user": "Ban user",
+    "@ban_user": {
+        "description": "created to be used in UserScreen"
+    },
     "ratings_and_reviews": "Ratings and reviews",
     "tools": "Tools",
     "rate_this_user": "Rate this user",
@@ -805,6 +809,25 @@
         "description": "created to be used in DisagreementCasePage"
     },
 
+    "are_you_sure_to_ban_user": "Are you sure you want to ban {username}?",
+    "@are_you_sure_to_ban_user": {
+        "description": "created to be used in UserScreen",
+        "placeholders": {
+            "username": {}
+        }
+    },
+    "this_user": "This user",
+    "@this_user": {
+        "description": "created to be used in UserScreen"
+    },
+    "the_reason": "The reason",
+    "@the_reason": {
+        "description": "created to be used in DisagreementCasePage"
+    },
+    "enter_reason_for_ban": "Enter the reason for the ban",
+    "@enter_reason_for_ban": {
+        "description": "created to be used in DisagreementCasePage"
+    },
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

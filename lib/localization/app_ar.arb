@@ -235,6 +235,7 @@
 
     "loading_user_info": "تحميل معلومات المستخدم",
     "error_loading_user_info": "حدث خطأ اثناء تحميل معلومات المستخدم",
+    "ban_user": "حظر المستخدم",
     "ratings_and_reviews": "التقييمات والمراجعات",
     "tools": "الأدوات",
     "rate_this_user": "قييم هذا المستخدم",
@@ -346,6 +347,11 @@
     "write_desc_in_ar_and_en": "أدخل الوصف باللغة العربية والإنجليزية مع وضع سطر بينهما يحتوي  على الأقل على 40 شرطة (‘-’) متتالية.",
     "enter_justification_for_decision": "أدخل تبريرك للقرار",
     "post_decision": "انشر القرار",
+
+    "are_you_sure_to_ban_user": "هل أنت متأكد من أنك تريد حظر {username}؟",
+    "this_user": "هذا المستخدم",
+    "the_reason": "السبب",
+    "enter_reason_for_ban": "أدخل سبب الحظر",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

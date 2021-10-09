@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/screens/account_settings_screen.dart';
 import 'package:rentool/screens/admin_panel_screen.dart';
+import 'package:rentool/screens/ban_user_screen.dart';
 import 'package:rentool/screens/chat_screen.dart';
 import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/edit_post_screen.dart';
@@ -185,6 +186,7 @@ class _MyAppState extends State<MyApp> {
         AccountSettingsScreen.routeName: (context) => AccountSettingsScreen(),
         ForgotPasswordScreen.routeName: (context) => const ForgotPasswordScreen(),
         AdminPanelScreen.routeName: (context) => AdminPanelScreen(),
+        BanUserScreen.routeName: (context) => const BanUserScreen(),
       },
     );
   }

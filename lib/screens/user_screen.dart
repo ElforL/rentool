@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/screens/account_settings_screen.dart';
+import 'package:rentool/screens/ban_user_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/reviews_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -91,6 +92,25 @@ class _UserScreenState extends State<UserScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: user != null ? Text(user!.name) : null,
+          actions: [
+            if (AuthServices.isAdmin)
+              PopupMenuButton(
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: ListTile(
+                      title: Text(AppLocalizations.of(context)!.ban_user),
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          BanUserScreen.routeName,
+                          arguments: BanUserScreenArguments(user: user),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+          ],
         ),
         body: FutureBuilder(
             future: future,

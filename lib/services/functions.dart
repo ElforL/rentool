@@ -12,6 +12,13 @@ class FunctionsServices {
     final result = await callable.call(newName);
     return UpdatePhotoResponse.fromJson(result.data);
   }
+
+  static Future<FunctionResponse> banUser(String uid, String reason) async {
+    final msg = {'uid': uid, 'reason': reason};
+    final callable = FirebaseFunctions.instance.httpsCallable('banUser');
+    final result = await callable.call(msg);
+    return FunctionResponse.fromJson(result.data);
+  }
 }
 
 //   .oooooo.   oooo
@@ -27,15 +34,17 @@ class FunctionsServices {
 /// Some decendants:
 /// * UpdateUsernameResponse
 /// * UpdatePhotoUrlResponse
-abstract class FunctionResponse {
+class FunctionResponse {
   final bool isSuccess;
   final String response;
+  final Object? value;
 
-  FunctionResponse(this.isSuccess, this.response);
+  FunctionResponse(this.isSuccess, this.response, [this.value]);
 
   FunctionResponse.fromJson(Map<String, dynamic> json)
       : isSuccess = json['success'],
-        response = json['response'];
+        response = json['response'],
+        value = json['value'];
 }
 
 /// a class for the response of the cloud function `updateUsername()`
