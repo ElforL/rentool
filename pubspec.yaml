@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.17.0
   url_launcher: ^6.0.12
   photo_view: ^0.13.0
+  chewie: ^1.2.2
 
   
   # // Needs an apple developer account which costs $99 🤷‍♂️
