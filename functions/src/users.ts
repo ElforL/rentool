@@ -160,6 +160,7 @@ export const banUser = functions.https.onCall(async (data, context) => {
         'idNumber': idNumber,
         'uid': uid,
         'reason': reason,
+        'admin': context.auth.uid,
         'ban_time': admin.firestore.FieldValue.serverTimestamp(),
       });
     }
@@ -168,6 +169,15 @@ export const banUser = functions.https.onCall(async (data, context) => {
     response.response = "ERROR: The user was banned but there was a problem banning the user's ID number";
     return response;
   }
+
+  try {
+    await admin.firestore().doc(`bannedUsers/${uid}/`).set({
+      'uid': uid,
+      'reason': reason,
+      'admin': context.auth.uid,
+      'ban_time': admin.firestore.FieldValue.serverTimestamp(),
+    });
+  } catch (_) { }
 
   response.success = true;
   response.response = 'SUCCESS';
