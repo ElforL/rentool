@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/dialogs.dart';
@@ -302,7 +303,7 @@ class _PostScreenState extends State<PostScreen> {
           ),
           const SizedBox(width: 10),
         ],
-        if (tool.acceptedRequestID != null && isUserAuthorized && tool.currentRent == null)
+        if (!kIsWeb && tool.acceptedRequestID != null && isUserAuthorized && tool.currentRent == null)
           SizedBox(
             width: 100,
             child: ElevatedButton(
@@ -316,7 +317,7 @@ class _PostScreenState extends State<PostScreen> {
               },
             ),
           ),
-        if (tool.currentRent != null && isUserAuthorized)
+        if (!kIsWeb && tool.currentRent != null && isUserAuthorized)
           SizedBox(
             width: 100,
             child: ElevatedButton(
