@@ -863,6 +863,14 @@
     "@unexpected_error_occured": {
         "description": "created to be used in EditRequestScreen"
     },
+    "files_added": "Files added",
+    "@files_added": {
+        "description": "created to be used in EditRequestScreen"
+    },
+    "undo": "Undo",
+    "@undo": {
+        "description": "created to be used in EditRequestScreen"
+    },
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

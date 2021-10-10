@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TODO better name :\
-
 /// a Text button that stays disabled for [seconds]
 class DurationDisabledButton extends StatefulWidget {
   const DurationDisabledButton({

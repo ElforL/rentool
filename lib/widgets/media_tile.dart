@@ -65,10 +65,9 @@ class _MediaTileState extends State<MediaTile> {
       try {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            // TODO localize
-            content: const Text('files added'),
+            content: Text(AppLocalizations.of(context)!.files_added),
             action: SnackBarAction(
-              label: 'Undo',
+              label: AppLocalizations.of(context)!.undo,
               onPressed: () {
                 _removeMedia(files);
               },

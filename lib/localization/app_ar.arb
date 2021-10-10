@@ -360,6 +360,8 @@
     "no_users_are_banned": "لا يوجد مستخدمين محظورين",
     "permission_denied": "تم رفض الوصول",
     "unexpected_error_occured": "حدث خطأ غير متوقع",
+    "files_added": "تمت إضافة الملفات",
+    "undo": "التراجع",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
