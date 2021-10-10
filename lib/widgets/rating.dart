@@ -4,12 +4,14 @@ class RatingDisplay extends StatelessWidget {
   const RatingDisplay({
     Key? key,
     required this.rating,
+    required this.numberOfReview,
     this.color,
     this.onTap,
   }) : super(key: key);
 
   final double rating;
   final Color? color;
+  final int numberOfReview;
   final void Function()? onTap;
 
   @override
@@ -43,7 +45,18 @@ class RatingDisplay extends StatelessWidget {
                   emptyColor: color,
                 ),
               ),
-            )
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              alignment: AlignmentDirectional.topEnd,
+              child: Text(
+                numberOfReview.toString(),
+                textScaleFactor: .6,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface.withAlpha(100),
+                ),
+              ),
+            ),
           ],
         ),
       ),

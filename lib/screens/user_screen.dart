@@ -153,6 +153,7 @@ class _UserScreenState extends State<UserScreen> {
                           Expanded(
                             child: RatingDisplay(
                               rating: user!.rating,
+                              numberOfReview: user!.numOfReviews,
                               color: Colors.orange.shade700,
                               onTap: () {
                                 Navigator.of(context).pushNamed(
