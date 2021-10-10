@@ -5,9 +5,11 @@ class ErrorScreen extends StatelessWidget {
   const ErrorScreen({
     Key? key,
     required this.error,
+    this.child,
   }) : super(key: key);
 
   final Object? error;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,11 @@ class ErrorScreen extends StatelessWidget {
                 AppLocalizations.of(context)!.unexpected_error_occured,
                 style: Theme.of(context).textTheme.headline6,
               ),
+              const SizedBox(height: 10),
+              if (child != null) ...[
+                child!,
+                const SizedBox(height: 10),
+              ],
               Theme(
                 data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
