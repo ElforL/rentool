@@ -517,5 +517,13 @@ service cloud.firestore {
         && request.resource.data.ResultDescription is string;
       }
     }
+
+    match /bannedList/{idNumber} {
+      allow read: if isAdmin();
+    }
+
+    match /bannedUsers/{uid} {
+      allow read: if isAdmin();
+    }
   }
 }
