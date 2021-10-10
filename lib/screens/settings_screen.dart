@@ -103,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 ListTile(
-                  // TODO add theme feature
+                  // for future: dark theme
                   enabled: false,
                   leading: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
                   title: Text(AppLocalizations.of(context)!.theme),
@@ -139,8 +139,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     if (result is bool || result == null) {
                       await settings.setdarkTheme(result);
                       setState(() {});
-                      // TODO add setBrightness to MyApp
-                      // MyApp.of(context)?.setState(() {});
+                      // MyApp.of(context)?.setDarkTheme(result);
                     }
                   },
                 ),
