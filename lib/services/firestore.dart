@@ -1,12 +1,9 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:rentool/services/functions.dart';
-import 'package:rentool/services/storage_services.dart';
-import 'package:rentool/services/auth.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/services/auth.dart';
+import 'package:rentool/services/storage_services.dart';
 
 class FirestoreServices {
   /// Firestore instance
@@ -441,6 +438,22 @@ class FirestoreServices {
           .get();
     } else {
       return _db.collection('bannedList').orderBy('ban_time', descending: true).limit(limit).get();
+    }
+  }
+
+  static Future<QuerySnapshot<Map<String, dynamic>>> getBannedUsers({
+    int limit = 10,
+    DocumentSnapshot<Object?>? previousDoc,
+  }) {
+    if (previousDoc != null) {
+      return _db
+          .collection('bannedUsers')
+          .orderBy('ban_time', descending: true)
+          .startAfterDocument(previousDoc)
+          .limit(limit)
+          .get();
+    } else {
+      return _db.collection('bannedUsers').orderBy('ban_time', descending: true).limit(limit).get();
     }
   }
 }
