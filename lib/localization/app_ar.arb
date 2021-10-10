@@ -357,6 +357,7 @@
     "ban_info": "معلومات الحظر",
     "uid": "رقم المستخدم التعريفي",
     "ban_time": "وقت الحظر",
+    "no_users_are_banned": "لا يوجد مستخدمين محظورين",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

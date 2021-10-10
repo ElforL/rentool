@@ -851,6 +851,11 @@
         "description": "created to be used in BannedIdPage"
     },
 
+    "no_users_are_banned": "No users are banned",
+    "@no_users_are_banned": {
+        "description": "created to be used in BannedUsersListPage"
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/screens/banned_ids_admin_page.dart';
+import 'package:rentool/screens/banned_users_admin_page.dart';
 import 'package:rentool/screens/disagreement_cases_admin_page.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/rentool_circle_avatar.dart';
@@ -60,9 +61,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         body = const DisagreementCasesAdminPage();
         break;
       case AdminPanelPage.bannedUsers:
-        body = Scaffold(
-          appBar: AppBar(),
-        );
+        body = const BannedUsersAdminPage();
         break;
       case AdminPanelPage.bannedIds:
         body = const BannedIdsAdminPage();
