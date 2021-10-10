@@ -26,24 +26,26 @@ class AuthServices {
   static void signOut([String? uuid]) async {
     if (!isSignedIn) return;
 
-    await FirebaseMessaging.instance.deleteToken();
+    if (!kIsWeb) {
+      await FirebaseMessaging.instance.deleteToken();
 
-    // get the device uuid to be able to navigate to the device's Firestore document and deleting the token
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    String? uuid;
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        final androidInfo = await deviceInfo.androidInfo;
-        uuid = androidInfo.androidId;
-        break;
-      case TargetPlatform.iOS:
-        final iosInfo = await deviceInfo.iosInfo;
-        uuid = iosInfo.identifierForVendor;
-        break;
-      default:
-        return;
+      // get the device uuid to be able to navigate to the device's Firestore document and deleting the token
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      String? uuid;
+      switch (defaultTargetPlatform) {
+        case TargetPlatform.android:
+          final androidInfo = await deviceInfo.androidInfo;
+          uuid = androidInfo.androidId;
+          break;
+        case TargetPlatform.iOS:
+          final iosInfo = await deviceInfo.iosInfo;
+          uuid = iosInfo.identifierForVendor;
+          break;
+        default:
+          return;
+      }
+      if (uuid != null) FirestoreServices.deleteDeviceToken(uuid, currentUid!);
     }
-    if (uuid != null) FirestoreServices.deleteDeviceToken(uuid, currentUid!);
 
     /// a list of the user information for each authentication provider.
     var providerData = auth.currentUser!.providerData;
