@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rentool/models/banned_user_entry.dart';
 
-class BannedIdEntry {
+class BannedIdEntry extends BannedUserEntry {
   final String idNumber;
-  final String uid;
-  final String reason;
-  final String admin;
-  final DateTime banTime;
 
-  BannedIdEntry(this.idNumber, this.uid, this.reason, this.admin, this.banTime);
+  BannedIdEntry(this.idNumber, uid, reason, admin, banTime) : super(uid, reason, admin, banTime);
 
   factory BannedIdEntry.fromJson(Map<String, dynamic> json) {
     return BannedIdEntry(
