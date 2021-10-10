@@ -66,7 +66,7 @@ Future<bool?> showErrorDialog(BuildContext context, {Widget? content, Widget? ti
     context: context,
     builder: (context) => AlertDialog(
       title: title ?? Text(AppLocalizations.of(context)!.error),
-      content: content,
+      content: content ?? Text(AppLocalizations.of(context)!.unexpected_error_occured),
       actions: actions ??
           [
             TextButton(

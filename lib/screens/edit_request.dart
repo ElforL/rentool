@@ -171,7 +171,7 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
                               Navigator.pop(context);
                             } catch (e) {
                               print('An unexpected error occured: $e');
-                              var content = Text(AppLocalizations.of(context)!.unexpected_error_occured);
+                              Widget? content;
                               if (e is FirebaseException) {
                                 content = Text(AppLocalizations.of(context)!.permission_denied);
                               }
