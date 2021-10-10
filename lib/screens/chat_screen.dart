@@ -117,7 +117,6 @@ class _ChatScreenState extends State<ChatScreen> {
           // Messages list
           Expanded(
             child: StreamBuilder(
-              // TODO pagination
               stream: FirestoreServices.getChatStream(request!.toolID, request!.id),
               builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 // update messages list

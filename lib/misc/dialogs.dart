@@ -61,6 +61,23 @@ Future<bool?> showConfirmDialog(BuildContext context, {Widget? content, Widget? 
   );
 }
 
+Future<bool?> showErrorDialog(BuildContext context, {Widget? content, Widget? title, List<Widget>? actions}) {
+  return showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: title ?? Text(AppLocalizations.of(context)!.error),
+      content: content,
+      actions: actions ??
+          [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+    ),
+  );
+}
+
 Future<dynamic> showIconAlertDialog(BuildContext context,
     {required IconData icon,
     required String titleText,

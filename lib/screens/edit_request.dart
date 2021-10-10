@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 
@@ -156,18 +158,28 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
                               _daysErrorText = AppLocalizations.of(context)!.days_must_be_more_than_0;
                             });
                           } else {
-                            // TODO handle exception [premission denied] editing request when it's accepted.
-                            await FirestoreServices.updateToolRequest(
-                              request
-                                ..description = _descriptionController.text
-                                ..numOfDays = daysNum,
-                              tool!.id,
-                            );
-                            // I didn't put the code below before Firestore request because if there was an error with
-                            // Firestore, then the code below won't excute and the request object won't change
-                            request.description = _descriptionController.text;
-                            request.numOfDays = daysNum;
-                            Navigator.pop(context);
+                            try {
+                              await FirestoreServices.updateToolRequest(
+                                request
+                                  ..description = _descriptionController.text
+                                  ..numOfDays = daysNum,
+                                tool!.id,
+                              );
+
+                              request.description = _descriptionController.text;
+                              request.numOfDays = daysNum;
+                              Navigator.pop(context);
+                            } catch (e) {
+                              print('An unexpected error occured: $e');
+                              var content = Text(AppLocalizations.of(context)!.unexpected_error_occured);
+                              if (e is FirebaseException) {
+                                content = Text(AppLocalizations.of(context)!.permission_denied);
+                              }
+                              showErrorDialog(
+                                context,
+                                content: content,
+                              );
+                            }
                           }
                         },
                       ),

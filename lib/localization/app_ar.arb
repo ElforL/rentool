@@ -358,6 +358,8 @@
     "uid": "رقم المستخدم التعريفي",
     "ban_time": "وقت الحظر",
     "no_users_are_banned": "لا يوجد مستخدمين محظورين",
+    "permission_denied": "تم رفض الوصول",
+    "unexpected_error_occured": "حدث خطأ غير متوقع",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

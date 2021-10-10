@@ -855,6 +855,14 @@
     "@no_users_are_banned": {
         "description": "created to be used in BannedUsersListPage"
     },
+    "permission_denied": "Permission denied",
+    "@permission_denied": {
+        "description": "created to be used in EditRequestScreen"
+    },
+    "unexpected_error_occured": "An unexpected error occured",
+    "@unexpected_error_occured": {
+        "description": "created to be used in EditRequestScreen"
+    },
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
