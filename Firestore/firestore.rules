@@ -491,7 +491,7 @@ service cloud.firestore {
         // TODO validNewVals() e.g., check if compensation price is a double and < resource.data.insuranceAmount
 
         allow read, write: if isAdmin();
-        allow read: if isActive() && (isTheRenter() || isTheToolOwner());
+        allow read: if isTheRenter() || isTheToolOwner();
 
         allow update: if isActive() &&
         validAffectedFields() &&
