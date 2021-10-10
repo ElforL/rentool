@@ -47,19 +47,21 @@ void main() async {
   const emulatorOn = true;
   // Configure emulator settings
   if (emulatorOn && !kReleaseMode) {
-    const localhost = '192.168.3.2';
+    try {
+      const localhost = '192.168.3.2';
 
-    // //// AUTHENTICATION ////
-    await FirebaseAuth.instance.useAuthEmulator(localhost, 9099);
+      // //// AUTHENTICATION ////
+      await FirebaseAuth.instance.useAuthEmulator(localhost, 9099);
 
-    // //// FIRESTORE ////
-    FirebaseFirestore.instance.useFirestoreEmulator(localhost, 8080);
+      // //// FIRESTORE ////
+      FirebaseFirestore.instance.useFirestoreEmulator(localhost, 8080);
 
-    // STORAGE
-    await FirebaseStorage.instance.useStorageEmulator(localhost, 9199);
+      // STORAGE
+      await FirebaseStorage.instance.useStorageEmulator(localhost, 9199);
 
-    // FUNCTIONS
-    FirebaseFunctions.instance.useFunctionsEmulator(localhost, 5001);
+      // FUNCTIONS
+      FirebaseFunctions.instance.useFunctionsEmulator(localhost, 5001);
+    } catch (_) {}
   }
   // Turn off persistence (offline access)
   // it's automatically off in web and trying to turn it off manually throws an error
