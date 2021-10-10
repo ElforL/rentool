@@ -36,9 +36,9 @@ class AuthProvidersContainer extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // These buttons aren't localized due to the providers' guidlines
             AuthProviderButton(
               icon: Image.asset('assets/images/google_icon.png'),
-              // TODO localize?
               label: const Text(
                 'SIGN IN WITH GOOGLE',
                 style: TextStyle(fontFamily: 'Roboto'),
@@ -52,7 +52,6 @@ class AuthProvidersContainer extends StatelessWidget {
             ),
             AuthProviderButton(
               icon: Image.asset('assets/images/Facebook_icon.png'),
-              // TODO localize?
               label: const Text(
                 'Login with Facebook',
                 style: TextStyle(fontFamily: 'Roboto'),
@@ -66,7 +65,6 @@ class AuthProvidersContainer extends StatelessWidget {
             ),
             AuthProviderButton(
               icon: Image.asset('assets/images/microsoft_icon.png'),
-              // TODO localize?
               label: const Text(
                 'Sign in with Microsoft',
                 style: TextStyle(fontFamily: 'Roboto'),
