@@ -16,7 +16,7 @@ import 'package:rentool/screens/deliver_meet_screen.dart';
 import 'package:rentool/screens/edit_post_screen.dart';
 import 'package:rentool/screens/edit_request.dart';
 import 'package:rentool/screens/edit_review_screen.dart';
-import 'package:rentool/screens/firebase_init_error_screen.dart';
+import 'package:rentool/screens/error_screen.dart';
 import 'package:rentool/screens/forgot_password_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
@@ -202,12 +202,16 @@ class FirstScreen extends StatelessWidget {
     return StreamBuilder(
       stream: AuthServices.authStateChanges,
       builder: (context, AsyncSnapshot<User?> snapshot) {
-        if (snapshot.hasError) return FirebaseInitErrorScreen(error: snapshot.error!);
+        if (snapshot.hasError) {
+          return ErrorScreen(
+            child: Text(AppLocalizations.of(context)!.couldnt_init_app),
+            error: snapshot.error!,
+          );
+        }
         var user = snapshot.data;
         MyApp.of(context)?.fcmServices?.init(context);
 
         if (user == null) {
-          // TODO delete print statements
           print('User signed out');
           FirestoreServices.userIdNumber = null;
           return const LoginScreen();

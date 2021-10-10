@@ -868,6 +868,8 @@
 
     "storage_permission_denied": "Storage permission denied",
     "storage_permission_denied_explanation": "The app was denied access to the gallery. To allow the app to upload media from your device, it needs to have access to the device storage.\n\nYou can give access if a permission dialog pops up, or in the app settings.",
+    
+    "couldnt_init_app": "Couldn't initialize the app",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
