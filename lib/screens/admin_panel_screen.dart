@@ -29,6 +29,9 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     // Read args
     _readArgs(context);
 
+    final size = MediaQuery.of(context).size;
+    bool drawerInBody = size.width >= 670;
+
     final drawer = Row(children: [
       Drawer(
         elevation: 0,
@@ -45,15 +48,15 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                 ],
               ),
             ),
-            _buildListTile(AdminPanelPage.disagreementsCases),
-            _buildListTile(AdminPanelPage.bannedUsers),
-            _buildListTile(AdminPanelPage.bannedIds),
+            _buildListTile(AdminPanelPage.disagreementsCases, drawerInBody),
+            _buildListTile(AdminPanelPage.bannedUsers, drawerInBody),
+            _buildListTile(AdminPanelPage.bannedIds, drawerInBody),
           ],
         ),
       ),
       const VerticalDivider(width: 1),
     ]);
-    final size = MediaQuery.of(context).size;
+
     Widget body;
 
     switch (currentPage) {
@@ -69,8 +72,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
       default:
         throw Exception('Invalid AdminPanelPage: $currentPage');
     }
-
-    bool drawerInBody = size.width >= 600;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +93,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     );
   }
 
-  Widget _buildListTile(AdminPanelPage page) {
+  Widget _buildListTile(AdminPanelPage page, bool drawerInBody) {
     IconData icon;
     String titleText;
     switch (page) {
@@ -115,7 +116,10 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     return ListTile(
       leading: Icon(icon),
       title: Text(titleText),
-      onTap: () => _setPage(page),
+      onTap: () {
+        if (!drawerInBody) Navigator.pop(context);
+        _setPage(page);
+      },
       selectedTileColor: currentPage == page ? Theme.of(context).colorScheme.primary.withAlpha(40) : null,
       selected: currentPage == page,
     );
