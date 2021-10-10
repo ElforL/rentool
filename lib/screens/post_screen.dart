@@ -77,7 +77,7 @@ class _PostScreenState extends State<PostScreen> {
           ),
           PopupMenuButton(
             itemBuilder: (context) => [
-              if (isUsersTool) ...[
+              if (isUsersTool || AuthServices.isAdmin) ...[
                 PopupMenuItem(
                   padding: EdgeInsets.zero,
                   child: ListTile(
