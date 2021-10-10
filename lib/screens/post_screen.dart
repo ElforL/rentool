@@ -130,6 +130,9 @@ class _PostScreenState extends State<PostScreen> {
             if (tool.acceptedRequestID != null && tool.acceptedRequestID != acceptedRequest?.id) {
               _getRequest();
             }
+            if (tool.acceptedRequestID == null && acceptedRequest != null) {
+              acceptedRequest = null;
+            }
           }
           return ListView(
             primary: false,
