@@ -63,7 +63,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                   ),
                   ListTile(
-                    leading: Icon(Icons.info),
+                    leading: const Icon(Icons.info),
                     title: Text(
                       AppLocalizations.of(context)!.we_will_send_password_reset_email,
                       style: Theme.of(context).textTheme.subtitle2!.copyWith(

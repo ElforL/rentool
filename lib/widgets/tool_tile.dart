@@ -62,7 +62,7 @@ class ToolTile extends StatelessWidget {
               child: Align(
                 alignment: AlignmentDirectional.topStart,
                 child: Container(
-                  constraints: BoxConstraints(maxWidth: 500),
+                  constraints: const BoxConstraints(maxWidth: 500),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

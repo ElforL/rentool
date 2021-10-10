@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/main.dart';
 import 'package:rentool/widgets/login/email_sign_screen.dart';

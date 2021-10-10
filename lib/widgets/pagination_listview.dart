@@ -75,11 +75,6 @@ class _PaginationListViewState<T> extends State<PaginationListView<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final x = RefreshIndicator(
-      onRefresh: () async {},
-      child: Container(),
-    );
-
     return FutureBuilder(
       future: _getDocs(),
       builder: (context, snapshot) {

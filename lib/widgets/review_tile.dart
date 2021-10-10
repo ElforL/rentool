@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'package:flutter/rendering.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/firestore.dart';

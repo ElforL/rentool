@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/main.dart';
 import 'package:rentool/screens/forgot_password_screen.dart';
 import 'package:rentool/services/auth.dart';
-import 'package:rentool/services/firestore.dart';
 import 'package:rentool/services/functions.dart';
 
 class EmailSignContainer extends StatefulWidget {

@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
         0,
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
         curve: Curves.easeInOut,
       );
     }
@@ -168,7 +168,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   shape: const CircleBorder(),
                   child: IconButton(
                     color: Colors.white,
-                    icon: Icon(Icons.send),
+                    icon: const Icon(Icons.send),
                     onPressed: () => sendMessage(),
                   ),
                 ),
