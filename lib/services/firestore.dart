@@ -427,4 +427,20 @@ class FirestoreServices {
       return _db.collection('disagreementCases').orderBy('timeCreated', descending: true).limit(limit).get();
     }
   }
+
+  static Future<QuerySnapshot<Map<String, dynamic>>> getBannedIds({
+    int limit = 10,
+    DocumentSnapshot<Object?>? previousDoc,
+  }) {
+    if (previousDoc != null) {
+      return _db
+          .collection('bannedList')
+          .orderBy('ban_time', descending: true)
+          .startAfterDocument(previousDoc)
+          .limit(limit)
+          .get();
+    } else {
+      return _db.collection('bannedList').orderBy('ban_time', descending: true).limit(limit).get();
+    }
+  }
 }

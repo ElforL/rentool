@@ -61,7 +61,9 @@ class DisagreementCasesListPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () {
+              // TODO
+            },
           ),
         ],
         automaticallyImplyLeading: false,

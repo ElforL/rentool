@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/screens/banned_ids_admin_page.dart';
 import 'package:rentool/screens/disagreement_cases_admin_page.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/widgets/rentool_circle_avatar.dart';
@@ -64,9 +65,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
         );
         break;
       case AdminPanelPage.bannedIds:
-        body = Scaffold(
-          appBar: AppBar(),
-        );
+        body = const BannedIdsAdminPage();
         break;
       default:
         throw Exception('Invalid AdminPanelPage: $currentPage');

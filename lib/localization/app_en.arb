@@ -834,6 +834,23 @@
         "description": "created to be used in MediaViewScreen"
     },
 
+    "no_ids_are_banned": "No IDs are banned",
+    "@no_ids_are_banned": {
+        "description": "created to be used in BannedIdsListPage"
+    },
+    "ban_info": "Ban information",
+    "@ban_info": {
+        "description": "created to be used in BannedIdPage"
+    },
+    "uid": "User ID (UID)",
+    "@uid": {
+        "description": "created to be used in BannedIdPage"
+    },
+    "ban_time": "Ban time",
+    "@ban_time": {
+        "description": "created to be used in BannedIdPage"
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

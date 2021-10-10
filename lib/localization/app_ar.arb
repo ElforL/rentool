@@ -353,6 +353,10 @@
     "the_reason": "السبب",
     "enter_reason_for_ban": "أدخل سبب الحظر",
     "playback_speed": "سرعة التشغيل",
+    "no_ids_are_banned": "لا يوجد هويات محظورة",
+    "ban_info": "معلومات الحظر",
+    "uid": "رقم المستخدم التعريفي",
+    "ban_time": "وقت الحظر",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
