@@ -68,7 +68,7 @@ class ToolTile extends StatelessWidget {
                     children: [
                       // Tool name
                       Text(
-                        tool.name + 'dsadad ' * 100,
+                        tool.name,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6,
