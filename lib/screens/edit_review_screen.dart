@@ -95,7 +95,7 @@ class _EditReviewScreenState extends State<EditReviewScreen> {
       Navigator.of(context).popUntil(ModalRoute.withName(
         widget.isNew ? EditReviewScreen.routeNameNew : EditReviewScreen.routeNameEdit,
       ));
-      // TODO show error dialog
+      showErrorDialog(context);
     });
 
     // Shows loading dialog while creating the review
