@@ -36,7 +36,6 @@ class MessageBubble extends StatelessWidget {
         bottom: 2,
         top: isFirstFromUser ? 5 : 1,
       ),
-      // TODO change [Column] to [Align]
       child: Column(
         // Alignment
         crossAxisAlignment: isSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,

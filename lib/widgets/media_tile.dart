@@ -158,16 +158,13 @@ class _MediaTileState extends State<MediaTile> {
   _showStorageDeniedDialog() {
     var dialog = AlertDialog(
       title: Column(
-        children: const [
-          Icon(Icons.folder),
-          // TODO localize
-          Text('Storage permission denied'),
+        children: [
+          const Icon(Icons.folder),
+          Text(AppLocalizations.of(context)!.storage_permission_denied),
         ],
       ),
-      // TODO localize
-      content: const Text(
-        "The app was denied access to the gallery. To allow the app to upload media from your device, it needs to have access to the device storage.\n\n"
-        "You can give access if a permission dialog pops up, or in the app settings.",
+      content: Text(
+        AppLocalizations.of(context)!.storage_permission_denied_explanation,
       ),
       actions: [
         TextButton(

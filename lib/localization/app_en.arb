@@ -864,13 +864,10 @@
         "description": "created to be used in EditRequestScreen"
     },
     "files_added": "Files added",
-    "@files_added": {
-        "description": "created to be used in EditRequestScreen"
-    },
     "undo": "Undo",
-    "@undo": {
-        "description": "created to be used in EditRequestScreen"
-    },
+
+    "storage_permission_denied": "Storage permission denied",
+    "storage_permission_denied_explanation": "The app was denied access to the gallery. To allow the app to upload media from your device, it needs to have access to the device storage.\n\nYou can give access if a permission dialog pops up, or in the app settings.",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
