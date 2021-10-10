@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/screens/edit_request.dart';
+import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/widgets/rating.dart';
 
 class RequestScreen extends StatefulWidget {
   const RequestScreen({Key? key}) : super(key: key);
@@ -17,8 +19,18 @@ class RequestScreen extends StatefulWidget {
 
 class _RequestScreenState extends State<RequestScreen> {
   late ToolRequest request;
+  RentoolUser? renter;
 
   late bool showAcceptButton;
+
+  Future<void> _getUser() async {
+    print('renter $renter');
+    if (renter != null) return;
+    print('start');
+    renter ??= await FirestoreServices.getUser(request.renterUID);
+    print('done');
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +38,8 @@ class _RequestScreenState extends State<RequestScreen> {
     final args = ModalRoute.of(context)!.settings.arguments as RequestScreenArguments;
     request = args.request;
     showAcceptButton = args.showAcceptButton;
+    _getUser();
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -102,13 +116,55 @@ class _RequestScreenState extends State<RequestScreen> {
                   ),
                 const SizedBox(height: 25),
                 // The renter info
-                // TODO show renter name and rating
                 Text(
                   AppLocalizations.of(context)!.renter,
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 15),
-                Text(request.renterUID),
+                Align(
+                  alignment: AlignmentDirectional.topStart,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 500),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(5),
+                      onTap: () async {
+                        final result = await Navigator.of(context).pushNamed(
+                          UserScreen.routeName,
+                          arguments: UserScreenArguments(user: renter),
+                        );
+                        if (result is RentoolUser) {
+                          setState(() {
+                            renter = result;
+                          });
+                        }
+                      },
+                      child: (renter == null)
+                          ? const LinearProgressIndicator()
+                          : Row(
+                              children: [
+                                Text(
+                                  renter!.name,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                                const Spacer(),
+                                Text(
+                                  renter!.rating.toStringAsFixed(1),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.orange.shade700,
+                                  ),
+                                ),
+                                ...RatingDisplay.getStarsIcons(
+                                  renter!.rating,
+                                  iconSize: 20,
+                                  fullColor: Colors.orange.shade700,
+                                  emptyColor: Colors.orange.shade700,
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 25),
                 // Price summary
                 Text(
