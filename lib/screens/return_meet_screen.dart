@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/models/return_meeting.dart';
+import 'package:rentool/screens/error_screen.dart';
 import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
 import 'package:rentool/screens/meetings_screens/compensation_price_screen.dart';
 import 'package:rentool/screens/meetings_screens/disagreement_case_created_screen.dart';
@@ -11,7 +14,7 @@ import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart'
 import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
 import 'package:rentool/screens/meetings_screens/tool_damaged_screen.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/widgets/loading_indicator.dart';
 
 class ReturnMeetScreen extends StatefulWidget {
   const ReturnMeetScreen({Key? key}) : super(key: key);
@@ -44,16 +47,10 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
       stream: FirestoreServices.getReturnMeetingStream(tool),
       builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
-          return Center(
-            // TODO localize
-            child: Text("Something went wrong\n${snapshot.error}"),
-          );
+          return ErrorScreen(error: snapshot.error);
         }
         if (snapshot.connectionState != ConnectionState.active) {
-          return const Center(
-            // TODO localize
-            child: Text('Getting ready...'),
-          );
+          return _buildLoadingScreen(context);
         }
 
         var data = snapshot.data!.data()!;
@@ -67,8 +64,32 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     );
   }
 
+  Scaffold _buildLoadingScreen(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const LoadingIndicator(
+              strokeWidth: 5,
+              height: 70,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              AppLocalizations.of(context)!.loading,
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget rentunAppropiateWidget() {
-    if (meeting.bothHandedOver) {
+    if (kIsWeb) {
+      return const ErrorScreen(error: "Meetings can only be done in the app");
+    } else if (meeting.bothHandedOver) {
       return MeetingSuccessScreen(
         title: AppLocalizations.of(context)!.success,
         subtitle: AppLocalizations.of(context)!.rentHasConcluded,
