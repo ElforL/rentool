@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/deliver_meetings.dart';
+import 'package:rentool/screens/error_screen.dart';
 import 'package:rentool/screens/meetings_screens/deliver_meeting_pics_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/screens/meetings_screens/meeting_ids_screen.dart';
@@ -9,6 +11,7 @@ import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/widgets/loading_indicator.dart';
 
 class DeliverMeetScreen extends StatefulWidget {
   const DeliverMeetScreen({Key? key}) : super(key: key);
@@ -42,28 +45,10 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       stream: FirestoreServices.getDeliverMeetingStream(tool),
       builder: (context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
-          // TODO
-          // if (snapshot.error is FirebaseException && (snapshot.error as FirebaseException).code == 'permission-denied')
-          //   return FirestorePermissionDeniedScreen();
-          return Scaffold(
-            appBar: AppBar(),
-            body: Center(
-              child: Text(
-                // TODO localize
-                "Something went wrong\n${snapshot.error}",
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+          return ErrorScreen(error: snapshot.error);
         }
         if (snapshot.connectionState != ConnectionState.active) {
-          return Scaffold(
-            appBar: AppBar(),
-            body: const Center(
-              // TODO localize
-              child: Text('Getting ready...'),
-            ),
-          );
+          return _buildLoadingScreen(context);
         }
 
         var data = snapshot.data!.data()!;
@@ -73,8 +58,32 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
     );
   }
 
+  Scaffold _buildLoadingScreen(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const LoadingIndicator(
+              strokeWidth: 5,
+              height: 70,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              AppLocalizations.of(context)!.loading,
+              style: Theme.of(context).textTheme.headline5,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget rentunAppropiateWidget(Map<String, dynamic> data, bool isUserTheOwner) {
-    if (!meeting!.bothArrived) {
+    if (kIsWeb) {
+      return const ErrorScreen(error: "Meetings can only be done in the app");
+    } else if (!meeting!.bothArrived) {
       return MeetingArrivedContainer(
         deliverMeeting: meeting,
       );
@@ -100,13 +109,11 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
           ),
         );
       } else {
-        // TODO
-        return Scaffold(
-          appBar: AppBar(),
-          body: const Center(
-            // TODO localize
-            child: Text('Loading... / unemplemented'),
-          ),
+        var json = meeting?.toJson()
+          ?..remove('renter_id')
+          ..remove('owner_id');
+        return ErrorScreen(
+          error: "Invalid state: the meeting's current state should be impossible.\ntoJson: $json",
         );
       }
     }
