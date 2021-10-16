@@ -315,7 +315,7 @@ class FirestoreServices {
   // and only take 'Cko-Request-Id' & 'Cko-Version' from headers
   static Future<void> addCardToken(Map<String, dynamic> body, Map<String, String> headers) {
     return _usersRef.doc(AuthServices.currentUid!).collection('private').doc('card').set({
-      'headers': headers,
+      'headers': headers..removeWhere((key, value) => !key.startsWith('cko')),
       'body': body,
     });
   }
