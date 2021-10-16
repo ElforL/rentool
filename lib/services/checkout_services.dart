@@ -8,7 +8,7 @@ import 'package:rentool/models/checkout/token_response.dart';
 class CheckoutServices {
   /// [Request a token](https://api-reference.checkout.com/#operation/requestAToken)
   static const tokensUrl = 'https://api.sandbox.checkout.com/tokens';
-  static get _headers => {'authorization': checkoutPublicKey};
+  static Map<String, String> get _headers => {'authorization': checkoutPublicKey};
 
   ///
   ///
