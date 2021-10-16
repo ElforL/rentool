@@ -311,15 +311,6 @@ class FirestoreServices {
     userIdNumber = idNumber;
   }
 
-  // TODO: TEMP cheange the format
-  // and only take 'Cko-Request-Id' & 'Cko-Version' from headers
-  static Future<void> addCardToken(Map<String, dynamic> body, Map<String, String> headers) {
-    return _usersRef.doc(AuthServices.currentUid!).collection('private').doc('card').set({
-      'headers': headers..removeWhere((key, value) => !key.startsWith('cko')),
-      'body': body,
-    });
-  }
-
   /// Sets _isRead_ field to [isRead] of the notification with the given [notificationId] of the user with the given [uid].
   static Future<void> setNotificationIsRead(String uid, String notificationId, {bool isRead = true}) {
     return _usersRef.doc(uid).collection('notifications').doc(notificationId).update({'isRead': isRead});

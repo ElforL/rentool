@@ -4,7 +4,6 @@ import 'package:rentool/misc/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:rentool/models/checkout/error_response.dart';
 import 'package:rentool/models/checkout/token_response.dart';
-import 'package:rentool/services/firestore.dart';
 
 class CheckoutServices {
   /// [Request a token](https://api-reference.checkout.com/#operation/requestAToken)
@@ -53,9 +52,20 @@ class CheckoutServices {
     );
 
     if (response.statusCode == 201) {
-      var jsonDecode2 = jsonDecode(response.body);
-      await FirestoreServices.addCardToken(jsonDecode2, response.headers);
-      return CardToken.fromJson(jsonDecode2);
+      var json = jsonDecode(response.body);
+      /*
+      * TODO Call ckoPay for creating customer or adding a new card OUTSIDE AND AFTER THIS METHOD
+      * THIS METHOD IS ONLY TO GENERATE THE TOKEN CALL THE `ckoPay()` AFTER CALLING THIS FUNCTION
+      * DO CHECK Checkout docs to know when to call /payments with amound = 0
+      * Also, TODO RENAME ckoPay
+      */
+      // final callable = FirebaseFunctions.instance.httpsCallable('ckoPay');
+      // final msg = {
+      //   'headers': response.headers..removeWhere((key, value) => !key.startsWith('cko')),
+      //   'body': json,
+      // };
+      // await callable.call(msg);
+      return CardToken.fromJson(json);
     } else {
       // An error occured
       if (response.statusCode == 422) {
