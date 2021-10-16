@@ -871,6 +871,16 @@
     
     "couldnt_init_app": "Couldn't initialize the app",
 
+    "enter_card": "Enter your card",
+    "card_number": "Card number",
+    "card_holder_name": "Card holder name",
+    "expiry_date": "Expiry date",
+    "ccv": "CCV",
+
+    "cvv_validation_message": "Please input a valid CVV",
+    "date_validation_message": "Please input a valid date",
+    "number_validation_message": "Please input a valid number",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

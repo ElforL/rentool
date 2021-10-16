@@ -367,5 +367,15 @@
     "storage_permission_denied_explanation": "تم رفض التطبيق من الوصول إلى المعرض. للسماح للتطبيق بتحميل الوسائط من جهازك ، يجب أن يكون له حق الوصول إلى وحدة تخزين الجهاز.\n\nيمكنك منح حق الوصول إذا انبثق مربع حوار، أو في إعدادات التطبيق.",
     "couldnt_init_app": "تعذرت تهيئة التطبيق",
 
+    "enter_card": "إدخال البطاقة",
+    "card_number": "رقم البطاقة",
+    "card_holder_name": "اسم حامل البطاقة",
+    "expiry_date": "تاريخ الإنتهاء",
+    "ccv": "رمز الأمان (CCV)",
+
+    "cvv_validation_message": "الرجاء إدخال رمز أمان صالح",
+    "date_validation_message": "الرجاء إدخال تاريخ صالح",
+    "number_validation_message": "الرجاء إدخال رقم صحيح",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
