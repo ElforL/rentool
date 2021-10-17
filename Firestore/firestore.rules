@@ -99,6 +99,12 @@ service cloud.firestore {
         return exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/ID);
       }
 
+      /// checks if the user has a customer id and a payment source in `/cko_users_payments/uid`
+      function hasCustomerAndSource(){
+        return get(/databases/$(database)/documents/cko_users_payments/$(request.auth.uid)).data.customer.id is string &&
+        get(/databases/$(database)/documents/cko_users_payments/$(request.auth.uid)).data.source.id is string;
+      }
+
       function isEmailVerified(){
         return request.auth != null && request.auth.token.email_verified == true;
       }
@@ -167,6 +173,7 @@ service cloud.firestore {
       allow create: if isEmailVerified()
       // and has an ID number
       && hasID()
+      && hasCustomerAndSource()
       // and the tool is valid
       && isToolValid(true);
       
@@ -220,6 +227,7 @@ service cloud.firestore {
         
         allow create: if isEmailVerified()
         && hasID()
+        && hasCustomerAndSource()
         && hasNoPreviousRequests()
         && isNewRequestValid();
         
