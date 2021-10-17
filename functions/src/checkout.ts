@@ -120,7 +120,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'id': result.customer.id,
         'email': result.customer.email,
       },
-      'source': result.source.expiry_month,
+      'source': result.source,
       'first_token_headers': data.headers,
     });
     batch.set(userCkoDoc.collection('payments').doc(result.id), result);
