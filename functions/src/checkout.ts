@@ -92,7 +92,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
     });
 
     // Check if it was approved
-    if (result.approve === false) {
+    if (result.approved === false) {
       response.statusCode = 406;
       response.error.type = 'declined';
       response.error.code = 'declined';
