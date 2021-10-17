@@ -64,4 +64,25 @@ class CardToken {
       headers: headers,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'token': token,
+      'expires_on': expiresOn,
+      'last4': last4,
+      'bin': bin,
+      'expiry_month': expMonth,
+      'expiry_year': expYear,
+      'name': name,
+      'scheme': scheme,
+      'card_type': cardType,
+      'card_category': cardCategory,
+      'issuer': issuer,
+      'issuer_country': issuerCountry,
+      'product_id': productId,
+      'product_type': productType,
+      'billing_address': billingAddress?.toJson(),
+      'phone': phoneNumber?.toJson(),
+    };
+  }
 }
