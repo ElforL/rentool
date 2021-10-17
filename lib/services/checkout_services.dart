@@ -13,7 +13,7 @@ class CheckoutServices {
   ///
   ///
   /// may throw [ErrorResponse] for error code 422
-  /// or [Response] for errpr 404 and other
+  /// or [Response] for error 401 or other
   static Future<CardToken> genCardToken(
     String number,
     int expMonth,
@@ -53,19 +53,7 @@ class CheckoutServices {
 
     if (response.statusCode == 201) {
       var json = jsonDecode(response.body);
-      /*
-      * TODO Call ckoPay for creating customer or adding a new card OUTSIDE AND AFTER THIS METHOD
-      * THIS METHOD IS ONLY TO GENERATE THE TOKEN CALL THE `ckoPay()` AFTER CALLING THIS FUNCTION
-      * DO CHECK Checkout docs to know when to call /payments with amound = 0
-      * Also, TODO RENAME ckoPay
-      */
-      // final callable = FirebaseFunctions.instance.httpsCallable('ckoPay');
-      // final msg = {
-      //   'headers': response.headers..removeWhere((key, value) => !key.startsWith('cko')),
-      //   'body': json,
-      // };
-      // await callable.call(msg);
-      return CardToken.fromJson(json);
+      return CardToken.fromJson(json, response.headers);
     } else {
       // An error occured
       if (response.statusCode == 422) {

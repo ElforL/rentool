@@ -9,6 +9,7 @@ class CardToken {
   final int expMonth;
   final int expYear;
 
+  final String? name;
   final String? scheme;
   final String? cardType;
   final String? cardCategory;
@@ -20,7 +21,7 @@ class CardToken {
   final BillingAddress? billingAddress;
   final PhoneNumber? phoneNumber;
 
-  final String? name;
+  final Map<String, String> headers;
 
   CardToken(
     this.token,
@@ -29,6 +30,7 @@ class CardToken {
     this.bin,
     this.expMonth,
     this.expYear, {
+    this.name,
     this.scheme,
     this.cardType,
     this.cardCategory,
@@ -38,10 +40,10 @@ class CardToken {
     this.productType,
     this.billingAddress,
     this.phoneNumber,
-    this.name,
+    required this.headers,
   });
 
-  factory CardToken.fromJson(Map<String, dynamic> json) {
+  factory CardToken.fromJson(Map<String, dynamic> json, Map<String, String> headers) {
     return CardToken(
       json['token'],
       json['expires_on'],
@@ -49,6 +51,7 @@ class CardToken {
       json['bin'],
       json['expiry_month'],
       json['expiry_year'],
+      name: json['name'],
       scheme: json['scheme'],
       cardType: json['card_type'],
       cardCategory: json['card_category'],
@@ -58,7 +61,7 @@ class CardToken {
       productType: json['product_type'],
       billingAddress: json['billing_address'] != null ? BillingAddress.fromJson(json['billing_address']) : null,
       phoneNumber: json['phone'] != null ? PhoneNumber.fromJson(json['phone']) : null,
-      name: json['name'],
+      headers: headers,
     );
   }
 }
