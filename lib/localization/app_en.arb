@@ -899,6 +899,9 @@
         }
     },
 
+    "payment": "Payment",
+    "payment_settings": "Payment settings",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

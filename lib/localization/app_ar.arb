@@ -389,5 +389,8 @@
     "request_success__status": "The request was successful\nStatus: {status}",
     "request_success__status": "تم نجاح الطلب\nالحالة: {status}",
 
+    "payment": "الدفع",
+    "payment_settings": "إعدادات الدفع",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
