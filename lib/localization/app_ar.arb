@@ -377,5 +377,17 @@
     "date_validation_message": "الرجاء إدخال تاريخ صالح",
     "number_validation_message": "الرجاء إدخال رقم صحيح",
 
+    "card_verification_not_siged_in_error": "المستخدم لم يسجل الدخول.\nلم تتمكن الخوادم من التحقق من المستخدم",
+    "card_verification_invalid_data": "بيانات غير صالحة",
+    "card_declined": "البطاقة مرفوضة",
+    "too_many_requests": "العديد من الطلبات",
+    "problem_on_our_side": "حصلت خطأ في خوادمنا",
+    "bad_gateway": "مدخل خاطئ",
+    "internal_server_error": "خطأ داخلي في الخادم",
+    "pending": "قيد الانتظار", 
+    "request_success_but_pending": "تم نجاح الطلب لكنه ما يزال قيد الانتظار. سنجهز الأمر بمجرد انتهاء الطلب.",
+    "request_success__status": "The request was successful\nStatus: {status}",
+    "request_success__status": "تم نجاح الطلب\nالحالة: {status}",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

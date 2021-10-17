@@ -881,6 +881,24 @@
     "date_validation_message": "Please input a valid date",
     "number_validation_message": "Please input a valid number",
 
+    "card_verification_not_siged_in_error": "User signed out.\nThe servers couldn't identify the user",
+    "card_verification_invalid_data": "Invalid data",
+    "card_declined": "Card declined",
+    "too_many_requests": "Too many requests",
+    "problem_on_our_side": "There was a problem on our side",
+    "bad_gateway": "Bad gateway",
+    "internal_server_error": "Internal server error",
+    "pending": "Pending", 
+    "request_success_but_pending": "The request was successful but it's still pending. We'll get it ready as soon as it's done.",
+    "request_success__status": "The request was successful\nStatus: {status}",
+    "@request_success__status": {
+        "placeholders": {
+            "status": {
+                "type": "String"
+            }
+        }
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
