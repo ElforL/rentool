@@ -120,14 +120,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'id': result.customer.id,
         'email': result.customer.email,
       },
-      'card': result.status === "Pending" ? null : {
-        'expiry_month': result.source.expiry_month,
-        'expiry_year': result.source.expiry_year,
-        'name': result.source.name,
-        'scheme': result.source.scheme,
-        'last4': result.source.last4,
-        'bin': result.source.bin,
-      },
+      'source': result.source.expiry_month,
       'first_token_headers': data.headers,
     });
     batch.set(userCkoDoc.collection('payments').doc(result.id), result);
