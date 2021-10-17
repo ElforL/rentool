@@ -102,7 +102,7 @@ class _BanUserScreenState extends State<BanUserScreen> {
                           return;
                         }
                         Navigator.pop(context);
-                        _showErrorDialog(result.response);
+                        _showErrorDialog('${result.statusCode} - ${result.error}');
                       }
                     },
                   ),

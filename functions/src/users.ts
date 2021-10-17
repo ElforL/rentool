@@ -12,18 +12,26 @@ export const authChange = functions.auth.user().onCreate((user, context) => {
 
 export const updateUsername = functions.https.onCall(async (data, context) => {
   const response: {
+    statusCode: number;
     success: boolean;
-    response: string;
-    username: string | undefined;
+    message: string | null;
+    value: any;
+    error: any;
   } = {
+    'statusCode': 401,
     'success': false,
-    'response': '',
-    'username': undefined,
+    'message': null,
+    'value': null,
+    'error': null,
   }
   const uid = context.auth?.uid;
 
   if (uid == null) {
-    response.response = 'ERROR: This function must be called by a signed-in user.';
+    response.message = 'ERROR: This function must be called by a signed-in user.';
+    response.error = {
+      'type': 'unauthorized',
+      'code': 'not-signed-in'
+    };
     return response;
   }
 
@@ -37,35 +45,55 @@ export const updateUsername = functions.https.onCall(async (data, context) => {
         'name': user.displayName,
       });
 
+      response.statusCode = 200;
       response.success = true;
-      response.response = `SUCCESS`;
-      response.username = user.displayName;
+      response.message = `SUCCESS`;
+      response.value = user.displayName;
       return response;
     } catch (error) {
       functions.logger.error(`An unexpected error occured while chaning the username of user with uid=${uid}. Data=${data}.`, error);
-      response.response = `ERROR: An unexpected error occured.`;
+      response.message = `ERROR: An unexpected error occured.`;
+      response.statusCode = 500;
+      response.error = {
+        'type': 'internal-server-error',
+        'code': 'internal-server-error'
+      };
       return response;
     }
   } else {
-    response.response = `ERROR: Invalid parameter type. This function accepts only 1 string paramater. Recivied: ${typeof data}.`;
+    response.message = `ERROR: Invalid parameter type. This function accepts only 1 string paramater. Recivied: ${typeof data}.`;
+    response.statusCode = 400;
+    response.error = {
+      'type': 'bad-request',
+      'code': 'invalid-paramaters'
+    };
     return response;
   }
 })
 
 export const updateUserPhoto = functions.https.onCall(async (data, context) => {
   const response: {
+    statusCode: number;
     success: boolean;
-    response: string;
-    photoUrl: string | undefined;
+    message: string | null;
+    value: any;
+    error: any;
   } = {
+    'statusCode': 401,
     'success': false,
-    'response': '',
-    'photoUrl': undefined,
+    'message': null,
+    'value': null,
+    'error': null,
   }
   const uid = context.auth?.uid;
 
   if (uid == null) {
-    response.response = 'ERROR: This function must be called by a signed-in user.';
+    response.message = 'ERROR: This function must be called by a signed-in user.';
+    response.statusCode = 401;
+    response.error = {
+      'type': 'unauthorized',
+      'code': 'not-signed-in'
+    };
     return response;
   }
 
@@ -78,7 +106,12 @@ export const updateUserPhoto = functions.https.onCall(async (data, context) => {
       try {
         new URL(photoUrl);
       } catch (_) {
-        response.response = 'ERROR: Invalid url.';
+        response.message = 'ERROR: Invalid url.';
+        response.statusCode = 400;
+        response.error = {
+          'type': 'bad-request',
+          'code': 'invalid-url'
+        };
         return response;
       }
 
@@ -92,16 +125,27 @@ export const updateUserPhoto = functions.https.onCall(async (data, context) => {
 
       // Response
       response.success = true;
-      response.response = `SUCCESS`;
-      response.photoUrl = user.photoURL;
+      response.message = `SUCCESS`;
+      response.statusCode = 200;
+      response.value = user.photoURL;
       return response;
     } catch (error) {
       functions.logger.error(`An unexpected error occured while chaning the photoUrl of user with uid=${uid}. Data=${data}.`, error);
-      response.response = `ERROR: An unexpected error occured.`;
+      response.message = `ERROR: An unexpected error occured.`;
+      response.statusCode = 500;
+      response.error = {
+        'type': 'internal-server-error',
+        'code': 'internal-server-error'
+      };
       return response;
     }
   } else {
-    response.response = `ERROR: Invalid parameter type. This function accepts only 1 string paramater. Recivied: ${typeof data}.`;
+    response.message = `ERROR: Invalid parameter type. This function accepts only 1 string paramater. Recivied: ${typeof data}.`;
+    response.statusCode = 400;
+    response.error = {
+      'type': 'bad-request',
+      'code': 'invalid-paramaters'
+    };
     return response;
   }
 })
@@ -109,19 +153,35 @@ export const updateUserPhoto = functions.https.onCall(async (data, context) => {
 /// paramaters => ({uid: string, reason: string})
 export const banUser = functions.https.onCall(async (data, context) => {
   const response: {
+    statusCode: number;
     success: boolean;
-    response: string;
-    value: string | undefined;
+    message: string | null;
+    value: any;
+    error: any;
   } = {
+    'statusCode': 401,
     'success': false,
-    'response': 'ERROR: This function is only callable by admins',
-    'value': undefined,
+    'message': null,
+    'value': null,
+    'error': null,
   }
 
-  if (context.auth?.token.admin !== true) return response;
+  if (context.auth?.token.admin !== true) {
+    response.statusCode = 403;
+    response.error = {
+      'type': 'unauthorized',
+      'code': 'not-an-admin'
+    };
+    return response;
+  }
 
   if (typeof data.uid !== 'string' || typeof data.reason !== 'string') {
-    response.response = `ERROR: Invalid parameters. This function accepts a map/object whith the keys 'uid' and 'reason' as: {'uid': string; 'reason': string;}. Recivied type: ${typeof data}.`;
+    response.message = `ERROR: Invalid parameters. This function accepts a map/object whith the keys 'uid' and 'reason' as: {'uid': string; 'reason': string;}. Recivied type: ${typeof data}.`;
+    response.statusCode = 400;
+    response.error = {
+      'type': 'bad-request',
+      'code': 'invalid-paramaters'
+    };
     return response;
   }
 
@@ -140,11 +200,21 @@ export const banUser = functions.https.onCall(async (data, context) => {
     // `error TS1196: Catch clause variable cannot have a type annotation.`
     function handleError(e: any) {
       if (e.code === 'auth/user-not-found') {
-        response.response = 'ERROR: There is no user record corresponding to the provided uid';
+        response.message = 'ERROR: There is no user record corresponding to the provided uid';
+        response.statusCode = 400;
+        response.error = {
+          'type': 'bad-request',
+          'code': 'no-user-with-provided-uid'
+        };
         return response;
       }
       functions.logger.error(`An unexpected error occured while banning the user with uid=${uid}. Data=${data}.`, error);
-      response.response = 'ERROR: An unexpected error occured';
+      response.message = 'ERROR: An unexpected error occured';
+      response.statusCode = 500;
+      response.error = {
+        'type': 'internal-server-error',
+        'code': 'internal-server-error'
+      };
       return response;
     }
 
@@ -166,7 +236,12 @@ export const banUser = functions.https.onCall(async (data, context) => {
     }
   } catch (error) {
     functions.logger.error(`An unexpected error occured while banning the user ID number with uid=${uid}. Data=${data}.`, error);
-    response.response = "ERROR: The user was banned but there was a problem banning the user's ID number";
+    response.message = "ERROR: The user was disabled but there was a problem banning the user's ID number";
+    response.statusCode = 202;
+    response.error = {
+      'type': 'internal-server-error',
+      'code': 'user-disabled-but-id-not-banned'
+    };
     return response;
   }
 
@@ -180,7 +255,9 @@ export const banUser = functions.https.onCall(async (data, context) => {
   } catch (_) { }
 
   response.success = true;
-  response.response = 'SUCCESS';
+  response.message = 'SUCCESS';
+  response.statusCode = 200;
+  response.value = true;
   return response;
 });
 

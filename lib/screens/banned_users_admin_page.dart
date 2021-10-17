@@ -85,12 +85,8 @@ class BannedUsersListPage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          print((await FunctionsServices.banUser(
-            'R84XhDPoqgGeoYnpRHl5FxXz2ijf',
-            'Testing the ban function',
-          ))
-              .response);
+        onPressed: () {
+          // TODO
         },
       ),
     );

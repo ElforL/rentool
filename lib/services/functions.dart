@@ -1,16 +1,16 @@
 import 'package:cloud_functions/cloud_functions.dart';
 
 class FunctionsServices {
-  static Future<UpdateUsernameResponse> updateUsername(String newName) async {
+  static Future<FunctionResponse> updateUsername(String newName) async {
     final callable = FirebaseFunctions.instance.httpsCallable('updateUsername');
     final result = await callable.call(newName);
-    return UpdateUsernameResponse.fromJson(result.data);
+    return FunctionResponse.fromJson(result.data);
   }
 
-  static Future<UpdatePhotoResponse> updateUserPhoto(String newName) async {
+  static Future<FunctionResponse> updateUserPhoto(String newName) async {
     final callable = FirebaseFunctions.instance.httpsCallable('updateUserPhoto');
     final result = await callable.call(newName);
-    return UpdatePhotoResponse.fromJson(result.data);
+    return FunctionResponse.fromJson(result.data);
   }
 
   static Future<FunctionResponse> banUser(String uid, String reason) async {
@@ -29,42 +29,22 @@ class FunctionsServices {
 // `88b    ooo   888  d8(  888  o.  )88b o.  )88b 888    .o o.  )88b
 //  `Y8bood8P'  o888o `Y888""8o 8""888P' 8""888P' `Y8bod8P' 8""888P'
 
-/// an abstract class for the response for some cloud functions e.g., `updateUsername()` and `updateUserPhoto()`
-///
-/// Some decendants:
-/// * UpdateUsernameResponse
-/// * UpdatePhotoUrlResponse
 class FunctionResponse {
+  final int statusCode;
   final bool isSuccess;
-  final String response;
+  final String? message;
   final Object? value;
+  final Object? error;
 
-  FunctionResponse(this.isSuccess, this.response, [this.value]);
+  FunctionResponse(this.statusCode, this.isSuccess, {this.message, this.value, this.error});
 
-  FunctionResponse.fromJson(Map<String, dynamic> json)
-      : isSuccess = json['success'],
-        response = json['response'],
-        value = json['value'];
-}
-
-/// a class for the response of the cloud function `updateUsername()`
-class UpdateUsernameResponse extends FunctionResponse {
-  final String? username;
-
-  UpdateUsernameResponse(bool isSuccess, String response, this.username) : super(isSuccess, response);
-
-  UpdateUsernameResponse.fromJson(Map<String, dynamic> json)
-      : username = json['username'],
-        super.fromJson(json);
-}
-
-/// a class for the response of the cloud function `updateUserPhoto()`
-class UpdatePhotoResponse extends FunctionResponse {
-  final String? photoUrl;
-
-  UpdatePhotoResponse(bool isSuccess, String response, this.photoUrl) : super(isSuccess, response);
-
-  UpdatePhotoResponse.fromJson(Map<String, dynamic> json)
-      : photoUrl = json['photoUrl'],
-        super.fromJson(json);
+  factory FunctionResponse.fromJson(Map<String, dynamic> json) {
+    return FunctionResponse(
+      json['statusCode'],
+      json['success'],
+      message: json['message'],
+      value: json['value'],
+      error: json['error'],
+    );
+  }
 }
