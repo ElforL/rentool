@@ -19,6 +19,16 @@ class FunctionsServices {
     final result = await callable.call(msg);
     return FunctionResponse.fromJson(result.data);
   }
+
+  static Future<FunctionResponse> addSourceFromToken(Map json, Map headers) async {
+    final callable = FirebaseFunctions.instance.httpsCallable('addSourceFromToken');
+    final msg = {
+      'headers': headers..removeWhere((key, value) => !key.startsWith('cko')),
+      'body': json,
+    };
+    final result = await callable.call(msg);
+    return FunctionResponse.fromJson(result.data);
+  }
 }
 
 //   .oooooo.   oooo
