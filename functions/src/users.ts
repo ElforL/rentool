@@ -209,6 +209,7 @@ export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/
 
         const totalWithoutVal = (rating * numOfReviews) - reviewValue;
         var avgAfter = totalWithoutVal / (numOfReviews - 1);
+        // isNaN is caused be dividing 0/0
         if (isNaN(avgAfter)) avgAfter = 0;
 
         // Update
