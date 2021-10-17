@@ -144,12 +144,6 @@ class _CardInputScreenState extends State<CardInputScreen> {
         icon: Icons.credit_card,
         titleText: AppLocalizations.of(context)!.pending,
         bodyText: AppLocalizations.of(context)!.request_success_but_pending,
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
-          ),
-        ],
       );
     } else if (result.statusCode == 201) {
       showIconAlertDialog(
@@ -157,12 +151,6 @@ class _CardInputScreenState extends State<CardInputScreen> {
         icon: Icons.credit_score,
         titleText: AppLocalizations.of(context)!.success,
         bodyText: AppLocalizations.of(context)!.request_success__status(result.message ?? '✔'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
-          ),
-        ],
       );
     }
   }
@@ -264,13 +252,7 @@ class _CardInputScreenState extends State<CardInputScreen> {
       icon: icon ?? Icons.credit_card_off_outlined,
       titleText: AppLocalizations.of(context)!.error,
       bodyText: bodyText,
-      actions: actions ??
-          [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
-            ),
-          ],
+      actions: actions,
     );
   }
 
