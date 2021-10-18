@@ -392,6 +392,9 @@
 
     "payment": "الدفع",
     "payment_settings": "إعدادات الدفع",
+    "loading_payment_settings": "جار تحميل إعدادات الدفع خاصتك",
+    "change_your_card": "غير بطاقتك",
+    "want_delete_your_card": "هل تريد حذف بطاقتك؟\nلن تتمكن من نشر أو طلب أي أداة",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

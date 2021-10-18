@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
+import 'package:rentool/screens/payment_settings_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/services/functions.dart';
@@ -262,8 +263,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
       ListTile(
         title: Text(AppLocalizations.of(context)!.payment_settings),
         onTap: () {
-          // TODO
-          // Navigator.of(context).pushNamed('/paymentSettings');
+          Navigator.of(context).pushNamed(PaymentSettingsScreen.routeName);
         },
       ),
       const Divider(),

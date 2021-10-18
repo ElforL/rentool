@@ -902,6 +902,9 @@
 
     "payment": "Payment",
     "payment_settings": "Payment settings",
+    "loading_payment_settings": "Loading your payment settings",
+    "change_your_card": "Change your card",
+    "want_delete_your_card": "Do you want to delete your card?\nYou won't be able to post or request any tools",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

@@ -24,6 +24,7 @@ import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
 import 'package:rentool/screens/my_tools_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
+import 'package:rentool/screens/payment_settings_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/request_screen.dart';
 import 'package:rentool/screens/requests_list_screen.dart';
@@ -189,6 +190,7 @@ class _MyAppState extends State<MyApp> {
         ForgotPasswordScreen.routeName: (context) => const ForgotPasswordScreen(),
         AdminPanelScreen.routeName: (context) => AdminPanelScreen(),
         BanUserScreen.routeName: (context) => const BanUserScreen(),
+        PaymentSettingsScreen.routeName: (context) => const PaymentSettingsScreen(),
       },
     );
   }
