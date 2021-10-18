@@ -78,7 +78,7 @@ class _CardInputScreenState extends State<CardInputScreen> {
                 ),
               ),
               ElevatedButton(
-                child: Text(AppLocalizations.of(context)!.enter_card),
+                child: Text(AppLocalizations.of(context)!.submit.toUpperCase()),
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     print('Valid!');

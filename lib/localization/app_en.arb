@@ -25,6 +25,7 @@
     "or": "Or",
     "back": "Back",
     "none": "None",
+    "submit": "Submit",
 
     "userNotFoundError": "There is no user corresponding to this email address.",
     "@userNotFoundError": {
