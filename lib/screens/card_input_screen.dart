@@ -35,6 +35,16 @@ class _CardInputScreenState extends State<CardInputScreen> {
               Directionality(
                 textDirection: TextDirection.ltr,
                 child: CreditCardWidget(
+                  customCardTypeIcons: [
+                    CustomCardTypeIcon(
+                      cardType: CardType.visa,
+                      cardImage: Image.asset(
+                        'assets/images/Visa_Brandmark_White_2021.png',
+                        height: 48,
+                        width: 48,
+                      ),
+                    ),
+                  ],
                   cardNumber: card?.cardNumber ?? '',
                   expiryDate: card?.expiryDate ?? '',
                   cardHolderName: card?.cardHolderName ?? '',
