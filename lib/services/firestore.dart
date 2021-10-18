@@ -306,6 +306,21 @@ class FirestoreServices {
     return _usersRef.doc(uid).collection('private').doc('ID').get();
   }
 
+  /// Get the card document of the user with the given [uid]
+  ///
+  /// Doc format:
+  /// ```
+  /// 'expiry_month': expiry_month,
+  /// 'expiry_year': expiry_year,
+  /// 'name': car holder name,
+  /// 'scheme': scheme (e.g., Visa),
+  /// 'last4': last4,
+  /// 'bin': bin,
+  /// ```
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getCard(String uid) {
+    return _usersRef.doc(uid).collection('private').doc('card').get();
+  }
+
   static Future<void> setID(String idNumber) async {
     await _usersRef.doc(AuthServices.currentUid!).collection('private').doc('ID').set({'idNumber': idNumber});
     userIdNumber = idNumber;
