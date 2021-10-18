@@ -34,6 +34,9 @@ service cloud.firestore {
         isIdNumValid(request.resource.data.idNumber);
       }
 
+      match /private/card{
+      	allow get: if isTHEuser();
+      }
 
       match /devices/{fcmToken}{
         function areFieldsValid(){
