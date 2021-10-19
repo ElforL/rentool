@@ -111,8 +111,7 @@ class _CardInputScreenState extends State<CardInputScreen> {
                       handleFunctionResponse(response);
                     } on FunctionResponse catch (response) {
                       return handleUnsuccessfulFunctionResponse(response);
-                    } on ErrorResponse catch (e) {
-                      // 422 Invalid data
+                    } on ErrorResponse catch (_) {
                       return showIconErrorDialog(context, AppLocalizations.of(context)!.card_verification_invalid_data);
                     } on http.Response catch (e) {
                       print("Error (${e.statusCode}) setting user's card!");

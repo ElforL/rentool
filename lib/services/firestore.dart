@@ -288,9 +288,8 @@ class FirestoreServices {
   ///
   /// returns true if successful
   static Future<bool> addUser(RentoolUser user) async {
-    var userJson = user.toJson(['reviews', 'tools', 'requests']);
-    var uid = userJson['uid'];
-    userJson.remove('uid');
+    final uid = user.uid;
+    final userJson = user.toJson(['reviews', 'tools', 'requests', 'uid']);
 
     try {
       await _usersRef.doc(uid).set(userJson);
