@@ -23,7 +23,8 @@ service cloud.firestore {
       // `ID` private doc
       match /private/ID{
         function isIdNumValid(idNumber){
-          return idNumber.size() == 10 &&
+          return idNumber is string &&
+          idNumber.size() == 10 &&
           // Check if ID is banned
           !exists(/databases/$(database)/documents/bannedList/$(idNumber)) &&
           !exists(/databases/$(database)/documents/idsList/$(idNumber));
