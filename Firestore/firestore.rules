@@ -14,10 +14,11 @@ service cloud.firestore {
       allow write: if isAdmin();
 
       allow create: if isTHEuser()
+      && request.resource.data.numOfReviews == 0
       && request.resource.data.rating == 0;
 
       allow update: if isTHEuser()
-      && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['rating']));
+      && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['rating', 'numOfReviews']));
 
       // `ID` private doc
       match /private/ID{
