@@ -153,6 +153,9 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
       };
     } else {
       response.statusCode = 201;
+      response.value = {
+        'payouts': result.source.payouts
+      };
     }
 
     response.error = null;
