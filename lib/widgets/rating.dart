@@ -52,7 +52,7 @@ class RatingDisplay extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               alignment: AlignmentDirectional.topStart,
               child: Text(
-                numberOfReview.toString(),
+                NumberFormat.compact().format(numberOfReview).toString(),
                 textScaleFactor: .6,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface.withAlpha(100),
