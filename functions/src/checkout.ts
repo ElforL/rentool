@@ -79,13 +79,15 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
   const userCkoDoc = db.doc(`cko_users_payments/${uid}`);
   try {
     // Delete previous cards
+    try {
     const cko_customer: any = await cko.customers.get(email);
     await cko_customer.instruments.forEach(async (element: any) => {
       try {
         await cko.instruments.delete(element.id);
       } catch (_) { }
     });
-
+      cko.customers.update(cko_customer.id, { 'name': uid });
+    } catch (_) { }
 
     // Request the payment
     const result: any = await cko.payments.request({
