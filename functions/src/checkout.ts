@@ -123,7 +123,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'scheme': result.source.scheme,
         'last4': result.source.last4,
         'bin': result.source.bin,
-        'payouts': result.source.payouts,
+        'payouts': result.source.payouts ?? true,
       });
 
       batch.set(userCkoDoc, {
