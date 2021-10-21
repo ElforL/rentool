@@ -32,7 +32,9 @@ class _CardInputScreenState extends State<CardInputScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Directionality(
+              Hero(
+                tag: 'CardWidget',
+                child: Directionality(
                 textDirection: TextDirection.ltr,
                 child: CreditCardWidget(
                   customCardTypeIcons: [
@@ -53,6 +55,7 @@ class _CardInputScreenState extends State<CardInputScreen> {
                   onCreditCardWidgetChange: (_) {},
                   isHolderNameVisible: true,
                 ),
+              ),
               ),
               Directionality(
                 textDirection: TextDirection.ltr,

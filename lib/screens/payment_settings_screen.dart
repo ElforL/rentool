@@ -171,6 +171,8 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 450),
+        child: Hero(
+          tag: 'CardWidget',
         child: Directionality(
           textDirection: TextDirection.ltr,
           child: CreditCardWidget(
@@ -192,6 +194,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
             isHolderNameVisible: true,
             showBackView: false,
             onCreditCardWidgetChange: (_) {},
+            ),
           ),
         ),
       ),
