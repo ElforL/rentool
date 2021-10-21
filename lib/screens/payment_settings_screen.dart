@@ -8,6 +8,7 @@ import 'package:rentool/screens/card_input_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
+import 'package:rentool/widgets/note_box.dart';
 
 class PaymentSettingsScreen extends StatefulWidget {
   const PaymentSettingsScreen({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class PaymentSettingsScreen extends StatefulWidget {
 class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
   CreditCardModel? card;
   bool hasCard = false;
+  bool payouts = false;
   bool loaded = false;
 
   Future<void> _loadCardDetails() async {
@@ -46,6 +48,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
           .replaceAllMapped(RegExp(r".{4}"), (match) => "${match.group(0)} ")
           .trim();
 
+      payouts = doc.data()!['payouts'];
       hasCard = true;
     }
 
@@ -117,6 +120,19 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
               child: ListView(
                 children: [
                   _buildCardWidget(),
+                  if (hasCard && !payouts)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      alignment: AlignmentDirectional.topStart,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 450),
+                        child: NoteBox(
+                          mainColor: Colors.red,
+                          text: /* hasCard && !payouts ? */ AppLocalizations.of(context)!.no_payouts,
+                          icon: Icons.warning,
+                        ),
+                      ),
+                    ),
                   buildButtons(),
                 ],
               ),
@@ -173,27 +189,27 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
         constraints: const BoxConstraints(maxWidth: 450),
         child: Hero(
           tag: 'CardWidget',
-        child: Directionality(
-          textDirection: TextDirection.ltr,
-          child: CreditCardWidget(
-            customCardTypeIcons: [
-              CustomCardTypeIcon(
-                cardType: CardType.visa,
-                cardImage: Image.asset(
-                  'assets/images/Visa_Brandmark_White_2021.png',
-                  height: 48,
-                  width: 48,
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: CreditCardWidget(
+              customCardTypeIcons: [
+                CustomCardTypeIcon(
+                  cardType: CardType.visa,
+                  cardImage: Image.asset(
+                    'assets/images/Visa_Brandmark_White_2021.png',
+                    height: 48,
+                    width: 48,
+                  ),
                 ),
-              ),
-            ],
-            isSwipeGestureEnabled: false,
-            cardNumber: card!.cardNumber,
-            expiryDate: card!.expiryDate,
-            cardHolderName: card!.cardHolderName,
-            cvvCode: '',
-            isHolderNameVisible: true,
-            showBackView: false,
-            onCreditCardWidgetChange: (_) {},
+              ],
+              isSwipeGestureEnabled: false,
+              cardNumber: card!.cardNumber,
+              expiryDate: card!.expiryDate,
+              cardHolderName: card!.cardHolderName,
+              cvvCode: '',
+              isHolderNameVisible: true,
+              showBackView: false,
+              onCreditCardWidgetChange: (_) {},
             ),
           ),
         ),
