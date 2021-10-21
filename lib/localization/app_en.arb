@@ -890,21 +890,19 @@
     "bad_gateway": "Bad gateway",
     "internal_server_error": "Internal server error",
     "pending": "Pending", 
-    "request_success_but_pending": "The request was successful but it's still pending. We'll get it ready as soon as it's done.",
-    "request_success__status": "The request was successful\nStatus: {status}",
-    "@request_success__status": {
-        "placeholders": {
-            "status": {
-                "type": "String"
-            }
-        }
-    },
+    "request_success": "The request was successful",
+    "request_success_it_may_take_mins_to_show": "The request was successful\nIt may take a couple of minutes for the card to update in the app.",
+    "request_success_no_payouts": "The request was successful. But your card doesn't support payouts (i.e., we can't pay you). Which means you can't post any tools, just send requests.",
+    "payouts_on": "Your card supports payouts (i.e., we can pay you). Which means you can post your own tools and send requests for others.",
+    "no_payouts": "Your card doesn't support payouts (i.e., we can't pay you). Which means you can't post any tools, just send requests.",
 
     "payment": "Payment",
     "payment_settings": "Payment settings",
     "loading_payment_settings": "Loading your payment settings",
     "change_your_card": "Change your card",
     "want_delete_your_card": "Do you want to delete your card?\nYou won't be able to post or request any tools",
+
+    "failed_to_authenticate": "Failed to authenticate",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

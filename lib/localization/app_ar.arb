@@ -386,15 +386,19 @@
     "bad_gateway": "مدخل خاطئ",
     "internal_server_error": "خطأ داخلي في الخادم",
     "pending": "قيد الانتظار", 
-    "request_success_but_pending": "تم نجاح الطلب لكنه ما يزال قيد الانتظار. سنجهز الأمر بمجرد انتهاء الطلب.",
-    "request_success__status": "The request was successful\nStatus: {status}",
-    "request_success__status": "تم نجاح الطلب\nالحالة: {status}",
+    "request_success": "تم نجاح الطلب",
+    "request_success_it_may_take_mins_to_show": "تم نجاح الطلب\nقد يستغرق تحديث البطاقة في التطبيق بضع دقائق",
+    "request_success_no_payouts": "تم نجاح الطلب. لكن بطاقتك لا تدعم خاصية الدفع المباشر (اي انه لا نستطيع تحويل الأموال لك). لذا لن تكون قادرا على عرض أدواتك ولكن ما يزال بامكانك استئجار الأدوات.",
+    "payouts_on": "بطاقتك تدعم خاصية الدفع المباشر (نستطيع تحويل الأموال إليك). لذا ستكون قادرًا على عرض أدواتك بالإضافة إلى استئجار أدوات الآخرين.",
+    "no_payouts": "بطاقتك لا تدعم خاصية الدفع المباشر (اي انه لا نستطيع تحويل الأموال إليك). لذا لن تكون قادرًا على عرض/نشر أدواتك للإيجار ولكن ما يزال بامكانك استئجار أدوات الآخرين.",
 
     "payment": "الدفع",
     "payment_settings": "إعدادات الدفع",
     "loading_payment_settings": "جار تحميل إعدادات الدفع خاصتك",
     "change_your_card": "غير بطاقتك",
     "want_delete_your_card": "هل تريد حذف بطاقتك؟\nلن تتمكن من نشر أو طلب أي أداة",
+
+    "failed_to_authenticate": "failed_to_authenticate",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

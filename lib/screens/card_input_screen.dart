@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/checkout/error_response.dart';
+import 'package:rentool/screens/card_verification_screen.dart';
 import 'package:rentool/services/checkout_services.dart';
 import 'package:rentool/services/functions.dart';
 
@@ -35,27 +36,27 @@ class _CardInputScreenState extends State<CardInputScreen> {
               Hero(
                 tag: 'CardWidget',
                 child: Directionality(
-                textDirection: TextDirection.ltr,
-                child: CreditCardWidget(
-                  customCardTypeIcons: [
-                    CustomCardTypeIcon(
-                      cardType: CardType.visa,
-                      cardImage: Image.asset(
-                        'assets/images/Visa_Brandmark_White_2021.png',
-                        height: 48,
-                        width: 48,
+                  textDirection: TextDirection.ltr,
+                  child: CreditCardWidget(
+                    customCardTypeIcons: [
+                      CustomCardTypeIcon(
+                        cardType: CardType.visa,
+                        cardImage: Image.asset(
+                          'assets/images/Visa_Brandmark_White_2021.png',
+                          height: 48,
+                          width: 48,
+                        ),
                       ),
-                    ),
-                  ],
-                  cardNumber: card?.cardNumber ?? '',
-                  expiryDate: card?.expiryDate ?? '',
-                  cardHolderName: card?.cardHolderName ?? '',
-                  cvvCode: card?.cvvCode ?? '',
-                  showBackView: card?.isCvvFocused ?? false,
-                  onCreditCardWidgetChange: (_) {},
-                  isHolderNameVisible: true,
+                    ],
+                    cardNumber: card?.cardNumber ?? '',
+                    expiryDate: card?.expiryDate ?? '',
+                    cardHolderName: card?.cardHolderName ?? '',
+                    cvvCode: card?.cvvCode ?? '',
+                    showBackView: card?.isCvvFocused ?? false,
+                    onCreditCardWidgetChange: (_) {},
+                    isHolderNameVisible: true,
+                  ),
                 ),
-              ),
               ),
               Directionality(
                 textDirection: TextDirection.ltr,
@@ -84,7 +85,6 @@ class _CardInputScreenState extends State<CardInputScreen> {
                 child: Text(AppLocalizations.of(context)!.submit.toUpperCase()),
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    print('Valid!');
                     final number = card!.cardNumber.replaceAll(' ', '');
                     final expMonth = int.parse(card!.expiryDate.split('/')[0]);
                     final expYear = int.parse(card!.expiryDate.split('/')[1]) + 2000;
@@ -107,11 +107,8 @@ class _CardInputScreenState extends State<CardInputScreen> {
                       // Call servers to check card and create a customer.
                       final response = await FunctionsServices.addSourceFromToken(token.toJson(), token.headers);
 
-                      // Pop loading indicator
-                      Navigator.pop(context);
-
                       // throws [response] if [!response.isSuccess]
-                      handleFunctionResponse(response);
+                      await handleFunctionResponse(response);
                     } on FunctionResponse catch (response) {
                       return handleUnsuccessfulFunctionResponse(response);
                     } on ErrorResponse catch (_) {
@@ -142,27 +139,63 @@ class _CardInputScreenState extends State<CardInputScreen> {
 
   /// throws [result] if [!result.isSuccess]
   /// otherwise pop screen and show dialog of success
-  void handleFunctionResponse(FunctionResponse result) {
+  Future<void> handleFunctionResponse(FunctionResponse result) async {
     // if it wasn't successful throw it and it'll be caught by try-catch
     if (!result.isSuccess) throw result;
 
-    // Pop the screen
-    Navigator.pop(context);
-
     // Pending
+    // 202 - Pending: means the user must be redirected to finish authinticating
     if (result.statusCode == 202) {
-      showIconAlertDialog(
-        context,
-        icon: Icons.credit_card,
-        titleText: AppLocalizations.of(context)!.pending,
-        bodyText: AppLocalizations.of(context)!.request_success_but_pending,
+      // Push 3DS page
+      final res = await Navigator.of(context).push<CardVerificationScreenResult>(
+        MaterialPageRoute(
+          builder: (_) => CardVerificationScreen(
+            url: (result.value as Map)['redircet_link'],
+            sucessUrlStart: 'https://rentool.site/payment/success',
+            errorUrlStart: 'https://rentool.site/payment/error',
+          ),
+        ),
       );
+      print(res?.url);
+
+      // Pop loading indicator
+      Navigator.pop(context);
+      // Pop the screen
+      Navigator.pop(context);
+
+      // 3DS Failed
+      if (res?.success != true) {
+        showIconAlertDialog(
+          context,
+          icon: Icons.credit_card_off_outlined,
+          titleText: AppLocalizations.of(context)!.error,
+          bodyText: AppLocalizations.of(context)!.failed_to_authenticate,
+        );
+      } else {
+        showIconAlertDialog(
+          context,
+          icon: Icons.credit_score,
+          titleText: AppLocalizations.of(context)!.success,
+          bodyText: AppLocalizations.of(context)!.request_success_it_may_take_mins_to_show,
+        );
+      }
     } else if (result.statusCode == 201) {
+      // Pop loading indicator
+      Navigator.pop(context);
+      // Pop the screen
+      Navigator.pop(context);
+
+      String bodyText = AppLocalizations.of(context)!.request_success;
+      if (result.value is Map) {
+        var payouts = (result.value as Map)['payouts'];
+        if (payouts == false) bodyText = AppLocalizations.of(context)!.request_success_no_payouts;
+      }
+
       showIconAlertDialog(
         context,
         icon: Icons.credit_score,
         titleText: AppLocalizations.of(context)!.success,
-        bodyText: AppLocalizations.of(context)!.request_success__status(result.message ?? '✔'),
+        bodyText: bodyText,
       );
     }
   }
