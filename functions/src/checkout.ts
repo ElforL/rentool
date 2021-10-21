@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { Checkout } from 'checkout-sdk-node';
 
-const cko = new Checkout(functions.config().checkout.checkout.sec_key);
+const cko = new Checkout(functions.config().checkout.sec_key);
 
 /**
 * Create a payment source using a token provided by the user.
