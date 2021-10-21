@@ -174,7 +174,7 @@ service cloud.firestore {
       // and the updates are valid
       && isToolValid(false);
       
-      // allow creation if the user is authinticated and verified
+      // allow creation if the user is authenticated and verified
       allow create: if isEmailVerified()
       // and has an ID number
       && hasID()
