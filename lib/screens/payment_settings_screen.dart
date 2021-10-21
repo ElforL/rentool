@@ -130,24 +130,30 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         children: [
-          SizedBox(
-            width: 100,
-            child: OutlinedButton(
-              child: Text(AppLocalizations.of(context)!.delete.toUpperCase()),
-              onPressed: () async {
-                final isSure = await showDeleteConfirmDialog(context);
-                if (isSure ?? false) {
-                  // await FunctionsServices.deleteCard();
-                  _reload();
-                }
-              },
+          if (hasCard) ...[
+            SizedBox(
+              width: 100,
+              child: OutlinedButton(
+                child: Text(AppLocalizations.of(context)!.delete.toUpperCase()),
+                onPressed: () async {
+                  final isSure = await showDeleteConfirmDialog(context);
+                  if (isSure ?? false) {
+                    // await FunctionsServices.deleteCard();
+                    _reload();
+                  }
+                },
+              ),
             ),
-          ),
-          const SizedBox(width: 20),
+            const SizedBox(width: 20),
+          ],
           SizedBox(
             width: 200,
             child: OutlinedButton(
-              child: Text(AppLocalizations.of(context)!.change_your_card.toUpperCase()),
+              child: Text(
+                hasCard
+                    ? AppLocalizations.of(context)!.change_your_card.toUpperCase()
+                    : AppLocalizations.of(context)!.enter_card.toUpperCase(),
+              ),
               onPressed: () async {
                 await Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const CardInputScreen()),
