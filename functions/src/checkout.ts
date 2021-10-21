@@ -5,28 +5,28 @@ import { Checkout } from 'checkout-sdk-node';
 const cko = new Checkout(functions.config().checkout.checkout.sec_key);
 
 /**
- * Create a payment source using a token provided by the user.
- * 
- * Accepts an object/map with the format: 
- * ```
- *  { 
- *    // [result] is the response the user gets when calling `/tokens` endpoint and recives the token
- *    'body': result.body,  
- *    'headers': result.headers.onlyStartsWith('cko')  
- *  }.
- * ```
- * 
- * Rreturns
- * ```
- * response: {
- *    'statusCode': number;
- *    'success': boolean;
- *    'message': string | null;
- *    'value': any;
- *    'error': any;
- * }
- * ```
- */
+* Create a payment source using a token provided by the user.
+* 
+* Accepts an object/map with the format: 
+* ```
+*  { 
+*    // [result] is the response the user gets when calling `/tokens` endpoint and recives the token
+*    'body': result.body,  
+*    'headers': result.headers.onlyStartsWith('cko')  
+*  }.
+* ```
+* 
+* Rreturns
+* ```
+* response: {
+*    'statusCode': number;
+*    'success': boolean;
+*    'message': string | null;
+*    'value': any;
+*    'error': any;
+* }
+* ```
+*/
 export const addSourceFromToken = functions.https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
@@ -124,13 +124,13 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'payouts': result.source.payouts,
       });
 
-    batch.set(userCkoDoc, {
-      'init_payment_id': result.id,
-      'customer': {
-        'id': result.customer.id,
-        'email': result.customer.email,
-      },
-      'source': result.source,
+      batch.set(userCkoDoc, {
+        'init_payment_id': result.id,
+        'customer': {
+          'id': result.customer.id,
+          'email': result.customer.email,
+        },
+        'source': result.source,
       });
     }
     batch.set(userCkoDoc.collection('payments').doc(result.id), {
@@ -146,9 +146,9 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
     if (result.status === "Pending") {
       // Requires redirecting the user
       response.statusCode = 202;
-    response.value = {
+      response.value = {
         'redircet_link': result._links.redirect.href,
-    };
+      };
     } else {
       response.statusCode = 201;
     }
@@ -202,6 +202,72 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
     }
 
     functions.logger.error('An unexpected error occured', error);
+    return response;
+  }
+});
+
+export const checkCkoSessionId = functions.https.onCall(async (id, context) => {
+  const response: {
+    statusCode: number;
+    success: boolean;
+    message: string | null;
+    value: any;
+    error: any;
+  } = {
+    'statusCode': 401,
+    'success': false,
+    'message': null,
+    'value': null,
+    'error': {
+      'type': 'unauthorized',
+      'code': 'not-signed-in'
+    },
+  }
+
+  if (context.auth == null) {
+    return response;
+  }
+  if (context.auth!.token.email_verified !== true) {
+    response.error.code = "unverified-email-address";
+    return response;
+  }
+  if (context.auth!.token.email == null) {
+    response.statusCode = 403;
+    response.error.code = 'no-email-registered';
+    return response;
+  }
+
+  if (typeof id !== 'string' && !RegExp('^(sid)_(\\w{26})$').test(id)) {
+    response.statusCode = 400;
+    response.error.type = 'bad-request';
+    response.error.code = 'invalid id';
+    return response;
+  }
+
+  const payment: any = await cko.payments.request(id);
+  if (payment.customer.email != null && payment.customer.email !== context.auth.token.email) {
+    response.statusCode = 403;
+    response.error.code = 'forbidden';
+    return response;
+  }
+
+  if (payment.status === 'Card Verified' || payment.status === 'Authorized') {
+    response.success = true;
+    response.statusCode = 200;
+    response.value = {
+      'expiry_month': payment.source.expiry_month,
+      'expiry_year': payment.source.expiry_year,
+      'name': payment.source.name,
+      'scheme': payment.source.scheme,
+      'last4': payment.source.last4,
+      'bin': payment.source.bin,
+      'payouts': payment.source.payouts,
+    };
+    return response;
+  }else{
+    response.success = true;
+    response.statusCode = 200;
+    response.value = payment.status;
     return response;
   }
 });
