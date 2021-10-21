@@ -123,7 +123,6 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'bin': result.source.bin,
         'payouts': result.source.payouts,
       });
-    }
 
     batch.set(userCkoDoc, {
       'init_payment_id': result.id,
@@ -132,18 +131,28 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'email': result.customer.email,
       },
       'source': result.source,
+      });
+    }
+    batch.set(userCkoDoc.collection('payments').doc(result.id), {
       'first_token_headers': data.headers,
+      [result.status]: result
     });
-    batch.set(userCkoDoc.collection('payments').doc(result.id), result);
 
     // Commit
     await batch.commit();
-    response.statusCode = result.status === "Pending" ? 202 : 201;
     response.success = true;
     response.message = result.status;
+
+    if (result.status === "Pending") {
+      // Requires redirecting the user
+      response.statusCode = 202;
     response.value = {
-      'customer_id': result.customer.id
+        'redircet_link': result._links.redirect.href,
     };
+    } else {
+      response.statusCode = 201;
+    }
+
     response.error = null;
     return response;
   } catch (error) {
