@@ -9,6 +9,7 @@
 .history
 .svn/
 note.md
+.runtimeconfig.json
 
 # IntelliJ related
 *.iml
