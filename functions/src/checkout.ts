@@ -80,12 +80,12 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
   try {
     // Delete previous cards
     try {
-    const cko_customer: any = await cko.customers.get(email);
-    await cko_customer.instruments.forEach(async (element: any) => {
-      try {
-        await cko.instruments.delete(element.id);
-      } catch (_) { }
-    });
+      const cko_customer: any = await cko.customers.get(email);
+      await cko_customer.instruments.forEach(async (element: any) => {
+        try {
+          await cko.instruments.delete(element.id);
+        } catch (_) { }
+      });
       cko.customers.update(cko_customer.id, { 'name': uid });
     } catch (_) { }
 
@@ -116,6 +116,15 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
     const batch = db.batch();
 
     if (result.status !== "Pending") {
+      /* 
+      TODO
+      if(result.source.payouts == null){
+        // check if card accepts payout
+        // 1- call support and ask for a way
+        // 2- try a payout then refund it ? (can you refund it?, maybe charge back?)
+        checkCardPayout();
+      }
+      */
       batch.set(db.doc(`Users/${uid}/private/card`), {
         'expiry_month': result.source.expiry_month,
         'expiry_year': result.source.expiry_year,
