@@ -2,6 +2,8 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { Checkout } from 'checkout-sdk-node';
 
+const cko = new Checkout(functions.config().checkout.checkout.sec_key);
+
 /**
  * Create a payment source using a token provided by the user.
  * 
@@ -68,7 +70,6 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
   }
 
   // Initiate Checkout and Firestore
-  const cko = new Checkout('sk_test_f1a1d5bb-9b4b-4660-b6b8-f769158fa21e');
   const db = admin.firestore();
   try {
     db.settings({ ignoreUndefinedProperties: true });
@@ -120,6 +121,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'scheme': result.source.scheme,
         'last4': result.source.last4,
         'bin': result.source.bin,
+        'payouts': result.source.payouts,
       });
     }
 
