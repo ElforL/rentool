@@ -149,7 +149,7 @@ async function payment_captured_handler(request: functions.https.Request): Promi
     }
   }
 
-  functions.logger.warn('Recived a "payment_captured" without a reference', request);
+  logNoReferenceEvent('payment_captured', request);
   return true;
 }
 
@@ -172,7 +172,7 @@ async function payment_canceled_handler(request: functions.https.Request): Promi
   }
   // referenceId == null
 
-  functions.logger.warn('Recived a "payment_canceled" without a reference', request);
+  logNoReferenceEvent('payment_canceled', request);
   return true;
 }
 
@@ -200,7 +200,7 @@ async function payment_declined_handler(request: functions.https.Request): Promi
   }
   // referenceId == null
 
-  functions.logger.warn('Recived a "payment_declined" without a reference', request);
+  logNoReferenceEvent('payment_declined', request);
   return true;
 }
 
@@ -249,7 +249,7 @@ async function payment_paid_handler(request: functions.https.Request): Promise<b
     }
   }
 
-  functions.logger.warn('Recived a "payment_paid" without a reference', request);
+  logNoReferenceEvent('payment_paid', request);
   return true;
 }
 
@@ -279,7 +279,7 @@ async function payment_capture_declined_handler(request: functions.https.Request
   }
   // referenceId == null
 
-  functions.logger.warn('Recived a "payment_capture_declined" without a reference', request);
+  logNoReferenceEvent('payment_capture_declined', request);
   return true;
 }
 
@@ -303,7 +303,7 @@ async function payment_expired_handler(request: functions.https.Request): Promis
   }
   // referenceId == null
 
-  functions.logger.warn('Recived a "payment_expired" without a reference', request);
+  logNoReferenceEvent('payment_expired', request);
   return true;
 }
 
@@ -391,4 +391,8 @@ async function cancelRequestForOwnerFailedPayment(referenceDoc: FirebaseFirestor
   await toolDoc?.update({
     'acceptedRequestID': null,
   });
+}
+
+function logNoReferenceEvent(event_type: string, request: functions.https.Request) {
+  functions.logger.warn(`Recived a ${event_type} without a reference`, 'body:', request.body, 'headers:', request.headers, 'full:', request);
 }
