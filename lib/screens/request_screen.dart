@@ -24,11 +24,8 @@ class _RequestScreenState extends State<RequestScreen> {
   late bool showAcceptButton;
 
   Future<void> _getUser() async {
-    print('renter $renter');
     if (renter != null) return;
-    print('start');
     renter ??= await FirestoreServices.getUser(request.renterUID);
-    print('done');
     setState(() {});
   }
 
