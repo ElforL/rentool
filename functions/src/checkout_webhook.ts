@@ -245,8 +245,8 @@ async function payment_paid_handler(request: functions.https.Request): Promise<b
           }
         }
       }
-      return true;
     }
+    return true;
   }
 
   logNoReferenceEvent('payment_paid', request);
@@ -394,5 +394,5 @@ async function cancelRequestForOwnerFailedPayment(referenceDoc: FirebaseFirestor
 }
 
 function logNoReferenceEvent(event_type: string, request: functions.https.Request) {
-  functions.logger.warn(`Recived a ${event_type} without a reference`, 'body:', request.body, 'headers:', request.headers, 'full:', request);
+  functions.logger.warn(`Recived a ${event_type} without a reference :${request.body.data.reference}`, 'body:', request.body, 'headers:', request.headers, 'full:', request);
 }
