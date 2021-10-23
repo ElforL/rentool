@@ -193,6 +193,13 @@ class FirestoreServices {
     return await _toolsRef.doc(toolID).collection('requests').doc(requestID).delete();
   }
 
+  /// Cancel the accepted tool-request on tool with id [toolID].
+  ///
+  /// this will change the tool's _'acceptedRequestID'_ field to `null`
+  static Future<void> cancelRequest(String toolID) async {
+    return await _toolsRef.doc(toolID).update({'acceptedRequestID': null});
+  }
+
   /// Returns a `Stream` of the tool's delivery meeting document in Firestore.
   ///
   /// Notifies of document updates.
