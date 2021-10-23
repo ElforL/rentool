@@ -66,6 +66,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
                 title: Text('${request.numOfDays} ${AppLocalizations.of(context)!.days}'),
                 subtitle: Text(request.renterUID),
                 onTap: () async {
+                  if (request.id == tool.acceptedRequestID) request.isAccepted = true;
                   final result = await Navigator.of(context).pushNamed(
                     RequestScreen.routeName,
                     arguments: RequestScreenArguments(request, true),

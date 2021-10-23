@@ -217,7 +217,11 @@ class _RequestScreenState extends State<RequestScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    child: Text(AppLocalizations.of(context)!.reject.toUpperCase()),
+                    child: Text(
+                      request.isAccepted
+                          ? AppLocalizations.of(context)!.delete.toUpperCase()
+                          : AppLocalizations.of(context)!.reject.toUpperCase(),
+                    ),
                     onPressed: () async {
                       final isSure = await showConfirmDialog(context);
                       if (isSure ?? false) {
@@ -227,16 +231,32 @@ class _RequestScreenState extends State<RequestScreen> {
                     },
                   ),
                   const SizedBox(width: 20),
-                  ElevatedButton(
-                    child: Text(AppLocalizations.of(context)!.accept.toUpperCase()),
-                    onPressed: () async {
-                      final isSure = await showConfirmDialog(context);
-                      if (isSure ?? false) {
-                        FirestoreServices.acceptRequest(request.toolID, request.id);
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
+                  if (!request.isAccepted)
+                    ElevatedButton(
+                      child: Text(AppLocalizations.of(context)!.accept.toUpperCase()),
+                      onPressed: () async {
+                        final isSure = await showConfirmDialog(context);
+                        if (isSure ?? false) {
+                          FirestoreServices.acceptRequest(request.toolID, request.id);
+                          request.isAccepted = true;
+                          Navigator.pop(context);
+                        }
+                      },
+                    )
+                  else
+                    ElevatedButton(
+                      child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
+                      onPressed: () async {
+                        final isSure = await showConfirmDialog(
+                          context,
+                          content: Text(AppLocalizations.of(context)!.canceling_request_explanation),
+                        );
+                        if (isSure ?? false) {
+                          FirestoreServices.cancelRequest(request.toolID).then((value) => request.isAccepted = false);
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
                 ],
               ),
             ),
