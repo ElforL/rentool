@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { chargeCustomer, payOutCustomer, refundPayment } from './checkout_functions';
+import { chargeCustomer, createCkoProblem, payOutCustomer, refundPayment } from './checkout_functions';
 import { addNotification } from './fcm';
 
 export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID}/deliver_meetings/{requestID}').onUpdate(deliverMeetingHandler);
@@ -474,8 +474,8 @@ async function dMeetPaymendDocUpdatedHandler(change: functions.Change<functions.
   let deliverMeetingDoc = await change.after.ref.parent.parent?.get();
 
   if (renterPaid || owner_paid) {
+    const paymentDocData = await deliverMeetingDoc!.ref.collection('private').doc('payments_processing').get();
     if (renterPaid) {
-      const paymentDocData = await deliverMeetingDoc!.ref.collection('private').doc('payments_processing').get();
       if (paymentDocData.data()?.owner_sent_payment != true) {
         const requestDoc = await admin.firestore().doc(`Tools/${toolID}/requests/${requestID}`).get();
         const numOfDays = requestDoc.data()!.numOfDays;
@@ -504,15 +504,26 @@ async function dMeetPaymendDocUpdatedHandler(change: functions.Change<functions.
     if (change.after.data().renter_paid == change.after.data().owner_paid) {
       deliverMeetingDoc = await deliverMeetingDoc!.ref.get();
 
+      await deliverMeetingDoc?.ref.update({
+        'payments_successful': true,
+      });
       if (deliverMeetingDoc?.data()?.payments_successful != false) {
-        deliverMeetingDoc?.ref.update({
-          'payments_successful': true,
-        });
-      } else {
         functions.logger.error('Both parties set to "paid" in an unsuccessful payment.',
           `toolId: ${toolID}`,
           `requestID: ${requestID}`
         );
+        try {
+          await createCkoProblem(
+            'both_paid_but_payments_successful_is_false',
+            'Both parties set to "paid" in an unsuccessful payment. Make sure all charges are ok',
+            {
+              'deliveryDoc': deliverMeetingDoc.data() as Object,
+              'paymentDoc': paymentDocData.data() as Object,
+            },
+          );
+        } catch (error) {
+          functions.logger.error('Couldn\'t create cko problem.');
+        }
       }
     }
   }

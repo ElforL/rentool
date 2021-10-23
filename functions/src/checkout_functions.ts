@@ -165,3 +165,19 @@ export function payOutCard(
     },
   }, idempotencyKey);
 }
+
+/**
+ * 
+ * @param type :
+ * - insurance_refund_return_error
+ * - compensation_payout_return_error
+ * - both_paid_but_payments_successful_is_false
+ * @returns 
+ */
+export function createCkoProblem(type: string, error: any, metadata: any) {
+  return admin.firestore().collection('payment_known_problems').add({
+    'type': type,
+    'error_obj': error as Object,
+    'metadata': metadata,
+  });
+}

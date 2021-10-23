@@ -1,5 +1,6 @@
-import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
+import { createCkoProblem, payOutCustomer, refundPayment } from './checkout_functions';
 import { addNotification } from './fcm';
 
 export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}/return_meetings/{requestID}')
@@ -111,7 +112,6 @@ async function returnMeetingHandler(change: functions.Change<functions.firestore
   return null;
 }
 
-
 async function endRent(
   toolID: string,
   requestID: string,
@@ -120,132 +120,164 @@ async function endRent(
   compensationPrice: number = 0,
   returnMeetingDoc: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>,
 ) {
-
-  /** a `true` bool that turns `false` if an error was catched in a try-catch */
-  let success = true;
-  /** did [error] occur in payment logic */
-  let errorInPayment;
-  /** error object caught in a try-catch */
-  let error;
-
-
   // calculate total - and process payment
   const requestDoc = admin.firestore().doc(`Tools/${toolID}/requests/${requestID}`);
   const requstData = (await requestDoc.get()).data()!;
 
-  try {
-    // TODO move insuranceAmount to rent doc
-    const insuranceAmount = requstData.insuranceAmount;
+  // TODO move insuranceAmount to rent doc
+  const insuranceAmount = requstData.insuranceAmount;
+  if (typeof compensationPrice == 'undefined') compensationPrice = 0;
 
-    const total_to_renter = insuranceAmount - compensationPrice;
-    const total_to_owner = compensationPrice;
+  const total_to_renter = insuranceAmount - compensationPrice;
+  const total_to_owner = compensationPrice;
 
-    if (total_to_renter != 0) {
-      // send the money
+  if (total_to_renter > 0) {
+    const payment_type = compensationPrice > 0 ?
+      'refund_some_insurance_to_renter' :
+      'refund_all_insurance_to_renter';
+
+    const deliveryPaymentProcessingDoc = await admin.firestore()
+      .doc(`Tools/${toolID}/deliver_meetings/${requestID}/private/payments_processing`).get();
+
+    const renter_payment_ids = deliveryPaymentProcessingDoc.data()?.renter_payment_ids;
+    if (typeof renter_payment_ids == 'object') {
+      for (const id in renter_payment_ids) {
+        if (Object.prototype.hasOwnProperty.call(renter_payment_ids, id)) {
+          const payment_id = renter_payment_ids[id];
+          try {
+            if (payment_id.paid == true && payment_id.refunded != true) {
+              await refundPayment(
+                payment_id.id,
+                payment_type,
+                `${toolID}-${requestID}-${payment_type}`,
+                {
+                  'toolID': toolID,
+                  'requestID': requestID,
+                  'renterUID': ownerUID,
+                },
+                total_to_renter > 0 ? Math.round(total_to_renter * 100) : undefined,
+              );
+
+              break;
+            }
+          } catch (error) {
+            functions.logger.error(
+              'ERROR refunding insurance to renter',
+              `toolID:${toolID}, requestID:${requestID}, ownerUid:${ownerUID} amount:${total_to_renter} amount_Halala:${Math.round(total_to_renter * 100)} payment_id:${payment_id.id}`,
+              error
+            );
+            await createCkoProblem('insurance_refund_return_error', error, {
+              'toolID': toolID,
+              'requestID': requestID,
+              'renterUID': renterUID,
+              'payment_id': payment_id.id,
+              'amount': total_to_renter,
+              'amount_Halala': Math.round(total_to_renter * 100),
+            });
+            await returnMeetingDoc.update({
+              'errors_for_renter': admin.firestore.FieldValue.arrayUnion('renter_refund_failed'),
+            });
+          }
+        }
+      }
     }
-    if (total_to_owner != 0) {
-      // send the money
+  }
+
+  if (total_to_owner > 0) {
+    try {
+      const payment_type = 'compensation_to_owner';
+      await payOutCustomer(
+        ownerUID,
+        Math.round(total_to_owner * 100),
+        payment_type,
+        'Rentool- compensation price',
+        `${toolID}-${requestID}-${payment_type}`,
+        {
+          'toolID': toolID,
+          'requestID': requestID,
+          'ownerUID': ownerUID,
+        },
+      );
+    } catch (error) {
+      functions.logger.error(
+        'ERROR paying compensation to owner.',
+        `toolID:${toolID}, requestID:${requestID}, ownerUid:${ownerUID} amount:${total_to_owner} amount_Halala:${Math.round(total_to_owner * 100)}`,
+        error
+      );
+      await createCkoProblem('compensation_payout_return_error', error, {
+        'toolID': toolID,
+        'requestID': requestID,
+        'ownerUID': ownerUID,
+        'amount': total_to_owner,
+        'amount_Halala': Math.round(total_to_owner * 100),
+      });
+      await returnMeetingDoc.update({
+        'errors_for_owner': admin.firestore.FieldValue.arrayUnion('owner_payout_failed'),
+      });
     }
-  } catch (e) {
-    success = false;
-    errorInPayment = true;
-    error = e;
-    await returnMeetingDoc.update({
-      'error': 'Operation failed: An error occured while processing the payment.'
-    });
   }
 
   const toolDoc = admin.firestore().doc(`Tools/${toolID}`);
   const toolData = (await toolDoc.get()).data()!;
 
-  if (success) {
-    try {
-      const batch = admin.firestore().batch();
+  const batch = admin.firestore().batch();
 
-      const rentDoc = admin.firestore().doc(`rents/${toolData.currentRent}`);
-      batch.update(rentDoc, {
-        endTime: admin.firestore.Timestamp.now(),
-      });
+  const rentDoc = admin.firestore().doc(`rents/${toolData.currentRent}`);
+  batch.update(rentDoc, {
+    endTime: admin.firestore.Timestamp.now(),
+  });
 
-      // Update the tool doc
-      batch.update(toolDoc, {
-        'currentRent': null,
-        'acceptedRequestID': null,
-      });
+  // Update the tool doc
+  batch.update(toolDoc, {
+    'currentRent': null,
+    'acceptedRequestID': null,
+  });
 
 
-      // move the request to `previous_requests` subcollection then delete it from the `requests` subcollection
-      batch.set(
-        admin.firestore().doc(`Tools/${toolID}/previous_requests/${requestID}`),
-        requstData,
-      );
-      batch.delete(requestDoc);
+  // move the request to `previous_requests` subcollection then delete it from the `requests` subcollection
+  batch.set(
+    admin.firestore().doc(`Tools/${toolID}/previous_requests/${requestID}`),
+    requstData,
+  );
+  batch.delete(requestDoc);
 
-      // Update the deliver meeting doc to inActive
-      const deliverMeetingDoc = admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${requestID}`);
-      batch.update(deliverMeetingDoc, {
-        'isActive': false,
-      });
+  // Update the deliver meeting doc to inActive
+  const deliverMeetingDoc = admin.firestore().doc(`Tools/${toolID}/deliver_meetings/${requestID}`);
+  batch.update(deliverMeetingDoc, {
+    'isActive': false,
+  });
 
-      // set returnMeetingDoc.isActive to false
-      batch.update(returnMeetingDoc, {
-        'isActive': false,
-      });
+  // set returnMeetingDoc.isActive to false
+  batch.update(returnMeetingDoc, {
+    'isActive': false,
+  });
 
-      const rentersPreviousUserDoc = admin.firestore().doc(`Users/${renterUID}/previous_users/${ownerUID}`);
-      const owbersPreviousUserDoc = admin.firestore().doc(`Users/${ownerUID}/previous_users/${renterUID}`);
-      batch.set(rentersPreviousUserDoc, { [toolID]: true }, { merge: true });
-      batch.set(owbersPreviousUserDoc, { [toolID]: true }, { merge: true });
+  const rentersPreviousUserDoc = admin.firestore().doc(`Users/${renterUID}/previous_users/${ownerUID}`);
+  const owbersPreviousUserDoc = admin.firestore().doc(`Users/${ownerUID}/previous_users/${renterUID}`);
+  batch.set(rentersPreviousUserDoc, { [toolID]: true }, { merge: true });
+  batch.set(owbersPreviousUserDoc, { [toolID]: true }, { merge: true });
 
-      await batch.commit();
-    } catch (e) {
-      success = false;
-      errorInPayment = false;
-      error = e;
-      await returnMeetingDoc.update({
-        // TODO localize errors
-        'error': 'Operation failed: An error occured while ending the rent on our end. Payment has been deducted though. So, deliver the tool and we will fix this ASAP'
-      });
-      // TODO Send important notice to admins
-    }
-  }
+  await batch.commit();
 
-  if (success) {
-    // Send notifications
-    const toolName = toolData.name;
-    const renterName = (await admin.firestore().doc(`Users/${renterUID}`).get()).data()?.name;
-    const ownerName = (await admin.firestore().doc(`Users/${ownerUID}`).get()).data()?.name;
+  // Send notifications
+  const toolName = toolData.name;
+  const renterName = (await admin.firestore().doc(`Users/${renterUID}`).get()).data()?.name;
+  const ownerName = (await admin.firestore().doc(`Users/${ownerUID}`).get()).data()?.name;
 
-    const notifCode = 'REN_END';
-    const renterBodyData = {
-      'notificationBodyArgs': [toolName, ownerName],
-      'toolName': toolName,
-      'otherUserName': ownerName,
-      'toolID': toolID,
-    };
-    const ownerBodyData = {
-      'notificationBodyArgs': [toolName, renterName],
-      'toolName': toolName,
-      'otherUserName': renterName,
-      'toolID': toolID,
-    };
+  const notifCode = 'REN_END';
+  const renterBodyData = {
+    'notificationBodyArgs': [toolName, ownerName],
+    'toolName': toolName,
+    'otherUserName': ownerName,
+    'toolID': toolID,
+  };
+  const ownerBodyData = {
+    'notificationBodyArgs': [toolName, renterName],
+    'toolName': toolName,
+    'otherUserName': renterName,
+    'toolID': toolID,
+  };
 
-    await addNotification(ownerUID, notifCode, ownerBodyData);
-    return addNotification(renterUID, notifCode, renterBodyData);
-  } else {
-    if (error != null) {
-      return functions.logger.error(
-        `an error occured while ending the rent for tool ${toolID}, request ${requestID}, owner:${ownerUID}, renter${renterUID}`,
-        `did the error occur in payment?: ${errorInPayment}`,
-        'error variable:',
-        error,
-      );
-    } else {
-      return functions.logger.error(
-        `an error occured while ending the rent for tool ${toolID}, request ${requestID}, owner:${ownerUID}, renter${renterUID}`,
-        "However, the error wasn't caught in the try-catch 😕"
-      );
-    }
-  }
-
+  await addNotification(ownerUID, notifCode, ownerBodyData);
+  return addNotification(renterUID, notifCode, renterBodyData);
 }
