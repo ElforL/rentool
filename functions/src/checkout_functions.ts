@@ -1,6 +1,114 @@
+/**
+ * Non cloud functions for checkout. 
+*/
+
 import { Checkout } from 'checkout-sdk-node';
+import * as admin from 'firebase-admin';
 
 const cko = new Checkout('sk_test_f1a1d5bb-9b4b-4660-b6b8-f769158fa21e');
+
+export async function refundPayment(
+  payment_id: string,
+  payment_type: string,
+  idempotencyKey: string,
+  payment_reference_metadata: Object | undefined,
+  amount?: number | undefined,
+) {
+  const reference = (await admin.firestore().collection('payment_references').add({
+    'payment_id': null,
+    'type': payment_type,
+    'processed': false,
+    'metadata': payment_reference_metadata ?? {},
+  })).id;
+
+  return cko.payments.refund(
+    payment_id,
+    {
+      'amount': amount,
+      'reference': reference
+    },
+    idempotencyKey,
+  );
+}
+
+export async function chargeCustomer(
+  uid: string,
+  amount: number,
+  payment_type: string,
+  description: string,
+  idempotencyKey: string,
+  payment_reference_metadata: Object | undefined,
+) {
+  const user = await admin.auth().getUser(uid);
+  const userPaymentsDoc = await admin.firestore().doc(`cko_users_payments/${uid}`).get();
+
+  const cus_id = userPaymentsDoc.data()!.customer.id;
+
+  const reference = (await admin.firestore().collection('payment_references').add({
+    'payment_id': null,
+    'type': payment_type,
+    'processed': false,
+    'metadata': payment_reference_metadata ?? {},
+  })).id;
+
+  return cko.payments.request({
+    'source': {
+      'type': 'customer',
+      'id': cus_id
+    },
+    'reference': reference,
+    'amount': amount,
+    'currency': 'SAR',
+    'payment_type': 'Recurring',
+    'description': description,
+    'customer': {
+      'id': cus_id,
+      'email': user.email,
+    }
+  }, idempotencyKey);
+}
+
+export async function payOutCustomer(
+  reciverUid: string,
+  amount: number,
+  payment_type: string,
+  description: string,
+  idempotencyKey: string,
+  payment_reference_metadata: Object | undefined,
+) {
+  const reciver = await admin.auth().getUser(reciverUid);
+
+  const reciverPaymentsDoc = await admin.firestore().doc(`cko_users_payments/${reciverUid}`).get();
+
+  const src_id = reciverPaymentsDoc.data()!.source.id;
+  const reciver_first_name = (reciverPaymentsDoc.data()!.source.name as string).split(' ')[0];
+
+  let reciver_last_name: string = (reciverPaymentsDoc.data()!.source.name as string).split(' ')[1];
+  if (typeof reciver_last_name == 'undefined' || reciver_last_name.trim() == '') reciver_last_name = 'R';
+
+  const reciver_email = reciver.email!;
+  const reciver_cus_id = reciverPaymentsDoc.data()!.customer.id;
+
+  const reference = (await admin.firestore().collection('payment_references').add({
+    'payment_id': null,
+    'type': payment_type,
+    'processed': false,
+    'metadata': payment_reference_metadata ?? {},
+  })).id;
+
+  return payOutCard(
+    src_id,
+    reciver_first_name,
+    reciver_last_name,
+    amount,
+    description,
+    'SAR',
+    reciver_email,
+    reciver_cus_id,
+    reference,
+    idempotencyKey,
+  );
+}
 
 /**
  * 
@@ -21,10 +129,12 @@ export function payOutCard(
   first_name: string,
   last_name: string,
   amount: number,
+  description: string,
   currency: string,
   cus_email: string | undefined,
   cus_id: string | undefined,
   reference: string | undefined,
+  idempotencyKey: string
 ): Promise<Object> {
   if (!RegExp('^(src)_(\\w{26})$').test(src_id)) {
     throw Error(`Invalid argments: invalid source id: ${src_id}`);
@@ -45,12 +155,13 @@ export function payOutCard(
       "first_name": first_name,
       "last_name": last_name,
     },
+    'description': description,
     "reference": reference,
     "amount": amount,
     "currency": currency,
     "customer": {
       "id": cus_id,
       "email": cus_email,
-    }
-  });
+    },
+  }, idempotencyKey);
 }

@@ -9,6 +9,7 @@ admin.initializeApp();
 
 export * from './other_firestore_triggers';
 export * from './meetings';
+export * from './return_meeting';
 export * from './checkout';
 export * from './checkout_webhook';
 export * from './users';

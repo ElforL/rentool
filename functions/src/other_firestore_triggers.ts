@@ -37,11 +37,17 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
           'renter_id': null,
           'renter_ids_ok': false,
           'renter_pics_urls': [],
+
+          'processing_payment': true, // both confirmed ids and awaiting payment capturing and payouts
+          'payments_successful': null, // payments processing is done and successful
+          'renter_action_required': true, // should check doc([meeting_doc]/private/{uid})
+          'owner_action_required': true, // should check doc([meeting_doc]/private/{uid})
+
           // if the meeting was done and succesful and a rent object/doc was created
           'rent_started': false,
           // any errors that could occur with the meeting e.g., payment fail, database error... etc
           // TODO consider changing it to list in case there were multiple erros
-          'error': null,
+          'errors': [],
         });
 
         // Send notification to renter

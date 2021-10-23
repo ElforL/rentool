@@ -14,6 +14,7 @@ import 'package:rentool/widgets/logo_image.dart';
 import 'package:rentool/widgets/rentool_search_bar.dart';
 import 'package:rentool/widgets/user_listtile.dart';
 
+// TODO add support to homepage drawer so users with a problem can find support quickly.
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
