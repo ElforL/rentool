@@ -181,3 +181,9 @@ export function createCkoProblem(type: string, error: any, metadata: any) {
     'metadata': metadata,
   });
 }
+
+export function setPayIdToReference(reference: string, payment_id: string) {
+  return admin.firestore().doc(`payment_references/${reference}`).update({
+    'payment_id': payment_id,
+  });
+}
