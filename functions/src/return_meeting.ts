@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { createCkoProblem, payOutCustomer, refundPayment } from './checkout_functions';
+import { createCkoProblem, payOutCustomer, refundPayment, setPayIdToReference } from './checkout_functions';
 import { addNotification } from './fcm';
 
 export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}/return_meetings/{requestID}')
@@ -146,7 +146,7 @@ async function endRent(
           const payment_id = renter_payment_ids[id];
           try {
             if (payment_id.paid == true && payment_id.refunded != true) {
-              await refundPayment(
+              const payment: any = await refundPayment(
                 payment_id.id,
                 payment_type,
                 `${toolID}-${requestID}-${payment_type}`,
@@ -158,6 +158,7 @@ async function endRent(
                 total_to_renter > 0 ? Math.round(total_to_renter * 100) : undefined,
               );
 
+              await setPayIdToReference(payment.reference, payment.id);
               break;
             }
           } catch (error) {
@@ -186,7 +187,7 @@ async function endRent(
   if (total_to_owner > 0) {
     try {
       const payment_type = 'compensation_to_owner';
-      await payOutCustomer(
+      const payment: any = await payOutCustomer(
         ownerUID,
         Math.round(total_to_owner * 100),
         payment_type,
@@ -198,6 +199,7 @@ async function endRent(
           'ownerUID': ownerUID,
         },
       );
+      await setPayIdToReference(payment.reference, payment.id);
     } catch (error) {
       functions.logger.error(
         'ERROR paying compensation to owner.',
