@@ -398,7 +398,10 @@
     "change_your_card": "غير بطاقتك",
     "want_delete_your_card": "هل تريد حذف بطاقتك؟\nلن تتمكن من نشر أو طلب أي أداة",
 
-    "failed_to_authenticate": "failed_to_authenticate",
+    "failed_to_authenticate": "فشل في المصادقة",
+
+    "processing_payments": "جار معالجة عملية الدفع",
+    "processing_payments_may_take_min": "جار معالجة عملية الدفع.\nقد يستغرق بعض الوقت.",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

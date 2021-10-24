@@ -904,6 +904,9 @@
 
     "failed_to_authenticate": "Failed to authenticate",
 
+    "processing_payments": "Processing payments",
+    "processing_payments_may_take_min": "Processing payments.\nThis may take a minute",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

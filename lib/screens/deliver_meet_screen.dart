@@ -8,6 +8,7 @@ import 'package:rentool/screens/meetings_screens/deliver_meeting_pics_screen.dar
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/screens/meetings_screens/meeting_ids_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
+import 'package:rentool/screens/meetings_screens/processing_payments_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
@@ -95,11 +96,12 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       return MeetingsIdsScreen(
         meeting: meeting!,
       );
-    } else {
-      if (meeting!.rentStarted) {
+    } else if (meeting!.processingPayment && meeting!.paymentsSuccessful == null) {
+      return const ProcessingPaymentScreen(showAppBar: false);
+    } else if (meeting!.rentStarted || meeting!.paymentsSuccessful!) {
         return MeetingSuccessScreen(
           title: AppLocalizations.of(context)!.success,
-          subtitle: AppLocalizations.of(context)!.rentHasStarted,
+        subtitle: meeting!.rentStarted ? AppLocalizations.of(context)!.rentHasStarted : '',
         );
       } else if (meeting!.error != null) {
         return Scaffold(
