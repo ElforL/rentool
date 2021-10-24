@@ -507,7 +507,7 @@ async function dMeetPaymendDocUpdatedHandler(change: functions.Change<functions.
       await deliverMeetingDoc?.ref.update({
         'payments_successful': true,
       });
-      if (deliverMeetingDoc?.data()?.payments_successful != false) {
+      if (deliverMeetingDoc?.data()?.payments_successful == false) {
         functions.logger.error('Both parties set to "paid" in an unsuccessful payment.',
           `toolId: ${toolID}`,
           `requestID: ${requestID}`
