@@ -907,6 +907,11 @@
     "processing_payments": "Processing payments",
     "processing_payments_may_take_min": "Processing payments.\nThis may take a minute",
 
+    "owner_pay_fail_as_owner": "Failed to payout your card. Please try again later and if the issue continues contact your bank to solve the problem.",
+    "renter_pay_fail_as_owner": "Failed to charge the renter.",
+    "owner_pay_fail_as_renter": "Failed to pay the owner. You money will be refunded.",
+    "renter_pay_fail_as_renter": "Failed to charge your card. Please make sure there's enough balance and that's your card is not locked or inactive. if the issue continues contact your bank to solve the problem.",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
