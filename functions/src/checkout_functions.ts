@@ -38,11 +38,13 @@ export async function chargeCustomer(
   description: string,
   idempotencyKey: string,
   payment_reference_metadata: Object | undefined,
+  merchant_initiated: boolean,
 ) {
   const user = await admin.auth().getUser(uid);
   const userPaymentsDoc = await admin.firestore().doc(`cko_users_payments/${uid}`).get();
 
   const cus_id = userPaymentsDoc.data()!.customer.id;
+  const previous_payment_id = userPaymentsDoc.data()!.init_payment_id;
 
   const reference = (await admin.firestore().collection('payment_references').add({
     'payment_id': null,
@@ -59,7 +61,8 @@ export async function chargeCustomer(
     'reference': reference,
     'amount': amount,
     'currency': 'SAR',
-    'payment_type': 'Recurring',
+    'merchant_initiated': merchant_initiated ? true : undefined,
+    'previous_payment_id': merchant_initiated ? previous_payment_id : undefined,
     'description': description,
     'customer': {
       'id': cus_id,

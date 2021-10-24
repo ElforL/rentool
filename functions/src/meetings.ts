@@ -237,6 +237,7 @@ async function chargeRenter(
       'toolID': toolID,
       'requestID': requestID,
     },
+    true,
   );
 
   await admin.firestore().doc(`cko_users_payments/${renterUID}/payments/${payment.id}`).set({
