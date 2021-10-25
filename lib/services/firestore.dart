@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/storage_services.dart';
@@ -253,6 +254,12 @@ class FirestoreServices {
         .collection('messages')
         .orderBy('sentTime', descending: true)
         .snapshots();
+  }
+
+  static Future<DocumentSnapshot<Object?>> getDeliverMeetingPrivateDoc(DeliverMeeting meeting) {
+    return _toolsRef
+        .doc('${meeting.tool.id}/deliver_meetings/${meeting.requestID}/private/${AuthServices.currentUid}')
+        .get();
   }
 
   // ooooo     ooo
