@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import { addNotification } from './fcm';
 
 /**
  * handle tools' `acceptedRequestID` field changes
@@ -36,11 +37,17 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
           'renter_id': null,
           'renter_ids_ok': false,
           'renter_pics_urls': [],
+
+          'processing_payment': true, // both confirmed ids and awaiting payment capturing and payouts
+          'payments_successful': null, // payments processing is done and successful
+          'renter_action_required': false, // should check doc([meeting_doc]/private/{uid})
+          'owner_action_required': false, // should check doc([meeting_doc]/private/{uid})
+
           // if the meeting was done and succesful and a rent object/doc was created
           'rent_started': false,
           // any errors that could occur with the meeting e.g., payment fail, database error... etc
           // TODO consider changing it to list in case there were multiple erros
-          'error': null,
+          'errors': [],
         });
 
         // Send notification to renter
@@ -233,36 +240,3 @@ export const disagreementCaseUpdated = functions.firestore.document('/disagreeme
 
     return null;
   });
-
-/**
- * create a new doc in the user's notification collections which also invokes `newNotification()` and sends the user an FCM message
- * @param userUID the user's uid
- * @param code
- * Notifications codes:
- * - `REQ_REC`: request received
- * - `REQ_ACC`: request accepted
- * - `REQ_DEL`: request deleted
- * - `REN_START`: rent started
- * - `REN_END`: rent ended
- * - `DC_DAM`: disagreement case settled and tool is damaged
- * - `DC_NDAM`: disagreement case settled and tool is not damaged
- * @param data the notification data required for each code
- * - `REQ_REC`: toolID, requestID, toolName, renterName
- * - `REQ_ACC`: toolID, requestID, toolName,
- * - `REQ_DEL`: toolID, requestID, toolName,
- * - `REN_START`: toolID, toolName, renterName, ownerName, renterUID
- * - `REN_END`: toolID, toolName, renterName, ownerName, renterUID
- * - `DC_DAM`: toolID, toolName
- * - `DC_NDAM`: toolID, toolName
- * @returns A Promise resolved with a DocumentReference pointing to the newly created document after it has been written to the backend.
- */
-function addNotification(userUID: string, code: string, data: any)
-  : Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>> {
-  const notifsCollection = admin.firestore().collection(`Users/${userUID}/notifications`);
-  return notifsCollection.add({
-    'code': code,
-    'data': data,
-    'time': admin.firestore.FieldValue.serverTimestamp(),
-    'isRead': false,
-  });
-}

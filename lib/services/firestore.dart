@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/storage_services.dart';
@@ -262,6 +263,12 @@ class FirestoreServices {
         .snapshots();
   }
 
+  static Future<DocumentSnapshot<Object?>> getDeliverMeetingPrivateDoc(DeliverMeeting meeting) {
+    return _toolsRef
+        .doc('${meeting.tool.id}/deliver_meetings/${meeting.requestID}/private/${AuthServices.currentUid}')
+        .get();
+  }
+
   // ooooo     ooo
   // `888'     `8'
   //  888       8   .oooo.o  .ooooo.  oooo d8b  .oooo.o
@@ -295,9 +302,8 @@ class FirestoreServices {
   ///
   /// returns true if successful
   static Future<bool> addUser(RentoolUser user) async {
-    var userJson = user.toJson(['reviews', 'tools', 'requests']);
-    var uid = userJson['uid'];
-    userJson.remove('uid');
+    final uid = user.uid;
+    final userJson = user.toJson(['reviews', 'tools', 'requests', 'uid']);
 
     try {
       await _usersRef.doc(uid).set(userJson);
@@ -311,6 +317,21 @@ class FirestoreServices {
   /// Get the ID document of the user with the given [uid]
   static Future<DocumentSnapshot<Object>> getID(String uid) {
     return _usersRef.doc(uid).collection('private').doc('ID').get();
+  }
+
+  /// Get the card document of the user with the given [uid]
+  ///
+  /// Doc format:
+  /// ```
+  /// 'expiry_month': expiry_month,
+  /// 'expiry_year': expiry_year,
+  /// 'name': car holder name,
+  /// 'scheme': scheme (e.g., Visa),
+  /// 'last4': last4,
+  /// 'bin': bin,
+  /// ```
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getCard(String uid) {
+    return _usersRef.doc(uid).collection('private').doc('card').get();
   }
 
   static Future<void> setID(String idNumber) async {

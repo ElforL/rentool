@@ -5,7 +5,6 @@ import 'package:rentool/models/banned_user_entry.dart';
 import 'package:rentool/screens/disagreement_case_page.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/firestore.dart';
-import 'package:rentool/services/functions.dart';
 import 'package:rentool/widgets/pagination_listview.dart';
 
 class BannedUsersAdminPage extends StatefulWidget {
@@ -85,12 +84,8 @@ class BannedUsersListPage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          print((await FunctionsServices.banUser(
-            'R84XhDPoqgGeoYnpRHl5FxXz2ijf',
-            'Testing the ban function',
-          ))
-              .response);
+        onPressed: () {
+          // TODO
         },
       ),
     );

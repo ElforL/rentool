@@ -6,8 +6,11 @@ import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/screens/error_screen.dart';
 import 'package:rentool/screens/meetings_screens/deliver_meeting_pics_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
+import 'package:rentool/screens/meetings_screens/meeting_error_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_ids_screen.dart';
+import 'package:rentool/screens/meetings_screens/meeting_redirect_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
+import 'package:rentool/screens/meetings_screens/processing_payments_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
@@ -30,7 +33,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
 
   @override
   void dispose() {
-    if (!(meeting?.bothIdsOk ?? false)) {
+    if (meeting?.bothIdsOk == false) {
       meeting!.setArrived(false);
     }
     super.dispose();
@@ -52,7 +55,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         }
 
         var data = snapshot.data!.data()!;
-        meeting = DeliverMeeting.fromJson(tool, data);
+        meeting = DeliverMeeting.fromJson(tool, data, snapshot.data!.id);
         return rentunAppropiateWidget(data, isUserTheOwner);
       },
     );
@@ -95,27 +98,24 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       return MeetingsIdsScreen(
         meeting: meeting!,
       );
+    } else if (meeting!.userActionRequired && meeting!.paymentsSuccessful == null) {
+      return MeetingRedirectScreen(meeting: meeting!);
+    } else if (meeting!.processingPayment && meeting!.paymentsSuccessful == null) {
+      return const ProcessingPaymentScreen(showAppBar: false);
+    } else if (meeting!.rentStarted || meeting!.paymentsSuccessful!) {
+      return MeetingSuccessScreen(
+        title: AppLocalizations.of(context)!.success,
+        subtitle: meeting!.rentStarted ? AppLocalizations.of(context)!.rentHasStarted : '',
+      );
+    } else if (meeting!.errors != null && meeting!.errors!.isNotEmpty) {
+      return MeetingErrorScreen(meeting: meeting!);
     } else {
-      if (meeting!.rentStarted) {
-        return MeetingSuccessScreen(
-          title: AppLocalizations.of(context)!.success,
-          subtitle: AppLocalizations.of(context)!.rentHasStarted,
-        );
-      } else if (meeting!.error != null) {
-        return Scaffold(
-          appBar: AppBar(),
-          body: Center(
-            child: Text(meeting!.error.toString()),
-          ),
-        );
-      } else {
-        var json = meeting?.toJson()
-          ?..remove('renter_id')
-          ..remove('owner_id');
-        return ErrorScreen(
-          error: "Invalid state: the meeting's current state should be impossible.\ntoJson: $json",
-        );
-      }
+      var json = meeting?.toJson()
+        ?..remove('renter_id')
+        ..remove('owner_id');
+      return ErrorScreen(
+        error: "Invalid state: the meeting's current state should be impossible.\ntoJson: $json",
+      );
     }
   }
 }

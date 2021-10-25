@@ -14,12 +14,14 @@ service cloud.firestore {
       allow write: if isAdmin();
 
       allow create: if isTHEuser()
+      && request.resource.data.numOfReviews == 0
       && request.resource.data.rating == 0;
 
       // `ID` private doc
       match /private/ID{
         function isIdNumValid(idNumber){
-          return idNumber.size() == 10 &&
+          return idNumber is string &&
+          idNumber.size() == 10 &&
           // Check if ID is banned
           !exists(/databases/$(database)/documents/bannedList/$(idNumber)) &&
           !exists(/databases/$(database)/documents/idsList/$(idNumber));
@@ -29,6 +31,10 @@ service cloud.firestore {
         allow create: if isTHEuser() && 
         request.resource.data.keys().hasOnly(['idNumber']) &&
         isIdNumValid(request.resource.data.idNumber);
+      }
+
+      match /private/card{
+      	allow get: if isTHEuser();
       }
 
       match /devices/{fcmToken}{
@@ -95,6 +101,12 @@ service cloud.firestore {
         return exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/ID);
       }
 
+      /// checks if the user has a customer id and a payment source in `/cko_users_payments/uid`
+      function hasCustomerAndSource(){
+        return get(/databases/$(database)/documents/cko_users_payments/$(request.auth.uid)).data.customer.id is string &&
+        get(/databases/$(database)/documents/cko_users_payments/$(request.auth.uid)).data.source.id is string;
+      }
+
       function isEmailVerified(){
         return request.auth != null && request.auth.token.email_verified == true;
       }
@@ -159,10 +171,11 @@ service cloud.firestore {
       // and the updates are valid
       && isToolValid(false);
       
-      // allow creation if the user is authinticated and verified
+      // allow creation if the user is authenticated and verified
       allow create: if isEmailVerified()
       // and has an ID number
       && hasID()
+      && hasCustomerAndSource()
       // and the tool is valid
       && isToolValid(true);
       
@@ -216,6 +229,7 @@ service cloud.firestore {
         
         allow create: if isEmailVerified()
         && hasID()
+        && hasCustomerAndSource()
         && hasNoPreviousRequests()
         && isNewRequestValid();
         
@@ -310,6 +324,10 @@ service cloud.firestore {
         !didRentStart() &&
         validAffectedFields() &&
         (isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid());
+
+        match /private/{uid}{
+          allow read: if request.auth != null && request.auth.uid == uid;
+        }
       }
 
       match /return_meetings/{requestID}{

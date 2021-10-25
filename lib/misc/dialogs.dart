@@ -94,7 +94,13 @@ Future<dynamic> showIconAlertDialog(BuildContext context,
       bodyText: bodyText,
       importantText: importantText,
       noteText: noteText,
-      actions: actions,
+      actions: actions ??
+          [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context)!.ok.toUpperCase()),
+            )
+          ],
       key: key,
     ),
   );

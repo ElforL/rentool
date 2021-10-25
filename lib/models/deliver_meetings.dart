@@ -8,6 +8,7 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 
 class DeliverMeeting {
   final Tool tool;
+  final String requestID;
 
   final String ownerUID;
   final String renterUID;
@@ -27,14 +28,27 @@ class DeliverMeeting {
   bool ownerIdsOk;
   bool renterIdsOk;
 
+  /// both confirmed ids and awaiting payment capturing and payouts
+  bool processingPayment;
+
+  /// payments processing is done and successful
+  bool? paymentsSuccessful;
+
+  /// should check doc([meeting_doc]/private/{uid})
+  bool renterActionRequired;
+
+  /// should check doc([meeting_doc]/private/{uid})
+  bool ownerActionRequired;
+
   /// if the meeting was done and succesful and a rent object/doc was created
   bool rentStarted;
 
   /// any errors that could occur with the meeting e.g., payment fail, database error... etc
-  Object? error;
+  List<Object?>? errors;
 
   DeliverMeeting(
     this.tool,
+    this.requestID,
     this.ownerUID,
     this.renterUID,
     this.ownerArrived,
@@ -45,15 +59,20 @@ class DeliverMeeting {
     this.renterPicsUrls,
     this.ownerIdsOk,
     this.renterIdsOk,
+    this.processingPayment,
+    this.paymentsSuccessful,
+    this.renterActionRequired,
+    this.ownerActionRequired,
     this.rentStarted, {
     this.ownerID,
     this.renterID,
-    this.error,
+    this.errors,
   });
 
-  factory DeliverMeeting.fromJson(Tool tool, Map<String, dynamic> json) {
+  factory DeliverMeeting.fromJson(Tool tool, Map<String, dynamic> json, String? requestID) {
     return DeliverMeeting(
       tool,
+      requestID ?? json['requestID'],
       json['ownerUID'],
       json['renterUID'],
       json['owner_arrived'],
@@ -64,15 +83,20 @@ class DeliverMeeting {
       json['renter_pics_urls'] != null ? List<String>.from(json['renter_pics_urls']) : [],
       json['owner_ids_ok'],
       json['renter_ids_ok'],
+      json['processing_payment'],
+      json['payments_successful'],
+      json['renter_action_required'],
+      json['owner_action_required'],
       json['rent_started'],
       ownerID: json['owner_id'],
       renterID: json['renter_id'],
-      error: json['error'],
+      errors: json['errors'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'requestID': requestID,
       'ownerUID': ownerUID,
       'renterUID': renterUID,
       'owner_arrived': ownerArrived,
@@ -83,10 +107,14 @@ class DeliverMeeting {
       'renter_pics_urls': renterPicsUrls,
       'owner_ids_ok': ownerIdsOk,
       'renter_ids_ok': renterIdsOk,
+      'processing_payment': processingPayment,
+      'payments_successful': paymentsSuccessful,
+      'renter_action_required': renterActionRequired,
+      'owner_action_required': ownerActionRequired,
       'rent_started': rentStarted,
       'owner_id': ownerID,
       'renter_id': renterID,
-      'error': error,
+      'errors': errors,
     };
   }
 
@@ -191,4 +219,6 @@ class DeliverMeeting {
 
   /// did both the owner and renter confirm each other's IDs
   bool get bothIdsOk => ownerIdsOk && renterIdsOk;
+
+  bool get userActionRequired => isUserTheOwner ? ownerActionRequired : renterActionRequired;
 }
