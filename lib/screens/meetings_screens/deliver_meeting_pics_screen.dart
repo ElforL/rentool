@@ -186,6 +186,7 @@ class DeliverMeetingPicsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget? child;
     return DraggableScrollableSheet(
+      snap: true,
       expand: false,
       initialChildSize: 0.11,
       minChildSize: 0.11,

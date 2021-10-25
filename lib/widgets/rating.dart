@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class RatingDisplay extends StatelessWidget {
   const RatingDisplay({
@@ -47,10 +48,11 @@ class RatingDisplay extends StatelessWidget {
               ),
             ),
             Container(
+              constraints: const BoxConstraints(maxWidth: 70),
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              alignment: AlignmentDirectional.topEnd,
+              alignment: AlignmentDirectional.topStart,
               child: Text(
-                numberOfReview.toString(),
+                NumberFormat.compact().format(numberOfReview).toString(),
                 textScaleFactor: .6,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface.withAlpha(100),

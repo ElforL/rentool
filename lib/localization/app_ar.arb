@@ -413,5 +413,7 @@
     "verification_successful": "تم التوثيق",
     "verification_failed": "فشل التوثيق.",
 
+    "canceling_request_explanation": "سيبقى الطلب متوفرًا ويمكنك قبوله مجددًا في أي وقت.\nإن كنت تريد رفض الطلب وحذفه، اضغط على زر \"حذف\" أو \"رفض\" في صفحة الطلب.",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

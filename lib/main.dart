@@ -82,6 +82,9 @@ void main() async {
   runApp(MyApp(fcmServices: fcmServices, locale: locale));
 }
 
+/// Print warning for the user to not paste any code in the console
+///
+/// [About Self-XSS](https://en.wikipedia.org/wiki/Self-XSS)
 void printSelfXssWarning() {
   return print('''
   \u001B[6m\u001B[43m\u001B[31m⚠ WARNING!\u001B[0m

@@ -917,6 +917,8 @@
     "verification_successful": "Verification successful.",
     "verification_failed": "Verification failed.",
 
+    "canceling_request_explanation": "The request will stay available for you to accepet at a later time\nIf you want to reject the request and delete it, press the \"Delete\" or \"Reject\" button on the request page.",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
