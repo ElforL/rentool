@@ -40,8 +40,8 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
 
           'processing_payment': true, // both confirmed ids and awaiting payment capturing and payouts
           'payments_successful': null, // payments processing is done and successful
-          'renter_action_required': true, // should check doc([meeting_doc]/private/{uid})
-          'owner_action_required': true, // should check doc([meeting_doc]/private/{uid})
+          'renter_action_required': false, // should check doc([meeting_doc]/private/{uid})
+          'owner_action_required': false, // should check doc([meeting_doc]/private/{uid})
 
           // if the meeting was done and succesful and a rent object/doc was created
           'rent_started': false,
