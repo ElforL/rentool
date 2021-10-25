@@ -8,7 +8,7 @@ const isOnGithubActions = process.env.GITHUB_ACTIONS == 'true';
 admin.initializeApp();
 
 export * from './other_firestore_triggers';
-export * from './meetings';
+export * from './deliver_meetings';
 export * from './return_meeting';
 export * from './checkout';
 export * from './checkout_webhook';
