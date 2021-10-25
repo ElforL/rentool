@@ -8,6 +8,7 @@ import 'package:rentool/screens/meetings_screens/deliver_meeting_pics_screen.dar
 import 'package:rentool/screens/meetings_screens/meeting_arrived_container.dart';
 import 'package:rentool/screens/meetings_screens/meeting_error_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_ids_screen.dart';
+import 'package:rentool/screens/meetings_screens/meeting_redirect_screen.dart';
 import 'package:rentool/screens/meetings_screens/meeting_success_screen.dart';
 import 'package:rentool/screens/meetings_screens/processing_payments_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -32,7 +33,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
 
   @override
   void dispose() {
-    if (!(meeting?.bothIdsOk ?? false)) {
+    if (meeting?.bothIdsOk == false) {
       meeting!.setArrived(false);
     }
     super.dispose();
@@ -97,6 +98,8 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
       return MeetingsIdsScreen(
         meeting: meeting!,
       );
+    } else if (meeting!.userActionRequired && meeting!.paymentsSuccessful == null) {
+      return MeetingRedirectScreen(meeting: meeting!);
     } else if (meeting!.processingPayment && meeting!.paymentsSuccessful == null) {
       return const ProcessingPaymentScreen(showAppBar: false);
     } else if (meeting!.rentStarted || meeting!.paymentsSuccessful!) {

@@ -408,5 +408,10 @@
     "owner_pay_fail_as_renter": "فشلت عملية الدفع للمالك. سيتم إعادة الأموال إلى حسابك.",
     "renter_pay_fail_as_renter": "فشلت عملية الدفع من حسابك. الرجاء التأكد من وجود رصيد كافي في حسابك، وأن بطاقتك مفعلة. إن استمرت المشكلة تواصل مع بنكك لحل المشكلة.",
 
+    "your_action_required": "فضلًا أكمل الإجراء",
+    "require_3ds_waiting": "توثيق 3DS مطلوب. في انتظار النتائج",
+    "verification_successful": "تم التوثيق",
+    "verification_failed": "فشل التوثيق.",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

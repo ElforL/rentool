@@ -912,6 +912,11 @@
     "owner_pay_fail_as_renter": "Failed to pay the owner. You money will be refunded.",
     "renter_pay_fail_as_renter": "Failed to charge your card. Please make sure there's enough balance and that's your card is not locked or inactive. if the issue continues contact your bank to solve the problem.",
 
+    "your_action_required": "Your action is required",
+    "require_3ds_waiting": "3DS verification required. Waiting for result",
+    "verification_successful": "Verification successful.",
+    "verification_failed": "Verification failed.",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
