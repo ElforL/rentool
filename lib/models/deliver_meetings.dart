@@ -8,6 +8,7 @@ import 'package:rentool/models/rentool/rentool_models.dart';
 
 class DeliverMeeting {
   final Tool tool;
+  final String requestID;
 
   final String ownerUID;
   final String renterUID;
@@ -47,6 +48,7 @@ class DeliverMeeting {
 
   DeliverMeeting(
     this.tool,
+    this.requestID,
     this.ownerUID,
     this.renterUID,
     this.ownerArrived,
@@ -67,9 +69,10 @@ class DeliverMeeting {
     this.errors,
   });
 
-  factory DeliverMeeting.fromJson(Tool tool, Map<String, dynamic> json) {
+  factory DeliverMeeting.fromJson(Tool tool, Map<String, dynamic> json, String? requestID) {
     return DeliverMeeting(
       tool,
+      requestID ?? json['requestID'],
       json['ownerUID'],
       json['renterUID'],
       json['owner_arrived'],
@@ -93,6 +96,7 @@ class DeliverMeeting {
 
   Map<String, dynamic> toJson() {
     return {
+      'requestID': requestID,
       'ownerUID': ownerUID,
       'renterUID': renterUID,
       'owner_arrived': ownerArrived,
@@ -215,4 +219,6 @@ class DeliverMeeting {
 
   /// did both the owner and renter confirm each other's IDs
   bool get bothIdsOk => ownerIdsOk && renterIdsOk;
+
+  bool get userActionRequired => isUserTheOwner ? ownerActionRequired : renterActionRequired;
 }

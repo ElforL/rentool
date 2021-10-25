@@ -54,7 +54,7 @@ class _DeliverMeetScreenState extends State<DeliverMeetScreen> {
         }
 
         var data = snapshot.data!.data()!;
-        meeting = DeliverMeeting.fromJson(tool, data);
+        meeting = DeliverMeeting.fromJson(tool, data, snapshot.data!.id);
         return rentunAppropiateWidget(data, isUserTheOwner);
       },
     );
