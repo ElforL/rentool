@@ -327,6 +327,10 @@ service cloud.firestore {
         !didRentStart() &&
         validAffectedFields() &&
         (isTheRenter() ? areRenterUpdatesValid() : areOwnerUpdatesValid());
+
+        match /private/{uid}{
+          allow read: if request.auth != null && request.auth.uid == uid;
+        }
       }
 
       match /return_meetings/{requestID}{
