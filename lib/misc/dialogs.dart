@@ -156,3 +156,28 @@ Future<dynamic> showIdMissingDialog(BuildContext context, {List<Widget>? actions
     ),
   );
 }
+
+Future<dynamic> showMissingCardDialog(BuildContext context, {List<Widget>? actions}) {
+  return showDialog(
+    context: context,
+    builder: (context) => IconAlertDialog(
+      icon: Icons.credit_card_off_outlined,
+      titleText: AppLocalizations.of(context)!.no_card,
+      bodyText: AppLocalizations.of(context)!.you_must_set_card,
+      actions: actions ??
+          [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.set_card.toUpperCase()),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.of(context).pushNamed(AccountSettingsScreen.routeName);
+              },
+            ),
+          ],
+    ),
+  );
+}

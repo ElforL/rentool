@@ -374,8 +374,12 @@ class _PostScreenState extends State<PostScreen> {
                   showEmailNotVerifiedDialog(context);
                   return;
                 }
-                if (FirestoreServices.userIdNumber == null) {
+                if (FirestoreServices.hasId != true) {
                   showIdMissingDialog(context);
+                  return;
+                }
+                if (FirestoreServices.hasCard != true) {
+                  showMissingCardDialog(context);
                   return;
                 }
                 final result = await Navigator.pushNamed(context, NewRequestScreen.routeName, arguments: tool);

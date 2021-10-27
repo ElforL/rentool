@@ -218,7 +218,7 @@ class FirstScreen extends StatelessWidget {
 
         if (user == null) {
           print('User signed out');
-          FirestoreServices.userIdNumber = null;
+          FirestoreServices.updateChecklist();
           return const LoginScreen();
         } else {
           print('Signed in as ${user.displayName ?? '[No Username]'} ');
@@ -247,7 +247,7 @@ class FirstScreen extends StatelessWidget {
               }
             });
           });
-          FirestoreServices.updateUserIdNumber();
+          FirestoreServices.updateChecklist();
 
           return const HomePage();
         }

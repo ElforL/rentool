@@ -32,6 +32,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   /// was [ModalRoute.of(context).settings.arguments] read?
   bool argumentsRead = false;
   RentoolUser? user;
+  String? _idNum;
 
   Future<void> _getUser() async {
     user ??= await FirestoreServices.getUser(AuthServices.currentUid!);
@@ -43,6 +44,18 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
       AuthServices.currentUser!.reload();
     }
     super.initState();
+  }
+
+  Future<void> _getIdNumber() async {
+    if (_idNum != null) return;
+    if (AuthServices.currentUid == null) _idNum = '';
+
+    final doc = await FirestoreServices.getID(AuthServices.currentUid!);
+    if (doc.data() is Map) {
+      _idNum = (doc.data() as Map)['idNumber'];
+    } else {
+      _idNum = '';
+    }
   }
 
   Future<void> _uploadPhoto() async {
@@ -234,20 +247,31 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
         color: Colors.black54,
         hasLeadingSpace: false,
       ),
-      ListTile(
-        title: Text(FirestoreServices.userIdNumber ?? AppLocalizations.of(context)!.no_id_number),
-        subtitle: FirestoreServices.userIdNumber == null
-            ? OutlinedButton(
-                child: Text(AppLocalizations.of(context)!.set_id_number.toUpperCase()),
-                onPressed: () async {
-                  final result = await showDialog(context: context, builder: (_) => const SetIdDialog());
-                  if (result != null && result is String) {
-                    await FirestoreServices.setID(result);
-                    setState(() {});
-                  }
-                },
-              )
-            : null,
+      FutureBuilder(
+        future: _getIdNumber(),
+        builder: (context, snapshot) {
+          if (_idNum == null) {
+            return const LinearProgressIndicator();
+          }
+
+          return ListTile(
+            title: Text(_idNum!.isNotEmpty ? _idNum! : AppLocalizations.of(context)!.no_id_number),
+            subtitle: _idNum!.isEmpty
+                ? OutlinedButton(
+                    child: Text(AppLocalizations.of(context)!.set_id_number.toUpperCase()),
+                    onPressed: () async {
+                      final result = await showDialog(context: context, builder: (_) => const SetIdDialog());
+                      if (result != null && result is String) {
+                        await FirestoreServices.setID(result);
+                        setState(() {
+                          _idNum = result;
+                        });
+                      }
+                    },
+                  )
+                : null,
+          );
+        },
       ),
       const Divider(),
     ];

@@ -919,6 +919,19 @@
 
     "canceling_request_explanation": "The request will stay available for you to accepet at a later time\nIf you want to reject the request and delete it, press the \"Delete\" or \"Reject\" button on the request page.",
 
+    "no_card": "No Credit/Debit Card",
+    "@no_card": {
+        "description": "created to be used in missing card dialog title"
+    },
+    "you_must_set_card": "You need to add a credit/debit card in the payment settings to perform this action",
+    "@you_must_set_card": {
+        "description": "created to be used in missing card dialog body"
+    },
+    "set_card": "Set Card",
+    "@set_card": {
+        "description": "created to be used in missing card dialog actions"
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

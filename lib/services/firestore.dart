@@ -21,20 +21,22 @@ class FirestoreServices {
   /// The current user's ID number.
   ///
   /// could be `null` if the user is signed out or if the user didn't set an ID number.
-  static String? userIdNumber;
+  static bool? hasId;
+  static bool? hasCard;
 
-  /// Gets the ID number of the currently signed in user and sets [FirestoreServices.userIdNumber] accordingly.
-  ///
-  /// returns null if the user is signed out.
-  static Future<String?> updateUserIdNumber() async {
-    if (userIdNumber != null) return userIdNumber;
-    if (AuthServices.currentUid == null) return null;
-
-    final doc = await getID(AuthServices.currentUid!);
-    if (doc.exists && doc.data() is Map<String, dynamic>) {
-      return userIdNumber = (doc.data() as Map)['idNumber'];
+  /// Updates [FirestoreServices.hasId] and [FirestoreServices.hasCard]
+  static Future<void> updateChecklist() async {
+    if (AuthServices.currentUid == null) {
+      hasId = null;
+      hasCard = null;
+      return;
     }
-    return null;
+
+    final doc = await getCheckList(AuthServices.currentUid!);
+    if (doc.exists && doc.data() is Map<String, dynamic>) {
+      hasId = (doc.data() as Map)['hasId'];
+      hasCard = (doc.data() as Map)['hasCard'];
+    }
   }
 
   // ooooooooooooo                     oooo
@@ -336,7 +338,7 @@ class FirestoreServices {
 
   static Future<void> setID(String idNumber) async {
     await _usersRef.doc(AuthServices.currentUid!).collection('private').doc('ID').set({'idNumber': idNumber});
-    userIdNumber = idNumber;
+    hasId = true;
   }
 
   /// Sets _isRead_ field to [isRead] of the notification with the given [notificationId] of the user with the given [uid].
@@ -418,6 +420,10 @@ class FirestoreServices {
     } else {
       return query.limit(limit).get();
     }
+  }
+
+  static Future<DocumentSnapshot<Object?>> getCheckList(String uid) {
+    return _usersRef.doc('$uid/private/checklist').get();
   }
 
   //       .o.             .o8                     o8o
