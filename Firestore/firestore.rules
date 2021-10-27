@@ -37,6 +37,10 @@ service cloud.firestore {
       	allow get: if isTHEuser();
       }
 
+      match /private/checklist{
+      	allow get: if isTHEuser();
+      }
+
       match /devices/{fcmToken}{
         function areFieldsValid(){
           return request.resource.data.deviceName is string &&

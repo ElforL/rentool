@@ -205,7 +205,15 @@ export const IdCreated = functions.firestore.document('Users/{uid}/private/ID')
   .onCreate(async (snapshot, context) => {
     const idNumber = snapshot.data().idNumber;
     const uid = snapshot.ref.parent.parent!.id;
-    return admin.firestore().doc(`idsList/${idNumber}`).set({ 'uid': uid, 'time': snapshot.createTime });
+    const batch = admin.firestore().batch();
+    batch.set(admin.firestore().doc(`idsList/${idNumber}`), {
+      'uid': uid,
+      'time': snapshot.createTime
+    });
+    batch.set(snapshot.ref.parent.doc('checklist'), {
+      'hasId': true,
+    }, { merge: true });
+    return batch.commit();
   });
 
 export const disagreementCaseUpdated = functions.firestore.document('/disagreementCases/{caseID}')

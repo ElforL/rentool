@@ -135,6 +135,10 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'payouts': result.source.payouts ?? true,
       });
 
+      batch.set(admin.firestore().doc(`Users/${uid}/private/checklist`), {
+        'hasCard': true,
+      }, { merge: true });
+
       batch.set(userCkoDoc, {
         'init_payment_id': result.id,
         'customer': {

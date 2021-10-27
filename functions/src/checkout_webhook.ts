@@ -84,6 +84,9 @@ async function card_verified_handler(request: functions.https.Request): Promise<
     'payouts': payment.source.payouts ?? true,
   });
 
+  batch.set(admin.firestore().doc(`Users/${user.uid}/private/checklist`), {
+    'hasCard': true,
+  }, { merge: true });
 
   const userCkoDoc = db.doc(`cko_users_payments/${user.uid}`);
 
