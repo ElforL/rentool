@@ -64,7 +64,7 @@ class BannedUsersListPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            // TODO
+            // TODO add search
             onPressed: () {},
           ),
         ],
