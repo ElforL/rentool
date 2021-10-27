@@ -209,7 +209,7 @@
     "number_of_days": "عدد الأيام",
     "rentPrice": "سعر الإيجار",
     "summary": "الملخص",
-    "days": "أيام",
+    "days_plural": "{count, plural, =0{0 يوم} =1{يوم واحد} =2{يومان} few{{count} أيام} other{{count} يومًا}}",
     "insurancePrice": "سعر التأمين",
     "total": "المجموع",
     "you_cant_leave_this_empty": "لا يمكن ترك هذه الخانة فارغة",

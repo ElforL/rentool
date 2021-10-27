@@ -204,7 +204,7 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
         style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
       ),
       Text(
-        '$daysNum ${AppLocalizations.of(context)!.days} × ${AppLocalizations.of(context)!.priceDisplay(
+        '${AppLocalizations.of(context)!.days_plural(daysNum)} × ${AppLocalizations.of(context)!.priceDisplay(
           AppLocalizations.of(context)!.sar,
           tool!.rentPrice,
         )} = ${AppLocalizations.of(context)!.priceDisplay(

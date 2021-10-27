@@ -130,10 +130,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                       );
                     },
                   ),
-                  subtitle: Text(
-                    // TODO improve plurals
-                    '${request.numOfDays} ${AppLocalizations.of(context)!.days}',
-                  ),
+                  subtitle: Text(AppLocalizations.of(context)!.days_plural(request.numOfDays)),
                   onTap: () async {
                     await Navigator.of(context).pushNamed(
                       RequestScreen.routeName,

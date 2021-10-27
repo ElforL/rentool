@@ -175,7 +175,7 @@ class _RequestScreenState extends State<RequestScreen> {
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '${request.numOfDays} ${AppLocalizations.of(context)!.days} × ${AppLocalizations.of(context)!.priceDisplay(
+                  '${AppLocalizations.of(context)!.days_plural(request.numOfDays)} × ${AppLocalizations.of(context)!.priceDisplay(
                     AppLocalizations.of(context)!.sar,
                     request.rentPrice,
                   )} = ${AppLocalizations.of(context)!.priceDisplay(

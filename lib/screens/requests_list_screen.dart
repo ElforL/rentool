@@ -63,7 +63,7 @@ class _RequestsListScreenState extends State<RequestsListScreen> {
               if (index % 2 != 0) return const Divider();
               final request = list[index ~/ 2];
               return ListTile(
-                title: Text('${request.numOfDays} ${AppLocalizations.of(context)!.days}'),
+                title: Text(AppLocalizations.of(context)!.days_plural(request.numOfDays)),
                 subtitle: Text(request.renterUID),
                 onTap: () async {
                   if (request.id == tool.acceptedRequestID) request.isAccepted = true;

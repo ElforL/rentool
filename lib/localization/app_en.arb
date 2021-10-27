@@ -389,7 +389,12 @@
     "number_of_days": "Number of days",
     "rentPrice": "Rent price",
     "summary": "Summary",
-    "days": "Days",
+    "days_plural": "{count, plural, =1{One day} other{{count} days}}",
+    "@days_plural" : {
+        "placeholders": {
+            "count": { "type": "int" }
+        }
+    },
     "insurancePrice": "Insurance price",
     "total": "Total",
     "you_cant_leave_this_empty": "You can't leave this empty",
