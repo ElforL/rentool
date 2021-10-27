@@ -55,6 +55,7 @@ class _CardInputScreenState extends State<CardInputScreen> {
                     showBackView: card?.isCvvFocused ?? false,
                     onCreditCardWidgetChange: (_) {},
                     isHolderNameVisible: true,
+                    cardBgColor: Colors.blue.shade900,
                   ),
                 ),
               ),

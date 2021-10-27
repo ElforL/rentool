@@ -210,6 +210,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
               isHolderNameVisible: true,
               showBackView: false,
               onCreditCardWidgetChange: (_) {},
+              cardBgColor: Colors.blue.shade900,
             ),
           ),
         ),
