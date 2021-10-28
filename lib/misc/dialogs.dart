@@ -181,3 +181,27 @@ Future<dynamic> showMissingCardDialog(BuildContext context, {List<Widget>? actio
     ),
   );
 }
+
+Future<T?> showCircularLoadingIndicator<T>(
+  BuildContext context, {
+  bool barrierDismissible = true,
+  Color? barrierColor = Colors.black54,
+  String? barrierLabel,
+  bool useSafeArea = true,
+  bool useRootNavigator = true,
+  RouteSettings? routeSettings,
+}) {
+  return showDialog<T>(
+    context: context,
+    builder: (context) => WillPopScope(
+      onWillPop: () => Future.value(barrierDismissible),
+      child: const Center(child: CircularProgressIndicator()),
+    ),
+    barrierDismissible: barrierDismissible,
+    barrierColor: barrierColor,
+    barrierLabel: barrierLabel,
+    useSafeArea: useSafeArea,
+    useRootNavigator: useRootNavigator,
+    routeSettings: routeSettings,
+  );
+}
