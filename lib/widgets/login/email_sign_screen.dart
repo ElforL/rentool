@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/main.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/screens/forgot_password_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/functions.dart';
@@ -47,8 +48,16 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       // login
       try {
         if (_emailContoller.text.isEmpty || _passwordContoller.text.isEmpty) return;
+        showCircularLoadingIndicator(context, barrierDismissible: false);
+
         await AuthServices.signInWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
+
+        // Pop the loading indicator
+        Navigator.pop(context);
       } on FirebaseAuthException catch (e) {
+        // Pop the loading indicator
+        Navigator.pop(context);
+
         if (e.code == 'user-not-found') {
           setState(() {
             emailError = AppLocalizations.of(context)!.userNotFoundError;
@@ -87,13 +96,22 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
 
       // matched passwords
       try {
+        showCircularLoadingIndicator(context, barrierDismissible: false);
+
         await AuthServices.createUserWithEmailAndPassword(
           _emailContoller.text,
           _passwordContoller.text,
         );
         await FunctionsServices.updateUsername(_usernameContoller.text.trim());
+
+        // Pop the loading indicator
+        Navigator.pop(context);
+
         MyApp.of(context)?.setState(() {});
       } on FirebaseAuthException catch (e) {
+        // Pop the loading indicator
+        Navigator.pop(context);
+
         if (e.code == 'weak-password') {
           setState(() {
             passwordError = AppLocalizations.of(context)!.weak_password;
@@ -136,7 +154,13 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
 
   emailSubmit(String email) async {
     try {
+      showCircularLoadingIndicator(context, barrierDismissible: false);
+
       var list = await AuthServices.auth.fetchSignInMethodsForEmail(email);
+
+      // Pop the loading indicator
+      Navigator.pop(context);
+
       if (list.isNotEmpty) {
         // user exist
         if (list.contains('password')) {
@@ -193,6 +217,9 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         });
       }
     } on FirebaseAuthException catch (e) {
+      // Pop the loading indicator
+      Navigator.pop(context);
+
       if (e.code == 'invalid-email') {
         setState(() {
           emailError = AppLocalizations.of(context)!.badEmail;
