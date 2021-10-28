@@ -15,7 +15,10 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "rewrites": [{
+      "source": "/payments", "function": "payments"
+    }]
   },
   "storage": {
     "rules": "FirebaseStorage/storage.rules"
