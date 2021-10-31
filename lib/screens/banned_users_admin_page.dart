@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/banned_user_entry.dart';
 import 'package:rentool/screens/disagreement_case_page.dart';
 import 'package:rentool/screens/user_screen.dart';
@@ -29,11 +30,11 @@ class _BannedUsersAdminPageState extends State<BannedUsersAdminPage> {
       index: bannedUser == null ? 0 : 1,
       children: [
         BannedUsersListPage(
-          onTileTap: (bannedId) async {
+          onTileTap: (bannedUserId) async {
             // The delay is purely visual
             // without it, the transition is too sudden
             await Future.delayed(const Duration(milliseconds: 150));
-            _setId(bannedId);
+            _setId(bannedUserId);
           },
         ),
         if (bannedUser != null)
@@ -48,7 +49,7 @@ class _BannedUsersAdminPageState extends State<BannedUsersAdminPage> {
   }
 }
 
-class BannedUsersListPage extends StatelessWidget {
+class BannedUsersListPage extends StatefulWidget {
   const BannedUsersListPage({
     Key? key,
     this.onTileTap,
@@ -57,15 +58,63 @@ class BannedUsersListPage extends StatelessWidget {
   final void Function(BannedUserEntry bannedUser)? onTileTap;
 
   @override
+  State<BannedUsersListPage> createState() => _BannedUsersListPageState();
+}
+
+class _BannedUsersListPageState extends State<BannedUsersListPage> {
+  bool isSearching = false;
+  TextEditingController? _searchController;
+
+  @override
+  void initState() {
+    _searchController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _search(String uid) async {
+    try {
+      showCircularLoadingIndicator(context);
+      final doc = await FirestoreServices.getOneBannedUser(uid);
+      if (!doc.exists || doc.data() == null) throw 'noData';
+      final entry = BannedUserEntry.fromJson(doc.data()!);
+      Navigator.pop(context);
+      if (widget.onTileTap != null) widget.onTileTap!(entry);
+    } catch (e) {
+      Navigator.pop(context);
+      print(e);
+      showErrorDialog(
+        context,
+        content: e == 'noData' ? Text('No Results') : null,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.banned_ids),
+        title: isSearching
+            ? TextField(
+                controller: _searchController,
+                onSubmitted: _search,
+                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.uid),
+              )
+            : Text(AppLocalizations.of(context)!.banned_users),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            // TODO add search
-            onPressed: () {},
+            icon: Icon(isSearching ? Icons.clear : Icons.search),
+            onPressed: () {
+              _searchController?.clear();
+              setState(() {
+                isSearching = !isSearching;
+              });
+            },
           ),
         ],
         automaticallyImplyLeading: false,
@@ -98,7 +147,7 @@ class BannedUsersListPage extends StatelessWidget {
         '${AppLocalizations.of(context)!.assigned_admin}: ${bannedUser.admin}',
       ),
       trailing: Text(DateFormat('dd/MM/yyyy').format(bannedUser.banTime)),
-      onTap: onTileTap == null ? null : () => onTileTap!(bannedUser),
+      onTap: widget.onTileTap == null ? null : () => widget.onTileTap!(bannedUser),
     );
   }
 
