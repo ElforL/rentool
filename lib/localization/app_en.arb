@@ -937,6 +937,8 @@
         "description": "created to be used in missing card dialog actions"
     },
 
+    "no_results": "No results",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

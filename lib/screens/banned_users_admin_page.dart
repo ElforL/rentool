@@ -90,7 +90,7 @@ class _BannedUsersListPageState extends State<BannedUsersListPage> {
       print(e);
       showErrorDialog(
         context,
-        content: e == 'noData' ? Text('No Results') : null,
+        content: e == 'noData' ? Text(AppLocalizations.of(context)!.no_results) : null,
       );
     }
   }
