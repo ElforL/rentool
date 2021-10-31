@@ -434,6 +434,10 @@ class FirestoreServices {
   //  .8'     `888.  888   888   888   888   888   888   888   888
   // o88o     o8888o `Y8bod88P" o888o o888o o888o o888o o888o o888o
 
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getOneDisagreemtnCase(String id) {
+    return _db.doc('disagreementCases/$id').get();
+  }
+
   /// Updates the disagreement case with [caseID] document to the result and the sets the [adminUid]
   static Future<void> setDisagreementCaseResult(String caseID, bool result, String description, String adminUid) {
     return _db.doc('disagreementCases/$caseID').update({
@@ -459,6 +463,10 @@ class FirestoreServices {
     }
   }
 
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getOneBannedId(String id) {
+    return _db.doc('bannedList/$id').get();
+  }
+
   static Future<QuerySnapshot<Map<String, dynamic>>> getBannedIds({
     int limit = 10,
     DocumentSnapshot<Object?>? previousDoc,
@@ -473,6 +481,10 @@ class FirestoreServices {
     } else {
       return _db.collection('bannedList').orderBy('ban_time', descending: true).limit(limit).get();
     }
+  }
+
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getOneBannedUser(String uid) {
+    return _db.doc('bannedUsers/$uid').get();
   }
 
   static Future<QuerySnapshot<Map<String, dynamic>>> getBannedUsers({
