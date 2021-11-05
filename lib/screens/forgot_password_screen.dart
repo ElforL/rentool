@@ -78,7 +78,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ConstrainedBox(
                           constraints: const BoxConstraints(minWidth: 100),
                           child: OutlinedButton(
-                            child: Text(AppLocalizations.of(context)!.cancel),
+                            child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ),
@@ -86,7 +86,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ConstrainedBox(
                           constraints: const BoxConstraints(minWidth: 100),
                           child: ElevatedButton(
-                            child: Text(AppLocalizations.of(context)!.send),
+                            child: Text(AppLocalizations.of(context)!.send.toUpperCase()),
                             onPressed: () async {
                               try {
                                 await AuthServices.auth.sendPasswordResetEmail(email: _controller.text.trim());
