@@ -45,7 +45,9 @@ class CloudMessagingServices {
         ?.createNotificationChannel(channel);
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      deviceToken = await _fcm.getToken();
+      try {
+        deviceToken = await _fcm.getToken();
+      } catch (_) {}
     }
 
     FirebaseMessaging.onMessage.listen((message) async {
