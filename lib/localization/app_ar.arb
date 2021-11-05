@@ -421,5 +421,8 @@
 
     "no_results": "لا يوجد نتائج",
 
+    "no_network": "غير متصل",
+    "you_not_connected": "جهازك غير متصل باي شبكة.",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
