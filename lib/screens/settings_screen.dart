@@ -177,7 +177,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(null),
+                  leading: const Icon(Icons.article),
                   title: Text(AppLocalizations.of(context)!.user_agreement),
                   onTap: () {
                     // TODO create User agreement
