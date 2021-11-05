@@ -44,7 +44,7 @@ class AuthServices {
         default:
           return;
       }
-      if (uuid != null) FirestoreServices.deleteDeviceToken(uuid, currentUid!);
+      if (uuid != null) await FirestoreServices.deleteDeviceToken(uuid, currentUid!);
     }
 
     /// a list of the user information for each authentication provider.
