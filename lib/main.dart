@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,6 +25,7 @@ import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
 import 'package:rentool/screens/my_tools_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
+import 'package:rentool/screens/no_network_screen.dart';
 import 'package:rentool/screens/payment_settings_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/request_screen.dart';
@@ -219,7 +221,15 @@ class FirstScreen extends StatelessWidget {
         if (user == null) {
           print('User signed out');
           FirestoreServices.updateChecklist();
-          return const LoginScreen();
+          return StreamBuilder(
+            stream: Connectivity().onConnectivityChanged,
+            builder: (context, AsyncSnapshot<ConnectivityResult?> snapshot) {
+              if (snapshot.data == ConnectivityResult.none) {
+                return const NoNetworkScreen();
+              }
+              return const LoginScreen();
+            },
+          );
         } else {
           print('Signed in as ${user.displayName ?? '[No Username]'} ');
           final settings = SettingsServices();
