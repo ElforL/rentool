@@ -53,10 +53,10 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         await AuthServices.signInWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
 
         // Pop the loading indicator
-        Navigator.pop(context);
+        Navigator.of(context).pop();
       } on FirebaseAuthException catch (e) {
         // Pop the loading indicator
-        Navigator.pop(context);
+        Navigator.of(context).pop();
 
         if (e.code == 'user-not-found') {
           setState(() {
@@ -81,6 +81,11 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           );
           print(e.code);
         }
+      } catch (e) {
+        // Pop the loading indicator
+        Navigator.of(context).pop();
+
+        showErrorDialog(context);
       }
     } else {
       // signup
@@ -105,12 +110,12 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         await FunctionsServices.updateUsername(_usernameContoller.text.trim());
 
         // Pop the loading indicator
-        Navigator.pop(context);
+        Navigator.of(context).pop();
 
         MyApp.of(context)?.setState(() {});
       } on FirebaseAuthException catch (e) {
         // Pop the loading indicator
-        Navigator.pop(context);
+        Navigator.of(context).pop();
 
         if (e.code == 'weak-password') {
           setState(() {
@@ -136,6 +141,9 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           print(e.code);
         }
       } catch (e) {
+        // Pop the loading indicator
+        Navigator.of(context).pop();
+
         showMyAlert(
           context,
           Text(AppLocalizations.of(context)!.loginError),
