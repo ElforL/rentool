@@ -41,6 +41,7 @@ dependencies:
   chewie: ^1.2.2
   flutter_credit_card: ^3.0.1
   webview_flutter: ^2.1.1
+  connectivity_plus: ^2.0.2
 
   
   # // Needs an apple developer account which costs $99 🤷‍♂️
