@@ -102,7 +102,7 @@ service cloud.firestore {
     ////////////////////////////////// Tools ////////////////////////////////
     match /Tools/{toolID}{
       function hasID(){
-        return exists(/databases/$(database)/documents/Users/$(request.auth.uid)/private/ID);
+        return get(/databases/$(database)/documents/Users/$(request.auth.uid)/private/ID).data.idNumber != null;
       }
 
       /// checks if the user has a customer id and a payment source in `/cko_users_payments/uid`
