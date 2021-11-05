@@ -59,11 +59,9 @@ class AuthServices {
     try {
       if (_isProviderUsed('google.com')) {
         await GoogleSignIn().signOut();
-        print('G logout');
       }
       if (_isProviderUsed('facebook.com')) {
         await FacebookAuth.instance.logOut();
-        print('FB logout');
       }
     } catch (e) {
       print(e);
@@ -261,7 +259,8 @@ class AuthServices {
     return await auth.signInWithPopup(facebookProvider);
   }
 
-  /* ------------------ for Apple Sign in ------------------ */
+  /* ------------------ For Apple Sign-in ------------------- */
+  /* -- Required when uploading the app to Apple the store -- */
 
   /* 
   static Future<UserCredential> signInWithApple() async {
