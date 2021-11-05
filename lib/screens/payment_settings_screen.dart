@@ -49,9 +49,11 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
           .trim();
 
       payouts = doc.data()!['payouts'];
+      FirestoreServices.hasCard = true;
       hasCard = true;
     }
 
+    FirestoreServices.hasCard = false;
     card = CreditCardModel(number, expiryDate, cardHolderName, '', false);
 
     loaded = true;
