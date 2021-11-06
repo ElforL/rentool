@@ -9,7 +9,6 @@ import 'package:rentool/services/settings_services.dart';
 import 'package:rentool/widgets/list_label.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
 import 'package:rentool/widgets/logo_image.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -160,7 +159,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: Text(AppLocalizations.of(context)!.report_an_issue),
                   onTap: () {
                     try {
-                      _launchURL(issueReportFormMailtoLink(defaultTargetPlatform, context));
+                      launchUrl(issueReportFormMailtoLink(defaultTargetPlatform, context));
                     } catch (e) {
                       _showCouldntEmailDialog(context);
                     }
@@ -246,8 +245,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
-
-  void _launchURL(String _url) async => await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
 
   String _themeSubtitle() {
     final isDark = settings.getdarkTheme();

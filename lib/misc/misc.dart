@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/misc/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// A mailto link that create an email draft to [reportIssueEmailAddress] as a form for reporting an issue
 ///
@@ -42,3 +43,6 @@ String issueReportFormMailtoLink(TargetPlatform platform, BuildContext context) 
 
   return "mailto:$reportIssueEmailAddress?subject=$subject&body=$body";
 }
+
+Future<void> launchUrl(String _url) async =>
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
