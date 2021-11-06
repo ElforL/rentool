@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/constants.dart';
+import 'package:rentool/misc/misc.dart';
 import 'package:rentool/screens/admin_panel_screen.dart';
 import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
@@ -14,7 +17,6 @@ import 'package:rentool/widgets/logo_image.dart';
 import 'package:rentool/widgets/rentool_search_bar.dart';
 import 'package:rentool/widgets/user_listtile.dart';
 
-// TODO add support to homepage drawer so users with a problem can find support quickly.
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
@@ -112,6 +114,27 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).pushNamed(SettingsScreen.routeName);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.support),
+              title: Text(AppLocalizations.of(context)!.support),
+              onTap: () async {
+                Navigator.pop(context);
+                try {
+                  await launchUrl('mailto:$supportEmailAddress');
+                } catch (e) {
+                  await Future.delayed(const Duration(milliseconds: 300));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.couldnt_open_email_client),
+                      action: SnackBarAction(
+                        label: AppLocalizations.of(context)!.copy_email_address,
+                        onPressed: () => Clipboard.setData(const ClipboardData(text: supportEmailAddress)),
+                      ),
+                    ),
+                  );
+                }
               },
             ),
           ],

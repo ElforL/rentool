@@ -941,6 +941,7 @@
 
     "no_network": "No network",
     "you_not_connected": "You are not connected to a network.",
+    "copy_email_address": "Copy email address",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
