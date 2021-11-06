@@ -11,14 +11,22 @@
   },
   "hosting": {
     "public": "build/web",
+    "appAssociation": "AUTO",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [{
-      "source": "/payments", "function": "payments"
-    }]
+    "rewrites": [
+      {
+        "source": "/payments",
+        "function": "payments"
+      },
+      {
+        "source": "/links/**",
+        "dynamicLinks": true
+      }
+    ]
   },
   "storage": {
     "rules": "FirebaseStorage/storage.rules"
