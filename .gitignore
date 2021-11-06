@@ -9,6 +9,9 @@
 .history
 .svn/
 note.md
+
+# Firebase related
+.firebase/
 .runtimeconfig.json
 
 # IntelliJ related
