@@ -138,15 +138,17 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
               )
             ],
           );
-          print(e.code);
         }
       } catch (e) {
+        debugPrint('Signup non firebase error: ${e.runtimeType} - $e');
+        if (e is FlutterError) debugPrintStack(stackTrace: e.stackTrace);
+
         // Pop the loading indicator
         Navigator.of(context).pop();
 
         showMyAlert(
           context,
-          Text(AppLocalizations.of(context)!.loginError),
+          Text(AppLocalizations.of(context)!.signUpError),
           SelectableText(AppLocalizations.of(context)!.errorInfo + e.toString()),
           [
             TextButton(
@@ -155,7 +157,6 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
             )
           ],
         );
-        print(e);
       }
     }
   }
