@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/constants.dart';
 
 /// A mailto link that create an email draft to [reportIssueEmailAddress] as a form for reporting an issue
 ///
@@ -41,5 +42,3 @@ String issueReportFormMailtoLink(TargetPlatform platform, BuildContext context) 
 
   return "mailto:$reportIssueEmailAddress?subject=$subject&body=$body";
 }
-
-const reportIssueEmailAddress = 'issues.rentool@gmail.com';
