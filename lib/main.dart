@@ -42,6 +42,8 @@ import 'package:rentool/services/settings_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  // TODO avoid print statements
+
   if (kIsWeb) printSelfXssWarning();
 
   WidgetsFlutterBinding.ensureInitialized();
