@@ -254,6 +254,28 @@ class _MyAppState extends State<MyApp> {
             ),
           );
         }
+
+        if (settings.name!.startsWith(UserScreen.routeName)) {
+          final uri = Uri.parse(settings.name!);
+
+          UserScreenArguments? arg;
+          if (settings.arguments is UserScreenArguments) {
+            arg = settings.arguments as UserScreenArguments;
+          } else if (uri.pathSegments.length >= 2) {
+            // no argument but there's a uri argument
+            final uid = uri.pathSegments[1];
+            arg = UserScreenArguments(uid: uid);
+          }
+
+          if (arg is! UserScreenArguments) return null; // return a 404
+          return MaterialPageRoute(
+            builder: (context) => const UserScreen(),
+            settings: RouteSettings(
+              name: UserScreen.routeName + '/$arg',
+              arguments: arg,
+            ),
+          );
+        }
       },
       onUnknownRoute: (settings) {
         // If path was any of these cases don't push 404 page
@@ -281,7 +303,6 @@ class _MyAppState extends State<MyApp> {
         MyRequestsScreen.routeName: (context) => const MyRequestsScreen(),
         MyToolsScreen.routeName: (context) => const MyToolsScreen(),
         EditRequestScreen.routeName: (context) => const EditRequestScreen(),
-        UserScreen.routeName: (context) => const UserScreen(),
         EditReviewScreen.routeNameNew: (context) => const EditReviewScreen(isNew: true),
         EditReviewScreen.routeNameEdit: (context) => const EditReviewScreen(isNew: false),
         ReviewsScreen.routeName: (context) => const ReviewsScreen(),
