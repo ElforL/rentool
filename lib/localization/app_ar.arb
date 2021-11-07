@@ -425,5 +425,7 @@
     "you_not_connected": "جهازك غير متصل باي شبكة.",
     "copy_email_address": "انسخ عنوان البريد الاكتروني",
 
+    "sharePostText": "الق نظرة على {name} على رينتول\n{link}",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

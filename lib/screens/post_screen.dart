@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/constants.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/screens/chat_screen.dart';
@@ -16,6 +17,7 @@ import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/media_container.dart';
 import 'package:rentool/widgets/rating.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({Key? key}) : super(key: key);
@@ -72,7 +74,10 @@ class _PostScreenState extends State<PostScreen> {
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: () {
-              // TODO implement share and url parsing
+              Share.share(AppLocalizations.of(context)!.sharePostText(
+                tool.name,
+                '$siteDomain${PostScreen.routeName}/${tool.id}',
+              ));
             },
           ),
           PopupMenuButton(

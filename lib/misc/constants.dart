@@ -18,3 +18,5 @@ const dmcaEmailAddress = 'dmca@rentool.site';
 ///
 /// used for questions regarding Rentool (e.g, questions about terms of use).
 const helpEmailAddress = 'help@rentool.site';
+
+const siteDomain = 'https://rentool.site';

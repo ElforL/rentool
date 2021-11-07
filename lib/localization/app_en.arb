@@ -943,6 +943,14 @@
     "you_not_connected": "You are not connected to a network.",
     "copy_email_address": "Copy email address",
 
+    "sharePostText": "Checkout {name} on Rentool\n{link}",
+    "@sharePostText": {
+        "placeholders": {
+            "name": { "type": "String" },
+            "link": { "type": "String" }
+        }
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
