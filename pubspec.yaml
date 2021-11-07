@@ -45,6 +45,7 @@ dependencies:
   connectivity_plus: ^2.0.2
   # To to remove the leading hash (#) from the URL
   url_strategy: ^0.2.0 
+  share_plus: ^3.0.4
 
   
   # // Needs an apple developer account which costs $99 🤷‍♂️
