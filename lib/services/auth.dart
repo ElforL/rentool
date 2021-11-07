@@ -22,6 +22,19 @@ class AuthServices {
   /// Notifies about changes to the user's sign-in state (such as sign-in or sign-out).
   static Stream<User?> get authStateChanges => auth.authStateChanges();
 
+  static Future<void> sendEmailVerification(User? user) async {
+    if (user != null && !user.emailVerified) {
+      var actionCodeSettings = ActionCodeSettings(
+        url: 'https://rentool.site/links/emailVer?email=${user.email}',
+        androidInstallApp: true,
+        androidMinimumVersion: '20',
+        iOSBundleId: 'com.elfor.rentool',
+      );
+
+      return user.sendEmailVerification(actionCodeSettings);
+    }
+  }
+
   /// Sign the user out
   static void signOut([String? uuid]) async {
     if (!isSignedIn) return;
@@ -88,7 +101,7 @@ class AuthServices {
       email: inEmail,
       password: inPassword,
     );
-    if (creds.additionalUserInfo!.isNewUser) auth.currentUser!.sendEmailVerification();
+    if (creds.additionalUserInfo!.isNewUser) sendEmailVerification(auth.currentUser);
     return creds;
   }
 
@@ -228,7 +241,7 @@ class AuthServices {
     } else {
       creds = await signInWithFacebookNative();
     }
-    if (creds.additionalUserInfo!.isNewUser) auth.currentUser!.sendEmailVerification();
+    if (creds.additionalUserInfo!.isNewUser) sendEmailVerification(auth.currentUser);
     return creds;
   }
 

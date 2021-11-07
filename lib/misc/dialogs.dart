@@ -119,7 +119,7 @@ Future<dynamic> showEmailNotVerifiedDialog(BuildContext context, {List<Widget>? 
               TextButton(
                 child: Text(AppLocalizations.of(context)!.resend_email.toUpperCase()),
                 onPressed: () {
-                  AuthServices.currentUser!.sendEmailVerification();
+                  AuthServices.sendEmailVerification(AuthServices.currentUser);
                   Navigator.pop(context);
                 },
               ),

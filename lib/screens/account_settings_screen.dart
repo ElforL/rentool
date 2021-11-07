@@ -186,7 +186,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                   ),
                   DurationDisabledButton(
                     child: Text(AppLocalizations.of(context)!.resend_email.toUpperCase()),
-                    onPressed: () => AuthServices.currentUser?.sendEmailVerification(),
+                    onPressed: () => AuthServices.sendEmailVerification(AuthServices.currentUser),
                     seconds: 7,
                   ),
                 ],
