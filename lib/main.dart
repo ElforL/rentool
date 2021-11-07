@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/screens/account_settings_screen.dart';
 import 'package:rentool/screens/admin_panel_screen.dart';
 import 'package:rentool/screens/ban_user_screen.dart';
@@ -196,6 +197,38 @@ class _MyAppState extends State<MyApp> {
         );
       },
       initialRoute: '/',
+      onGenerateRoute: (settings) {
+        // https://flutter.dev/docs/cookbook/navigation/navigate-with-arguments#alternatively-extract-the-arguments-using-ongenerateroute
+        if (settings.name == null) return null;
+
+        // Post Screen
+        if (settings.name!.startsWith(PostScreen.routeName)) {
+          final uri = Uri.parse(settings.name!);
+          print('===> 1');
+
+          Tool? toolArg;
+
+          if (settings.arguments is Tool) {
+            // If there's argument. usually when pressed by a button.
+            toolArg = settings.arguments as Tool;
+          } else if (uri.pathSegments.length >= 2) {
+            // no argument but there's a uri toolId
+            final toolId = uri.pathSegments[1];
+            const emptyString = '...';
+            // Blank tool (the screen will call `getToolSnaphots` which will update it based on the id)
+            toolArg = Tool(toolId, emptyString, emptyString, emptyString, 0, 0, [], emptyString, false);
+          }
+
+          if (toolArg is! Tool) return null; // can't find the tool so, return a 404
+          return MaterialPageRoute(
+            builder: (context) => const PostScreen(),
+            settings: RouteSettings(
+              name: PostScreen.routeName + '/${toolArg.id}',
+              arguments: toolArg,
+            ),
+          );
+        }
+      },
       onUnknownRoute: (settings) {
         // If path was any of these cases don't push 404 page
         if (settings.name?.startsWith('/links/emailVer') ?? false) {
@@ -211,7 +244,6 @@ class _MyAppState extends State<MyApp> {
       },
       routes: {
         '/': (context) => const FirstScreen(),
-        PostScreen.routeName: (context) => const PostScreen(),
         EditPostScreen.routeNameNew: (context) => const EditPostScreen(),
         EditPostScreen.routeNameEdit: (context) => const EditPostScreen(isEditing: true),
         DeliverMeetScreen.routeName: (context) => const DeliverMeetScreen(),
