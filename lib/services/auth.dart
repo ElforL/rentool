@@ -40,31 +40,36 @@ class AuthServices {
     if (!isSignedIn) return;
 
     if (!kIsWeb) {
-      await FirebaseMessaging.instance.deleteToken();
+      try {
+        await FirebaseMessaging.instance.deleteToken();
 
-      // get the device uuid to be able to navigate to the device's Firestore document and deleting the token
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-      String? uuid;
-      switch (defaultTargetPlatform) {
-        case TargetPlatform.android:
-          final androidInfo = await deviceInfo.androidInfo;
-          uuid = androidInfo.androidId;
-          break;
-        case TargetPlatform.iOS:
-          final iosInfo = await deviceInfo.iosInfo;
-          uuid = iosInfo.identifierForVendor;
-          break;
-        default:
-          return;
+        // get the device uuid to be able to navigate to the device's Firestore document and deleting the token
+        DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+        String? uuid;
+        switch (defaultTargetPlatform) {
+          case TargetPlatform.android:
+            final androidInfo = await deviceInfo.androidInfo;
+            uuid = androidInfo.androidId;
+            break;
+          case TargetPlatform.iOS:
+            final iosInfo = await deviceInfo.iosInfo;
+            uuid = iosInfo.identifierForVendor;
+            break;
+          default:
+            return;
+        }
+        if (uuid != null) await FirestoreServices.deleteDeviceToken(uuid, currentUid!);
+      } catch (e, stack) {
+        debugPrintStack(label: e.toString(), stackTrace: stack);
       }
-      if (uuid != null) await FirestoreServices.deleteDeviceToken(uuid, currentUid!);
     }
 
     /// a list of the user information for each authentication provider.
-    var providerData = auth.currentUser!.providerData;
+    var providerData = auth.currentUser?.providerData;
 
     /// checks if the user has an authintication provider with the given [providerId].
     bool _isProviderUsed(String providerId) {
+      if (providerData is! List<UserInfo>) return false;
       return providerData.any((provider) => provider.providerId == providerId);
     }
 
@@ -76,8 +81,8 @@ class AuthServices {
       if (_isProviderUsed('facebook.com')) {
         await FacebookAuth.instance.logOut();
       }
-    } catch (e) {
-      print(e);
+    } catch (e, stack) {
+      debugPrintStack(label: e.toString(), stackTrace: stack);
     }
   }
 
