@@ -43,6 +43,8 @@ dependencies:
   flutter_credit_card: ^3.0.1
   webview_flutter: ^2.1.1
   connectivity_plus: ^2.0.2
+  # To to remove the leading hash (#) from the URL
+  url_strategy: ^0.2.0 
 
   
   # // Needs an apple developer account which costs $99 🤷‍♂️
