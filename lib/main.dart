@@ -204,9 +204,12 @@ class _MyAppState extends State<MyApp> {
       onGenerateRoute: (settings) {
         // https://flutter.dev/docs/cookbook/navigation/navigate-with-arguments#alternatively-extract-the-arguments-using-ongenerateroute
         if (settings.name == null) return null;
+        final uri = Uri.parse(settings.name!);
+        if (uri.pathSegments.isEmpty) return null;
+        final firstSegments = '/${uri.pathSegments[0]}';
 
         // Post Screen
-        if (settings.name!.startsWith(PostScreen.routeName)) {
+        if (firstSegments == PostScreen.routeName) {
           final uri = Uri.parse(settings.name!);
 
           Tool? toolArg;
@@ -233,7 +236,7 @@ class _MyAppState extends State<MyApp> {
         }
 
         // Search Screen
-        if (settings.name!.startsWith(SearchScreen.routeName)) {
+        if (firstSegments == SearchScreen.routeName) {
           final uri = Uri.parse(settings.name!);
 
           String? arg;
@@ -255,7 +258,7 @@ class _MyAppState extends State<MyApp> {
           );
         }
 
-        if (settings.name!.startsWith(UserScreen.routeName)) {
+        if (firstSegments == UserScreen.routeName) {
           final uri = Uri.parse(settings.name!);
 
           UserScreenArguments? arg;
