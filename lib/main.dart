@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -132,10 +133,39 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  void initDynamicLinks() async {
+    FirebaseDynamicLinks.instance.onLink(onSuccess: (PendingDynamicLinkData? dynamicLink) async {
+      final Uri? deepLink = dynamicLink?.link;
+      if (deepLink != null) _deepLinkHandler(deepLink);
+    }, onError: (OnLinkErrorException e) async {
+      debugPrint('onLinkError');
+      debugPrint(e.message);
+      debugPrint(e.stacktrace);
+    });
+
+    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance.getInitialLink();
+    final Uri? deepLink = data?.link;
+    if (deepLink != null) _deepLinkHandler(deepLink);
+  }
+
+  Future<void> _deepLinkHandler(Uri deepLink) async {
+    if (deepLink.path == '/emailVerified') {
+      try {
+        // refresh token
+        debugPrint('Refreshing user token');
+        await AuthServices.currentUser?.getIdToken(true);
+        await AuthServices.currentUser?.reload();
+      } catch (e, stacktrace) {
+        debugPrintStack(label: e.toString(), stackTrace: stacktrace);
+      }
+    }
+  }
+
   @override
   void initState() {
     _locale = widget.locale;
     super.initState();
+    initDynamicLinks();
   }
 
   @override
@@ -172,6 +202,19 @@ class _MyAppState extends State<MyApp> {
         );
       },
       initialRoute: '/',
+      onUnknownRoute: (settings) {
+        // If path was any of these cases don't push 404 page
+        if (settings.name?.startsWith('/links/emailVer') ?? false) {
+          return null;
+        }
+
+        return MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(),
+            body: Center(child: Text('404', style: Theme.of(context).textTheme.headline5)),
+          ),
+        );
+      },
       routes: {
         '/': (context) => const FirstScreen(),
         PostScreen.routeName: (context) => const PostScreen(),
