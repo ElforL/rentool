@@ -159,7 +159,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _locale = widget.locale;
     super.initState();
-    initDynamicLinks();
+    if (!kIsWeb) initDynamicLinks();
   }
 
   @override
