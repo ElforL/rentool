@@ -228,6 +228,29 @@ class _MyAppState extends State<MyApp> {
             ),
           );
         }
+
+        // Search Screen
+        if (settings.name!.startsWith(SearchScreen.routeName)) {
+          final uri = Uri.parse(settings.name!);
+
+          String? arg;
+          if (settings.arguments is String) {
+            arg = settings.arguments as String;
+          } else if (uri.pathSegments.length >= 2) {
+            // no argument but there's a uri argument
+            final searchQuery = uri.pathSegments[1];
+            arg = searchQuery;
+          }
+
+          if (arg is! String) return null; // return a 404
+          return MaterialPageRoute(
+            builder: (context) => const SearchScreen(),
+            settings: RouteSettings(
+              name: SearchScreen.routeName + '/$arg',
+              arguments: arg,
+            ),
+          );
+        }
       },
       onUnknownRoute: (settings) {
         // If path was any of these cases don't push 404 page
@@ -250,7 +273,6 @@ class _MyAppState extends State<MyApp> {
         ReturnMeetScreen.routeName: (context) => const ReturnMeetScreen(),
         NewRequestScreen.routeName: (context) => const NewRequestScreen(),
         RequestsListScreen.routeName: (context) => const RequestsListScreen(),
-        SearchScreen.routeName: (context) => const SearchScreen(),
         RequestScreen.routeName: (context) => const RequestScreen(),
         MyNotificationsScreen.routeName: (context) => const MyNotificationsScreen(),
         MyRequestsScreen.routeName: (context) => const MyRequestsScreen(),
