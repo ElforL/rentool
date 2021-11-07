@@ -163,7 +163,10 @@ class _UserScreenState extends State<UserScreen> {
                               },
                             ),
                           ),
-                          if (user!.uid != AuthServices.currentUid) ...[
+                          // if the displayed user isn't the current user AND the current user is SIGNED-IN.
+                          // if the current user is not signed in,
+                          // the check will be (user.uid != user.uid) which will return `false`
+                          if (user!.uid != (AuthServices.currentUid ?? user!.uid)) ...[
                             const SizedBox(width: 10),
                             RateUser(
                               user: user!,
