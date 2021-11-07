@@ -36,11 +36,15 @@ import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/cloud_messaging.dart';
 import 'package:rentool/services/settings_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
   // TODO avoid print statements
 
-  if (kIsWeb) printSelfXssWarning();
+  if (kIsWeb) {
+    printSelfXssWarning();
+    setPathUrlStrategy();
+  }
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -204,7 +208,6 @@ class _MyAppState extends State<MyApp> {
         // Post Screen
         if (settings.name!.startsWith(PostScreen.routeName)) {
           final uri = Uri.parse(settings.name!);
-          print('===> 1');
 
           Tool? toolArg;
 
