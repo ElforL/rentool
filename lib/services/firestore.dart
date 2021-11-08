@@ -123,7 +123,13 @@ class FirestoreServices {
 
   static Future<List<QueryDocumentSnapshot<Object?>>> searchForTool(String searchkey) async {
     // https://stackoverflow.com/a/56747021/12571630
-    var out = await _toolsRef.orderBy('name').startAt([searchkey]).endAt([searchkey + '\uf8ff']).limit(10).get();
+    var out = await _toolsRef
+        .where('isAvailable', isEqualTo: true)
+        .orderBy('name')
+        .startAt([searchkey])
+        .endAt([searchkey + '\uf8ff'])
+        .limit(10)
+        .get();
 
     return out.docs;
   }
