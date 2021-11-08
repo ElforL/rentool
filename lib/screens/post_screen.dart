@@ -374,26 +374,28 @@ class _PostScreenState extends State<PostScreen> {
             return ElevatedButton.icon(
               icon: const Icon(Icons.shopping_cart),
               label: Text(AppLocalizations.of(context)!.request.toUpperCase()),
-              onPressed: () async {
-                if (!AuthServices.currentUser!.emailVerified) {
-                  showEmailNotVerifiedDialog(context);
-                  return;
-                }
-                if (FirestoreServices.hasId != true) {
-                  showIdMissingDialog(context);
-                  return;
-                }
-                if (FirestoreServices.hasCard != true) {
-                  showMissingCardDialog(context);
-                  return;
-                }
-                final result = await Navigator.pushNamed(context, NewRequestScreen.routeName, arguments: tool);
-                if (result is ToolRequest) {
-                  setState(() {
-                    userRequest = result;
-                  });
-                }
-              },
+              onPressed: tool.isAvailable
+                  ? () async {
+                      if (!AuthServices.currentUser!.emailVerified) {
+                        showEmailNotVerifiedDialog(context);
+                        return;
+                      }
+                      if (FirestoreServices.hasId != true) {
+                        showIdMissingDialog(context);
+                        return;
+                      }
+                      if (FirestoreServices.hasCard != true) {
+                        showMissingCardDialog(context);
+                        return;
+                      }
+                      final result = await Navigator.pushNamed(context, NewRequestScreen.routeName, arguments: tool);
+                      if (result is ToolRequest) {
+                        setState(() {
+                          userRequest = result;
+                        });
+                      }
+                    }
+                  : null,
             );
           } else {
             return ElevatedButton(
