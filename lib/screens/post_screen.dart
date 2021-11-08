@@ -376,6 +376,9 @@ class _PostScreenState extends State<PostScreen> {
               label: Text(AppLocalizations.of(context)!.request.toUpperCase()),
               onPressed: tool.isAvailable
                   ? () async {
+                      if (AuthServices.currentUser == null) {
+                        Navigator.of(context).pushNamed('/', arguments: true);
+                      }
                       if (!AuthServices.currentUser!.emailVerified) {
                         showEmailNotVerifiedDialog(context);
                         return;
