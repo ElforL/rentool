@@ -271,12 +271,14 @@ async function endRent(
     'notificationBodyArgs': [toolName, ownerName],
     'toolName': toolName,
     'otherUserName': ownerName,
+    'otherUserId': ownerUID,
     'toolID': toolID,
   };
   const ownerBodyData = {
     'notificationBodyArgs': [toolName, renterName],
     'toolName': toolName,
     'otherUserName': renterName,
+    'otherUserId': renterUID,
     'toolID': toolID,
   };
 
