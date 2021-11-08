@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/main.dart';
 import 'package:rentool/widgets/login/email_sign_screen.dart';
 import 'package:rentool/widgets/login/login_providers_container.dart';
@@ -21,7 +22,7 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   IconButton(
                     color: Theme.of(context).colorScheme.primary,
-                    // tooltip: AppLocalizations.of(context)!.lan,
+                    tooltip: AppLocalizations.of(context)!.language,
                     icon: const Icon(Icons.language),
                     onPressed: () {
                       MyApp.of(context)?.nextLocale(context);
