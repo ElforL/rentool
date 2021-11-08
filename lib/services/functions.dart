@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:rentool/services/auth.dart';
 
 class FunctionsServices {
   static Future<FunctionResponse> updateUsername(String newName) async {
@@ -27,6 +28,13 @@ class FunctionsServices {
       'body': json,
     };
     final result = await callable.call(msg);
+    return FunctionResponse.fromJson(result.data);
+  }
+
+  static Future<FunctionResponse> deleteCard() async {
+    if (AuthServices.currentUser == null) return FunctionResponse(401, false);
+    final callable = FirebaseFunctions.instance.httpsCallable('deleteCard');
+    final result = await callable.call();
     return FunctionResponse.fromJson(result.data);
   }
 }

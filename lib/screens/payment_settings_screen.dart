@@ -7,6 +7,7 @@ import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/screens/card_input_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/services/functions.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
 import 'package:rentool/widgets/note_box.dart';
 
@@ -33,7 +34,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
 
     // Get card
     final doc = await FirestoreServices.getCard(AuthServices.currentUid!);
-    if (doc.exists && doc.data() != null) {
+    if (doc.exists && doc.data() != null && doc.data()!.isNotEmpty) {
       cardHolderName = doc.data()!['name'];
 
       final bin = doc.data()!['bin'].toString();
@@ -77,6 +78,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
           future: _loadCardDetails(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
+              debugPrintStack(label: snapshot.error.toString(), stackTrace: snapshot.stackTrace);
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -156,8 +158,20 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
                 onPressed: () async {
                   final isSure = await showDeleteConfirmDialog(context);
                   if (isSure ?? false) {
-                    // await FunctionsServices.deleteCard();
-                    _reload();
+                    showCircularLoadingIndicator(context);
+                    final result = await FunctionsServices.deleteCard();
+                    // Pop the loading indicator
+                    Navigator.pop(context);
+
+                    if (result.isSuccess) {
+                      setState(() {
+                        hasCard = false;
+                        card = CreditCardModel('', '', '', '', false);
+                      });
+                    } else {
+                      showErrorDialog(context);
+                      debugPrint('${result.statusCode}: ${result.error}');
+                    }
                   }
                 },
               ),

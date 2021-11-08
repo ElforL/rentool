@@ -223,3 +223,75 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
     return response;
   }
 });
+
+export const deleteCard = functions.https.onCall(async (data, context) => {
+  const response: {
+    statusCode: number;
+    success: boolean;
+    message: string | null;
+    value: any;
+    error: any;
+  } = {
+    'statusCode': 401,
+    'success': false,
+    'message': null,
+    'value': null,
+    'error': {
+      'type': 'unauthorized',
+      'code': 'not-signed-in'
+    },
+  }
+
+  if (context.auth?.uid == null || context.auth.token.email == null) {
+    return response;
+  }
+  const uid = context.auth.uid;
+
+  const hasCard = (await admin.firestore().doc(`Users/${uid}/private/checklist`).get()).data()?.hasCard;
+  if (!hasCard) {
+    response.statusCode = 404;
+    response.error.type = 'Not Found';
+    response.error.code = 'user-has-no-card';
+    return response;
+  }
+
+  // Delete previous cards
+  try {
+    const cko_customer: any = await cko.customers.get(context.auth.token.email);
+
+    if (cko_customer.default != null) {
+      const instruments = cko_customer.instruments;
+      for (const key in instruments) {
+        if (Object.prototype.hasOwnProperty.call(instruments, key)) {
+          const instrument = instruments[key];
+          try {
+            await cko.instruments.delete(instrument.id);
+          } catch (error) { }
+        }
+      }
+      cko.customers.update(cko_customer.id, { 'name': uid, 'default': null });
+    }
+  } catch (_) { }
+
+  const batch = admin.firestore().batch();
+  const userCkoDoc = admin.firestore().doc(`cko_users_payments/${uid}`);
+
+  batch.delete(admin.firestore().doc(`Users/${uid}/private/card`));
+
+  batch.set(admin.firestore().doc(`Users/${uid}/private/checklist`), {
+    'hasCard': false,
+  }, { merge: true });
+
+  batch.update(userCkoDoc, {
+    'init_payment_id': null,
+    'source': null,
+  });
+
+  await batch.commit();
+
+  response.success = true;
+  response.error = null;
+  response.message = 'Success';
+  response.statusCode = 200;
+  return response;
+});
