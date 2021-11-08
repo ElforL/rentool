@@ -122,6 +122,7 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
                     style: notification.isRead ? null : const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
+                    notification.getOnPressHandler(context)();
                     setState(() {
                       notification.setIsRead();
                     });
