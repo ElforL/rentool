@@ -23,6 +23,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
 
   bool? _isLogin;
   bool _showPasswords = false;
+  bool _isLoading = false;
 
   String? emailError;
   String? passwordError;
@@ -48,15 +49,13 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       // login
       try {
         if (_emailContoller.text.isEmpty || _passwordContoller.text.isEmpty) return;
-        showCircularLoadingIndicator(context, barrierDismissible: false);
+        setState(() => _isLoading = true);
 
         await AuthServices.signInWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
 
-        // Pop the loading indicator
-        Navigator.of(context).pop();
+        setState(() => _isLoading = false);
       } on FirebaseAuthException catch (e) {
-        // Pop the loading indicator
-        Navigator.of(context).pop();
+        setState(() => _isLoading = false);
 
         if (e.code == 'user-not-found') {
           setState(() {
@@ -82,8 +81,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           print(e.code);
         }
       } catch (e) {
-        // Pop the loading indicator
-        Navigator.of(context).pop();
+        setState(() => _isLoading = false);
 
         showErrorDialog(context);
       }
@@ -101,7 +99,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
 
       // matched passwords
       try {
-        showCircularLoadingIndicator(context, barrierDismissible: false);
+        setState(() => _isLoading = true);
 
         await AuthServices.createUserWithEmailAndPassword(
           _emailContoller.text,
@@ -109,13 +107,11 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         );
         await FunctionsServices.updateUsername(_usernameContoller.text.trim());
 
-        // Pop the loading indicator
-        Navigator.of(context).pop();
+        setState(() => _isLoading = false);
 
         MyApp.of(context)?.setState(() {});
       } on FirebaseAuthException catch (e) {
-        // Pop the loading indicator
-        Navigator.of(context).pop();
+        _isLoading = false;
 
         if (e.code == 'weak-password') {
           setState(() {
@@ -127,6 +123,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
             _isLogin = true;
           });
         } else {
+          setState(() {});
           showMyAlert(
             context,
             Text(AppLocalizations.of(context)!.signUpError),
@@ -143,8 +140,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         debugPrint('Signup non firebase error: ${e.runtimeType} - $e');
         if (e is FlutterError) debugPrintStack(stackTrace: e.stackTrace);
 
-        // Pop the loading indicator
-        Navigator.of(context).pop();
+        setState(() => _isLoading = false);
 
         showMyAlert(
           context,
@@ -163,12 +159,11 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
 
   emailSubmit(String email) async {
     try {
-      showCircularLoadingIndicator(context, barrierDismissible: false);
+      setState(() => _isLoading = true);
 
       var list = await AuthServices.auth.fetchSignInMethodsForEmail(email);
 
-      // Pop the loading indicator
-      Navigator.pop(context);
+      setState(() => _isLoading = false);
 
       if (list.isNotEmpty) {
         // user exist
@@ -225,9 +220,8 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
           _isLogin = false;
         });
       }
-    } on FirebaseAuthException catch (e) {
-      // Pop the loading indicator
-      Navigator.pop(context);
+    } on FirebaseAuthException catch (e, stacktrace) {
+      setState(() => _isLoading = false);
 
       if (e.code == 'invalid-email') {
         setState(() {
@@ -245,8 +239,12 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
             )
           ],
         );
-        print(e);
+        debugPrintStack(label: e.toString(), stackTrace: stacktrace);
       }
+    } catch (e, stacktrace) {
+      setState(() => _isLoading = false);
+
+      debugPrintStack(label: e.toString(), stackTrace: stacktrace);
     }
   }
 
@@ -312,7 +310,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
               errorText: emailError,
               autofillHints: [AutofillHints.email],
               onTap: () {
-                if (_isLogin != null) {
+                if (_isLogin != null && !_isLoading) {
                   // if the email is chosen (password field(s) are shown) and the user taps on the email textField
                   setState(() {
                     _isLogin = null;
@@ -352,12 +350,18 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
               child: SizedBox(
                 height: 35,
                 child: ElevatedButton(
-                  child: Text(_isLogin == null
-                      ? AppLocalizations.of(context)!.next.toUpperCase()
-                      : _isLogin!
-                          ? AppLocalizations.of(context)!.login
-                          : AppLocalizations.of(context)!.signUp),
-                  onPressed: () => submit(),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(),
+                        )
+                      : Text(_isLogin == null
+                          ? AppLocalizations.of(context)!.next.toUpperCase()
+                          : _isLogin!
+                              ? AppLocalizations.of(context)!.login
+                              : AppLocalizations.of(context)!.signUp),
+                  onPressed: _isLoading ? null : () => submit(),
                 ),
               ),
             ),
