@@ -7,21 +7,6 @@ import 'package:rentool/widgets/logo_image.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
-  /// shows an alert dialog
-  Future showMyAlert(
-    BuildContext context,
-    Widget title,
-    Widget content, [
-    List<Widget>? actions,
-  ]) async {
-    Widget k = AlertDialog(
-      title: title,
-      content: content,
-      actions: actions,
-    );
-    return await showDialog(context: context, builder: (context) => k);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
