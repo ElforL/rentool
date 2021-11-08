@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rentool/screens/account_settings_screen.dart';
 import 'package:rentool/services/auth.dart';
+import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/icon_alert_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -169,6 +170,17 @@ Future<dynamic> showMissingCardDialog(BuildContext context, {List<Widget>? actio
             TextButton(
               child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
               onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.refresh.toUpperCase()),
+              onPressed: () {
+                FirestoreServices.updateChecklist().then((value) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(AppLocalizations.of(context)!.data_refreshed),
+                  ));
+                });
+                Navigator.pop(context);
+              },
             ),
             TextButton(
               child: Text(AppLocalizations.of(context)!.set_card.toUpperCase()),

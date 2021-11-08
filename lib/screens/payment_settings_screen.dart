@@ -168,6 +168,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
                         hasCard = false;
                         card = CreditCardModel('', '', '', '', false);
                       });
+                      FirestoreServices.hasCard = false;
                     } else {
                       showErrorDialog(context);
                       debugPrint('${result.statusCode}: ${result.error}');
@@ -191,6 +192,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
                   MaterialPageRoute(builder: (_) => const CardInputScreen()),
                 );
                 _reload();
+                FirestoreServices.updateChecklist();
               },
             ),
           ),

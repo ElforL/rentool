@@ -928,7 +928,7 @@
     "@no_card": {
         "description": "created to be used in missing card dialog title"
     },
-    "you_must_set_card": "You need to add a credit/debit card in the payment settings to perform this action",
+    "you_must_set_card": "You need to add a credit/debit card in the payment settings to perform this action.\nIf you already added one, press refresh and wait a little.",
     "@you_must_set_card": {
         "description": "created to be used in missing card dialog body"
     },
@@ -936,6 +936,7 @@
     "@set_card": {
         "description": "created to be used in missing card dialog actions"
     },
+    "data_refreshed": "Data refreshed",
 
     "no_results": "No results",
 
