@@ -18,6 +18,7 @@ class FirstScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final popAfterLogin = ModalRoute.of(context)?.settings.arguments;
     return StreamBuilder(
       stream: AuthServices.authStateChanges,
       builder: (context, AsyncSnapshot<User?> snapshot) {
@@ -71,6 +72,9 @@ class FirstScreen extends StatelessWidget {
           });
           FirestoreServices.updateChecklist();
 
+          if (popAfterLogin == true) {
+            Navigator.pop(context);
+          }
           return const HomePage();
         }
       },
