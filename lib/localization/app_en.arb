@@ -922,7 +922,7 @@
     "verification_successful": "Verification successful.",
     "verification_failed": "Verification failed.",
 
-    "canceling_request_explanation": "The request will stay available for you to accepet at a later time\nIf you want to reject the request and delete it, press the \"Delete\" or \"Reject\" button on the request page.",
+    "canceling_request_explanation": "The request will stay available for you to accept at a later time\nIf you want to reject the request and delete it, press the \"Delete\" or \"Reject\" button on the request page.",
 
     "no_card": "No Credit/Debit Card",
     "@no_card": {
@@ -951,6 +951,8 @@
             "link": { "type": "String" }
         }
     },
+
+    "allow_rent_requests": "Allow rent requests",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

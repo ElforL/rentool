@@ -26,11 +26,13 @@ class EditPostScreen extends StatefulWidget {
 class _EditPostScreenState extends State<EditPostScreen> {
   Tool? tool;
 
+  bool argsRead = false;
   final _nameContoller = TextEditingController();
   final _descriptionContoller = TextEditingController();
   final _priceContoller = TextEditingController();
   final _insuranceContoller = TextEditingController();
   final _locationContoller = TextEditingController();
+  bool? _isAvailable;
 
   final List<File> media = [];
 
@@ -46,7 +48,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isEditing) {
+    if (widget.isEditing && !argsRead) {
       assert(ModalRoute.of(context)?.settings.arguments != null);
       tool = ModalRoute.of(context)?.settings.arguments as Tool;
       _nameContoller.text = tool!.name;
@@ -54,6 +56,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
       _priceContoller.text = tool!.rentPrice.toString();
       _insuranceContoller.text = tool!.insuranceAmount.toString();
       _locationContoller.text = tool!.location;
+      _isAvailable = tool!.isAvailable;
+      argsRead = true;
     }
     return Scaffold(
       appBar: AppBar(
@@ -106,6 +110,27 @@ class _EditPostScreenState extends State<EditPostScreen> {
               labelText: AppLocalizations.of(context)!.location,
               textInputAction: TextInputAction.done,
             ),
+            if (widget.isEditing)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: ListTile(
+                  title: Text(AppLocalizations.of(context)!.allow_rent_requests),
+                  subtitle: Text(_isAvailable!
+                      ? AppLocalizations.of(context)!.available
+                      : AppLocalizations.of(context)!.notAvailable),
+                  visualDensity: const VisualDensity(vertical: 1),
+                  trailing: Switch(
+                    value: _isAvailable!,
+                    onChanged: (val) {
+                      setState(() {
+                        _isAvailable = val;
+                      });
+                    },
+                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  tileColor: Theme.of(context).inputDecorationTheme.fillColor,
+                ),
+              ),
 
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 5),
@@ -153,6 +178,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         tool!.rentPrice = double.parse(_priceContoller.text);
                         tool!.insuranceAmount = double.parse(_insuranceContoller.text);
                         tool!.location = _locationContoller.text;
+                        tool!.isAvailable = _isAvailable ?? tool!.isAvailable;
 
                         final urls = await StorageServices.uploadMediaOfTool(media, tool!.id);
                         tool!.media.addAll(urls);

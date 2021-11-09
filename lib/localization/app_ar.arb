@@ -428,5 +428,7 @@
 
     "sharePostText": "الق نظرة على {name} على رينتول\n{link}",
 
+    "allow_rent_requests": "استقبال طلبات الإيجار",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
