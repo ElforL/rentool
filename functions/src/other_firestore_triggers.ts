@@ -124,6 +124,12 @@ export const toolDeleted = functions.firestore.document('Tools/{toolID}')
     }
 
     const toolID = context.params.toolID;
+
+    try {
+      await admin.storage().bucket(`rentool-5a78c.appspot.com`).deleteFiles({prefix: `tools_media/${toolID}/`})
+    } catch (error) {
+      functions.logger.error(error);
+    }
     return deleteCollection(`Tools/${toolID}/requests`, 10);
   });
 
