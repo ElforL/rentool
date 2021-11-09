@@ -67,65 +67,67 @@ class _PostScreenState extends State<PostScreen> {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
 
     Future<RentoolUser> ownerFuture = owner == null ? FirestoreServices.getUser(tool.ownerUID) : Future.value(owner);
-
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () {
-              Share.share(AppLocalizations.of(context)!.sharePostText(
-                tool.name,
-                '$siteDomain${PostScreen.routeName}/${tool.id}',
-              ));
-            },
-          ),
-          PopupMenuButton(
-            itemBuilder: (context) => [
-              if (isUsersTool || AuthServices.isAdmin) ...[
-                PopupMenuItem(
-                  padding: EdgeInsets.zero,
-                  child: ListTile(
-                    title: Text(AppLocalizations.of(context)!.edit),
-                    onTap: () => Navigator.of(context).pushReplacementNamed(
-                      EditPostScreen.routeNameEdit,
-                      arguments: tool,
-                    ),
-                  ),
+        actions: tool.rentPrice <= 0
+            ? null
+            : [
+                IconButton(
+                  icon: const Icon(Icons.share),
+                  onPressed: () {
+                    Share.share(AppLocalizations.of(context)!.sharePostText(
+                      tool.name,
+                      '$siteDomain${PostScreen.routeName}/${tool.id}',
+                    ));
+                  },
                 ),
-                PopupMenuItem(
-                  padding: EdgeInsets.zero,
-                  child: ListTile(
-                    title: Text(AppLocalizations.of(context)!.delete),
-                    onTap: () async {
-                      if (tool.currentRent != null) {
-                        return showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text(AppLocalizations.of(context)!.error),
-                            content: Text(AppLocalizations.of(context)!.cant_delete_rented_tool + '.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(AppLocalizations.of(context)!.ok),
-                              )
-                            ],
+                PopupMenuButton(
+                  itemBuilder: (context) => [
+                    if (isUsersTool || AuthServices.isAdmin) ...[
+                      PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        child: ListTile(
+                          title: Text(AppLocalizations.of(context)!.edit),
+                          onTap: () => Navigator.of(context).pushReplacementNamed(
+                            EditPostScreen.routeNameEdit,
+                            arguments: tool,
                           ),
-                        );
-                      }
-                      final isSure = await showConfirmDialog(context);
-                      if (isSure ?? false) {
-                        FirestoreServices.deleteTool(tool.id);
-                        Navigator.of(context).popUntil(ModalRoute.withName(PostScreen.routeName));
-                        Navigator.pop(context, 'Deleted');
-                      }
-                    },
-                  ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        child: ListTile(
+                          title: Text(AppLocalizations.of(context)!.delete),
+                          onTap: () async {
+                            if (tool.currentRent != null) {
+                              return showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(AppLocalizations.of(context)!.error),
+                                  content: Text(AppLocalizations.of(context)!.cant_delete_rented_tool + '.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(AppLocalizations.of(context)!.ok),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }
+                            final isSure = await showConfirmDialog(context);
+                            if (isSure ?? false) {
+                              FirestoreServices.deleteTool(tool.id);
+                              Navigator.of(context)
+                                  .popUntil((route) => route.settings.name?.startsWith(PostScreen.routeName) ?? false);
+                              Navigator.pop(context, 'Deleted');
+                            }
+                          },
+                        ),
+                      ),
+                    ]
+                  ],
                 ),
-              ]
-            ],
-          ),
-        ],
+              ],
       ),
       body: StreamBuilder(
         stream: FirestoreServices.getToolStream(tool.id),
@@ -140,6 +142,11 @@ class _PostScreenState extends State<PostScreen> {
               acceptedRequest = null;
             }
           }
+
+          if (snapshot.connectionState == ConnectionState.active && !(snapshot.data?.exists ?? true)) {
+            return _build404(snapshot);
+          }
+
           return ListView(
             primary: false,
             children: [
@@ -282,6 +289,35 @@ class _PostScreenState extends State<PostScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Center _build404(AsyncSnapshot<DocumentSnapshot<Object?>> snapshot) {
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(height: 100),
+          Text(
+            '404',
+            style: Theme.of(context).textTheme.headline1?.copyWith(fontFamily: 'Roboto', fontWeight: FontWeight.w100),
+          ),
+          Text(
+            AppLocalizations.of(context)!.couldnt_find_tool,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: 150),
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(AppLocalizations.of(context)!.back.toUpperCase()),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

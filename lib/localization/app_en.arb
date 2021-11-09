@@ -953,6 +953,7 @@
     },
 
     "allow_rent_requests": "Allow rent requests",
+    "couldnt_find_tool": "We couldn't find the tool you're looking for",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {

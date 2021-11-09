@@ -429,6 +429,7 @@
     "sharePostText": "الق نظرة على {name} على رينتول\n{link}",
 
     "allow_rent_requests": "استقبال طلبات الإيجار",
+    "couldnt_find_tool": "لم نستطع العثور على الأداة التي تبحث عنها",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
