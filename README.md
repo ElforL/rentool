@@ -1,16 +1,13 @@
-# rentool
+# Rentool
 
-A new Flutter project.
 
-## Getting Started
+A Tools Rental E-Commerce Platform. A mobile app and a website for users tom post their tools for rent and to rent other users' tools.
 
-This project is a starting point for a Flutter application.
+Link: https://rentool.site
 
-A few resources to get you started if this is your first Flutter project:
+## Links
+[Website](https://rentool.site),
+[Android apk](https://github.com/ElforL/rentool/releases)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## T471
+This project is my graduation/final-year project in [AOU-KSA](https://www.arabou.edu.sa)
