@@ -955,6 +955,13 @@
     "allow_rent_requests": "Allow rent requests",
     "couldnt_find_tool": "We couldn't find the tool you're looking for",
 
+    "city": "{city, select, riyadh{Riyadh} jeddah{Jeddah} makkah{Makkah} medina{Medina} al-ahsa{Al-Ahsa} dammam{Dammam} taif{Taif} buraidah{Buraidah} tabuk{Tabuk} qatif{Qatif} khamis_mushayt{Khamis Mushayt} khobar{Khobar} hafar_al_Batin{Hafar al-Batin} jubail{Jubail} kharj{Kharj} abha{Abha} hail{Haʼil} najran{Najran} yanbu{Yanbu} sabya{Sabya} dawadmi{Dawadmi} bisha{Bisha} abu_arish{Abu Arish} al_qunfudhah{Al Qunfudhah} muhayil{Muhayil} sakakah{Sakakah} arar{Arar} unaizah{Unaizah} qurayyat{Qurayyat} samtah{Samtah} jazan{Jazan} al_majmaah{Al Majma'ah} al-quwayiyah{al-Quway'iyah} ar_rass{Ar Rass} wadi_ad_dawasir{Wadi ad-Dawasir} bahrah{Bahrah} al_bahah{Al Bahah} al_jumum{Al Jumum} rabigh{Rabigh} ahad_rafidah{Ahad Rafidah} sharurah{Sharurah} al_lith{Al Lith} rafha{Rafha} afif{Afif} al_aridhah{Al Aridhah} al-khafji{Al-Khafji} balqarn{Balqarn} damad{Damad} tubarjal{Tubarjal} baish{Baish} az_zulfi{Az Zulfi} ad_darb{Ad Darb} al-aflaj{Al-Aflaj} sarat_abidah{Sarat Abidah} rijal_almaa{Rijal Almaa} baljurashi{Baljurashi} al_hait{Al Hait} maysaan{Maysaan} badr{Badr} umluj{Umluj} ras_tanura{Ras Tanura} al_dayer{Al Dayer} al_bukayriyah{Al Bukayriyah} al_badayea{Al Badayea} khulais{Khulais} al_hinakiyah{Al Hinakiyah} al-ula{Al-Ula} al_tuwal{Al Tuwal} al_namas{Al Namas} al_majaridah{Al Majaridah} buqayq{Buqayq} tathlith{Tathlith} al_makhwah{Al Makhwah} al_nairyah{Al Nairyah} al_wajh{Al Wajh} duba{Duba} bareq{Bareq} turaif{Turaif} khaybar{Khaybar} adham{Adham} al_nabhaniyah{Al Nabhaniyah} ranyah{Ranyah} dumat_al-jandal{Dumat al-Jandal} al_mithnab{Al Mithnab} turubah{Turubah} howtat_bani_tamim{Howtat Bani Tamim} al_khurma{Al Khurma} qilwah{Qilwah} shaqra{Shaqra} al_muwayh{Al Muwayh} al_asyah{Al Asyah} baqaa{Baqaa} as_sulayyil{As Sulayyil} tayma{Tayma} other{$city}}",
+    "@city": {
+        "placeholders": {
+            "city": { "type": "String" }
+        }
+    },
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
