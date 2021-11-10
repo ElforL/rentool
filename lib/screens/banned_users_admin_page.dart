@@ -132,11 +132,6 @@ class _BannedUsersListPageState extends State<BannedUsersListPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO
-        },
-      ),
     );
   }
 
