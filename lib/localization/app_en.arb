@@ -959,6 +959,9 @@
     "other": "Other",
     "enter_the_location": "Enter the location",
 
+    "not_found": "Not found",
+    "couldnt_find_page": "We couldn't find the page you're looking for",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

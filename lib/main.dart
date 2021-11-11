@@ -23,6 +23,7 @@ import 'package:rentool/screens/my_notifications.dart';
 import 'package:rentool/screens/my_requests.dart';
 import 'package:rentool/screens/my_tools_screen.dart';
 import 'package:rentool/screens/new_request_screen.dart';
+import 'package:rentool/screens/not_found_screen.dart';
 import 'package:rentool/screens/payment_settings_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/screens/request_screen.dart';
@@ -286,12 +287,7 @@ class _MyAppState extends State<MyApp> {
           return null;
         }
 
-        return MaterialPageRoute(
-          builder: (context) => Scaffold(
-            appBar: AppBar(),
-            body: Center(child: Text('404', style: Theme.of(context).textTheme.headline5)),
-          ),
-        );
+        return MaterialPageRoute(builder: (context) => const NotFoundScreen());
       },
       routes: {
         '/': (context) => const FirstScreen(),

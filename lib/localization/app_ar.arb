@@ -435,5 +435,8 @@
     "other": "أُخرى",
     "enter_the_location": "أدخل الموقع",
 
+    "not_found": "غير موجود",
+    "couldnt_find_page": "لم نستطع العثور على الصفحة التي تبحث عنها",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }
