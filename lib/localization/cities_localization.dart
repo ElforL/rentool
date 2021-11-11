@@ -5,8 +5,8 @@ class CityLocalization {
   }
 
   /// Return a map of the cities for the language of [langCode].
-  static Map<String, dynamic> cities(String langCode) {
-    return _json.map<String, dynamic>((cityCode, value) => MapEntry(cityCode, value[langCode]));
+  static Map<String, String> cities(String langCode) {
+    return _json.map<String, String>((cityCode, value) => MapEntry(cityCode, value[langCode] ?? ''));
   }
 }
 
@@ -48,7 +48,7 @@ const _json = {
   'samtah': {'en': 'Samtah', 'ar': 'صامطة'},
   'jazan': {'en': 'Jazan', 'ar': 'جازان'},
   'al_majmaah': {'en': "Al Majma'ah", 'ar': 'المجمعة'},
-  'al-quwayiyah': {'en': "al-Quway'iyah", 'ar': 'القويعية'},
+  'al-quwayiyah': {'en': "Al-Quway'iyah", 'ar': 'القويعية'},
   'ar_rass': {'en': 'Ar Rass', 'ar': 'الرس'},
   'wadi_ad_dawasir': {'en': 'Wadi ad-Dawasir', 'ar': 'وادي الدواسر'},
   'bahrah': {'en': 'Bahrah', 'ar': 'بحرة'},

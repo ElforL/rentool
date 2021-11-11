@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/services/storage_services.dart';
+import 'package:rentool/widgets/location_dropdown.dart';
 import 'package:rentool/widgets/media_tile.dart';
 
 /// Screen to edit or create a new tool
@@ -31,8 +32,14 @@ class _EditPostScreenState extends State<EditPostScreen> {
   final _descriptionContoller = TextEditingController();
   final _priceContoller = TextEditingController();
   final _insuranceContoller = TextEditingController();
-  final _locationContoller = TextEditingController();
+  String _location = '';
   bool? _isAvailable;
+
+  String? _nameErrorText;
+  String? _descriptionErrorText;
+  String? _rentPriceErrorText;
+  String? _insuranceErrorText;
+  String? _locationErrorText;
 
   final List<File> media = [];
 
@@ -42,7 +49,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
     _descriptionContoller.dispose();
     _priceContoller.dispose();
     _insuranceContoller.dispose();
-    _locationContoller.dispose();
     super.dispose();
   }
 
@@ -55,7 +61,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
       _descriptionContoller.text = tool!.description;
       _priceContoller.text = tool!.rentPrice.toString();
       _insuranceContoller.text = tool!.insuranceAmount.toString();
-      _locationContoller.text = tool!.location;
+      _location = tool!.location;
       _isAvailable = tool!.isAvailable;
       argsRead = true;
     }
@@ -105,10 +111,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
               ],
             ),
             // location
-            _buildTextField(
-              controller: _locationContoller,
-              labelText: AppLocalizations.of(context)!.location,
-              textInputAction: TextInputAction.done,
+            const SizedBox(height: 20),
+            Text(AppLocalizations.of(context)!.location),
+            Container(
+              margin: const EdgeInsets.only(bottom: 5),
+              padding: const EdgeInsets.all(5),
+              child: LocationDropDown(
+                value: _location,
+                onChanged: (city) => _location = city ?? '',
+                errorText: _locationErrorText,
+              ),
             ),
             if (widget.isEditing)
               Padding(
@@ -164,20 +176,45 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     child: Text(
                         widget.isEditing ? AppLocalizations.of(context)!.edit : AppLocalizations.of(context)!.create),
                     onPressed: () async {
-                      if (_nameContoller.text.trim().isEmpty ||
-                          _descriptionContoller.text.trim().isEmpty ||
-                          _priceContoller.text.trim().isEmpty ||
-                          _insuranceContoller.text.trim().isEmpty ||
-                          _locationContoller.text.trim().isEmpty) {
-                        print('Missing fields');
+                      bool hasError = false;
+                      // TODO localize
+                      if (_nameContoller.text.trim().isEmpty) {
+                        _nameErrorText = "Name Can't be empty";
+                        hasError = true;
+                      }
+                      if (_descriptionContoller.text.trim().isEmpty) {
+                        _descriptionErrorText = "Desctiption Can't be empty";
+                        hasError = true;
+                      }
+                      if (_priceContoller.text.trim().isEmpty) {
+                        _rentPriceErrorText = "Price Can't be empty";
+                        hasError = true;
+                      } else if (double.parse(_priceContoller.text) <= 0) {
+                        _rentPriceErrorText = "Price Must be > 0";
+                        hasError = true;
+                      }
+                      if (_insuranceContoller.text.trim().isEmpty) {
+                        _insuranceErrorText = "Insurance Can't be empty";
+                        hasError = true;
+                      } else if (double.parse(_insuranceContoller.text) <= 0) {
+                        _insuranceErrorText = "Insurance Must be > 0";
+                        hasError = true;
+                      }
+                      if (_location.trim().isEmpty) {
+                        _locationErrorText = "Location Can't be empty";
+                        hasError = true;
+                      }
+                      if (hasError) {
+                        setState(() {});
                         return;
                       }
+
                       if (widget.isEditing) {
-                        tool!.name = _nameContoller.text;
-                        tool!.description = _descriptionContoller.text;
+                        tool!.name = _nameContoller.text.trim();
+                        tool!.description = _descriptionContoller.text.trim();
                         tool!.rentPrice = double.parse(_priceContoller.text);
                         tool!.insuranceAmount = double.parse(_insuranceContoller.text);
-                        tool!.location = _locationContoller.text;
+                        tool!.location = _location.trim();
                         tool!.isAvailable = _isAvailable ?? tool!.isAvailable;
 
                         final urls = await StorageServices.uploadMediaOfTool(media, tool!.id);
@@ -191,7 +228,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           double.parse(_priceContoller.text.trim()),
                           double.parse(_insuranceContoller.text.trim()),
                           media,
-                          _locationContoller.text.trim(),
+                          _location.trim(),
                         );
                       }
                       Navigator.pop(context);

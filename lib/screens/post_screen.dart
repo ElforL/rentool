@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/localization/cities_localization.dart';
 import 'package:rentool/misc/constants.dart';
 import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
@@ -204,7 +205,10 @@ class _PostScreenState extends State<PostScreen> {
                           style: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey.shade600),
                           children: [
                             TextSpan(
-                              text: tool.location,
+                              text: CityLocalization.cityName(
+                                tool.location,
+                                AppLocalizations.of(context)!.localeName,
+                              ),
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
                           ]),
