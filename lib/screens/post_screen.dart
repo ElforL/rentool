@@ -67,7 +67,6 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     tool = ModalRoute.of(context)!.settings.arguments as Tool;
 
-    Future<RentoolUser> ownerFuture = owner == null ? FirestoreServices.getUser(tool.ownerUID) : Future.value(owner);
     return Scaffold(
       appBar: AppBar(
         actions: tool.rentPrice <= 0
@@ -157,6 +156,18 @@ class _PostScreenState extends State<PostScreen> {
             return _build404(snapshot);
           }
 
+          Future<RentoolUser?> ownerFuture;
+          if (owner == null) {
+            if (tool.ownerUID == '...') {
+              ownerFuture = Future.value(null);
+            } else {
+              print('Call Firestore');
+              ownerFuture = FirestoreServices.getUser(tool.ownerUID);
+            }
+          } else {
+            ownerFuture = Future.value(owner);
+          }
+
           return ListView(
             primary: false,
             children: [
@@ -225,7 +236,7 @@ class _PostScreenState extends State<PostScreen> {
                     const SizedBox(height: 5),
                     FutureBuilder(
                       future: ownerFuture,
-                      builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
+                      builder: (context, AsyncSnapshot<RentoolUser?> snapshot) {
                         owner = snapshot.data;
                         if (owner == null) {
                           return const LinearProgressIndicator();
