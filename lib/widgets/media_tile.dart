@@ -125,7 +125,7 @@ class _MediaTileState extends State<MediaTile> {
   Widget _buildAddTile() {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).inputDecorationTheme.fillColor,
+        border: Border.all(),
         borderRadius: BorderRadius.circular(8),
       ),
       width: 130,

@@ -265,7 +265,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
         maxLines: maxLines,
         decoration: InputDecoration(
           labelText: labelText,
-          filled: true,
           errorText: errorText,
         ),
       ),
