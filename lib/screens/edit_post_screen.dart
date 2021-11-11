@@ -79,6 +79,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
               controller: _nameContoller,
               labelText: AppLocalizations.of(context)!.tool_name,
               textInputAction: TextInputAction.next,
+              errorText: _nameErrorText,
             ),
             // description
             _buildTextField(
@@ -86,6 +87,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
               labelText: AppLocalizations.of(context)!.description,
               // textInputAction: TextInputAction.next,
               maxLines: 20,
+              errorText: _descriptionErrorText,
             ),
             Row(
               children: [
@@ -96,6 +98,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     labelText: AppLocalizations.of(context)!.rentPrice,
                     textInputAction: TextInputAction.next,
                     isNumber: true,
+                    errorText: _rentPriceErrorText,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -106,6 +109,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     labelText: AppLocalizations.of(context)!.insurancePrice,
                     textInputAction: TextInputAction.next,
                     isNumber: true,
+                    errorText: _insuranceErrorText,
                   ),
                 ),
               ],
@@ -122,15 +126,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 errorText: _locationErrorText,
               ),
             ),
+
             if (widget.isEditing)
-              Padding(
+              Container(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 3),
                   title: Text(AppLocalizations.of(context)!.allow_rent_requests),
                   subtitle: Text(_isAvailable!
                       ? AppLocalizations.of(context)!.available
                       : AppLocalizations.of(context)!.notAvailable),
-                  visualDensity: const VisualDensity(vertical: 1),
                   trailing: Switch(
                     value: _isAvailable!,
                     onChanged: (val) {
@@ -139,8 +144,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       });
                     },
                   ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  tileColor: Theme.of(context).inputDecorationTheme.fillColor,
                 ),
               ),
 
@@ -249,6 +252,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     TextInputAction? textInputAction,
     bool isNumber = false,
     int? maxLines = 1,
+    String? errorText,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -262,6 +266,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
         decoration: InputDecoration(
           labelText: labelText,
           filled: true,
+          errorText: errorText,
         ),
       ),
     );
