@@ -8,6 +8,8 @@ class CityLocalization {
   static Map<String, String> cities(String langCode) {
     return _json.map<String, String>((cityCode, value) => MapEntry(cityCode, value[langCode] ?? ''));
   }
+
+  static bool hasCity(String city) => _json[city] != null;
 }
 
 /// A map of the cities as:

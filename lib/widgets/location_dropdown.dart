@@ -10,7 +10,7 @@ class LocationDropDown extends StatefulWidget {
     this.errorText,
   }) : super(key: key);
 
-  final String? value;
+  final String value;
   final Function(String? city)? onChanged;
   String? errorText;
 
@@ -25,7 +25,12 @@ class _LocationDropDownState extends State<LocationDropDown> {
 
   @override
   void initState() {
-    value = widget.value;
+    if (CityLocalization.hasCity(widget.value)) {
+      value = widget.value;
+    } else {
+      value = _otherCityValue;
+      _otherCityController.text = widget.value;
+    }
     super.initState();
   }
 
