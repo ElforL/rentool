@@ -438,5 +438,8 @@
     "not_found": "غير موجود",
     "couldnt_find_page": "لم نستطع العثور على الصفحة التي تبحث عنها",
 
+    "rent_price_must_greater_than_zero": "يجب أن يكون سعر الإيجار أكبر من 0",
+    "insurance_must_greater_than_zero": "يجب أن يكون مبلغ التأمين أكبر من 0",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

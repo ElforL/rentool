@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/services/storage_services.dart';
@@ -180,31 +181,30 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         widget.isEditing ? AppLocalizations.of(context)!.edit : AppLocalizations.of(context)!.create),
                     onPressed: () async {
                       bool hasError = false;
-                      // TODO localize
                       if (_nameContoller.text.trim().isEmpty) {
-                        _nameErrorText = "Name Can't be empty";
+                        _nameErrorText = AppLocalizations.of(context)!.you_cant_leave_this_empty;
                         hasError = true;
                       }
                       if (_descriptionContoller.text.trim().isEmpty) {
-                        _descriptionErrorText = "Desctiption Can't be empty";
+                        _descriptionErrorText = AppLocalizations.of(context)!.you_cant_leave_this_empty;
                         hasError = true;
                       }
                       if (_priceContoller.text.trim().isEmpty) {
-                        _rentPriceErrorText = "Price Can't be empty";
+                        _rentPriceErrorText = AppLocalizations.of(context)!.you_cant_leave_this_empty;
                         hasError = true;
                       } else if (double.parse(_priceContoller.text) <= 0) {
-                        _rentPriceErrorText = "Price Must be > 0";
+                        _rentPriceErrorText = AppLocalizations.of(context)!.rent_price_must_greater_than_zero;
                         hasError = true;
                       }
                       if (_insuranceContoller.text.trim().isEmpty) {
-                        _insuranceErrorText = "Insurance Can't be empty";
+                        _insuranceErrorText = AppLocalizations.of(context)!.you_cant_leave_this_empty;
                         hasError = true;
                       } else if (double.parse(_insuranceContoller.text) <= 0) {
-                        _insuranceErrorText = "Insurance Must be > 0";
+                        _insuranceErrorText = AppLocalizations.of(context)!.insurance_must_greater_than_zero;
                         hasError = true;
                       }
                       if (_location.trim().isEmpty) {
-                        _locationErrorText = "Location Can't be empty";
+                        _locationErrorText = AppLocalizations.of(context)!.you_cant_leave_this_empty;
                         hasError = true;
                       }
                       if (hasError) {
@@ -212,6 +212,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         return;
                       }
 
+                      showCircularLoadingIndicator(context);
                       if (widget.isEditing) {
                         tool!.name = _nameContoller.text.trim();
                         tool!.description = _descriptionContoller.text.trim();
@@ -234,6 +235,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           _location.trim(),
                         );
                       }
+                      // Pop the loading indicator
+                      Navigator.pop(context);
+                      // Pop the page
                       Navigator.pop(context);
                     },
                   ),

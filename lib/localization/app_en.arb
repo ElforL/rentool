@@ -397,7 +397,7 @@
     },
     "insurancePrice": "Insurance price",
     "total": "Total",
-    "you_cant_leave_this_empty": "You can't leave this empty",
+    "you_cant_leave_this_empty": "You can't leave this field empty",
     "days_must_be_more_than_0": "Days must be 1 or greater",
 
     "no_description": "There is no description",
@@ -961,6 +961,9 @@
 
     "not_found": "Not found",
     "couldnt_find_page": "We couldn't find the page you're looking for",
+
+    "rent_price_must_greater_than_zero": "Rent price must be greater than 0",
+    "insurance_must_greater_than_zero": "Insurance amount must be greater than 0",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
