@@ -284,6 +284,7 @@ class _MyAppState extends State<MyApp> {
       onUnknownRoute: (settings) {
         // If path was any of these cases don't push 404 page
         if (settings.name?.startsWith('/links/emailVer') ?? false) {
+          _deepLinkHandler(Uri.parse('https://rentool.site/emailVerified'));
           return null;
         }
 
