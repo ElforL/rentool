@@ -7,7 +7,7 @@ export const authChange = functions.auth.user().onCreate((user, context) => {
     'photoURL': user.photoURL,
     'rating': 0,
     'numOfReviews': 0,
-  });
+  }, {merge: true});
 });
 
 export const updateUsername = functions.https.onCall(async (data, context) => {
@@ -41,9 +41,9 @@ export const updateUsername = functions.https.onCall(async (data, context) => {
       const user = await admin.auth().updateUser(uid, {
         displayName: username,
       })
-      admin.firestore().doc(`Users/${uid}`).update({
+      admin.firestore().doc(`Users/${uid}`).set({
         'name': user.displayName,
-      });
+      }, {merge: true});
 
       response.statusCode = 200;
       response.success = true;
@@ -119,9 +119,9 @@ export const updateUserPhoto = functions.https.onCall(async (data, context) => {
       const user = await admin.auth().updateUser(uid, {
         photoURL: photoUrl,
       })
-      admin.firestore().doc(`Users/${uid}`).update({
+      admin.firestore().doc(`Users/${uid}`).set({
         'photoURL': user.photoURL,
-      });
+      }, {merge: true});
 
       // Response
       response.success = true;
