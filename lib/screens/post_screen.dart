@@ -84,6 +84,15 @@ class _PostScreenState extends State<PostScreen> {
                 ),
                 PopupMenuButton(
                   itemBuilder: (context) => [
+                    if (AuthServices.isAdmin)
+                      PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        child: ListTile(
+                          trailing: const Icon(Icons.send_and_archive_rounded),
+                          title: Text(AppLocalizations.of(context)!.browseRequests.toUpperCase()),
+                          onTap: () => Navigator.pushNamed(context, RequestsListScreen.routeName, arguments: tool),
+                        ),
+                      ),
                     if (isUsersTool || AuthServices.isAdmin) ...[
                       PopupMenuItem(
                         padding: EdgeInsets.zero,
