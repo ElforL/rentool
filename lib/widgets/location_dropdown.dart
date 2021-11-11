@@ -25,7 +25,9 @@ class _LocationDropDownState extends State<LocationDropDown> {
 
   @override
   void initState() {
-    if (CityLocalization.hasCity(widget.value)) {
+    if (widget.value == '') {
+      value = null;
+    } else if (CityLocalization.hasCity(widget.value)) {
       value = widget.value;
     } else {
       value = _otherCityValue;
