@@ -43,7 +43,7 @@ class _RequestScreenState extends State<RequestScreen> {
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
             itemBuilder: (context) => [
-              if (request.renterUID == AuthServices.currentUid)
+              if (request.renterUID == AuthServices.currentUid || AuthServices.isAdmin)
                 PopupMenuItem(
                   padding: EdgeInsets.zero,
                   child: ListTile(
