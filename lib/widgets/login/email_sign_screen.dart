@@ -92,9 +92,16 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       }
       if (_passwordContoller.text != _confirmPasswordContoller.text) {
         // unmatched passwords
-        return setState(() {
+        setState(() {
           confirmPasswordError = AppLocalizations.of(context)!.pass_not_match;
         });
+        return;
+      }
+      if (!_isPasswordStrong(_passwordContoller.text)) {
+        setState(() {
+          passwordError = AppLocalizations.of(context)!.weak_password;
+        });
+        return;
       }
 
       // matched passwords
@@ -375,6 +382,19 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         ),
       ),
     );
+  }
+
+  bool _isPasswordStrong(String password) {
+    if (password.length < 10) {
+      return false;
+    } else if (!password.contains(RegExp('[a-zA-Z\u0621-\u064A]'))) {
+      return false;
+    } else if (!password.contains(RegExp(r'[@$!%*#?&^]'))) {
+      return false;
+    } else if (!password.contains(RegExp(r'[\d]'))) {
+      return false;
+    }
+    return true;
   }
 
   Future showMyAlert(
