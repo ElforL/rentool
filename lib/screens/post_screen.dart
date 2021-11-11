@@ -390,6 +390,7 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   Future<ToolRequest?> _getUserRequest() async {
+    if (AuthServices.currentUser == null) return null;
     if (loadedUserRequest) return userRequest;
     loadedUserRequest = true;
     final result = await FirestoreServices.getUserToolRequest(tool.id, AuthServices.currentUid!);
