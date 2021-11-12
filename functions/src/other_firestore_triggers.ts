@@ -46,7 +46,6 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
           // if the meeting was done and succesful and a rent object/doc was created
           'rent_started': false,
           // any errors that could occur with the meeting e.g., payment fail, database error... etc
-          // TODO consider changing it to list in case there were multiple erros
           'errors': [],
         });
 

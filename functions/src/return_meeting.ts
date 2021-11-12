@@ -124,7 +124,6 @@ async function endRent(
   const requestDoc = admin.firestore().doc(`Tools/${toolID}/requests/${requestID}`);
   const requstData = (await requestDoc.get()).data()!;
 
-  // TODO move insuranceAmount to rent doc
   const insuranceAmount = requstData.insuranceAmount;
   if (typeof compensationPrice == 'undefined') compensationPrice = 0;
 

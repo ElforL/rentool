@@ -325,28 +325,11 @@ async function startRent(
 ) {
   /** a `true` bool that turns `false` if an error was catched in a try-catch */
   let success = true;
-  /** did [error] occur in payment logic */
-  let errorInPayment;
   /** error object caught in a try-catch */
   let error;
   const toolDoc = admin.firestore().doc(`Tools/${toolID}`);
   const requestDoc = admin.firestore().doc(`Tools/${toolID}/requests/${requestID}`);
   const requestData = (await requestDoc.get()).data()!;
-
-  // Process payment
-  try {
-    // TODO: for better debugging, wrap each step with a try-catch to know what exactly failed
-    // Calculate total
-    // Take the total from renter
-    // Give the owner the rent money
-  } catch (e) {
-    success = false;
-    errorInPayment = true;
-    error = e;
-    await deliverMeetingDoc.update({
-      'error': 'Operation failed: An error occured while processing the payment.'
-    });
-  }
 
   if (success)
     try {
@@ -401,7 +384,6 @@ async function startRent(
       await batch.commit();
     } catch (e) {
       success = false;
-      errorInPayment = false;
       error = e;
       // if an error occured update the meeting's error field.
       await deliverMeetingDoc.update({
@@ -434,7 +416,6 @@ async function startRent(
     if (error != null) {
       return functions.logger.error(
         `an error occured while starting the rent for tool ${toolID}, request ${requestID}, owner:${ownerUID}, renter${renterUID}`,
-        `did the error occur in payment?: ${errorInPayment}`,
         'error variable:',
         error,
       );

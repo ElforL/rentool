@@ -222,8 +222,6 @@ service cloud.firestore {
         function isRequestUpdateValid(){
           return isRequestFieldsValid()
           // 'isAccepted' and 'isRented' must not be changed
-          // TODO don't allow to delete if there's a current rent
-          // maybe don't allow if it's the accepted request and implement a way to cancel (but not delete) an accepted request
           && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
         }
 
@@ -274,7 +272,6 @@ service cloud.firestore {
           return resource.data.owner_pics_ok == true && resource.data.renter_pics_ok == true;
         }
 
-        // TODO #26 ensure owner and renter uids match the request's
         function isTheToolOwner(){
           return request.auth != null && resource.data.ownerUID == request.auth.uid;
         }
@@ -506,8 +503,6 @@ service cloud.firestore {
                           onlyAllow(['ownerArrived', 'toolDamaged', 'ownerConfirmHandover'])
           );
         }
-
-        // TODO validNewVals() e.g., check if compensation price is a double and < resource.data.insuranceAmount
 
         allow read, write: if isAdmin();
         allow read: if isTheRenter() || isTheToolOwner();
