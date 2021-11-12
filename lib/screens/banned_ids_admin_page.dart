@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/banned_id_entry.dart';
 import 'package:rentool/screens/disagreement_case_page.dart';
 import 'package:rentool/screens/user_screen.dart';
@@ -48,7 +49,7 @@ class _BannedIdsAdminPageState extends State<BannedIdsAdminPage> {
   }
 }
 
-class BannedIdsListPage extends StatelessWidget {
+class BannedIdsListPage extends StatefulWidget {
   const BannedIdsListPage({
     Key? key,
     this.onTileTap,
@@ -57,15 +58,67 @@ class BannedIdsListPage extends StatelessWidget {
   final void Function(BannedIdEntry bannedId)? onTileTap;
 
   @override
+  State<BannedIdsListPage> createState() => _BannedIdsListPageState();
+}
+
+class _BannedIdsListPageState extends State<BannedIdsListPage> {
+  bool _isSearching = false;
+  TextEditingController? _searchController;
+
+  @override
+  void initState() {
+    _searchController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _search(String id) async {
+    try {
+      showCircularLoadingIndicator(context);
+      final doc = await FirestoreServices.getOneBannedId(id);
+      if (!doc.exists || doc.data() == null) throw 'noData';
+      final entry = BannedIdEntry.fromJson(doc.data()!);
+
+      // Pop loading indicator
+      Navigator.pop(context);
+      if (widget.onTileTap != null) widget.onTileTap!(entry);
+    } catch (e, stacktrace) {
+      // Pop loading indicator
+      Navigator.pop(context);
+
+      if (e != 'noData') debugPrintStack(label: e.toString(), stackTrace: stacktrace);
+      showErrorDialog(
+        context,
+        content: e == 'noData' ? Text(AppLocalizations.of(context)!.no_results) : null,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.banned_ids),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                onSubmitted: _search,
+                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.disagreementCaseID),
+              )
+            : Text(AppLocalizations.of(context)!.banned_ids),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            // TODO add search
-            onPressed: () {},
+            icon: Icon(_isSearching ? Icons.clear : Icons.search),
+            onPressed: () {
+              _searchController?.clear();
+              setState(() {
+                _isSearching = !_isSearching;
+              });
+            },
           ),
         ],
         automaticallyImplyLeading: false,
@@ -93,7 +146,7 @@ class BannedIdsListPage extends StatelessWidget {
         '${AppLocalizations.of(context)!.assigned_admin}: ${bannedId.admin}',
       ),
       trailing: Text(DateFormat('dd/MM/yyyy').format(bannedId.banTime)),
-      onTap: onTileTap == null ? null : () => onTileTap!(bannedId),
+      onTap: widget.onTileTap == null ? null : () => widget.onTileTap!(bannedId),
     );
   }
 

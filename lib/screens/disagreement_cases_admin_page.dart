@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/disagreement_case.dart';
 import 'package:rentool/screens/disagreement_case_page.dart';
 import 'package:rentool/services/firestore.dart';
@@ -45,7 +46,7 @@ class _DisagreementCasesAdminPageState extends State<DisagreementCasesAdminPage>
   }
 }
 
-class DisagreementCasesListPage extends StatelessWidget {
+class DisagreementCasesListPage extends StatefulWidget {
   const DisagreementCasesListPage({
     Key? key,
     required this.onTileTap,
@@ -54,15 +55,66 @@ class DisagreementCasesListPage extends StatelessWidget {
   final void Function(DisagreementCase disagreementCase)? onTileTap;
 
   @override
+  State<DisagreementCasesListPage> createState() => _DisagreementCasesListPageState();
+}
+
+class _DisagreementCasesListPageState extends State<DisagreementCasesListPage> {
+  bool _isSearching = false;
+  TextEditingController? _searchController;
+
+  @override
+  void initState() {
+    _searchController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _search(String id) async {
+    try {
+      showCircularLoadingIndicator(context);
+      final doc = await FirestoreServices.getOneDisagreemtnCase(id);
+      if (!doc.exists || doc.data() == null) throw 'noData';
+      final entry = DisagreementCase.fromJson(doc.data()!);
+
+      // Pop loading indicator
+      Navigator.pop(context);
+      if (widget.onTileTap != null) widget.onTileTap!(entry);
+    } catch (e, stacktrace) {
+      // Pop loading indicator
+      Navigator.pop(context);
+
+      debugPrintStack(label: e.toString(), stackTrace: stacktrace);
+      showErrorDialog(
+        context,
+        content: e == 'noData' ? Text(AppLocalizations.of(context)!.no_results) : null,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.disagreement_cases),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                onSubmitted: _search,
+                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.disagreementCaseID),
+              )
+            : Text(AppLocalizations.of(context)!.disagreement_cases),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: Icon(_isSearching ? Icons.clear : Icons.search),
             onPressed: () {
-              // TODO add search
+              _searchController?.clear();
+              setState(() {
+                _isSearching = !_isSearching;
+              });
             },
           ),
         ],
@@ -98,7 +150,7 @@ class DisagreementCasesListPage extends StatelessWidget {
         ],
       ),
       trailing: Text(DateFormat('dd/MM/yyyy').format(disCase.timeCreated)),
-      onTap: onTileTap == null ? null : () => onTileTap!(disCase),
+      onTap: widget.onTileTap == null ? null : () => widget.onTileTap!(disCase),
     );
   }
 
