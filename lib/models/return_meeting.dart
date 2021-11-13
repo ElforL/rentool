@@ -247,3 +247,121 @@ class ReturnMeeting {
     );
   }
 }
+
+// Code below is the permissions for the renter and owner for each state of the meeting
+// The code is then converted form if-else to optional operator (?:) to paste in firestore.rules
+
+// class ResR {
+//   late ReturnMeeting data;
+// }
+// late ResR resource;
+// onlyAllow(List x) {}
+// bothArrived() {}
+
+// owner() {
+//   if (resource.data.disagreementCaseSettled != null) {
+//     if (resource.data.disagreementCaseSettled == false) {
+//       // 👮⏳ Disagreement case still processing
+//       false;
+//     } else {
+//       // 👮✅
+//       if (bothArrived() == true) {
+//         // 🤝 both arrived
+//         onlyAllow(['ownerArrived', 'ownerConfirmHandover']);
+//       } else {
+//         // 🧍 didn't both arrive
+//         onlyAllow(['ownerArrived']);
+//       }
+//     }
+//   } else {
+//     // No disagreement case
+//     if (bothArrived() == false) {
+//       // 🧍
+//       onlyAllow(['ownerArrived']);
+//     } else {
+//       // 🤝
+//       if (resource.data.toolDamaged == null) {
+//         // ❓ Tool unchecked
+//         onlyAllow(['ownerArrived', 'toolDamaged']);
+//       } else {
+//         if (resource.data.toolDamaged == true) {
+//           // 💔 Tool Damaged
+//           if (resource.data.renterAdmitDamage != null) {
+//             // Renter responded to claims
+//             if (resource.data.renterAdmitDamage == true) {
+//               // 😞 Admit damage
+//               onlyAllow(['ownerArrived', 'toolDamaged']);
+//             } else {
+//               // 😡 Deny damage
+//               if (resource.data.ownerMediaOK == true) {
+//                 onlyAllow(['ownerArrived', 'toolDamaged', 'ownerMediaOK']);
+//               } else {
+//                 onlyAllow(['ownerArrived', 'toolDamaged', 'ownerMediaUrls', 'ownerMediaOK']);
+//               }
+//             }
+//           } else {
+//             // Renter hasn't responded to claims yet
+//             onlyAllow(['ownerArrived', 'toolDamaged']);
+//           }
+//         } else {
+//           // 💖 Tool Undamaged
+//           onlyAllow(['ownerArrived', 'toolDamaged', 'ownerConfirmHandover']);
+//         }
+//       }
+//     }
+//   }
+// }
+
+// void renter() {
+//   if (resource.data.disagreementCaseSettled != null) {
+//     if (resource.data.disagreementCaseSettled == false) {
+//       // 👮⏳ Disagreement case still processing
+//       false;
+//     } else {
+//       // 👮✅
+//       if (bothArrived() == true) {
+//         // 🤝 both arrived
+//         onlyAllow(['renterArrived', 'renterConfirmHandover']);
+//       } else {
+//         // 🧍 didn't both arrive
+//         onlyAllow(['renterArrived']);
+//       }
+//     }
+//   } else {
+//     // No disagreement case
+//     if (bothArrived() == false) {
+//       // 🧍
+//       onlyAllow(['renterArrived']);
+//     } else {
+//       // 🤝 bothArrived
+//       if (resource.data.toolDamaged == null) {
+//         // ❓ Tool unchecked
+//         onlyAllow(['renterArrived']);
+//       } else {
+//         if (resource.data.toolDamaged == true) {
+//           // 💔 Tool Damaged
+//           if (resource.data.renterAdmitDamage != null) {
+//             // Renter responded to claims
+//             if (resource.data.renterAdmitDamage == true) {
+//               // 😞 Admit damage
+//               onlyAllow(['renterArrived']);
+//             } else {
+//               // 😡 Deny damage
+//               if (resource.data.renterMediaOK == true) {
+//                 onlyAllow(['renterArrived', 'renterAdmitDamage', 'renterMediaOK']);
+//               } else {
+//                 onlyAllow(['renterArrived', 'renterAdmitDamage', 'renterMediaUrls', 'renterMediaOK']);
+//               }
+//             }
+//           } else {
+//             // Renter hasn't responded to claims yet
+//             onlyAllow(['renterArrived', 'renterAdmitDamage']);
+//           }
+//         } else {
+//           // 💖 Tool Undamaged
+//           onlyAllow(['renterArrived', 'renterConfirmHandover']);
+//         }
+//       }
+//     }
+//   }
+// }
