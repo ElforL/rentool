@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
       ),
+      // TODO invistigate opening the drawer causes auth stream to trigger
       drawer: Drawer(
         child: ListView(
           children: [
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             FutureBuilder(
-              future: AuthServices.auth.currentUser?.getIdTokenResult(),
+              future: AuthServices.getIdTokenResult(),
               builder: (context, AsyncSnapshot<IdTokenResult?> snapshot) {
                 AuthServices.isAdmin = snapshot.data?.claims?['admin'] == true;
                 if (AuthServices.isAdmin) {
