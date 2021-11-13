@@ -23,6 +23,7 @@ class FirestoreServices {
   /// could be `null` if the user is signed out or if the user didn't set an ID number.
   static bool? hasId;
   static bool? hasCard;
+  static bool? cardPayouts;
 
   /// Updates [FirestoreServices.hasId] and [FirestoreServices.hasCard]
   static Future<void> updateChecklist() async {
@@ -36,6 +37,7 @@ class FirestoreServices {
     if (doc.exists && doc.data() is Map<String, dynamic>) {
       hasId = (doc.data() as Map)['hasId'];
       hasCard = (doc.data() as Map)['hasCard'];
+      cardPayouts = (doc.data() as Map)['cardPayouts'];
     }
   }
 
