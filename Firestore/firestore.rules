@@ -349,8 +349,8 @@ service cloud.firestore {
         }
 
         function validAffectedFields(){
-          return (isTheRenter() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['renterArrived','renterAdmitDamage','renterConfirmHandover', 'renterAcceptCompensationPrice', 'renterMediaOK', 'renterMediaUrls'])) || 
-          (isTheToolOwner() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ownerArrived','toolDamaged','ownerConfirmHandover', 'compensationPrice', 'ownerMediaOK', 'ownerMediaUrls']))
+          return (isTheRenter() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['renterArrived','renterAdmitDamage','renterConfirmHandover', 'renterMediaOK', 'renterMediaUrls'])) || 
+          (isTheToolOwner() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ownerArrived','toolDamaged','ownerConfirmHandover', 'ownerMediaOK', 'ownerMediaUrls']))
         }
 
         function onlyAllow(list){
@@ -362,14 +362,12 @@ service cloud.firestore {
           request.resource.data.renterConfirmHandover is bool &&
           request.resource.data.renterMediaOK is bool &&
           (request.resource.data.renterAdmitDamage is bool || request.resource.data.renterAdmitDamage == null) &&
-          (request.resource.data.renterAcceptCompensationPrice is bool || request.resource.data.renterAcceptCompensationPrice == null) &&
           request.resource.data.renterMediaUrls is list &&
 
           request.resource.data.ownerArrived is bool &&
           request.resource.data.ownerConfirmHandover is bool &&
           request.resource.data.ownerMediaOK is bool &&
           (request.resource.data.toolDamaged is bool || request.resource.data.toolDamaged == null) &&
-          (request.resource.data.compensationPrice is float || request.resource.data.compensationPrice == null) &&
           request.resource.data.ownerMediaUrls is list;
         }
 
