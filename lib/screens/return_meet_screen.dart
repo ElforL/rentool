@@ -87,9 +87,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
   }
 
   Widget rentunAppropiateWidget() {
-    if (kIsWeb) {
-      return const ErrorScreen(error: "Meetings can only be done in the app");
-    } else if (meeting.bothHandedOver) {
+    if (meeting.bothHandedOver) {
       return MeetingSuccessScreen(
         title: AppLocalizations.of(context)!.success,
         subtitle: AppLocalizations.of(context)!.rentHasConcluded,
