@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/dialogs.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/screens/edit_post_screen.dart';
 import 'package:rentool/screens/post_screen.dart';
@@ -67,6 +68,22 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
         foregroundColor: Colors.black,
         child: const Icon(Icons.add),
         onPressed: () async {
+          if (!AuthServices.currentUser!.emailVerified) {
+            showEmailNotVerifiedDialog(context);
+            return;
+          }
+          if (FirestoreServices.hasId != true) {
+            showIdMissingDialog(context);
+            return;
+          }
+          if (FirestoreServices.hasCard != true) {
+            showMissingCardDialog(context);
+            return;
+          }
+          // if (FirestoreServices.cardPayouts != true) {
+          //   showNoPayoutsDialog(context);
+          //   return;
+          // }
           await Navigator.pushNamed(context, EditPostScreen.routeNameNew);
           setState(() {});
         },
