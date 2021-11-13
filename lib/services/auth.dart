@@ -9,6 +9,7 @@ import 'package:rentool/services/firestore.dart';
 class AuthServices {
   static bool isAdmin = false;
   static FirebaseAuth auth = FirebaseAuth.instance;
+  static IdTokenResult? idTokenResult;
 
   /// Returns `true` if the user is signed in and vice versa.
   static bool get isSignedIn => auth.currentUser != null;
@@ -21,6 +22,17 @@ class AuthServices {
 
   /// Notifies about changes to the user's sign-in state (such as sign-in or sign-out).
   static Stream<User?> get authStateChanges => auth.authStateChanges();
+
+  static Future<IdTokenResult?> getIdTokenResult() async {
+    if (currentUser == null) {
+      return idTokenResult = null;
+    }
+    if (idTokenResult != null) {
+      return idTokenResult!;
+    } else {
+      return idTokenResult = await currentUser!.getIdTokenResult();
+    }
+  }
 
   static Future<void> sendEmailVerification(User? user) async {
     if (user != null && !user.emailVerified) {
