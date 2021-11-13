@@ -116,6 +116,12 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
     const batch = db.batch();
 
     if (result.status !== "Pending") {
+      /** 
+       * Payouts require a first and last name that i get from the card name
+       * so if the name has no spaces in between, payouts = false
+       */
+      const payoutsBasedOnName = typeof result.source.name == 'string' ? (result.source.name as string).split(' ').length >= 2 : false;
+
       /* 
       TODO
       if(result.source.payouts == null){
@@ -132,12 +138,13 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
         'scheme': result.source.scheme,
         'last4': result.source.last4,
         'bin': result.source.bin,
-        'payouts': result.source.payouts ?? true,
+        'payouts': result.source.payouts ?? payoutsBasedOnName,
       });
 
       batch.set(admin.firestore().doc(`Users/${uid}/private/checklist`), {
         'hasCard': true,
-      }, { merge: true });
+        'cardPayouts': result.source.payouts ?? payoutsBasedOnName,
+  }, { merge: true });
 
       batch.set(userCkoDoc, {
         'init_payment_id': result.id,
@@ -280,6 +287,7 @@ export const deleteCard = functions.https.onCall(async (data, context) => {
 
   batch.set(admin.firestore().doc(`Users/${uid}/private/checklist`), {
     'hasCard': false,
+    'cardPayouts': false,
   }, { merge: true });
 
   batch.update(userCkoDoc, {

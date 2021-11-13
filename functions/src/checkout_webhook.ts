@@ -74,6 +74,12 @@ async function card_verified_handler(request: functions.https.Request): Promise<
     return false;
   }
 
+  /** 
+   * Payouts require a first and last name that i get from the card name
+   * so if the name has no spaces in between, payouts = false
+   */
+  const payoutsBasedOnName = typeof payment.source.name == 'string' ? (payment.source.name as string).split(' ').length >= 2 : false;
+
   batch.set(db.doc(`Users/${user.uid}/private/card`), {
     'expiry_month': payment.source.expiry_month,
     'expiry_year': payment.source.expiry_year,
@@ -81,11 +87,12 @@ async function card_verified_handler(request: functions.https.Request): Promise<
     'scheme': payment.source.scheme,
     'last4': payment.source.last_4,
     'bin': payment.source.bin,
-    'payouts': payment.source.payouts ?? true,
+    'payouts': payment.source.payouts ?? payoutsBasedOnName,
   });
 
   batch.set(admin.firestore().doc(`Users/${user.uid}/private/checklist`), {
     'hasCard': true,
+    'cardPayouts': payment.source.payouts ?? payoutsBasedOnName,
   }, { merge: true });
 
   const userCkoDoc = db.doc(`cko_users_payments/${user.uid}`);
