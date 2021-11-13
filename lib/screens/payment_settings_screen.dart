@@ -51,10 +51,12 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
 
       payouts = doc.data()!['payouts'];
       FirestoreServices.hasCard = true;
+      FirestoreServices.cardPayouts = payouts;
       hasCard = true;
     }
 
     FirestoreServices.hasCard = false;
+    FirestoreServices.cardPayouts = false;
     card = CreditCardModel(number, expiryDate, cardHolderName, '', false);
 
     loaded = true;
@@ -64,6 +66,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
     setState(() {
       hasCard = false;
       loaded = false;
+      payouts = false;
       card = null;
     });
   }
@@ -132,7 +135,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
                         constraints: const BoxConstraints(maxWidth: 450),
                         child: NoteBox(
                           mainColor: Colors.red,
-                          text: /* hasCard && !payouts ? */ AppLocalizations.of(context)!.no_payouts,
+                          text: AppLocalizations.of(context)!.no_payouts,
                           icon: Icons.warning,
                         ),
                       ),
@@ -169,6 +172,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
                         card = CreditCardModel('', '', '', '', false);
                       });
                       FirestoreServices.hasCard = false;
+                      FirestoreServices.cardPayouts = false;
                     } else {
                       showErrorDialog(context);
                       debugPrint('${result.statusCode}: ${result.error}');
