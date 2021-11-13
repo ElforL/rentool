@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/models/return_meeting.dart';
 import 'package:rentool/screens/error_screen.dart';
 import 'package:rentool/screens/meetings_screens/check_tool_screen.dart';
-import 'package:rentool/screens/meetings_screens/compensation_price_screen.dart';
 import 'package:rentool/screens/meetings_screens/disagreement_case_created_screen.dart';
 import 'package:rentool/screens/meetings_screens/disagreement_media_screen.dart';
 import 'package:rentool/screens/meetings_screens/handover_screen.dart';
@@ -99,17 +97,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
     } else {
       if (meeting.disagreementCaseSettled != null) {
         if (meeting.disagreementCaseSettled!) {
-          if (meeting.disagreementCaseResult!) {
-            // tool damaged
-            if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
-              return MeetingCompensationPriceScreen(meeting: meeting);
-            } else {
-              return MeetingHandoverScreen(meeting: meeting);
-            }
-          } else {
-            // tool undamaged
-            return MeetingHandoverScreen(meeting: meeting);
-          }
+          return MeetingHandoverScreen(meeting: meeting);
         } else {
           return MeetingDisagreementCaseCreatedScreen(meeting: meeting);
         }
@@ -124,11 +112,10 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
               meeting: meeting,
             );
           } else if (meeting.renterAdmitDamage!) {
-            if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
-              return MeetingCompensationPriceScreen(meeting: meeting);
-            } else {
-              return MeetingHandoverScreen(meeting: meeting);
-            }
+            return MeetingSuccessScreen(
+              title: AppLocalizations.of(context)!.success,
+              subtitle: AppLocalizations.of(context)!.rentHasConcluded,
+            );
           } else {
             if (meeting.disagreementCaseID == null) {
               return DisagreementMediaScreen(

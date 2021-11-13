@@ -13,16 +13,12 @@ class MeetingHandoverScreen extends StatelessWidget {
 
   MeetingAppBar _buildAppBar(BuildContext context) {
     void Function() onPressed;
-    String text = 'unimplemented';
+    String text;
 
     if (meeting.isUserTheOwner && meeting.disagreementCaseID == null) {
       // if it's the owner and there's no disagreement case go back to inspect -> set `toolDamaged` to `null`
       onPressed = () => meeting.setToolDamaged(null);
       text = AppLocalizations.of(context)!.backToInspect;
-    } else if (!meeting.isUserTheOwner && (meeting.renterAcceptCompensationPrice ?? false)) {
-      // if it's the renter and `renterAcceptCompensationPrice` is true set `renterAcceptCompensationPrice` to `false`
-      onPressed = () => meeting.setAcceptCompensationPrice(null);
-      text = AppLocalizations.of(context)!.backToCompPrice;
     } else {
       onPressed = () => meeting.setArrived(false);
       text = AppLocalizations.of(context)!.backToArrival;
@@ -55,11 +51,6 @@ class MeetingHandoverScreen extends StatelessWidget {
                 // TODO center the icon. it looks BAD
                 icon: CustomIcons.handshake,
               ),
-              if (meeting.compensationPrice != null && (meeting.renterAcceptCompensationPrice ?? false))
-                Text(
-                  '${AppLocalizations.of(context)!.compensationPrice} = ${AppLocalizations.of(context)!.priceDisplay(AppLocalizations.of(context)!.sar, meeting.compensationPrice!.toString())}',
-                  style: Theme.of(context).textTheme.caption,
-                ),
               SizedBox(height: MediaQuery.of(context).size.height / 10),
               Text(
                 meeting.isUserTheOwner

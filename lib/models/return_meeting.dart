@@ -24,10 +24,6 @@ class ReturnMeeting {
   /// does the renter admit the tool is damaged. Requires `toolDamaged` to be `true`.
   bool? renterAdmitDamage;
 
-  double? compensationPrice;
-
-  bool? renterAcceptCompensationPrice;
-
   /// did the owner confirm the handover
   bool ownerConfirmHandover;
 
@@ -62,8 +58,6 @@ class ReturnMeeting {
     this.renterArrived = false,
     this.toolDamaged,
     this.renterAdmitDamage,
-    this.compensationPrice,
-    this.renterAcceptCompensationPrice,
     this.ownerConfirmHandover = false,
     this.renterConfirmHandover = false,
     this.disagreementCaseID,
@@ -85,8 +79,6 @@ class ReturnMeeting {
       renterArrived: json['renterArrived'],
       toolDamaged: json['toolDamaged'],
       renterAdmitDamage: json['renterAdmitDamage'],
-      compensationPrice: json['compensationPrice'],
-      renterAcceptCompensationPrice: json['renterAcceptCompensationPrice'],
       ownerConfirmHandover: json['ownerConfirmHandover'],
       renterConfirmHandover: json['renterConfirmHandover'],
       disagreementCaseID: json['disagreementCaseID'],
@@ -109,8 +101,6 @@ class ReturnMeeting {
       'renterArrived': renterArrived,
       'toolDamaged': toolDamaged,
       'renterAdmitDamage': renterAdmitDamage,
-      'compensationPrice': compensationPrice,
-      'renterAcceptCompensationPrice': renterAcceptCompensationPrice,
       'ownerConfirmHandover': ownerConfirmHandover,
       'renterConfirmHandover': renterConfirmHandover,
       'disagreementCaseID': disagreementCaseID,
@@ -159,22 +149,6 @@ class ReturnMeeting {
   /// only available to the renter
   Future<void>? setAdmitDamage(bool? doAdmit) {
     if (!isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'renterAdmitDamage', doAdmit);
-  }
-
-  // Compensation price methods
-
-  /// set _'compensationPrice'_ to [price]
-  ///
-  /// only available to the owner
-  Future<void>? setCompensationPrice(double price) {
-    if (isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'compensationPrice', price);
-  }
-
-  /// set _'renterAcceptCompensationPrice'_ to [accepts]
-  ///
-  /// only available to the renter
-  Future<void>? setAcceptCompensationPrice(bool? accepts) {
-    if (!isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'renterAcceptCompensationPrice', accepts);
   }
 
   // Handover methods
