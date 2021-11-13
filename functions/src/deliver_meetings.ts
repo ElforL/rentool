@@ -364,8 +364,6 @@ async function startRent(
         'renterArrived': false,
         'toolDamaged': null,
         'renterAdmitDamage': null,
-        'compensationPrice': null,
-        'renterAcceptCompensationPrice': null,
         'ownerConfirmHandover': false,
         'renterConfirmHandover': false,
         'disagreementCaseID': null,

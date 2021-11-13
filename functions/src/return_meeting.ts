@@ -12,6 +12,16 @@ async function returnMeetingHandler(change: functions.Change<functions.firestore
   const newData = change.after.data();
   const oldData = change.before.data();
 
+  if(newData.disagreementCaseResult == true){
+    return endRent(
+      toolID,
+      requestID,
+      newData.ownerUID,
+      newData.renterUID,
+      change.after.ref,
+    );
+  }
+
   // if renterArrived CHANGED to `false` set everything that comes after it to false
   if (!oldData.renterArrived && newData.renterArrived) {
     // same for other fields
@@ -20,13 +30,11 @@ async function returnMeetingHandler(change: functions.Change<functions.firestore
       // if there is a disagreement case don't change `renterAdmitDamage` and `renterMediaOK`
       // because 1- changing them won't change anythin 2- they must be `false` and `true` respectively for a disagreement case to have been created
       updates = {
-        'renterAcceptCompensationPrice': null,
         'renterConfirmHandover': false,
       };
     } else {
       updates = {
         'renterAdmitDamage': null,
-        'renterAcceptCompensationPrice': null,
         'renterMediaOK': false,
         'renterConfirmHandover': false,
       };
@@ -41,13 +49,11 @@ async function returnMeetingHandler(change: functions.Change<functions.firestore
       // if there is a disagreement case don't change `toolDamaged` and `ownerMediaOK`
       // because 1- changing them won't change anythin 2- they must be both `true` for a disagreement case to have been created
       updates = {
-        'compensationPrice': null,
         'ownerConfirmHandover': false,
       };
     } else {
       updates = {
         'toolDamaged': null,
-        'compensationPrice': null,
         'ownerMediaOK': false,
         'ownerConfirmHandover': false,
       };
@@ -85,11 +91,14 @@ async function returnMeetingHandler(change: functions.Change<functions.firestore
     }
   }
 
-  const compensationPriceChanged = oldData.compensationPrice != newData.compensationPrice;
-  if (compensationPriceChanged) {
-    await change.after.ref.update({
-      'renterAcceptCompensationPrice': null,
-    });
+  if (newData.renterAdmitDamage) {
+    return endRent(
+      toolID,
+      requestID,
+      newData.ownerUID,
+      newData.renterUID,
+      change.after.ref,
+    );
   }
 
   const ownerConfirmedHO = !oldData.ownerConfirmHandover && newData.ownerConfirmHandover;
@@ -103,7 +112,6 @@ async function returnMeetingHandler(change: functions.Change<functions.firestore
         requestID,
         newData.ownerUID,
         newData.renterUID,
-        newData.compensationPrice,
         change.after.ref,
       );
     }
@@ -117,7 +125,6 @@ async function endRent(
   requestID: string,
   ownerUID: string,
   renterUID: string,
-  compensationPrice: number = 0,
   returnMeetingDoc: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>,
 ) {
   // calculate total - and process payment
@@ -125,20 +132,18 @@ async function endRent(
   const requstData = (await requestDoc.get()).data()!;
 
   const insuranceAmount = requstData.insuranceAmount;
-  if (typeof compensationPrice == 'undefined') compensationPrice = 0;
 
-  const total_to_renter = insuranceAmount - compensationPrice;
-  const total_to_owner = compensationPrice;
+  const total_to_renter = 0;
+  const total_to_owner = insuranceAmount;
 
   if (total_to_renter > 0) {
-    const payment_type = compensationPrice > 0 ?
-      'refund_some_insurance_to_renter' :
-      'refund_all_insurance_to_renter';
+    const payment_type = 'refund_all_insurance_to_renter';
 
     const deliveryPaymentProcessingDoc = await admin.firestore()
       .doc(`Tools/${toolID}/deliver_meetings/${requestID}/private/payments_processing`).get();
 
     const renter_payment_ids = deliveryPaymentProcessingDoc.data()?.renter_payment_ids;
+    
     if (typeof renter_payment_ids == 'object') {
       for (const id in renter_payment_ids) {
         if (Object.prototype.hasOwnProperty.call(renter_payment_ids, id)) {
