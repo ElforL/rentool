@@ -123,7 +123,7 @@
     },
     
     
-    "body_DC_DAM": "We reviewed the case for the tool {toolName} and decided it was indeed damaged. Please organize a meeting to agree on a compensation price and deliver the tool.",
+    "body_DC_DAM": "We reviewed the case for the tool {toolName} and decided it was indeed damaged. The insurance price was sent to the owner.",
     "@body_DC_DAM": {
         "placeholders": {
             "toolName": {}
@@ -307,7 +307,6 @@
     "reciveTool": "Recive your tool from the renter.",
     "confirmHandOver": "Confirm handover",
     "didntHandOver": "Didn't handover",
-    "backToCompPrice": "Back to compensation price",
     "backToInspect": "Back to inspect the tool",
 
     "informedRenterOfClaims": "We informed the renter of your claims. Awaiting his/her response",
@@ -326,7 +325,6 @@
             "price": {}
         }
     },
-    "compensationPrice": "Compensation price",
     "waitingForOwnerToSetPrice": "Waiting for the owner to set a price",
     "waitingForOwnerToSetNewPrice": "Waiting for the owner to set a new price",
     "theOwnerSetPriceAt": "The owner set the price at",
@@ -339,7 +337,6 @@
         }
     },
 
-    "setACompPrice": "Set a compensation price for the tool",
     "youSetPriceAt": "You set the price at {currency} {price}. waiting for the renter's response",
     "@youSetPriceAt": {
         "placeholders":{
@@ -380,7 +377,7 @@
 
     "disagreement_cases": "Disagreement cases",
     "disagreement_cases_creation": "Disagreement cases are created when the renter and owner disagree on the tool status after renting it.",
-    "disagreement_cases_after_decision": "After a decision is made you will get a notification of the decision. Then you will need to meet again to agree on a compensation price (if the tool was damaged) and deliver the tool.",
+    "disagreement_cases_after_decision": "After a decision is made you will get a notification of the decision. If the tool was not damaged then you will need to meet again to deliver the tool to get. If the tool was damaged the insurance amount will be sent to the owner",
     "cases_help_dialog_owner_body": "Take pictures and videos of the tool to show the damage. These pictures and videos will then be reviewd by Rentool administrators to determine if the tool was damaged or not.",
     "cases_help_dialog_renter_body": "Take pictures and videos to show the tool is not damaged as the owner claims. These pictures and videos will then be reviewd by Rentool administrators to determine if the tool was damaged or not.",
 
@@ -425,11 +422,6 @@
     "no_tools": "No tools",
     "@no_tools": {
         "description": "Used in `MyToolsScreen` when there are no tools."
-    },
-
-    "comp_price_must_be_less_than_insurance": "Compensation price can't be greater than the insurance amount",
-    "@comp_price_must_be_less_than_insurance": {
-        "description": "Used in `MeetingCompensationPriceScreen` when setting a compensation price greater than the insurance amount"
     },
 
     "refresh": "Refresh",
