@@ -196,7 +196,6 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
                   MaterialPageRoute(builder: (_) => const CardInputScreen()),
                 );
                 _reload();
-                FirestoreServices.updateChecklist();
               },
             ),
           ),
