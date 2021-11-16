@@ -30,8 +30,10 @@ class _SearchScreenState extends State<SearchScreen> {
   _search() async {
     var searchKey = _controller.text.trim();
     if (searchKey.isEmpty) return;
+
+    setState(() => results.clear());
+
     var res = await algolia.index('tools').query(searchKey).getObjects();
-    results.clear();
     for (var item in res.hits) {
       final widget = _buildResultContainer(item);
       results.add(widget);
@@ -87,10 +89,16 @@ class _SearchScreenState extends State<SearchScreen> {
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
-          for (var result in results) ...[
-            result,
-            const Divider(),
-          ],
+          if (results.isNotEmpty)
+            for (var result in results) ...[
+              result,
+              const Divider(),
+            ]
+          else
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
         ],
       ),
     );
