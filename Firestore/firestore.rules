@@ -176,7 +176,7 @@ service cloud.firestore {
       && isToolValid(false);
       
       // allow creation if the user is authenticated and verified
-      allow create: if isEmailVerified()
+      allow create: if false && isEmailVerified()
       // and has an ID number
       && hasID()
       && hasCustomerAndSource()
