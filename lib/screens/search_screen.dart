@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:algolia/algolia.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/misc/constants.dart';
 import 'package:rentool/screens/post_screen.dart';
-import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/rentool_search_bar.dart';
 import 'package:rentool/widgets/tool_tile.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
@@ -20,14 +20,23 @@ class _SearchScreenState extends State<SearchScreen> {
   bool readArguments = false;
   late TextEditingController _controller;
 
-  late List<QueryDocumentSnapshot<Object>> results;
+  late List<Widget> results;
+
+  final algolia = const Algolia.init(
+    applicationId: angoliaAppId,
+    apiKey: angoliaApiKey,
+  );
 
   _search() async {
-    var searchKey = _controller.text;
-    var res = await FirestoreServices.searchForTool(searchKey);
-    setState(() {
-      if (res is List<QueryDocumentSnapshot<Object>>) results = res;
-    });
+    var searchKey = _controller.text.trim();
+    if (searchKey.isEmpty) return;
+    var res = await algolia.index('tools').query(searchKey).getObjects();
+    results.clear();
+    for (var item in res.hits) {
+      final widget = _buildResultContainer(item);
+      results.add(widget);
+    }
+    setState(() {});
   }
 
   @override
@@ -79,7 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
           for (var result in results) ...[
-            _buildResultContainer(result),
+            result,
             const Divider(),
           ],
         ],
@@ -87,10 +96,12 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildResultContainer(QueryDocumentSnapshot<Object> result) {
+  Widget _buildResultContainer(AlgoliaObjectSnapshot result) {
     Tool tool = Tool.fromJson(
-      Map.from(result.data() as Map<dynamic, dynamic>)..addAll({'id': result.id}),
+      Map.from(result.data)..addAll({'id': result.objectID}),
     );
+
+    print('Tool: ${tool.toJson()}');
 
     return ToolTile(
       tool: tool,
