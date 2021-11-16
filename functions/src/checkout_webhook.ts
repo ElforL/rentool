@@ -1,9 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { refundPayment } from './checkout_functions';
-// import Checkout from 'checkout-sdk-node';
 
-// const cko = new Checkout(functions.config().checkout.sec_key);
 const db = admin.firestore();
 try {
   db.settings({ ignoreUndefinedProperties: true });
