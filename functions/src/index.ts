@@ -13,9 +13,6 @@ export * from './return_meeting';
 export * from './checkout';
 export * from './checkout_webhook';
 export * from './users';
-if (!isOnGithubActions){
-    console.log('NOT IN GITHUB ACTIONS');
+console.log(`GITHUB ACTIONS: ${isOnGithubActions}`);
+if (!isOnGithubActions)
     exports.fcm = require('./fcm');
-}else{
-    console.log('IN GITHUB ACTIONS');
-}
