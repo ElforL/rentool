@@ -38,10 +38,11 @@ class _HomePageState extends State<HomePage> {
       appBar: RentoolSearchAppBar(
         textFieldContoller: _searchController,
         onSubmitted: (value) async {
+          if (value.trim().isEmpty) return;
           await Navigator.pushNamed(
             context,
             SearchScreen.routeName,
-            arguments: value,
+            arguments: value.trim(),
           );
           setState(() {
             _searchController.clear();
