@@ -4,8 +4,10 @@
 
 import { Checkout } from 'checkout-sdk-node';
 import * as admin from 'firebase-admin';
+import { config } from 'firebase-functions';
 
-const cko = new Checkout('sk_test_f1a1d5bb-9b4b-4660-b6b8-f769158fa21e');
+const env = config();
+const cko = new Checkout(env.checkout.sec_key);
 
 export async function refundPayment(
   payment_id: string,
