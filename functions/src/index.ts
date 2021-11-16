@@ -16,4 +16,6 @@ export * from './users';
 if (!isOnGithubActions){
     console.log('NOT IN GITHUB ACTIONS');
     exports.fcm = require('./fcm');
+}else{
+    console.log('IN GITHUB ACTIONS');
 }
