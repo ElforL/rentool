@@ -109,8 +109,6 @@ class _SearchScreenState extends State<SearchScreen> {
       Map.from(result.data)..addAll({'id': result.objectID}),
     );
 
-    print('Tool: ${tool.toJson()}');
-
     return ToolTile(
       tool: tool,
       onTap: () {
