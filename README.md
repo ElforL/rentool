@@ -1,10 +1,10 @@
 # Rentool
 
-
 A Tools Rental E-Commerce Platform. A mobile app and a website for users tom post their tools for rent and to rent other users' tools.
 
 Link: https://rentool.site
 
+[![CI_badge](https://github.com/ElforL/rentool/actions/workflows/ci.yml/badge.svg)](https://github.com/ElforL/rentool/actions/workflows/ci.yml)
 ## Links
 [Website](https://rentool.site),
 [Android apk](https://github.com/ElforL/rentool/releases)
