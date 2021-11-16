@@ -1,6 +1,21 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { addNotification } from './fcm';
+import *  as algolia from 'algoliasearch';
+
+const env = functions.config();
+const algoliIndex = algolia.default(env.algolia.appid, env.algolia.apikey).initIndex('tools');
+
+export const toolCreated = functions.firestore.document('Tools/{toolID}')
+  .onCreate((snapshot, context) => {
+    const toolID = snapshot.id;
+    const data = snapshot.data();
+
+    return algoliIndex.saveObject({
+      objectID: toolID,
+      ...data
+    });
+  });
 
 /**
  * handle tools' `acceptedRequestID` field changes
@@ -11,11 +26,16 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
   .onUpdate(async (change, context) => {
     const oldData = change.before.data();
     const newData = change.after.data();
+    const toolID = change.after.id;
+
+    await algoliIndex.partialUpdateObject({
+      objectID: toolID,
+      ...newData
+    });
 
     /** did `acceptedRequestID` field changed */
     const changedAcceptedID = oldData.acceptedRequestID != newData.acceptedRequestID;
     if (changedAcceptedID) {
-      const toolID = change.after.id;
       const oldRequestID = oldData.acceptedRequestID;
       const newRequestID = newData.acceptedRequestID;
       if (newRequestID != null) {
@@ -124,8 +144,10 @@ export const toolDeleted = functions.firestore.document('Tools/{toolID}')
 
     const toolID = context.params.toolID;
 
+    await algoliIndex.deleteObject(toolID);
+
     try {
-      await admin.storage().bucket(`rentool-5a78c.appspot.com`).deleteFiles({prefix: `tools_media/${toolID}/`})
+      await admin.storage().bucket(`rentool-5a78c.appspot.com`).deleteFiles({ prefix: `tools_media/${toolID}/` })
     } catch (error) {
       functions.logger.error(error);
     }
