@@ -20,3 +20,6 @@ const dmcaEmailAddress = 'dmca@rentool.site';
 const helpEmailAddress = 'help@rentool.site';
 
 const siteDomain = 'https://rentool.site';
+
+const angoliaAppId = '98BEXO9QS8';
+const angoliaApiKey = '2c82b0b3e22f83cb7fe91027888e042b';
