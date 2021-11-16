@@ -4,7 +4,8 @@ import * as admin from 'firebase-admin';
 
 let prodAdmin: admin.app.App;
 const isOnLocalEmulator = process.env.FUNCTIONS_EMULATOR == 'true';
-if (isOnLocalEmulator) {
+const isOnGithubActions = process.env.GITHUB_ACTIONS == 'true';
+if (isOnLocalEmulator && !isOnGithubActions) {
   console.log('function running in local emulator');
   const serviceAccount = require('../secret/rentool-5a78c-firebase-adminsdk.json');
   prodAdmin = admin.initializeApp(
