@@ -1,9 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { refundPayment } from './checkout_functions';
-// import Checkout from 'checkout-sdk-node';
 
-// const cko = new Checkout(functions.config().checkout.sec_key);
 const db = admin.firestore();
 try {
   db.settings({ ignoreUndefinedProperties: true });
@@ -13,6 +11,10 @@ try {
  * Handle the requests from the webhook
  */
 export const payments = functions.https.onRequest(async (request, response) => {
+  if (typeof functions.config().checkout == 'undefined') {
+    response.sendStatus(500);
+    return;
+  }
   // Authorization
   if (request.get('authorization') !== functions.config().checkout.webhook1_key) {
     response.sendStatus(401);

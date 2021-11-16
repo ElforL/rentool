@@ -2,7 +2,10 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { Checkout } from 'checkout-sdk-node';
 
-const cko = new Checkout(functions.config().checkout.sec_key);
+const env = functions.config();
+let cko: Checkout | undefined;
+if (typeof env.checkout != 'undefined')
+  cko = new Checkout(functions.config().checkout.sec_key);
 
 /**
 * Create a payment source using a token provided by the user.
@@ -45,7 +48,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
     },
   }
 
-  if (context.auth == null) {
+  if (context.auth == null || cko == null) {
     return response;
   }
   if (context.auth!.token.email_verified !== true) {
@@ -83,7 +86,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
       const cko_customer: any = await cko.customers.get(email);
       await cko_customer.instruments.forEach(async (element: any) => {
         try {
-          await cko.instruments.delete(element.id);
+          await cko!.instruments.delete(element.id);
         } catch (_) { }
       });
       cko.customers.update(cko_customer.id, { 'name': uid });
@@ -144,7 +147,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
       batch.set(admin.firestore().doc(`Users/${uid}/private/checklist`), {
         'hasCard': true,
         'cardPayouts': result.source.payouts ?? payoutsBasedOnName,
-  }, { merge: true });
+      }, { merge: true });
 
       batch.set(userCkoDoc, {
         'init_payment_id': result.id,
@@ -249,7 +252,7 @@ export const deleteCard = functions.https.onCall(async (data, context) => {
     },
   }
 
-  if (context.auth?.uid == null || context.auth.token.email == null) {
+  if (context.auth?.uid == null || context.auth.token.email == null || cko == null) {
     return response;
   }
   const uid = context.auth.uid;
