@@ -7,7 +7,10 @@ import * as admin from 'firebase-admin';
 import { config } from 'firebase-functions';
 
 const env = config();
-const cko = new Checkout(env.checkout.sec_key);
+let cko: Checkout | undefined;
+if (typeof env.checkout != 'undefined') {
+  cko = new Checkout(env.checkout.sec_key);
+}
 
 export async function refundPayment(
   payment_id: string,
@@ -23,7 +26,7 @@ export async function refundPayment(
     'metadata': payment_reference_metadata ?? {},
   })).id;
 
-  return cko.payments.refund(
+  return cko?.payments.refund(
     payment_id,
     {
       'amount': amount,
@@ -55,7 +58,7 @@ export async function chargeCustomer(
     'metadata': payment_reference_metadata ?? {},
   })).id;
 
-  return cko.payments.request({
+  return cko?.payments.request({
     'source': {
       'type': 'customer',
       'id': cus_id
@@ -152,6 +155,7 @@ export function payOutCard(
   } else if (cus_id != null && !RegExp('^(cus)_(\\w{26})$').test(cus_id)) {
     throw Error(`Invalid argments: invalid customer id: ${cus_id}`);
   }
+  if (cko == null) return Promise.resolve({});
 
   return cko.payments.request({
     "destination": {
