@@ -4,13 +4,18 @@ import { addNotification } from './fcm';
 import *  as algolia from 'algoliasearch';
 
 const env = functions.config();
-const algoliIndex = algolia.default(env.algolia.appid, env.algolia.apikey).initIndex('tools');
+let algoliIndex: algolia.SearchIndex | undefined;
+if (typeof env.algolia != 'undefined') {
+  algoliIndex = algolia.default(env.algolia.appid, env.algolia.apikey).initIndex('tools');
+}
 
 export const toolCreated = functions.firestore.document('Tools/{toolID}')
   .onCreate((snapshot, context) => {
     const toolID = snapshot.id;
     const data = snapshot.data();
-
+    
+    if(algoliIndex == null) return null;
+    
     return algoliIndex.saveObject({
       objectID: toolID,
       ...data
@@ -28,7 +33,7 @@ export const toolUpdated = functions.firestore.document('Tools/{toolID}')
     const newData = change.after.data();
     const toolID = change.after.id;
 
-    await algoliIndex.partialUpdateObject({
+    await algoliIndex?.partialUpdateObject({
       objectID: toolID,
       ...newData
     });
@@ -144,7 +149,7 @@ export const toolDeleted = functions.firestore.document('Tools/{toolID}')
 
     const toolID = context.params.toolID;
 
-    await algoliIndex.deleteObject(toolID);
+    await algoliIndex?.deleteObject(toolID);
 
     try {
       await admin.storage().bucket(`rentool-5a78c.appspot.com`).deleteFiles({ prefix: `tools_media/${toolID}/` })
