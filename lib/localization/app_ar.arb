@@ -281,7 +281,7 @@
     "language": "اللغة",
     "theme": "المظهر",
     "support": "الدعم",
-    "help_center": "مركز المساعدة",
+    "help_contact_us": "تواصل مع فريق المساعدة",
     "report_an_issue": "التبليغ عن مشكلة",
     "about": "عن",
     "privacy_policy": "سياسة الخصوصية",
@@ -440,6 +440,8 @@
 
     "rent_price_must_greater_than_zero": "يجب أن يكون سعر الإيجار أكبر من 0",
     "insurance_must_greater_than_zero": "يجب أن يكون مبلغ التأمين أكبر من 0",
+
+    "contact_support": "تواصل مع الدعم",
 
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

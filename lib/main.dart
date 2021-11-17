@@ -32,6 +32,7 @@ import 'package:rentool/screens/return_meet_screen.dart';
 import 'package:rentool/screens/reviews_screen.dart';
 import 'package:rentool/screens/search_screen.dart';
 import 'package:rentool/screens/settings_screen.dart';
+import 'package:rentool/screens/terms_screen.dart';
 import 'package:rentool/screens/user_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/cloud_messaging.dart';
@@ -292,6 +293,8 @@ class _MyAppState extends State<MyApp> {
       },
       routes: {
         '/': (context) => const FirstScreen(),
+        TermsScreen.tosRouteName: (context) => const TermsScreen(isTos: true),
+        TermsScreen.privacyPolicyRouteName: (context) => const TermsScreen(isTos: false),
         EditPostScreen.routeNameNew: (context) => const EditPostScreen(),
         EditPostScreen.routeNameEdit: (context) => const EditPostScreen(isEditing: true),
         DeliverMeetScreen.routeName: (context) => const DeliverMeetScreen(),

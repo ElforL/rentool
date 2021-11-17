@@ -5,6 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/main.dart';
 import 'package:rentool/misc/constants.dart';
 import 'package:rentool/misc/misc.dart';
+import 'package:rentool/screens/terms_screen.dart';
+import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/settings_services.dart';
 import 'package:rentool/widgets/list_label.dart';
 import 'package:rentool/widgets/loading_indicator.dart';
@@ -45,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             }
             return ListView(
               children: [
-                if (!kIsWeb) ...[
+                if (!kIsWeb || AuthServices.currentUser != null) ...[
                   ListLabel(
                     text: AppLocalizations.of(context)!.notifications,
                   ),
@@ -102,56 +104,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }
                   },
                 ),
-                ListTile(
-                  // for future: dark theme
-                  enabled: false,
-                  leading: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
-                  title: Text(AppLocalizations.of(context)!.theme),
-                  subtitle: Text(_themeSubtitle()),
-                  onTap: () async {
-                    final result = await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return SingleChoiceSettingScreen(
-                            title: Text(AppLocalizations.of(context)!.theme),
-                            selectedValue: settings.getdarkTheme(),
-                            choices: [
-                              SettingChoice(
-                                displayWidget: Text(
-                                  AppLocalizations.of(context)!.device_default('').replaceFirst(': ', ''),
-                                ),
-                                value: null,
-                              ),
-                              SettingChoice(
-                                displayWidget: Text(AppLocalizations.of(context)!.light),
-                                value: false,
-                              ),
-                              SettingChoice(
-                                displayWidget: Text(AppLocalizations.of(context)!.dark),
-                                value: true,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    );
-
-                    if (result is bool || result == null) {
-                      await settings.setdarkTheme(result);
-                      setState(() {});
-                      // MyApp.of(context)?.setDarkTheme(result);
-                    }
-                  },
-                ),
                 const SizedBox(height: 20),
                 ListLabel(
                   text: AppLocalizations.of(context)!.support,
                 ),
                 ListTile(
-                  leading: const Icon(Icons.help_center),
-                  title: Text(AppLocalizations.of(context)!.help_center),
+                  leading: const Icon(Icons.support),
+                  title: Text(AppLocalizations.of(context)!.contact_support),
                   onTap: () {
-                    // TODO create Help center
+                    launchUrl('mailto:$supportEmailAddress');
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.help),
+                  title: Text(AppLocalizations.of(context)!.help_contact_us),
+                  onTap: () {
+                    launchUrl('mailto:$helpEmailAddress');
                   },
                 ),
                 ListTile(
@@ -173,14 +141,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   leading: const Icon(Icons.privacy_tip),
                   title: Text(AppLocalizations.of(context)!.privacy_policy),
                   onTap: () {
-                    // TODO create Privacy policy
+                    Navigator.of(context).pushNamed(TermsScreen.privacyPolicyRouteName);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.article),
                   title: Text(AppLocalizations.of(context)!.tos),
                   onTap: () {
-                    // TODO create User agreement
+                    Navigator.of(context).pushNamed(TermsScreen.tosRouteName);
                   },
                 ),
                 ListTile(

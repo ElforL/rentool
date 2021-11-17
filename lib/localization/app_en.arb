@@ -561,8 +561,8 @@
     "@support": {
         "description": "created to be used in settings screen"
     },
-    "help_center": "Help center",
-    "@help_center": {
+    "help_contact_us": "Contact help team",
+    "@help_contact_us": {
         "description": "created to be used in settings screen"
     },
     "report_an_issue": "Report an issue",
@@ -964,6 +964,8 @@
 
     "rent_price_must_greater_than_zero": "Rent price must be greater than 0",
     "insurance_must_greater_than_zero": "Insurance amount must be greater than 0",
+
+    "contact_support": "Contact support",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
