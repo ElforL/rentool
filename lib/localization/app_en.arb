@@ -577,8 +577,8 @@
     "@privacy_policy": {
         "description": "created to be used in settings screen"
     },
-    "user_agreement": "User agreement",
-    "@user_agreement": {
+    "tos": "Terms of Service",
+    "@tos": {
         "description": "created to be used in settings screen"
     },
     "software_licenses": "Software licenses",
