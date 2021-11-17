@@ -15,9 +15,10 @@ const supportEmailAddress = 'support@rentool.site';
 const dmcaEmailAddress = 'dmca@rentool.site';
 
 /// general help email address.
-///
-/// used for questions regarding Rentool (e.g, questions about terms of use).
 const helpEmailAddress = 'help@rentool.site';
+
+/// used for questions regarding Rentool (e.g, questions about terms of use).
+const termsEmailAddress = 'terms@rentool.site';
 
 const siteDomain = 'https://rentool.site';
 
