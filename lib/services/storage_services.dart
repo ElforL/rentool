@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -29,5 +30,21 @@ class StorageServices {
   static UploadTask uploadUserPhoto(File file, String uid) {
     // final type = fileName.substring(fileName.lastIndexOf('.'));
     return _storage.ref('/userPhotos/$uid').putFile(file);
+  }
+
+  static Future<Uint8List?> getTOS() {
+    return _storage.ref('/read_only/terms/terms_of_use.md').getData();
+  }
+
+  static Future<Uint8List?> getPrivacyPolicy() {
+    return _storage.ref('/read_only/terms/privacy_policy.md').getData();
+  }
+
+  static Future<String> getTosUrl() {
+    return _storage.ref('/read_only/terms/terms_of_use.md').getDownloadURL();
+  }
+
+  static Future<String> getPrivacyPolicyUrl() {
+    return _storage.ref('/read_only/terms/privacy_policy.md').getDownloadURL();
   }
 }
