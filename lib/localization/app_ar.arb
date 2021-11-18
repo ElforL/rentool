@@ -443,5 +443,9 @@
 
     "contact_support": "تواصل مع الدعم",
 
+    "welcome_to_rentool": "مرحبًا بك في رينتول",
+    "offer_n_rent": "أجر أدواتك واستأجر أدوات الآخرين",
+    "random_tools": "أدوات مختارة عشوائيًا",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rentool/models/deliver_meetings.dart';
@@ -113,6 +114,23 @@ class FirestoreServices {
   /// Get the tool document from Firestore.
   static Future<DocumentSnapshot<Object?>> getTool(String toolID) {
     return _toolsRef.doc(toolID).get();
+  }
+
+  /// Get the tool document from Firestore.
+  static Future<QuerySnapshot<Object?>> getRandomTool() async {
+    const autoIdAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    final randomIndex = Random().nextInt(autoIdAlphabet.length);
+    final random = autoIdAlphabet[randomIndex];
+
+    const field = 'name';
+
+    final result =
+        await _toolsRef.where(field, isLessThanOrEqualTo: random).orderBy(field, descending: true).limit(1).get();
+    if (result.docs.isEmpty) {
+      return _toolsRef.where(field, isGreaterThanOrEqualTo: random).orderBy(field).limit(1).get();
+    } else {
+      return result;
+    }
   }
 
   static Future<QuerySnapshot<Object?>> getUserTool(String uid, {int limit = 10, DocumentSnapshot? previousDoc}) {

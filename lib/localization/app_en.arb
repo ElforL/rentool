@@ -967,6 +967,10 @@
 
     "contact_support": "Contact support",
 
+    "welcome_to_rentool": "Welcome to Rentool",
+    "offer_n_rent": "Offer your tools and rent others'",
+    "random_tools": "Random tools",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
