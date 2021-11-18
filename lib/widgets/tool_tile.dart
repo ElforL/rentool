@@ -25,6 +25,7 @@ class ToolTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         child: Image.network(
           tool.media.first,
+          fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return FutureBuilder(
               future: VideoThumbnail.thumbnailData(video: tool.media.first),
