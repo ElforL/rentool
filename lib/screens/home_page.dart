@@ -253,7 +253,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildEmptyWidget() {
     return Center(
-      child: Text('Empty'),
+      child: Text(AppLocalizations.of(context)!.empty),
     );
   }
 }
