@@ -227,13 +227,12 @@ class _HomePageState extends State<HomePage> {
     var docs = <QueryDocumentSnapshot<Object?>>[];
     for (var i = 0; i < numberOfDocs; i++) {
       try {
-        print('calling');
         final result = (await FirestoreServices.getRandomTool()).docs;
         if (!docs.any((element) => element.id == result.first.id)) {
           docs.addAll(result);
         }
       } catch (e, stack) {
-        debugPrintStack(label: 'ERRRRROR $e');
+        debugPrintStack(label: e.toString(), stackTrace: stack);
       }
     }
 
