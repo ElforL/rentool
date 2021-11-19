@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
   final _searchController = TextEditingController();
 
   bool _isLoading = false;
-  bool _noMoreDocs = false;
   List<Tool> tools = [];
 
   @override
@@ -189,23 +188,11 @@ class _HomePageState extends State<HomePage> {
             // separatorBuilder: (context, index) => const Divider(),
             builder: (context) {
               // If there is no objects and no more docs
-              if (_noMoreDocs && tools.isEmpty) {
+              if (tools.isEmpty) {
                 return _buildEmptyWidget();
               }
-              final i = index % tools.length;
 
-              if (i >= tools.length) {
-                if (!_noMoreDocs) {
-                  // If at the end of the list and didn't reach the end of the list (!noMoreDocs)
-                  // then call _getDocs() and setState when Done
-                  _getRandomDocs().then((value) => setState(() {}));
-                }
-                // Show loading bar or empty if the end of the list was reached (noMoreDocs)
-                return ListTile(
-                  title: _noMoreDocs ? null : const LinearProgressIndicator(),
-                );
-              }
-              final tool = tools[i];
+              final tool = tools[index];
               return CompactToolTile(
                 tool: tool,
                 onTap: () => Navigator.pushNamed(context, PostScreen.routeName, arguments: tool),
@@ -216,16 +203,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _getRandomDocs([numberOfDocs = 10]) async {
-    if (tools.length >= 30) {
-      _noMoreDocs = true;
-      return;
-    }
+  Future<void> _getRandomDocs() async {
     if (_isLoading) return;
     _isLoading = true;
 
     var docs = <QueryDocumentSnapshot<Object?>>[];
-    for (var i = 0; i < numberOfDocs; i++) {
+    for (var i = 0; i < 30 && docs.length < 15; i++) {
       try {
         final result = (await FirestoreServices.getRandomTool()).docs;
         if (!docs.any((element) => element.id == result.first.id)) {
@@ -236,15 +219,11 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    if (docs.isEmpty) {
-      _noMoreDocs = true;
-    } else {
-      for (var doc in docs) {
-        var data = doc.data();
-        if (data is Map<String, dynamic>) {
-          final tool = Tool.fromJson(data..addAll({'id': doc.id}));
-          tools.add(tool);
-        }
+    for (var doc in docs) {
+      var data = doc.data();
+      if (data is Map<String, dynamic>) {
+        final tool = Tool.fromJson(data..addAll({'id': doc.id}));
+        tools.add(tool);
       }
     }
     _isLoading = false;
