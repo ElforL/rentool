@@ -29,13 +29,24 @@ class Tool {
   });
 
   factory Tool.fromJson(Map<String, dynamic> json) {
+    var rent = json['rentPrice'];
+    if (rent is! double) {
+      if (rent is int) rent = rent.toDouble();
+      if (rent is String) rent = double.parse(rent);
+    }
+    var insurance = json['insuranceAmount'];
+    if (insurance is! double) {
+      if (insurance is int) insurance = insurance.toDouble();
+      if (insurance is String) insurance = double.parse(insurance);
+    }
+
     return Tool(
       json['id'],
       json['ownerUID'],
       json['name'],
       json['description'],
-      json['rentPrice'],
-      json['insuranceAmount'],
+      rent,
+      insurance,
       json['media'] == null ? [] : List<String>.from(json['media']),
       json['location'],
       json['isAvailable'],
