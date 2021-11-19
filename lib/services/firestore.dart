@@ -141,6 +141,7 @@ class FirestoreServices {
     }
   }
 
+  @Deprecated('Use algolia search instead.')
   static Future<List<QueryDocumentSnapshot<Object?>>> searchForTool(String searchkey) async {
     // https://stackoverflow.com/a/56747021/12571630
     var out = await _toolsRef
