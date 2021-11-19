@@ -1,9 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CompactToolTile extends StatelessWidget {
   const CompactToolTile({
@@ -17,27 +14,6 @@ class CompactToolTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget? image;
-    if (tool.media.isNotEmpty) {
-      image = ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.network(
-          tool.media.first,
-          errorBuilder: (context, error, stackTrace) {
-            return FutureBuilder(
-              future: VideoThumbnail.thumbnailData(video: tool.media.first),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return Image.memory(snapshot.data as Uint8List);
-              },
-            );
-          },
-        ),
-      );
-    }
-
     return InkWell(
       borderRadius: BorderRadius.circular(15),
       onTap: onTap,
@@ -54,7 +30,7 @@ class CompactToolTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: image ?? const Icon(Icons.image_not_supported),
+              child: _image(),
             ),
             Text(tool.name, style: const TextStyle(fontWeight: FontWeight.bold)),
             Text(
@@ -71,5 +47,29 @@ class CompactToolTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _image() {
+    if (tool.media.isNotEmpty) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+          tool.media.first,
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return const Icon(Icons.image_not_supported);
+    }
   }
 }
