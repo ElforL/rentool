@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
     return Wrap(
       alignment: WrapAlignment.spaceAround,
       children: [
-        for (var index = 0; index < tools.length * 10; index++)
+        for (var index = 0; index < tools.length; index++)
           Builder(
             // itemCount: tools.length,
             // separatorBuilder: (context, index) => const Divider(),
