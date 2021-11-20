@@ -1,5 +1,5 @@
 # Privacy Policy
-Last updated: November 17th, 2021
+Last updated: November 20th, 2021
 
 Thank you for chosing Rentool. **Rentool is currently under development and so is the Privacy Policy**. We will update the privacy policy once development is finished. And we will send notice of these updates.
 
@@ -36,6 +36,22 @@ For the purposes of this Privacy Policy:
 
 - **You** means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.
 
+- **Tool** means any product posted on Rentool for rent.
+
+- **Owner of a tool** is the user who offered/posted the tool.
+
+- **Renter if a tool** is the user who wants to rent the tool and sent the owner a request.
+
+- **Renting a tool** means renting another user's tool. Making you the renter of the tool.
+
+- **Offering a tool** means renting your own tool for renters to send you requests to rent it. Making you the owner of the tool.
+
+- **Rent price** is the price of renting a tool per day.
+
+- **Insurance amount** is an insurance deposit sent to the owner if the tool was damaged.
+
+## Data Deletion
+If you want your data to be deleted contact us by email at support@rentool.site
 
 ## Contact Us
 If you have any questions about this Privacy Policy, You can contact us by email: terms@rentool.site
