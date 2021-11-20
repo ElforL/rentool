@@ -447,5 +447,7 @@
     "offer_n_rent": "أجر أدواتك واستأجر أدوات الآخرين",
     "random_tools": "أدوات مختارة عشوائيًا",
 
+    "optional": "اختياري",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

@@ -60,8 +60,8 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                     maxLines: 20,
                     textInputAction: TextInputAction.newline,
                     decoration: InputDecoration(
-                      filled: true,
-                      labelText: AppLocalizations.of(context)!.description,
+                      labelText:
+                          '${AppLocalizations.of(context)!.description} (${AppLocalizations.of(context)!.optional})',
                       errorText: _descriptionErrorText,
                     ),
                     onChanged: (_) {

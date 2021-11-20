@@ -971,6 +971,8 @@
     "offer_n_rent": "Offer your tools and rent others'",
     "random_tools": "Random tools",
 
+    "optional": "Optional",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
