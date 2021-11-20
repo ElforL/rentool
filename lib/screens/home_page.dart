@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
     _isLoading = true;
 
     var docs = <QueryDocumentSnapshot<Object?>>[];
-    for (var i = 0; i < 30 && docs.length < 15; i++) {
+    for (var i = 0; i < 50 && docs.length < 30; i++) {
       try {
         final result = (await FirestoreServices.getRandomTool()).docs;
         if (!docs.any((element) => element.id == result.first.id)) {
