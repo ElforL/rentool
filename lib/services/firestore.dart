@@ -122,7 +122,7 @@ class FirestoreServices {
     final randomIndex = Random().nextInt(autoIdAlphabet.length);
     final random = autoIdAlphabet[randomIndex];
 
-    const field = 'name';
+    const field = 'ownerUID';
 
     final result =
         await _toolsRef.where(field, isLessThanOrEqualTo: random).orderBy(field, descending: true).limit(1).get();
