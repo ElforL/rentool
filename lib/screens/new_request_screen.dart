@@ -79,7 +79,6 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
-                      filled: true,
                       labelText: AppLocalizations.of(context)!.number_of_days,
                       counterText: '',
                       errorText: _daysErrorText,
