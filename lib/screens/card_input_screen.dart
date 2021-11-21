@@ -91,8 +91,7 @@ class _CardInputScreenState extends State<CardInputScreen> {
                     final expYear = int.parse(card!.expiryDate.split('/')[1]) + 2000;
 
                     // Show loading indicator
-                    showDialog(
-                        context: context, builder: (context) => const Center(child: CircularProgressIndicator()));
+                    showCircularLoadingIndicator(context, barrierDismissible: false);
 
                     try {
                       // Get token
