@@ -47,7 +47,10 @@ class _SetIdDialogState extends State<SetIdDialog> {
         ],
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('CANCEL')),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(AppLocalizations.of(context)!.cancel.toUpperCase()),
+        ),
         TextButton(
           onPressed: () {
             if (_idController.text.trim().length == 10) {
@@ -58,7 +61,7 @@ class _SetIdDialogState extends State<SetIdDialog> {
               });
             }
           },
-          child: const Text('SET'),
+          child: Text(AppLocalizations.of(context)!.set.toUpperCase()),
         ),
       ],
     );
