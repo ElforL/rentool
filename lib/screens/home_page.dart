@@ -35,7 +35,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _getRandomDocs().then((value) => setState(() {}));
+    _getRandomDocs().then((value) {
+      try {
+        setState(() {});
+      } catch (_) {}
+    });
     super.initState();
   }
 

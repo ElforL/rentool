@@ -114,9 +114,11 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         );
         await FunctionsServices.updateUsername(_usernameContoller.text.trim());
 
-        setState(() => _isLoading = false);
+        try {
+          setState(() => _isLoading = false);
 
-        MyApp.of(context)?.setState(() {});
+          MyApp.of(context)?.setState(() {});
+        } catch (_) {}
       } on FirebaseAuthException catch (e) {
         _isLoading = false;
 
@@ -147,7 +149,9 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
         debugPrint('Signup non firebase error: ${e.runtimeType} - $e');
         if (e is FlutterError) debugPrintStack(stackTrace: e.stackTrace);
 
-        setState(() => _isLoading = false);
+        try {
+          setState(() => _isLoading = false);
+        } catch (_) {}
 
         showMyAlert(
           context,
