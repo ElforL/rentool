@@ -40,7 +40,8 @@ import 'package:rentool/services/settings_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_strategy/url_strategy.dart';
 
-void main() async {
+/// if the first element in [args] is a [Locale] the locale from [SharedPreferences] will be ignored
+void main(List args) async {
   // TODO avoid print statements
 
   if (kIsWeb) {
@@ -81,9 +82,14 @@ void main() async {
   CloudMessagingServices? fcmServices;
   if (!kIsWeb) fcmServices = CloudMessagingServices();
 
-  final prefs = await SharedPreferences.getInstance();
-  final langCode = prefs.getString('locale');
-  final locale = langCode != null ? Locale(langCode) : null;
+  Locale? locale;
+  if (args.first is Locale) {
+    locale = args.first;
+  } else {
+    final prefs = await SharedPreferences.getInstance();
+    final langCode = prefs.getString('locale');
+    locale = langCode != null ? Locale(langCode) : null;
+  }
 
   runApp(MyApp(fcmServices: fcmServices, locale: locale));
 }
