@@ -113,88 +113,89 @@ class _UserScreenState extends State<UserScreen> {
           ],
         ),
         body: FutureBuilder(
-            future: future,
-            builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
-              if (snapshot.hasError) {
-                print('error getting user info: ${snapshot.error}}');
-                return _buildErrorContainer(context);
-              }
-              user = snapshot.data;
+          future: future,
+          builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
+            if (snapshot.hasError) {
+              print('error getting user info: ${snapshot.error}}');
+              return _buildErrorContainer(context);
+            }
+            user = snapshot.data;
 
-              if (user == null) {
-                return _buildLoadingContainer(context);
-              }
+            if (user == null) {
+              return _buildLoadingContainer(context);
+            }
 
-              return RefreshIndicator(
-                onRefresh: () => _refresh(),
-                child: ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  controller: _scrollController,
-                  children: [
-                    _buildUserTopTile(user!, context),
-                    const Divider(color: Colors.black26, height: 20),
+            return RefreshIndicator(
+              onRefresh: () => _refresh(),
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: _scrollController,
+                children: [
+                  _buildUserTopTile(user!, context),
+                  const Divider(color: Colors.black26, height: 20),
 
-                    // Ratings
+                  // Ratings
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        AppLocalizations.of(context)!.ratings_and_reviews,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      AppLocalizations.of(context)!.ratings_and_reviews,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: RatingDisplay(
-                              rating: user!.rating,
-                              numberOfReview: user!.numOfReviews,
-                              color: Colors.orange.shade700,
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                  ReviewsScreen.routeName,
-                                  arguments: ReviewsScreenArguments(user!),
-                                );
-                              },
-                            ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RatingDisplay(
+                            rating: user!.rating,
+                            numberOfReview: user!.numOfReviews,
+                            color: Colors.orange.shade700,
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                ReviewsScreen.routeName,
+                                arguments: ReviewsScreenArguments(user!),
+                              );
+                            },
                           ),
-                          // if the displayed user isn't the current user AND the current user is SIGNED-IN.
-                          // if the current user is not signed in,
-                          // the check will be (user.uid != user.uid) which will return `false`
-                          if (user!.uid != (AuthServices.currentUid ?? user!.uid)) ...[
-                            const SizedBox(width: 10),
-                            RateUser(
-                              user: user!,
-                              afterChange: () => setState(() {}),
-                            ),
-                          ]
-                        ],
-                      ),
-                    ),
-                    const Divider(color: Colors.black26),
-
-                    // Tools
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        AppLocalizations.of(context)!.tools,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
                         ),
+                        // if the displayed user isn't the current user AND the current user is SIGNED-IN.
+                        // if the current user is not signed in,
+                        // the check will be (user.uid != user.uid) which will return `false`
+                        if (user!.uid != (AuthServices.currentUid ?? user!.uid)) ...[
+                          const SizedBox(width: 10),
+                          RateUser(
+                            user: user!,
+                            afterChange: () => setState(() {}),
+                          ),
+                        ]
+                      ],
+                    ),
+                  ),
+                  const Divider(color: Colors.black26),
+
+                  // Tools
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      AppLocalizations.of(context)!.tools,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
                       ),
                     ),
-                    _buildToolsList(context),
-                  ],
-                ),
-              );
-            }),
+                  ),
+                  _buildToolsList(context),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
