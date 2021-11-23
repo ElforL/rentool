@@ -64,6 +64,7 @@ class _MyToolsScreenState extends State<MyToolsScreen> {
         title: Text(AppLocalizations.of(context)!.myTools),
       ),
       floatingActionButton: FloatingActionButton(
+        tooltip: AppLocalizations.of(context)!.new_post,
         backgroundColor: Colors.orange,
         foregroundColor: Colors.black,
         child: const Icon(Icons.add),
