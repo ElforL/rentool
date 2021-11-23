@@ -48,7 +48,7 @@ class AuthServices {
   }
 
   /// Sign the user out
-  static void signOut([String? uuid]) async {
+  static Future<void> signOut() async {
     if (!isSignedIn) return;
 
     if (!kIsWeb) {
