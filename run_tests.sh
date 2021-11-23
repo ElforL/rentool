@@ -1,5 +1,6 @@
 # Color codes
-RED="\033[91m"
+RED="\033[31m"
+YELLOW="\033[33m"
 BLUE="\033[34m"
 MAGE="\033[35m"
 DEF="\033[0m"
@@ -20,6 +21,6 @@ else
     flutter test integration_test
 fi;
 
-echo -e ${RED}🔥🧪 Running Firestore tests${DEF}
+echo -e ${YELLOW}🔥🧪 Running Firestore tests${DEF}
 cd test/firestore_test
 npm test
