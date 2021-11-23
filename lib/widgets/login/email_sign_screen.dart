@@ -145,8 +145,8 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
             ],
           );
         }
-      } catch (e) {
-        debugPrint('Signup non firebase error: ${e.runtimeType} - $e');
+      } catch (e, stacktrace) {
+        debugPrintStack(label: 'Signup non firebase error: ${e.runtimeType} - $e', stackTrace: stacktrace);
         if (e is FlutterError) debugPrintStack(stackTrace: e.stackTrace);
 
         try {
@@ -361,6 +361,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
               child: SizedBox(
                 height: 35,
                 child: ElevatedButton(
+                  key: const Key('SubmitButton'),
                   child: _isLoading
                       ? const SizedBox(
                           height: 20,
