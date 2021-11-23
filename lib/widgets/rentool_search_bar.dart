@@ -59,6 +59,7 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
         children: [
           if (Scaffold.of(context).hasDrawer)
             IconButton(
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
               icon: const Icon(Icons.menu),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
@@ -66,6 +67,7 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
             )
           else if (Navigator.of(context).canPop())
             IconButton(
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
@@ -111,6 +113,7 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
   Widget _buildLast() {
     if (isFocused || _searchController.text.isNotEmpty) {
       return IconButton(
+        tooltip: AppLocalizations.of(context)!.cancel,
         icon: const Icon(Icons.close),
         onPressed: () {
           _searchController.clear();
@@ -118,6 +121,7 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
       );
     } else {
       return IconButton(
+        tooltip: AppLocalizations.of(context)!.search,
         icon: const Icon(Icons.search),
         onPressed: () {},
       );
