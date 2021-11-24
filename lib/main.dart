@@ -83,7 +83,7 @@ void main(List args) async {
   if (!kIsWeb) fcmServices = CloudMessagingServices();
 
   Locale? locale;
-  if (args.first is Locale) {
+  if (args.isNotEmpty && args.first is Locale) {
     locale = args.first;
   } else {
     final prefs = await SharedPreferences.getInstance();
