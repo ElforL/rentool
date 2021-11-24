@@ -26,8 +26,6 @@ class ReturnMeeting {
 
   double? compensationPrice;
 
-  bool? renterAcceptCompensationPrice;
-
   /// did the owner confirm the handover
   bool ownerConfirmHandover;
 
@@ -63,7 +61,6 @@ class ReturnMeeting {
     this.toolDamaged,
     this.renterAdmitDamage,
     this.compensationPrice,
-    this.renterAcceptCompensationPrice,
     this.ownerConfirmHandover = false,
     this.renterConfirmHandover = false,
     this.disagreementCaseID,
@@ -86,7 +83,6 @@ class ReturnMeeting {
       toolDamaged: json['toolDamaged'],
       renterAdmitDamage: json['renterAdmitDamage'],
       compensationPrice: json['compensationPrice'],
-      renterAcceptCompensationPrice: json['renterAcceptCompensationPrice'],
       ownerConfirmHandover: json['ownerConfirmHandover'],
       renterConfirmHandover: json['renterConfirmHandover'],
       disagreementCaseID: json['disagreementCaseID'],
@@ -110,7 +106,6 @@ class ReturnMeeting {
       'toolDamaged': toolDamaged,
       'renterAdmitDamage': renterAdmitDamage,
       'compensationPrice': compensationPrice,
-      'renterAcceptCompensationPrice': renterAcceptCompensationPrice,
       'ownerConfirmHandover': ownerConfirmHandover,
       'renterConfirmHandover': renterConfirmHandover,
       'disagreementCaseID': disagreementCaseID,
@@ -166,7 +161,7 @@ class ReturnMeeting {
   /// set _'compensationPrice'_ to [price]
   ///
   /// only available to the owner
-  Future<void>? setCompensationPrice(double price) {
+  Future<void>? setCompensationPrice(double? price) {
     if (isUserTheOwner) return FirestoreServices.setReturnMeetingField(tool, 'compensationPrice', price);
   }
 
@@ -250,7 +245,6 @@ class ReturnMeeting {
 
 // // Code below is the permissions for the renter and owner for each state of the meeting
 // // The code is then converted form if-else to optional(ternary) operator (?:) to paste in firestore.rules
-// 
 // class Res {
 //   late ReturnMeeting data;
 // }
@@ -270,11 +264,7 @@ class ReturnMeeting {
 //         if (resource.data.disagreementCaseResult == true) {
 //           // 👮💔
 //           if (resource.data.compensationPrice != null) {
-//             if (resource.data.renterAcceptCompensationPrice == true) {
-//               onlyAllow(['renterArrived', 'renterAcceptCompensationPrice', 'renterConfirmHandover']);
-//             } else {
-//               onlyAllow(['renterArrived', 'renterAcceptCompensationPrice']);
-//             }
+//             onlyAllow(['renterArrived', 'renterConfirmHandover']);
 //           } else {
 //             onlyAllow(['renterArrived']);
 //           }
@@ -304,20 +294,11 @@ class ReturnMeeting {
 //             if (resource.data.renterAdmitDamage == true) {
 //               // 😞 Admit damage
 //               if (resource.data.compensationPrice != null) {
-//                 if (resource.data.renterAcceptCompensationPrice == true) {
-//                   onlyAllow([
-//                     'renterArrived',
-//                     'renterAdmitDamage',
-//                     'renterAcceptCompensationPrice',
-//                     'renterConfirmHandover',
-//                   ]);
-//                 } else {
-//                   onlyAllow([
-//                     'renterArrived',
-//                     'renterAdmitDamage',
-//                     'renterAcceptCompensationPrice',
-//                   ]);
-//                 }
+//                 onlyAllow([
+//                   'renterArrived',
+//                   'renterAdmitDamage',
+//                   'renterConfirmHandover',
+//                 ]);
 //               } else {
 //                 onlyAllow(['renterArrived', 'renterAdmitDamage']);
 //               }
@@ -353,12 +334,7 @@ class ReturnMeeting {
 //         // 🤝 both arrived
 //         if (resource.data.disagreementCaseResult == true) {
 //           // 👮💔
-//           if (resource.data.renterAcceptCompensationPrice != null &&
-//               resource.data.renterAcceptCompensationPrice == true) {
-//             onlyAllow(['ownerArrived', 'ownerConfirmHandover']);
-//           } else {
-//             onlyAllow(['ownerArrived', 'compensationPrice']);
-//           }
+//           onlyAllow(['ownerArrived', 'compensationPrice', 'ownerConfirmHandover']);
 //         } else {
 //           // 👮💖
 //           onlyAllow(['ownerArrived', 'ownerConfirmHandover']);
@@ -384,12 +360,7 @@ class ReturnMeeting {
 //             // Renter responded to claims
 //             if (resource.data.renterAdmitDamage == true) {
 //               // 😞 Admit damage
-//               if (resource.data.renterAcceptCompensationPrice != null &&
-//                   resource.data.renterAcceptCompensationPrice == true) {
-//                 onlyAllow(['ownerArrived', 'toolDamaged', 'compensationPrice', 'ownerConfirmHandover']);
-//               } else {
-//                 onlyAllow(['ownerArrived', 'toolDamaged', 'compensationPrice']);
-//               }
+//               onlyAllow(['ownerArrived', 'toolDamaged', 'compensationPrice', 'ownerConfirmHandover']);
 //             } else {
 //               // 😡 Deny damage
 //               if (resource.data.ownerMediaOK == true) {

@@ -15,13 +15,12 @@ class MeetingHandoverScreen extends StatelessWidget {
     void Function() onPressed;
     String text = 'unimplemented';
 
-    if (meeting.isUserTheOwner && meeting.disagreementCaseID == null) {
+    if (meeting.isUserTheOwner && meeting.disagreementCaseID == null && meeting.compensationPrice == null) {
       // if it's the owner and there's no disagreement case go back to inspect -> set `toolDamaged` to `null`
       onPressed = () => meeting.setToolDamaged(null);
       text = AppLocalizations.of(context)!.backToInspect;
-    } else if (!meeting.isUserTheOwner && (meeting.renterAcceptCompensationPrice ?? false)) {
-      // if it's the renter and `renterAcceptCompensationPrice` is true set `renterAcceptCompensationPrice` to `false`
-      onPressed = () => meeting.setAcceptCompensationPrice(null);
+    } else if (meeting.isUserTheOwner && meeting.compensationPrice != null) {
+      onPressed = () => meeting.setCompensationPrice(null);
       text = AppLocalizations.of(context)!.backToCompPrice;
     } else {
       onPressed = () => meeting.setArrived(false);
@@ -55,7 +54,7 @@ class MeetingHandoverScreen extends StatelessWidget {
                 // TODO center the icon. it looks BAD
                 icon: CustomIcons.handshake,
               ),
-              if (meeting.compensationPrice != null && (meeting.renterAcceptCompensationPrice ?? false))
+              if (meeting.compensationPrice != null)
                 Text(
                   '${AppLocalizations.of(context)!.compensationPrice} = ${AppLocalizations.of(context)!.priceDisplay(AppLocalizations.of(context)!.sar, meeting.compensationPrice!.toString())}',
                   style: Theme.of(context).textTheme.caption,

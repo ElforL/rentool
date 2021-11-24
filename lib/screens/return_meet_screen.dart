@@ -101,7 +101,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
         if (meeting.disagreementCaseSettled!) {
           if (meeting.disagreementCaseResult!) {
             // tool damaged
-            if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
+            if (meeting.compensationPrice == null) {
               return MeetingCompensationPriceScreen(meeting: meeting);
             } else {
               return MeetingHandoverScreen(meeting: meeting);
@@ -124,7 +124,7 @@ class _ReturnMeetScreenState extends State<ReturnMeetScreen> {
               meeting: meeting,
             );
           } else if (meeting.renterAdmitDamage!) {
-            if (meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? false)) {
+            if (meeting.compensationPrice == null) {
               return MeetingCompensationPriceScreen(meeting: meeting);
             } else {
               return MeetingHandoverScreen(meeting: meeting);

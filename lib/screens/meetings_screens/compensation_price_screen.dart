@@ -95,12 +95,9 @@ class _MeetingCompensationPriceScreenState extends State<MeetingCompensationPric
                     // only digits
                     inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))],
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.black12,
-                      errorText: meeting.renterAcceptCompensationPrice ?? true
-                          ? null
-                          : AppLocalizations.of(context)!.renterRejected,
                     ),
                   ),
                 ),
@@ -133,46 +130,16 @@ class _MeetingCompensationPriceScreenState extends State<MeetingCompensationPric
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                if (meeting.compensationPrice != null && meeting.renterAcceptCompensationPrice == null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      AppLocalizations.of(context)!.youSetPriceAt(
-                        AppLocalizations.of(context)!.sar,
-                        meeting.compensationPrice!,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                else if (!(meeting.renterAcceptCompensationPrice ?? true)) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      AppLocalizations.of(context)!.renterRefuesdPrice(
-                        AppLocalizations.of(context)!.sar,
-                        meeting.compensationPrice!,
-                      ),
-                      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Text(AppLocalizations.of(context)!.setAnotherPrice),
-                ]
               ] else ...[
                 /////// Renter ///////
 
                 Text(
-                  meeting.compensationPrice == null
-                      ? AppLocalizations.of(context)!.waitingForOwnerToSetPrice
-                      : !(meeting.renterAcceptCompensationPrice ?? true)
-                          ? AppLocalizations.of(context)!.waitingForOwnerToSetNewPrice
-                          : AppLocalizations.of(context)!.theOwnerSetPriceAt,
+                  AppLocalizations.of(context)!.waitingForOwnerToSetPrice,
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  meeting.compensationPrice == null || !(meeting.renterAcceptCompensationPrice ?? true)
+                  meeting.compensationPrice == null
                       ? '- - -'
                       : AppLocalizations.of(context)!.priceDisplay(
                           AppLocalizations.of(context)!.sar,
@@ -181,31 +148,6 @@ class _MeetingCompensationPriceScreenState extends State<MeetingCompensationPric
                   style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.black),
                 ),
                 const SizedBox(height: 50),
-                if (meeting.compensationPrice != null && meeting.renterAcceptCompensationPrice == null) ...[
-                  Text(AppLocalizations.of(context)!.doYouAgreeOnPrice),
-                  SizedBox(
-                    width: 150,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.thumb_up),
-                      label: Text(AppLocalizations.of(context)!.agree),
-                      onPressed: () => meeting.setAcceptCompensationPrice(true),
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 150,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.thumb_down),
-                      label: Text(AppLocalizations.of(context)!.disagree),
-                      onPressed: () => meeting.setAcceptCompensationPrice(false),
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
-                    ),
-                  ),
-                ] else if (!(meeting.renterAcceptCompensationPrice ?? true))
-                  Text(AppLocalizations.of(context)!.youRejectedPriceOf(
-                    AppLocalizations.of(context)!.sar,
-                    meeting.compensationPrice!,
-                  )),
               ],
             ],
           ),
