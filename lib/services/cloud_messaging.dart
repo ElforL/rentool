@@ -21,7 +21,7 @@ class CloudMessagingServices {
     NotificationSettings settings = await _fcm.requestPermission();
 
     // Initialize flutterLocalNotificationsPlugin
-    const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/noti_icon');
     const initializationSettingsIOS = IOSInitializationSettings();
     const initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
