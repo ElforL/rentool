@@ -201,8 +201,9 @@ class _CardInputScreenState extends State<CardInputScreen> {
   }
 
   handleUnsuccessfulFunctionResponse(FunctionResponse result) {
+    // Pop loading indicator
+    Navigator.pop(context);
     if (result.error is! Map) {
-      Navigator.pop(context);
       return showIconErrorDialog(
         context,
         AppLocalizations.of(context)!.errorInfo + '\n: Code:${result.statusCode}',
