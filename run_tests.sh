@@ -12,6 +12,13 @@ then
     exit;
 fi
 
+password="HardPass@20"
+adminEmailAddress="admin@test.com"
+emailVerifiedEmail="verf@test.com"
+
+echo -e 🏗 Setting up
+node test/firestore_test/lib/setup_tests.js $password $adminEmailAddress $emailVerifiedEmail
+
 if [ "`adb devices`" = "List of devices attached" ]
 then
     echo -e "${RED}Skipping Flutter integration tests. \"adb devices\" detected no devices.$DEF"
