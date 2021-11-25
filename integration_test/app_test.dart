@@ -40,23 +40,19 @@ void main() {
         return widget is TextField && (widget.decoration?.labelText == AppLocalizationsEn().form_confirm_password);
       });
 
-      final Finder btn = find.byKey(const Key('SubmitButton'));
-
       expect(emailTf, findsOneWidget);
 
       await tester.enterText(emailTf, myEmail);
-
-      await tester.tap(btn);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
       expect(find.byType(TextField), findsNWidgets(4));
 
       await tester.enterText(usernameTf, myName);
-
       await tester.enterText(passwordTf, myPassword);
       await tester.enterText(confirmPasswordTf, myPassword);
 
-      await tester.tap(btn);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
       expect(find.byType(HomePage), findsOneWidget);
@@ -92,19 +88,17 @@ void main() {
           return widget is TextField && (widget.decoration?.labelText == AppLocalizationsEn().password);
         });
 
-        final Finder btn = find.byKey(const Key('SubmitButton'));
-
         expect(emailTf, findsOneWidget);
         await tester.enterText(emailTf, myEmail);
 
-        await tester.tap(btn);
+        await tester.testTextInput.receiveAction(TextInputAction.done);
         await tester.pumpAndSettle();
 
         expect(find.byType(TextField), findsNWidgets(2));
 
         await tester.enterText(passwordTf, myPassword);
 
-        await tester.tap(btn);
+        await tester.testTextInput.receiveAction(TextInputAction.done);
         await tester.pumpAndSettle();
 
         expect(find.byType(HomePage), findsOneWidget);
@@ -138,6 +132,7 @@ void main() {
         expect(idTf, findsOneWidget);
 
         await tester.enterText(idTf, myId);
+        await tester.testTextInput.receiveAction(TextInputAction.done);
         await tester.tap(find.text(AppLocalizationsEn().set.toUpperCase()));
         await tester.pumpAndSettle();
 
