@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:rentool/main.dart' as app;
+import 'package:rentool/screens/card_input_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -112,18 +114,11 @@ void main() {
     testWidgets(
       'FR4- The system must allow the user to enter his/her ID number.',
       (WidgetTester tester) async {
+        await ensureUserSignedIn(emailVerifiedEmail, myPassword);
+
         await tester.pumpAndSettle();
 
-        final Finder drawerBtn = find.byTooltip(const DefaultMaterialLocalizations().openAppDrawerTooltip);
-        await tester.tap(drawerBtn);
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.byType(UserListTile));
-        await tester.pumpAndSettle();
-
-        final Finder accountSettingsBtn = find.text(AppLocalizationsEn().account_settings.toUpperCase());
-        await tester.tap(accountSettingsBtn);
-        await tester.pumpAndSettle();
+        await gotoAccountSettings(tester);
 
         expect(find.text(AppLocalizationsEn().no_id_number), findsOneWidget);
         await tester.tap(find.text(AppLocalizationsEn().set_id_number.toUpperCase()));
@@ -148,5 +143,126 @@ void main() {
         expect(idTest, myId);
       },
     );
+    testWidgets(
+      'FR9 & FR10 Invalid card will be declined',
+      (WidgetTester tester) async {
+        await ensureUserSignedIn(emailVerifiedEmail, myPassword);
+        await tester.pumpAndSettle();
+        await gotoAccountSettings(tester);
+
+        // Go to payment settings page
+        await tester.tap(find.text(AppLocalizationsEn().payment_settings));
+        await tester.pumpAndSettle();
+
+        // Tap "Enter you card" button
+        await tester.tap(find.text(AppLocalizationsEn().enter_card.toUpperCase()));
+        await tester.pumpAndSettle();
+
+        // should to be in the input form
+        expect(find.byType(CardInputScreen), findsOneWidget);
+
+        final cardNumberTf = find.byWidgetPredicate((widget) {
+          return widget is TextField && widget.decoration?.labelText == AppLocalizationsEn().card_number;
+        });
+
+        // Card number
+        expect(cardNumberTf, findsOneWidget);
+        await tester.enterText(cardNumberTf, '4242424242424242');
+        await tester.testTextInput.receiveAction(TextInputAction.next);
+        // Expiry date
+        tester.testTextInput.enterText('0133');
+        await tester.testTextInput.receiveAction(TextInputAction.next);
+        // CCV
+        tester.testTextInput.enterText('120');
+        await tester.testTextInput.receiveAction(TextInputAction.next);
+        // Name
+        tester.testTextInput.enterText('Foo Bar');
+        await tester.testTextInput.receiveAction(TextInputAction.next);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text(AppLocalizationsEn().submit.toUpperCase()));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.text(AppLocalizationsEn().card_declined + '.'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'FR9 & FR10 Valid card will be accepted',
+      (WidgetTester tester) async {
+        await ensureUserSignedIn(emailVerifiedEmail, myPassword);
+        await tester.pumpAndSettle();
+        await gotoAccountSettings(tester);
+
+        // Go to payment settings page
+        await tester.tap(find.text(AppLocalizationsEn().payment_settings));
+        await tester.pumpAndSettle();
+
+        // Tap "Enter you card" button
+        await tester.tap(find.text(AppLocalizationsEn().enter_card.toUpperCase()));
+        await tester.pumpAndSettle();
+
+        // should to be in the input form
+        expect(find.byType(CardInputScreen), findsOneWidget);
+
+        final cardNumberTf = find.byWidgetPredicate((widget) {
+          return widget is TextField && widget.decoration?.labelText == AppLocalizationsEn().card_number;
+        });
+
+        // Card number
+        expect(cardNumberTf, findsOneWidget);
+        await tester.enterText(cardNumberTf, '4242424242424242');
+        await tester.testTextInput.receiveAction(TextInputAction.next);
+        // Expiry date
+        tester.testTextInput.enterText('0133');
+        await tester.testTextInput.receiveAction(TextInputAction.next);
+        // CCV
+        tester.testTextInput.enterText('100');
+        await tester.testTextInput.receiveAction(TextInputAction.next);
+        // Name
+        tester.testTextInput.enterText('Foo Bar');
+        await tester.testTextInput.receiveAction(TextInputAction.next);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text(AppLocalizationsEn().submit.toUpperCase()));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.text(AppLocalizationsEn().success), findsOneWidget);
+      },
+    );
   });
+}
+
+/// returns immediately if `AuthServices.currentUser != null`
+///
+/// otherwise, it logs in the user with [myEmail] and [myPassword].
+/// OR, creates a new user if it caught a [FirebaseException] during login.
+Future<void> ensureUserSignedIn(String myEmail, String myPassword) async {
+  if (AuthServices.currentUser != null) return;
+  try {
+    await AuthServices.signInWithEmailAndPassword(myEmail, myPassword);
+  } on FirebaseException catch (_) {
+    await AuthServices.createUserWithEmailAndPassword(myEmail, myPassword);
+  }
+}
+
+/// Navigates to the account settings **from the home page**
+///
+/// Steps:
+/// 1. press the 'open drawer' button on the AppBar
+/// 2. press on the user tile
+/// 3. press on the account settings button
+Future<void> gotoAccountSettings(WidgetTester tester) async {
+  final Finder drawerBtn = find.byTooltip(const DefaultMaterialLocalizations().openAppDrawerTooltip);
+  await tester.tap(drawerBtn);
+  await tester.pumpAndSettle();
+
+  await tester.tap(find.byType(UserListTile));
+  await tester.pumpAndSettle();
+
+  final Finder accountSettingsBtn = find.text(AppLocalizationsEn().account_settings.toUpperCase());
+  await tester.tap(accountSettingsBtn);
+  await tester.pumpAndSettle();
 }
