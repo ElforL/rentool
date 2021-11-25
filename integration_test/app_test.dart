@@ -12,10 +12,14 @@ import 'package:rentool/widgets/user_listtile.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  const myEmail = 'fooBar@test.com';
+  const newEmail = 'fooBar@test.com';
   const myName = 'FooBar';
-  const myPassword = 'HardPass@20';
+  const myPassword = String.fromEnvironment('password');
   const myId = '1122334455';
+
+  /// the email address of an email verified account
+  const emailVerifiedEmail = String.fromEnvironment('emailVerifiedEmail');
+  const adminEmailAddress = String.fromEnvironment('adminEmailAddress');
 
   group('Functional Requirements', () {
     setUp(() {
@@ -42,7 +46,7 @@ void main() {
 
       expect(emailTf, findsOneWidget);
 
-      await tester.enterText(emailTf, myEmail);
+      await tester.enterText(emailTf, newEmail);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
 
@@ -89,7 +93,7 @@ void main() {
         });
 
         expect(emailTf, findsOneWidget);
-        await tester.enterText(emailTf, myEmail);
+        await tester.enterText(emailTf, emailVerifiedEmail);
 
         await tester.testTextInput.receiveAction(TextInputAction.done);
         await tester.pumpAndSettle();
