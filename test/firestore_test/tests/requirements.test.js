@@ -299,6 +299,137 @@ describe("FR16.C - The system must be able to determine if a user is authorized 
 	});
 });
 
+describe("FR20 - The system must be able to determine if a user is authorized to send, edit, or remove a tool-request to a tool-post.", () => {
+	it("C- Signed in user with unverified email and no ID nor card CAN'T send a request", async () => {
+		const admin = getAdminFirestore();
+		const theirToolDoc = admin.doc(`Tools/${theirToolId}`);
+		await theirToolDoc.set(myValidTool(theirUid));
+
+		const db = getFirestore(myAuth(false));
+		const toolDoc = db.collection('Tools').doc(theirToolId);
+
+		const requestID = 'req_id';
+		const requestTestDoc = toolDoc.collection('requests').doc(requestID)
+
+		await firebase.assertFails(requestTestDoc.set(myValidRequest(theirToolId, myUid)));
+	});
+	it("C- Signed in user with verified email and no ID nor card CAN'T send a request", async () => {
+		const admin = getAdminFirestore();
+		const theirToolDoc = admin.doc(`Tools/${theirToolId}`);
+		await theirToolDoc.set(myValidTool(theirUid));
+
+		const db = getFirestore(myAuth(true));
+		const toolDoc = db.collection('Tools').doc(theirToolId);
+
+		const requestID = 'req_id';
+		const requestTestDoc = toolDoc.collection('requests').doc(requestID)
+
+		await firebase.assertFails(requestTestDoc.set(myValidRequest(theirToolId, myUid)));
+	});
+	it("C- Signed in user with verified email and card but no ID CAN'T send a request", async () => {
+		const admin = getAdminFirestore();
+		const theirToolDoc = admin.doc(`Tools/${theirToolId}`);
+		await theirToolDoc.set(myValidTool(theirUid));
+
+		const idDoc = admin.collection('Users').doc(myUid).collection('private').doc('ID');
+		await idDoc.set({ 'idNumber': 2233445566 });
+
+		const db = getFirestore(myAuth(true));
+		const toolDoc = db.collection('Tools').doc(theirToolId);
+
+		const requestID = 'req_id';
+		const requestTestDoc = toolDoc.collection('requests').doc(requestID)
+
+		await firebase.assertFails(requestTestDoc.set(myValidRequest(theirToolId, myUid)));
+	});
+	it("C- Signed in user with verified email an ID but no card CAN'T send a request", async () => {
+		const admin = getAdminFirestore();
+		const theirToolDoc = admin.doc(`Tools/${theirToolId}`);
+		await theirToolDoc.set(myValidTool(theirUid));
+
+		const cardDoc = admin.doc(`cko_users_payments/${myUid}`);
+		await cardDoc.set({
+			'customer': { 'id': 'cus_2324123' },
+			'source': { 'id': 'src_2gs324123' },
+		});
+
+		const db = getFirestore(myAuth(true));
+		const toolDoc = db.collection('Tools').doc(theirToolId);
+
+		const requestID = 'req_id';
+		const requestTestDoc = toolDoc.collection('requests').doc(requestID)
+
+		await firebase.assertFails(requestTestDoc.set(myValidRequest(theirToolId, myUid)));
+	});
+	it("C- Signed in user with verified email an ID and a card CAN send a request", async () => {
+		const admin = getAdminFirestore();
+		const theirToolDoc = admin.doc(`Tools/${theirToolId}`);
+		await theirToolDoc.set(myValidTool(theirUid));
+
+		const idDoc = admin.collection('Users').doc(myUid).collection('private').doc('ID');
+		await idDoc.set({ 'idNumber': 2233445566 });
+		const cardDoc = admin.doc(`cko_users_payments/${myUid}`);
+		await cardDoc.set({
+			'customer': { 'id': 'cus_2324123' },
+			'source': { 'id': 'src_2gs324123' },
+		});
+
+		const db = getFirestore(myAuth(true));
+		const toolDoc = db.collection('Tools').doc(theirToolId);
+
+		const requestID = 'req_id';
+		const requestTestDoc = toolDoc.collection('requests').doc(requestID)
+
+		await firebase.assertSucceeds(requestTestDoc.set(myValidRequest(theirToolId, myUid)));
+	});
+
+	it("U- Signed in user CAN'T update own request document if it's accepted", async () => {
+		const admin = getAdminFirestore();
+		const requestID = 'req_1';
+		await createToolWithRequest(admin, requestID, theirToolId, myValidTool(theirUid), myValidRequest(theirToolId, myUid, true));
+
+		const db = getFirestore(myAuth(true));
+		const testDoc = db.doc(`Tools/${theirToolId}/requests/${requestID}`);
+		await firebase.assertFails(testDoc.update({ numOfDays: 5 }));
+	});
+
+	it("D- Signed in user CAN delete own request document", async () => {
+		const admin = getAdminFirestore();
+		const requestID = 'req_1';
+		await createToolWithRequest(admin, requestID, theirToolId, myValidTool(theirUid), myValidRequest(theirToolId, myUid));
+
+		const db = getFirestore(myAuth(true));
+		const testDoc = db.doc(`Tools/${theirToolId}/requests/${requestID}`);
+		await firebase.assertSucceeds(testDoc.delete());
+	});
+	it("D- Signed in user CAN delete request on own tool", async () => {
+		const admin = getAdminFirestore();
+		const requestID = 'req_1';
+		await createToolWithRequest(admin, requestID, myToolId, myValidTool(myUid), myValidRequest(myToolId, theirUid));
+
+		const db = getFirestore(myAuth(true));
+		const testDoc = db.doc(`Tools/${myToolId}/requests/${requestID}`);
+		await firebase.assertSucceeds(testDoc.delete());
+	});
+	it("D- Signed in user CAN'T delete own request document if it's renter", async () => {
+		const admin = getAdminFirestore();
+		const requestID = 'req_1';
+		await createToolWithRequest(admin, requestID, theirToolId, myValidTool(theirUid), myValidRequest(theirToolId, myUid, true, true));
+
+		const db = getFirestore(myAuth(true));
+		const testDoc = db.doc(`Tools/${theirToolId}/requests/${requestID}`);
+		await firebase.assertFails(testDoc.delete());
+	});
+	it("D- Signed in user CAN'T delete request on own tool if it's renter", async () => {
+		const admin = getAdminFirestore();
+		const requestID = 'req_1';
+		await createToolWithRequest(admin, requestID, myToolId, myValidTool(myUid), myValidRequest(myToolId, theirUid, true, true));
+
+		const db = getFirestore(myAuth(true));
+		const testDoc = db.doc(`Tools/${myToolId}/requests/${requestID}`);
+		await firebase.assertFails(testDoc.delete());
+	});
+});
 afterAll(async () => {
 	await firebase.clearFirestoreData({ projectId: PROJECT_ID })
 });
