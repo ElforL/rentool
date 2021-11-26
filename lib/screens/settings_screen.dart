@@ -30,9 +30,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-    final isDarkMode = brightness == Brightness.dark;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
@@ -212,19 +209,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
-  }
-
-  String _themeSubtitle() {
-    final isDark = settings.getdarkTheme();
-
-    if (isDark == null) {
-      final currentTheme = Theme.of(context).brightness == Brightness.dark
-          ? AppLocalizations.of(context)!.dark
-          : AppLocalizations.of(context)!.light;
-
-      return AppLocalizations.of(context)!.device_default(currentTheme);
-    }
-    return isDark ? AppLocalizations.of(context)!.dark : AppLocalizations.of(context)!.light;
   }
 
   String _languageSubtitle() {

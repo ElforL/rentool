@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/localization/cities_localization.dart';
 
+// ignore: must_be_immutable
 class LocationDropDown extends StatefulWidget {
   LocationDropDown({
     Key? key,
