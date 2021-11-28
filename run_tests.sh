@@ -15,9 +15,10 @@ fi
 password="HardPass@20"
 adminEmailAddress="admin@test.com"
 emailVerifiedEmail="verf@test.com"
+secondEmail="second@test.com"
 
 echo -e 🏗 Setting up
-node test/firestore_test/lib/setup_tests.js $password $adminEmailAddress $emailVerifiedEmail
+node test/firestore_test/lib/setup_tests.js $password $adminEmailAddress $emailVerifiedEmail $secondEmail
 
 if [ "`adb devices`" = "List of devices attached" ]
 then
@@ -25,7 +26,7 @@ then
     echo -e "If you do have an Android device connected, this may be the result of not having 'adb' in your PATH"
 else
     echo -e $BLUE💙🧪 Running Flutter integration tests$DEF
-    flutter test integration_test --dart-define="password=HardPass@20" --dart-define="adminEmailAddress=admin@test.com" --dart-define="emailVerifiedEmail=verf@test.com"
+    flutter test integration_test --dart-define="password=HardPass@20" --dart-define="adminEmailAddress=admin@test.com" --dart-define="emailVerifiedEmail=verf@test.com" --dart-define="secondEmail=second@test.com"
 fi;
 
 echo -e ${YELLOW}🔥🧪 Running Firestore tests${DEF}

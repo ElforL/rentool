@@ -2,9 +2,10 @@ const admin = require("firebase-admin")
 
 const PROJECT_ID = "rentool-5a78c";
 
-const password = process.argv[2] //?? 'HardPass@20';
-const adminEmailAddress = process.argv[3] //?? 'admin@test.com';
-const emailVerifiedEmail = process.argv[4]// ?? 'verf@test.com';
+const password = process.argv[2] 
+const adminEmailAddress = process.argv[3] 
+const emailVerifiedEmail = process.argv[4]
+const secondEmail = process.argv[5]
 
 admin.initializeApp({
     credential: admin.credential.applicationDefault(),
@@ -29,6 +30,24 @@ function getRandomId() {
     return out;
 }
 
+
+async function createTool(user, toolName, rentPrice, insurance, location, media = []) {
+    const doc = await admin.firestore().collection('Tools').add({
+        'ownerUID': user.uid,
+        'name': toolName,
+        'description': `this the tool of ${user.displayName}\nهذه الأداة ملك لـ ${user.displayName}`,
+        'rentPrice': rentPrice,
+        'insuranceAmount': insurance,
+        'media': media,
+        'location': location,
+        'isAvailable': true,
+        'acceptedRequestID': null,
+        'currentRent': null,
+    })
+
+    console.log(`Created tool ${toolName} id= ${doc.id}, owner = ${user.displayName}`);
+}
+
 async function addUser(email, password, name, emailVerified, id, isAdmin) {
     // Add user in Auth
     const user = await admin.auth().createUser({
@@ -40,7 +59,7 @@ async function addUser(email, password, name, emailVerified, id, isAdmin) {
     });
 
     if (isAdmin == true)
-        admin.auth().setCustomUserClaims(user.uid, {'admin': true});
+        admin.auth().setCustomUserClaims(user.uid, { 'admin': true });
 
     // Set user's ID
     if (id != null)
@@ -53,3 +72,7 @@ async function addUser(email, password, name, emailVerified, id, isAdmin) {
 
 addUser(adminEmailAddress, password, 'Admin', true, getRandomId(), true);
 addUser(emailVerifiedEmail, password, 'Verified', true);
+addUser(secondEmail, password, 'Second', true, getRandomId())
+// .then(async (user) => {
+//     await createTool(user, 'The second tool', 7, 12, 'riyadh');
+// });

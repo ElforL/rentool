@@ -22,6 +22,7 @@ void main() {
   /// the email address of an email verified account
   const emailVerifiedEmail = String.fromEnvironment('emailVerifiedEmail');
   const adminEmailAddress = String.fromEnvironment('adminEmailAddress');
+  const secondEmail = String.fromEnvironment('secondEmail');
 
   group('Functional Requirements', () {
     setUp(() {
