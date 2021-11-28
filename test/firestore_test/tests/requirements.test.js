@@ -231,7 +231,7 @@ describe("FR16.A - The system must be able to determine if a user is authorized 
 		await firebase.assertSucceeds(testDoc.get());
 	});
 });
-describe("FR16.B - The system must be able to determine if a user is authorized to accept tool-requests to a certain post.", () => {
+describe("FR16.B & FR18 - The system must be able to determine if a user is authorized to accept tool-requests to a certain post.", () => {
 	it("Signed in user CAN update own tool's acceptedRequestID", async () => {
 		const admin = getAdminFirestore();
 		const myToolDoc = admin.collection('Tools').doc(myToolId);
