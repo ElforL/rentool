@@ -235,7 +235,7 @@ describe("FR16.B & FR18 - The system must be able to determine if a user is auth
 	it("Signed in user CAN update own tool's acceptedRequestID", async () => {
 		const admin = getAdminFirestore();
 		const myToolDoc = admin.collection('Tools').doc(myToolId);
-		await myToolDoc.set(myValidTool(myUid));
+		await createToolWithRequest(admin, 'newReqId', myToolId, myValidTool(myUid), myValidRequest(myToolId, theirUid), false)
 
 		const db = getFirestore(myAuth(true));
 		const testDoc = db.collection('Tools').doc(myToolId);
