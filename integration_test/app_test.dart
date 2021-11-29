@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:rentool/localization/cities_localization.dart';
 import 'package:rentool/main.dart' as app;
 import 'package:rentool/screens/card_input_screen.dart';
+import 'package:rentool/screens/edit_post_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
 import 'package:rentool/services/auth.dart';
@@ -233,6 +235,73 @@ void main() {
         expect(find.text(AppLocalizationsEn().success), findsOneWidget);
       },
     );
+
+    testWidgets('FR11 - The system must allow the user (owner) to create a new post', (WidgetTester tester) async {
+      await ensureUserSignedIn(emailVerifiedEmail, myPassword);
+      await tester.pumpAndSettle();
+
+      // Open the drawer
+      final Finder drawerBtn = find.byTooltip(const DefaultMaterialLocalizations().openAppDrawerTooltip);
+      await tester.tap(drawerBtn);
+      await tester.pumpAndSettle();
+
+      // press "my tools"
+      await tester.tap(find.text(AppLocalizationsEn().myTools));
+      await tester.pumpAndSettle();
+
+      // Press the FAB
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EditPostScreen), findsOneWidget);
+
+      // Enter tool name
+      final nameTf = find.byWidgetPredicate((widget) {
+        return widget is TextField && widget.decoration?.labelText == AppLocalizationsEn().tool_name;
+      });
+      const toolName = 'New tool';
+      await tester.enterText(nameTf, toolName);
+
+      // Enter tool description
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      tester.testTextInput.enterText('Description of New tool');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+
+      // Enter rent price
+      final rentTf = find.byWidgetPredicate((widget) {
+        return widget is TextField && widget.decoration?.labelText == AppLocalizationsEn().rentPrice;
+      });
+      await tester.enterText(rentTf, '5');
+
+      // Enter insurance
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      tester.testTextInput.enterText('20');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+
+      // Enter location
+      await tester.tap(find.text(AppLocalizationsEn().choose_a_city));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(CityLocalization.cityName('abha', 'en')).first);
+      await tester.pumpAndSettle();
+
+      // Press create
+      final createBtn = find.text(AppLocalizationsEn().create);
+      await tester.tap(createBtn);
+      await tester.pumpAndSettle();
+
+      final query = await FirestoreServices.searchForTool(toolName);
+      bool found = false;
+      for (var doc in query) {
+        var data = doc.data();
+        if (data is Map && data['name'] == toolName) {
+          found = true;
+          break;
+        }
+      }
+
+      tester.printToConsole('Found = $found');
+      expect(found, true);
+    });
   });
 }
 

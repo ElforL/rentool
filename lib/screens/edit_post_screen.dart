@@ -86,7 +86,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
             _buildTextField(
               controller: _descriptionContoller,
               labelText: AppLocalizations.of(context)!.description,
-              // textInputAction: TextInputAction.next,
               maxLines: 20,
               errorText: _descriptionErrorText,
             ),
