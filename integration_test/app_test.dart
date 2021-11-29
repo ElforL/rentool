@@ -9,8 +9,10 @@ import 'package:rentool/screens/card_input_screen.dart';
 import 'package:rentool/screens/edit_post_screen.dart';
 import 'package:rentool/screens/home_page.dart';
 import 'package:rentool/screens/login_screen.dart';
+import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
+import 'package:rentool/widgets/tool_tile.dart';
 import 'package:rentool/widgets/user_listtile.dart';
 
 void main() {
@@ -299,8 +301,57 @@ void main() {
         }
       }
 
-      tester.printToConsole('Found = $found');
       expect(found, true);
+    });
+
+    testWidgets('FR13- The system must allow the owner to edit and delete their posts', (WidgetTester tester) async {
+      await ensureUserSignedIn(emailVerifiedEmail, myPassword);
+      await tester.pumpAndSettle();
+
+      // Open the drawer
+      final Finder drawerBtn = find.byTooltip(const DefaultMaterialLocalizations().openAppDrawerTooltip);
+      await tester.tap(drawerBtn);
+      await tester.pumpAndSettle();
+
+      // press "my tools"
+      await tester.tap(find.text(AppLocalizationsEn().myTools));
+      await tester.pumpAndSettle();
+
+      // Press the first tool
+      await tester.tap(find.byType(ToolTile));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(PostScreen), findsOneWidget);
+
+      // Press the "more" button
+      await tester.tap(find.byTooltip(const DefaultMaterialLocalizations().moreButtonTooltip));
+      await tester.pumpAndSettle();
+
+      // Expect edit and delete buttons
+      expect(find.text(AppLocalizationsEn().edit), findsOneWidget);
+      expect(find.text(AppLocalizationsEn().delete), findsOneWidget);
+
+      // Press "Edit"
+      await tester.tap(find.text(AppLocalizationsEn().edit));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EditPostScreen), findsOneWidget);
+
+      // Enter tool name
+      final descriptionTf = find.byWidgetPredicate((widget) {
+        return widget is TextField && widget.decoration?.labelText == AppLocalizationsEn().description;
+      });
+      const newDescription = 'This is the new description';
+      await tester.enterText(descriptionTf, newDescription);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+
+      // Press create
+      final editBtn = find.text(AppLocalizationsEn().edit);
+      await tester.tap(editBtn);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(PostScreen), findsOneWidget);
+      expect(find.text(newDescription), findsOneWidget);
     });
   });
 }

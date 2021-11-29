@@ -82,6 +82,7 @@ class _PostScreenState extends State<PostScreen> {
                   },
                 ),
                 PopupMenuButton(
+                  tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
                   itemBuilder: (context) => [
                     if (AuthServices.isAdmin)
                       PopupMenuItem(
