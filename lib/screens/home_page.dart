@@ -169,7 +169,6 @@ class _HomePageState extends State<HomePage> {
               const Divider(),
               const SizedBox(height: 10),
               Text(
-                // TODO
                 AppLocalizations.of(context)!.random_tools.toUpperCase(),
                 style: Theme.of(context).textTheme.overline,
               ),

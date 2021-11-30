@@ -226,29 +226,6 @@ class AuthServices {
     return await auth.signInWithCredential(credential);
   }
 
-  // // TODO make sure this is the correct way
-  // // my main problem was getting the credintials
-  // // TODO if this way is correct it probably won't work for web. check Google sing in methods
-  // static Future<UserCredential> reauthenticateGoogle() async {
-  //   // Create a credential
-  //   // Trigger the authentication flow
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  //   if (googleUser == null) throw Exception('Sign in process was aborted');
-
-  //   // Obtain the auth details from the request
-  //   final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-  //   // Create a new credential
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth.accessToken,
-  //     idToken: googleAuth.idToken,
-  //   );
-
-  //   // Reauthenticate
-  //   return FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
-  // }
-
   /* ------------------ for Facebook Sign in ------------------ */
 
   static Future<UserCredential> signInWithFacebook() async {
