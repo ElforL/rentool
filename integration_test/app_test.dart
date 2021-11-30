@@ -30,7 +30,7 @@ void main() {
 
   group('Functional Requirements', () {
     setUp(() {
-      app.main([const Locale('en')]);
+      app.main();
     });
 
     testWidgets('FR2- The system must allow the user to create an account.', (WidgetTester tester) async {

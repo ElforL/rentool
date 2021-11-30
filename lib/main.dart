@@ -41,7 +41,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 /// if the first element in [args] is a [Locale] the locale from [SharedPreferences] will be ignored
-void main(List args) async {
+void main() async {
   // TODO avoid print statements
 
   if (kIsWeb) {
@@ -83,8 +83,10 @@ void main(List args) async {
   if (!kIsWeb) fcmServices = CloudMessagingServices();
 
   Locale? locale;
-  if (args.isNotEmpty && args.first is Locale) {
-    locale = args.first;
+
+  var envLocale = const String.fromEnvironment('locale');
+  if (envLocale.isNotEmpty) {
+    locale = Locale(envLocale);
   } else {
     final prefs = await SharedPreferences.getInstance();
     final langCode = prefs.getString('locale');
