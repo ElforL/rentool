@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
-export const authChange = functions.auth.user().onCreate((user, context) => {
+export const authChange = functions.region('europe-west3').auth.user().onCreate((user, context) => {
   return admin.firestore().doc(`Users/${user.uid}`).set({
     'name': user.displayName,
     'photoURL': user.photoURL,
@@ -10,7 +10,7 @@ export const authChange = functions.auth.user().onCreate((user, context) => {
   }, {merge: true});
 });
 
-export const updateUsername = functions.https.onCall(async (data, context) => {
+export const updateUsername = functions.region('europe-west3').https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
     success: boolean;
@@ -71,7 +71,7 @@ export const updateUsername = functions.https.onCall(async (data, context) => {
   }
 })
 
-export const updateUserPhoto = functions.https.onCall(async (data, context) => {
+export const updateUserPhoto = functions.region('europe-west3').https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
     success: boolean;
@@ -151,7 +151,7 @@ export const updateUserPhoto = functions.https.onCall(async (data, context) => {
 })
 
 /// paramaters => ({uid: string, reason: string})
-export const banUser = functions.https.onCall(async (data, context) => {
+export const banUser = functions.region('europe-west3').https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
     success: boolean;
@@ -261,7 +261,7 @@ export const banUser = functions.https.onCall(async (data, context) => {
   return response;
 });
 
-export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/{reviewerUID}')
+export const reviewWrite = functions.region('europe-west3').firestore.document('Users/{userID}/reviews/{reviewerUID}')
   .onWrite(async (change, context) => {
     const uid = context.params.userID;
     const reviewerUID = context.params.reviewerUID;

@@ -16,7 +16,7 @@ if (isOnLocalEmulator && !isOnGithubActions) {
   );
 }
 
-export const newNotification = functions.firestore
+export const newNotification = functions.region('europe-west3').firestore
   .document('Users/{userID}/notifications/{notificationID}')
   .onCreate(async (snapshot, context) => {
     const docData = snapshot.data()!;

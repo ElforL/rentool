@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 import { createCkoProblem, payOutCustomer, refundPayment, setPayIdToReference } from './checkout_functions';
 import { addNotification } from './fcm';
 
-export const returnMeetingUpdated = functions.firestore.document('Tools/{toolID}/return_meetings/{requestID}')
+export const returnMeetingUpdated = functions.region('europe-west3').firestore.document('Tools/{toolID}/return_meetings/{requestID}')
   .onUpdate(returnMeetingHandler);
 
 async function returnMeetingHandler(change: functions.Change<functions.firestore.QueryDocumentSnapshot>, context: functions.EventContext) {

@@ -9,6 +9,9 @@ try {
 
 /**
  * Handle the requests from the webhook
+ * 
+ * This function  [must be deployed in us-central1 for hosting redirect](
+ * https://firebase.google.com/docs/functions/locations#http_and_client-callable_functions)
  */
 export const payments = functions.https.onRequest(async (request, response) => {
   if (typeof functions.config().checkout == 'undefined') {

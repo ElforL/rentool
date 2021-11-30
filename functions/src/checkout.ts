@@ -30,7 +30,7 @@ if (typeof env.checkout != 'undefined')
 * }
 * ```
 */
-export const addSourceFromToken = functions.https.onCall(async (data, context) => {
+export const addSourceFromToken = functions.region('europe-west3').https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
     success: boolean;
@@ -234,7 +234,7 @@ export const addSourceFromToken = functions.https.onCall(async (data, context) =
   }
 });
 
-export const deleteCard = functions.https.onCall(async (data, context) => {
+export const deleteCard = functions.region('europe-west3').https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
     success: boolean;
