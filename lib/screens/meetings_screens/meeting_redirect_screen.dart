@@ -31,7 +31,7 @@ class _MeetingRedirectScreenState extends State<MeetingRedirectScreen> {
               future: doc == null ? FirestoreServices.getDeliverMeetingPrivateDoc(widget.meeting) : Future.value(doc),
               builder: (context, AsyncSnapshot<DocumentSnapshot<Object?>?> snapshot) {
                 if (snapshot.hasError) {
-                  print(AppLocalizations.of(context)!.error + ': ' + snapshot.error.toString());
+                  debugPrintStack(label: 'Error: ' + snapshot.error.toString(), stackTrace: snapshot.stackTrace);
                   return Center(
                     child: BigIcon(
                       icon: Icons.error,

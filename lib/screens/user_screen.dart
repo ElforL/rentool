@@ -116,7 +116,7 @@ class _UserScreenState extends State<UserScreen> {
           future: future,
           builder: (context, AsyncSnapshot<RentoolUser> snapshot) {
             if (snapshot.hasError) {
-              print('error getting user info: ${snapshot.error}}');
+              debugPrint('error getting user info: ${snapshot.error}}');
               return _buildErrorContainer(context);
             }
             user = snapshot.data;

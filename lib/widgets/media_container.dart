@@ -62,7 +62,7 @@ class MediaContainer extends StatelessWidget {
     } else if (type == 'video') {
       future = VideoThumbnail.thumbnailData(video: mediaURL ?? mediaFile!.path);
     } else {
-      print('Media type is not an image nor a video: $type.');
+      debugPrint('Media type is not an image nor a video: $type.');
       return _buildError(context);
     }
 
@@ -78,7 +78,7 @@ class MediaContainer extends StatelessWidget {
               return _buildLoading();
             }
             if (snapshot.data == null) {
-              print('Image bytes were null for file "${mediaFile?.path ?? mediaURL}"');
+              debugPrint('Image bytes were null for file "${mediaFile?.path ?? mediaURL}"');
               return _buildError(context);
             }
 

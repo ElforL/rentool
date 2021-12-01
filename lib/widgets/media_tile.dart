@@ -46,11 +46,11 @@ class _MediaTileState extends State<MediaTile> {
         }
         _addMedia(files);
       } else {
-        print('No files were selected.');
+        debugPrint('No files were selected.');
       }
     } on PlatformException catch (e) {
       if (e.code == 'read_external_storage_denied') {
-        print('Storage read denied');
+        debugPrint('Storage read denied');
         _showStorageDeniedDialog();
       } else {
         rethrow;

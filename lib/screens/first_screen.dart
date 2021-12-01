@@ -32,7 +32,7 @@ class FirstScreen extends StatelessWidget {
         MyApp.of(context)?.fcmServices?.init(context);
 
         if (user == null) {
-          print('User signed out');
+          debugPrint('User signed out');
           FirestoreServices.updateChecklist();
           return StreamBuilder(
             stream: Connectivity().onConnectivityChanged,
@@ -44,7 +44,7 @@ class FirstScreen extends StatelessWidget {
             },
           );
         } else {
-          print('Signed in as ${user.displayName ?? '[No Username]'} ');
+          debugPrint('Signed in as ${user.displayName ?? '[No Username]'} ');
           final settings = SettingsServices();
           settings.init().then((_) {
             if (settings.getNotificationsEnabled() == null) {
@@ -97,7 +97,7 @@ class FirstScreen extends StatelessWidget {
         deviceName = iosInfo.model;
         return [uuid, deviceName];
       default:
-        print("_getDeviceUuidAndName() doesn't support current platfrom: $defaultTargetPlatform");
+        debugPrint("_getDeviceUuidAndName() doesn't support current platfrom: $defaultTargetPlatform");
         return [null, null];
     }
   }

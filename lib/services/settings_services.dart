@@ -67,7 +67,7 @@ class SettingsServices {
           deviceName = iosInfo.model;
           break;
         default:
-          print("addFcmTokenToDb() couldn't identify current platfrom");
+          debugPrint("addFcmTokenToDb() couldn't identify current platfrom");
       }
 
       if (uuid != null && AuthServices.currentUid != null) {

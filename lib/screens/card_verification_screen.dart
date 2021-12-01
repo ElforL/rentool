@@ -20,7 +20,6 @@ class CardVerificationScreen extends StatefulWidget {
 class _CardVerificationScreenState extends State<CardVerificationScreen> {
   @override
   Widget build(BuildContext context) {
-    print(widget.url);
     return Scaffold(
       appBar: AppBar(title: const Text('3DS')),
       body: WebView(

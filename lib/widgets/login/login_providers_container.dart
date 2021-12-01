@@ -162,8 +162,9 @@ class AuthProvidersContainer extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.emailSent),
       ));
-    } on FirebaseAuthException catch (e) {
-      print('cought');
+    } on FirebaseAuthException catch (e, stack) {
+      debugPrintStack(label: e.toString(), stackTrace: stack);
+
       Navigator.pop(context);
       if (e.code == 'invalid-email') {
         showMyAlert(

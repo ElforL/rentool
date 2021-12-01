@@ -53,12 +53,12 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   _getRequest() async {
-    print('Fetching accepted request: ${tool.acceptedRequestID}');
+    debugPrint('Fetching accepted request: ${tool.acceptedRequestID}');
     var docData = await FirestoreServices.getToolRequest(tool.id, tool.acceptedRequestID);
     if (docData.data() != null) {
       setState(() {
         acceptedRequest = ToolRequest.fromJson(docData.data()!..addAll({'id': docData.id}));
-        print('Request ${tool.acceptedRequestID} fetched');
+        debugPrint('Request ${tool.acceptedRequestID} fetched');
       });
     }
   }
@@ -162,7 +162,7 @@ class _PostScreenState extends State<PostScreen> {
             if (tool.ownerUID == '...') {
               ownerFuture = Future.value(null);
             } else {
-              print('Call Firestore');
+              debugPrint('Call Firestore');
               ownerFuture = FirestoreServices.getUser(tool.ownerUID);
             }
           } else {

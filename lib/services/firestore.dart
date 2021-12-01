@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:rentool/models/deliver_meetings.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/services/auth.dart';
@@ -337,8 +338,8 @@ class FirestoreServices {
     try {
       await _usersRef.doc(uid).set(userJson);
       return true;
-    } catch (e) {
-      print(e);
+    } catch (e, stack) {
+      debugPrintStack(label: e.toString(), stackTrace: stack);
       return false;
     }
   }

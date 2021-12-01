@@ -85,9 +85,9 @@ class _BannedUsersListPageState extends State<BannedUsersListPage> {
       final entry = BannedUserEntry.fromJson(doc.data()!);
       Navigator.pop(context);
       if (widget.onTileTap != null) widget.onTileTap!(entry);
-    } catch (e) {
+    } catch (e, stack) {
       Navigator.pop(context);
-      print(e);
+      debugPrintStack(label: e.toString(), stackTrace: stack);
       showErrorDialog(
         context,
         content: e == 'noData' ? Text(AppLocalizations.of(context)!.no_results) : null,

@@ -42,8 +42,6 @@ import 'package:url_strategy/url_strategy.dart';
 
 /// if the first element in [args] is a [Locale] the locale from [SharedPreferences] will be ignored
 void main() async {
-  // TODO avoid print statements
-
   if (kIsWeb) {
     printSelfXssWarning();
     setPathUrlStrategy();
@@ -100,6 +98,7 @@ void main() async {
 ///
 /// [About Self-XSS](https://en.wikipedia.org/wiki/Self-XSS)
 void printSelfXssWarning() {
+  // ignore: avoid_print
   return print('''
   \u001B[6m\u001B[43m\u001B[31m⚠ WARNING!\u001B[0m
   \u001B[31mDo not enter or paste any code here.

@@ -52,7 +52,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             reviews.add(review);
             widgets.add(ReviewTile(review: review));
           } catch (e) {
-            print('Failed to create UserReview object for doc(${doc.reference.path}): $e');
+            debugPrint('Failed to create UserReview object for doc(${doc.reference.path}): $e');
           }
         }
         previousDoc = result.docs.last;

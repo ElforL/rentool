@@ -76,22 +76,7 @@ class CloudMessagingServices {
     });
 
     FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
-
-    FirebaseMessaging.onMessageOpenedApp.listen(
-      (message) {
-        // Navigate to page?
-        // set `isRead` to `true`
-        print(
-          '`onMessageOpenedApp` Notification: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}',
-        );
-        print('`onMessageOpenedApp`- Body: ${message.data}');
-      },
-    );
   }
 }
 
-Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
-  print(
-      '`onMessage` Noti Gang: ${message.notification?.title ?? 'no Title'}, ${message.notification?.body ?? 'no body'}');
-  print('`onBackgroundMessage`- Body: ${message.data}');
-}
+Future<void> _fcmBackgroundHandler(RemoteMessage message) async {}

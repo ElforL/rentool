@@ -114,17 +114,17 @@ class _CardInputScreenState extends State<CardInputScreen> {
                     } on ErrorResponse catch (_) {
                       return showIconErrorDialog(context, AppLocalizations.of(context)!.card_verification_invalid_data);
                     } on http.Response catch (e) {
-                      print("Error (${e.statusCode}) setting user's card!");
-                      print('-----Body-----');
-                      print(e.body);
-                      print('-----Headers-----');
-                      print(e.headers);
+                      debugPrint("Error (${e.statusCode}) setting user's card!");
+                      debugPrint('-----Body-----');
+                      debugPrint(e.body);
+                      debugPrint('-----Headers-----');
+                      debugPrint(e.headers.toString());
                       return showIconErrorDialog(
                         context,
                         AppLocalizations.of(context)!.errorInfo + ':\nCode: ${e.statusCode}',
                       );
-                    } catch (e) {
-                      print(e);
+                    } catch (e, stack) {
+                      debugPrintStack(label: e.toString(), stackTrace: stack);
                       return showIconErrorDialog(context, AppLocalizations.of(context)!.unexpected_error_occured);
                     }
                   }
@@ -156,7 +156,7 @@ class _CardInputScreenState extends State<CardInputScreen> {
           ),
         ),
       );
-      print(res?.url);
+      debugPrint(res?.url);
 
       // Pop loading indicator
       Navigator.pop(context);

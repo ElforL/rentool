@@ -169,8 +169,8 @@ class _EditRequestScreenState extends State<EditRequestScreen> {
                               request.description = _descriptionController.text;
                               request.numOfDays = daysNum;
                               Navigator.pop(context);
-                            } catch (e) {
-                              print('An unexpected error occured: $e');
+                            } catch (e, stack) {
+                              debugPrintStack(label: 'An unexpected error occured: $e', stackTrace: stack);
                               Widget? content;
                               if (e is FirebaseException) {
                                 content = Text(AppLocalizations.of(context)!.permission_denied);

@@ -78,7 +78,7 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
               )
             ],
           );
-          print(e.code);
+          debugPrint(e.code);
         }
       } catch (e) {
         setState(() => _isLoading = false);
