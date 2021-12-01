@@ -3,10 +3,12 @@ import * as admin from 'firebase-admin';
 import { addNotification } from './fcm';
 import *  as algolia from 'algoliasearch';
 
+const isOnLocalEmulator = process.env.FUNCTIONS_EMULATOR == 'true';
 const env = functions.config();
 let algoliIndex: algolia.SearchIndex | undefined;
 if (typeof env.algolia != 'undefined') {
-  algoliIndex = algolia.default(env.algolia.appid, env.algolia.apikey).initIndex('tools');
+  const index = isOnLocalEmulator ? 'tools_test' : 'tools';
+  algoliIndex = algolia.default(env.algolia.appid, env.algolia.apikey).initIndex(index);
 }
 
 export const toolCreated = functions.region('europe-west3').firestore.document('Tools/{toolID}')

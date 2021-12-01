@@ -1,6 +1,8 @@
 import 'package:algolia/algolia.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rentool/main.dart';
 import 'package:rentool/misc/constants.dart';
 import 'package:rentool/screens/post_screen.dart';
 import 'package:rentool/widgets/rentool_search_bar.dart';
@@ -32,8 +34,8 @@ class _SearchScreenState extends State<SearchScreen> {
     if (searchKey.isEmpty) return;
 
     setState(() => results.clear());
-
-    var res = await algolia.index('tools').query(searchKey).getObjects();
+    const index = emulatorOn && !kReleaseMode ? 'tools_test' : 'tools';
+    var res = await algolia.index(index).query(searchKey).getObjects();
     for (var item in res.hits) {
       final widget = _buildResultContainer(item);
       results.add(widget);

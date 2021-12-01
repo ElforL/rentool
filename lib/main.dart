@@ -40,6 +40,8 @@ import 'package:rentool/services/settings_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_strategy/url_strategy.dart';
 
+const emulatorOn = true;
+
 /// if the first element in [args] is a [Locale] the locale from [SharedPreferences] will be ignored
 void main() async {
   if (kIsWeb) {
@@ -50,7 +52,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  const emulatorOn = true;
   // Configure emulator settings
   if (emulatorOn && !kReleaseMode) {
     try {
