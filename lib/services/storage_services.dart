@@ -33,18 +33,12 @@ class StorageServices {
   }
 
   static Future<Uint8List?> getTOS() {
-    return _storage.ref('/read_only/terms/terms_of_use.md').getData();
+    final termsBucket = FirebaseStorage.instanceFor(bucket: 'gs://rentool-terms');
+    return termsBucket.ref('terms_of_use.md').getData();
   }
 
   static Future<Uint8List?> getPrivacyPolicy() {
-    return _storage.ref('/read_only/terms/privacy_policy.md').getData();
-  }
-
-  static Future<String> getTosUrl() {
-    return _storage.ref('/read_only/terms/terms_of_use.md').getDownloadURL();
-  }
-
-  static Future<String> getPrivacyPolicyUrl() {
-    return _storage.ref('/read_only/terms/privacy_policy.md').getDownloadURL();
+    final termsBucket = FirebaseStorage.instanceFor(bucket: 'gs://rentool-terms');
+    return termsBucket.ref('privacy_policy.md').getData();
   }
 }

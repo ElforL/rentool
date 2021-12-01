@@ -21,20 +21,11 @@ class TermsScreen extends StatelessWidget {
     return String.fromCharCodes(bytes);
   }
 
-  Future<String?> getAgreementFromUrl() async {
-    final url = isTos ? await StorageServices.getTosUrl() : await StorageServices.getPrivacyPolicyUrl();
-    return await http.read(Uri.parse(url));
-  }
-
   @override
   Widget build(BuildContext context) {
     final Future<String?> future;
 
-    if (kIsWeb) {
-      future = getAgreementFromUrl();
-    } else {
-      future = getAgreementBytes();
-    }
+    future = getAgreementBytes();
 
     return Scaffold(
       appBar: AppBar(
