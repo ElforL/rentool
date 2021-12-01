@@ -158,8 +158,8 @@ async function pay(
 
   if (paymentDocData.renter_sent_charge != true) {
     try {
-      await deliverMeetingDoc.collection('private').doc('payments_processing').update({ 'renter_sent_charge': true });
       await chargeRenter(renterUID, total, toolID, requestID, deliverMeetingDoc);
+      await deliverMeetingDoc.collection('private').doc('payments_processing').update({ 'renter_sent_charge': true });
     } catch (error) {
       functions.logger.debug('Failed to charge the renter', error);
       await cancelRequest(toolID);
