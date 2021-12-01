@@ -33,6 +33,10 @@ jobs:
   test_all:
     name: 🔥 🧪 Run flutter tests
     runs-on: macos-latest
+    strategy:
+      matrix:
+        device:
+          - "pixel"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -50,4 +54,4 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: sh test.sh true
+          script: avdmanager list device
