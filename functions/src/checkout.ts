@@ -125,15 +125,6 @@ export const addSourceFromToken = functions.region('europe-west3').https.onCall(
        */
       const payoutsBasedOnName = typeof result.source.name == 'string' ? (result.source.name as string).split(' ').length >= 2 : false;
 
-      /* 
-      TODO
-      if(result.source.payouts == null){
-        // check if card accepts payout
-        // 1- call support and ask for a way
-        // 2- try a payout then refund it ? (can you refund it?, maybe charge back?)
-        checkCardPayout();
-      }
-      */
       batch.set(db.doc(`Users/${uid}/private/card`), {
         'expiry_month': result.source.expiry_month,
         'expiry_year': result.source.expiry_year,
