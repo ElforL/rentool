@@ -63,24 +63,6 @@ class AuthProvidersContainer extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all(const Color(0xFF1877F2)),
               foregroundColor: MaterialStateProperty.all(Colors.white),
             ),
-            AuthProviderButton(
-              icon: Image.asset('assets/images/microsoft_icon.png'),
-              label: const Text(
-                'Sign in with Microsoft',
-                style: TextStyle(fontFamily: 'Roboto'),
-              ),
-              onPressed: () {
-                microsoftSignin(context);
-              },
-              margin: const EdgeInsets.all(5),
-              backgroundColor: MaterialStateProperty.all(const Color(0xFF2F2F2F)),
-              foregroundColor: MaterialStateProperty.all(Colors.white),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0),
-                ),
-              ),
-            ),
           ],
         ),
       ],
@@ -275,7 +257,7 @@ var signInOptions = {
   //   'backgroundColor': Colors.black,
   //   'icon': Icon(CustomIcons.apple),
   // },
-  // // Azure subscription is free for only 12 months 🤔
+  // // Has no flutter implementaion
   // 'Microsoft': {
   //   'backgroundColor': Colors.grey.shade800,
   //   'icon': Icon(CustomIcons.microsoft),

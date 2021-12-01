@@ -70,7 +70,7 @@ void main() {
     });
 
     testWidgets(
-      'FR3- The system must allow the user to log-in/sign-up using a Google, Facebook, Microsoft',
+      'FR3- The system must allow the user to log-in/sign-up using a Google, Facebook',
       (WidgetTester tester) async {
         await AuthServices.signOut();
         await tester.pumpAndSettle();
@@ -79,8 +79,6 @@ void main() {
 
         expect(find.text('SIGN IN WITH GOOGLE'), findsOneWidget);
         expect(find.text('Login with Facebook'), findsOneWidget);
-        // IF YOU REMOVE MS BUTTON, DELETE MS NAME FROM THE TEST TITLE ABOVE
-        expect(find.text('Sign in with Microsoft'), findsOneWidget);
       },
     );
 
