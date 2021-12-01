@@ -31,7 +31,7 @@ jobs:
         run: firebase emulators:exec "cd test/firestore_test && npm test"
   
   test_all:
-    name: 🔥 🧪 Run all tests
+    name: 🔥 🧪 Run flutter tests
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -46,14 +46,8 @@ jobs:
           npm ci
           npm run build
         
-      - name: ⬇ Install tests dependencies
-        working-directory: ./test/firestore_test
-        run: npm install
-      
-      - name: run tests
+      - name: 🧪 Run Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-
-      - name: 🧪 Run tests
-        run: sh test.sh
+          scrips: sh test.sh true

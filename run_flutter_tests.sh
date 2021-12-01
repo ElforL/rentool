@@ -24,12 +24,8 @@ if [ "`adb devices`" = "List of devices attached" ]
 then
     echo -e "${RED}Skipping Flutter integration tests. \"adb devices\" detected no devices.$DEF"
     echo -e "If you do have an Android device connected, this may be the result of not having 'adb' in your PATH"
-    exit 1;
+    exit 1
 else
     echo -e $BLUE💙🧪 Running Flutter integration tests$DEF
     flutter test integration_test --dart-define="password=HardPass@20" --dart-define="locale=en" --dart-define="adminEmailAddress=admin@test.com" --dart-define="emailVerifiedEmail=verf@test.com" --dart-define="secondEmail=second@test.com"
 fi;
-
-echo -e ${YELLOW}🔥🧪 Running Firestore tests${DEF}
-cd test/firestore_test
-npm test
