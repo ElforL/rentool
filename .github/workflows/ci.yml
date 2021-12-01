@@ -36,14 +36,16 @@ jobs:
     strategy:
       matrix:
         device:
-          - "pixel" 
+          - "pixel"
+          - "pixel_3_xl"
+          - "pixel_4"
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
 
       - name: 🔥 Install Firebase CLI
-        run: avdmanager list device
+        run: npm install -g firebase-tools
         
       - name: ☁ Install functions dependencies
         working-directory: ./functions
@@ -55,4 +57,5 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: avdmanager list device
+          profile: ${{ matrix.device }}
+          script: sh test.sh
