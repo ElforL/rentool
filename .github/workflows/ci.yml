@@ -36,13 +36,14 @@ jobs:
     strategy:
       matrix:
         device:
-          - "pixel"
+          - "pixel" 
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
 
       - name: 🔥 Install Firebase CLI
-        run: npm install -g firebase-tools
+        run: avdmanager list device
         
       - name: ☁ Install functions dependencies
         working-directory: ./functions
