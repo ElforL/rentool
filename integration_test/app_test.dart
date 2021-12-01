@@ -291,6 +291,7 @@ void main() {
       await tester.tap(createBtn);
       await tester.pumpAndSettle();
 
+      // ignore: deprecated_member_use_from_same_package
       final query = await FirestoreServices.searchForTool(toolName);
       bool found = false;
       for (var doc in query) {
