@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
-export const authChange = functions.region('europe-west3').auth.user().onCreate((user, context) => {
+export const newUser = functions.region('europe-west3').auth.user().onCreate((user, context) => {
   return admin.firestore().doc(`Users/${user.uid}`).set({
     'name': user.displayName,
     'photoURL': user.photoURL,
