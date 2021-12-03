@@ -7,7 +7,7 @@ export const newUser = functions.region('europe-west3').auth.user().onCreate((us
     'photoURL': user.photoURL,
     'rating': 0,
     'numOfReviews': 0,
-  }, {merge: true});
+  }, { merge: true });
 });
 
 export const updateUsername = functions.region('europe-west3').https.onCall(async (data, context) => {
@@ -43,7 +43,7 @@ export const updateUsername = functions.region('europe-west3').https.onCall(asyn
       })
       admin.firestore().doc(`Users/${uid}`).set({
         'name': user.displayName,
-      }, {merge: true});
+      }, { merge: true });
 
       response.statusCode = 200;
       response.success = true;
@@ -121,7 +121,7 @@ export const updateUserPhoto = functions.region('europe-west3').https.onCall(asy
       })
       admin.firestore().doc(`Users/${uid}`).set({
         'photoURL': user.photoURL,
-      }, {merge: true});
+      }, { merge: true });
 
       // Response
       response.success = true;
@@ -329,5 +329,40 @@ export const reviewWrite = functions.region('europe-west3').firestore.document('
           'numOfReviews': newNumOfReviews,
         });
       })
+    }
+  });
+
+export const adminChange = functions.region('europe-west3').firestore.document('admins/{uid}')
+  .onWrite(async (change, context) => {
+    if (!change.after.exists) {
+      // Deleted
+      const uid = change.before.id;
+
+      try {
+        return admin.auth().setCustomUserClaims(
+          uid,
+          null,
+        );
+      } catch (error) {
+        return functions.logger.error(`Error setting user (${uid}) as an admin`, error);
+      }
+    } else if (!change.before.exists) {
+      // New
+      const uid = change.after.id;
+
+      try {
+        await admin.auth().setCustomUserClaims(
+          uid,
+          { admin: true }
+        );
+        return change.after.ref.set({ 'time': admin.firestore.Timestamp.now() }, { merge: true });
+      } catch (error) {
+        return functions.logger.error(`Error setting user (${uid}) as an admin`, error);
+      }
+
+    } else {
+      // Update
+      const uid = change.after.id;
+      return functions.logger.warn(`Admin document (uid:${uid}) was updated`, change.before, change.after);
     }
   });
