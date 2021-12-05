@@ -286,7 +286,7 @@ async function payOutOwner(
   const payment_type = 'rent_price_to_owner';
   const payment: any = await payOutCustomer(
     ownerUID,
-    Math.round(amount * 100),
+    Math.round(amount * 100 * 0.95),
     payment_type,
     'Rentool- Rent price',
     `${toolID}-${requestID}-${payment_type}`,
