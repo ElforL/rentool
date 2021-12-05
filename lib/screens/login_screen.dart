@@ -44,6 +44,7 @@ class LoginScreen extends StatelessWidget {
                 child: RichText(
                   text: TextSpan(
                     text: AppLocalizations.of(context)!.by_use_u_agree_2,
+                    style: const TextStyle(color: Colors.black),
                     children: [
                       TextSpan(
                         text: AppLocalizations.of(context)!.tos,
