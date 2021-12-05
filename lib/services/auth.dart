@@ -43,7 +43,7 @@ class AuthServices {
         iOSBundleId: 'com.elfor.rentool',
       );
 
-      return user.sendEmailVerification(actionCodeSettings);
+      return user.sendEmailVerification(kIsWeb ? null : actionCodeSettings);
     }
   }
 
