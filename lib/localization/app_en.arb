@@ -26,6 +26,7 @@
     "back": "Back",
     "none": "None",
     "submit": "Submit",
+    "and": "and",
 
     "userNotFoundError": "There is no user corresponding to this email address.",
     "@userNotFoundError": {
@@ -972,6 +973,8 @@
     "random_tools": "Random tools",
 
     "optional": "Optional",
+
+    "by_use_u_agree_2": "By using any of Rentool services, you agree to the ",
 
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
