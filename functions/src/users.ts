@@ -10,7 +10,7 @@ export const newUser = functions.region('europe-west3').auth.user().onCreate((us
   }, { merge: true });
 });
 
-export const updateUsername = functions.region('europe-west3').https.onCall(async (data, context) => {
+export const updateUsername = functions.https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
     success: boolean;
@@ -71,7 +71,7 @@ export const updateUsername = functions.region('europe-west3').https.onCall(asyn
   }
 })
 
-export const updateUserPhoto = functions.region('europe-west3').https.onCall(async (data, context) => {
+export const updateUserPhoto = functions.https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
     success: boolean;
@@ -151,7 +151,7 @@ export const updateUserPhoto = functions.region('europe-west3').https.onCall(asy
 })
 
 /// paramaters => ({uid: string, reason: string})
-export const banUser = functions.region('europe-west3').https.onCall(async (data, context) => {
+export const banUser = functions.https.onCall(async (data, context) => {
   const response: {
     statusCode: number;
     success: boolean;
