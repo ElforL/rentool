@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/widgets/logo_image.dart';
 
@@ -78,6 +79,7 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
             child: TextField(
               focusNode: _searchTfFocusNode,
               controller: _searchController,
+              textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: AppLocalizations.of(context)!.search,
