@@ -278,6 +278,7 @@ class _MyAppState extends State<MyApp> {
           UserScreenArguments? arg;
           if (settings.arguments is UserScreenArguments) {
             arg = settings.arguments as UserScreenArguments;
+            uid = arg.uid ?? arg.user?.uid;
           } else if (uri.pathSegments.length >= 2) {
             // no argument but there's a uri argument
             uid = uri.pathSegments[1];
