@@ -273,13 +273,14 @@ class _MyAppState extends State<MyApp> {
 
         if (firstSegments == UserScreen.routeName) {
           final uri = Uri.parse(settings.name!);
+          String? uid;
 
           UserScreenArguments? arg;
           if (settings.arguments is UserScreenArguments) {
             arg = settings.arguments as UserScreenArguments;
           } else if (uri.pathSegments.length >= 2) {
             // no argument but there's a uri argument
-            final uid = uri.pathSegments[1];
+            uid = uri.pathSegments[1];
             arg = UserScreenArguments(uid: uid);
           }
 
@@ -287,7 +288,7 @@ class _MyAppState extends State<MyApp> {
           return MaterialPageRoute(
             builder: (context) => const UserScreen(),
             settings: RouteSettings(
-              name: UserScreen.routeName + '/$arg',
+              name: UserScreen.routeName + '/$uid',
               arguments: arg,
             ),
           );
