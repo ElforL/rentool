@@ -33,29 +33,35 @@ class _CardInputScreenState extends State<CardInputScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Hero(
-                tag: 'CardWidget',
-                child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: CreditCardWidget(
-                    customCardTypeIcons: [
-                      CustomCardTypeIcon(
-                        cardType: CardType.visa,
-                        cardImage: Image.asset(
-                          'assets/images/Visa_Brandmark_White_2021.png',
-                          height: 48,
-                          width: 48,
-                        ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 450),
+                child: Hero(
+                  tag: 'CardWidget',
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: AspectRatio(
+                      aspectRatio: 5 / 3,
+                      child: CreditCardWidget(
+                        customCardTypeIcons: [
+                          CustomCardTypeIcon(
+                            cardType: CardType.visa,
+                            cardImage: Image.asset(
+                              'assets/images/Visa_Brandmark_White_2021.png',
+                              height: 48,
+                              width: 48,
+                            ),
+                          ),
+                        ],
+                        cardNumber: card?.cardNumber ?? '',
+                        expiryDate: card?.expiryDate ?? '',
+                        cardHolderName: card?.cardHolderName ?? '',
+                        cvvCode: card?.cvvCode ?? '',
+                        showBackView: card?.isCvvFocused ?? false,
+                        onCreditCardWidgetChange: (_) {},
+                        isHolderNameVisible: true,
+                        cardBgColor: Colors.blue.shade900,
                       ),
-                    ],
-                    cardNumber: card?.cardNumber ?? '',
-                    expiryDate: card?.expiryDate ?? '',
-                    cardHolderName: card?.cardHolderName ?? '',
-                    cvvCode: card?.cvvCode ?? '',
-                    showBackView: card?.isCvvFocused ?? false,
-                    onCreditCardWidgetChange: (_) {},
-                    isHolderNameVisible: true,
-                    cardBgColor: Colors.blue.shade900,
+                    ),
                   ),
                 ),
               ),

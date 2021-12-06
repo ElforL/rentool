@@ -152,6 +152,7 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (hasCard) ...[
             SizedBox(
@@ -212,26 +213,29 @@ class _PaymentSettingsScreenState extends State<PaymentSettingsScreen> {
           tag: 'CardWidget',
           child: Directionality(
             textDirection: TextDirection.ltr,
-            child: CreditCardWidget(
-              customCardTypeIcons: [
-                CustomCardTypeIcon(
-                  cardType: CardType.visa,
-                  cardImage: Image.asset(
-                    'assets/images/Visa_Brandmark_White_2021.png',
-                    height: 48,
-                    width: 48,
+            child: AspectRatio(
+              aspectRatio: 5 / 3,
+              child: CreditCardWidget(
+                customCardTypeIcons: [
+                  CustomCardTypeIcon(
+                    cardType: CardType.visa,
+                    cardImage: Image.asset(
+                      'assets/images/Visa_Brandmark_White_2021.png',
+                      height: 48,
+                      width: 48,
+                    ),
                   ),
-                ),
-              ],
-              isSwipeGestureEnabled: false,
-              cardNumber: card!.cardNumber,
-              expiryDate: card!.expiryDate,
-              cardHolderName: card!.cardHolderName,
-              cvvCode: '',
-              isHolderNameVisible: true,
-              showBackView: false,
-              onCreditCardWidgetChange: (_) {},
-              cardBgColor: Colors.blue.shade900,
+                ],
+                isSwipeGestureEnabled: false,
+                cardNumber: card!.cardNumber,
+                expiryDate: card!.expiryDate,
+                cardHolderName: card!.cardHolderName,
+                cvvCode: '',
+                isHolderNameVisible: true,
+                showBackView: false,
+                onCreditCardWidgetChange: (_) {},
+                cardBgColor: Colors.blue.shade900,
+              ),
             ),
           ),
         ),
