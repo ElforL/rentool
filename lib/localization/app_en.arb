@@ -38,7 +38,7 @@
     "loginError": "Login Error",
     "signUpError": "Sign up Error",
     "pass_not_match": "Passwords don't match.",
-    "weak_password": "The password provided is too weak.",
+    "weak_password": "The password provided is weak. The password must be longer than 10 characters, and has at least one letter, one number, and one of theses symbols @$!%*#?&^",
     "email_already_in_use": "An account already exists for this email address.",
     "no_password_error": "This email address doesn't have a password.\nIt uses login with {list}",
     "@no_password_error": {
