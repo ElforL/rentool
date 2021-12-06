@@ -48,7 +48,16 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
     } else if (_isLogin!) {
       // login
       try {
-        if (_emailContoller.text.isEmpty || _passwordContoller.text.isEmpty) return;
+        bool shouldReturn = false;
+        if (_emailContoller.text.isEmpty) {
+          emailError = AppLocalizations.of(context)!.you_cant_leave_this_empty;
+          shouldReturn = true;
+        }
+        if (_passwordContoller.text.isEmpty) {
+          passwordError = AppLocalizations.of(context)!.you_cant_leave_this_empty;
+          shouldReturn = true;
+        }
+        if (shouldReturn) return;
         setState(() => _isLoading = true);
 
         await AuthServices.signInWithEmailAndPassword(_emailContoller.text, _passwordContoller.text);
@@ -87,9 +96,28 @@ class _EmailSignContainerState extends State<EmailSignContainer> {
       }
     } else {
       // signup
-      if (_emailContoller.text.isEmpty || _passwordContoller.text.isEmpty || _confirmPasswordContoller.text.isEmpty) {
+      bool shouldReturn = false;
+      if (_emailContoller.text.isEmpty) {
+        emailError = AppLocalizations.of(context)!.you_cant_leave_this_empty;
+        shouldReturn = true;
+      }
+      if (_usernameContoller.text.isEmpty) {
+        usernameError = AppLocalizations.of(context)!.you_cant_leave_this_empty;
+        shouldReturn = true;
+      }
+      if (_passwordContoller.text.isEmpty) {
+        passwordError = AppLocalizations.of(context)!.you_cant_leave_this_empty;
+        shouldReturn = true;
+      }
+      if (_confirmPasswordContoller.text.isEmpty) {
+        confirmPasswordError = AppLocalizations.of(context)!.you_cant_leave_this_empty;
+        shouldReturn = true;
+      }
+      if (shouldReturn) {
+        setState(() {});
         return;
       }
+
       if (_passwordContoller.text != _confirmPasswordContoller.text) {
         // unmatched passwords
         setState(() {
