@@ -42,6 +42,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: RichText(
+                  textAlign: TextAlign.center,
                   text: TextSpan(
                     text: AppLocalizations.of(context)!.by_use_u_agree_2,
                     style: const TextStyle(color: Colors.black),
