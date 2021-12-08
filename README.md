@@ -9,5 +9,7 @@ Link: https://rentool.site
 [Website](https://rentool.site),
 [Android apk](https://github.com/ElforL/rentool/releases)
 
-## T471
+## T471 (2021)
 This project is my graduation/final-year project in [AOU-KSA](https://www.arabou.edu.sa)
+
+For the report and TMA files check [ElforL/Graduation-Project](https://github.com/ElforL/Graduation-Project)
