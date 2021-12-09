@@ -452,5 +452,11 @@
 
     "by_use_u_agree_2": "باستخدام اي من خدمات رينتول، فإنك توافق على ",
 
+    "open_with": "افتح باستخدام:",
+    "use_app_4_better": "استخدم التطبيق لتجربة أفضل",
+    "continue_in_browser": "استمر في المتصفح",
+    "download": "تحميل",
+    "continue_": "استمر",
+
     "someLocalizedString": "متغير تجريبي - {argument}"
 }

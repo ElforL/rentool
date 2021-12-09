@@ -24,3 +24,6 @@ const siteDomain = 'https://rentool.site';
 
 const angoliaAppId = '98BEXO9QS8';
 const angoliaApiKey = '2c82b0b3e22f83cb7fe91027888e042b';
+
+/// https://github.com/ElforL/rentool
+const githubRepoUrl = 'https://github.com/ElforL/rentool';

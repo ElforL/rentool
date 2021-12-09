@@ -976,6 +976,12 @@
 
     "by_use_u_agree_2": "By using any of Rentool services, you agree to the ",
 
+    "open_with": "Open with:",
+    "use_app_4_better": "Use the app for a better expierence",
+    "continue_in_browser": "Continue using the browser",
+    "download": "Download",
+    "continue_": "Continue",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",

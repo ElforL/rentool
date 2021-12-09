@@ -1,14 +1,88 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/main.dart';
+import 'package:rentool/misc/constants.dart';
+import 'package:rentool/misc/misc.dart';
 import 'package:rentool/screens/terms_screen.dart';
 import 'package:rentool/widgets/login/email_sign_screen.dart';
 import 'package:rentool/widgets/login/login_providers_container.dart';
 import 'package:rentool/widgets/logo_image.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  showAppDialog(BuildContext context) {
+    final sheet = BottomSheet(
+      onClosing: () => null,
+      enableDrag: false,
+      builder: (context) {
+        buttonStyle([bool isGrey = false]) => ButtonStyle(
+              backgroundColor: isGrey ? MaterialStateProperty.all(Colors.grey) : null,
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            );
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text(AppLocalizations.of(context)!.open_with),
+            ),
+            ListTile(
+              leading: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LogoImage.primaryIcon(),
+              ),
+              title: Text(AppLocalizations.of(context)!.use_app_4_better),
+              trailing: ElevatedButton(
+                style: buttonStyle(),
+                onPressed: () => launchUrl('$githubRepoUrl/releases'),
+                // child: Text(AppLocalizations.of(context)!.download),
+                child: Text(AppLocalizations.of(context)!.download.toUpperCase()),
+              ),
+            ),
+            ListTile(
+              leading: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.public,
+                  size: 34,
+                ),
+              ),
+              title: Text(AppLocalizations.of(context)!.continue_in_browser),
+              trailing: ElevatedButton(
+                style: buttonStyle(true),
+                onPressed: () => Navigator.pop(context),
+                // child: Text(AppLocalizations.of(context)!.close),
+                child: Text(AppLocalizations.of(context)!.continue_.toUpperCase()),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    showModalBottomSheet(context: context, builder: (context) => sheet);
+  }
+
+  @override
+  void initState() {
+    if (kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS)) {
+      SchedulerBinding.instance?.addPostFrameCallback((_) => showAppDialog(context));
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
