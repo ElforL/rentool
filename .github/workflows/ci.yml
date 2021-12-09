@@ -28,4 +28,4 @@ jobs:
         run: npm install
 
       - name: 🧪 Run tests
-        run: firebase emulators:exec "cd test/firestore_test && npm test"
+        run: firebase emulators:exec --only firestore "cd test/firestore_test && npm test"
