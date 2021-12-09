@@ -47,7 +47,15 @@ dependencies:
   # To to remove the leading hash (#) from the URL
   url_strategy: ^0.2.0 
   share_plus: ^3.0.4
-  algolia: ^1.0.2
+
+  ## TODO: Algolia throws an error when searching in web release
+  ## There's a PR that fixes it but it's not merged yet
+  ## Check if https://github.com/knoxpo/dart_algolia/pull/73 is merged and if it is, then remove [aemelyanovff/dart_algolia] and use the official package
+  # algolia: ^1.0.2
+  algolia:
+    git:
+      url: git://github.com/aemelyanovff/dart_algolia.git
+
   flutter_markdown: ^0.6.8
 
   

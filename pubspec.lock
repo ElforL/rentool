@@ -4,9 +4,11 @@ packages:
   algolia:
     dependency: "direct main"
     description:
-      name: algolia
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: a54e366060cc35bf5f9e2ec93888f267cd56b045
+      url: "git://github.com/aemelyanovff/dart_algolia.git"
+    source: git
     version: "1.0.4"
   archive:
     dependency: transitive
