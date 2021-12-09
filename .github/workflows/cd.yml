@@ -30,26 +30,3 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_RENTOOL_5A78C }}'
           channelId: live
           projectId: rentool-5a78c
-
-  build_n_release_apk:
-    name: Build and draft a release for the apk.
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@v2
-
-      - name: Install Flutter 💙
-        uses: subosito/flutter-action@v1
-        with:
-          channel: 'master'
-
-      - name: Build Flutter apk 🏗 
-        run: flutter build apk
-
-      - name: Create a release
-        uses: softprops/action-gh-release@v0.1.14
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          draft: true
-          files: build/app/build/app/outputs/flutter-apk/app-release.apk
