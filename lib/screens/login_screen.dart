@@ -21,7 +21,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   showAppDialog(BuildContext context) {
     final sheet = BottomSheet(
-      onClosing: () => null,
+      onClosing: () {},
       enableDrag: false,
       builder: (context) {
         buttonStyle([bool isGrey = false]) => ButtonStyle(
