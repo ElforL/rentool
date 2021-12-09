@@ -51,7 +51,7 @@ class MeetingHandoverScreen extends StatelessWidget {
                   ),
                 ),
               const BigIcon(
-                // TODO center the icon. it looks BAD
+                // TODO center the icon.
                 icon: CustomIcons.handshake,
               ),
               if (meeting.compensationPrice != null)
