@@ -982,6 +982,9 @@
     "download": "Download",
     "continue_": "Continue",
 
+    "use_test_cards": "Rentool is currently in testing. So, it doesn't accept real credit cards. Use one of the test cards instead.",
+    "view_available_cards": "View available cards",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
