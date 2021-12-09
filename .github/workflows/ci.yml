@@ -17,15 +17,9 @@ jobs:
       - name: 🔥 Install Firebase CLI
         run: npm install -g firebase-tools
         
-      - name: ☁ Install functions dependencies
-        working-directory: ./functions
-        run: |
-          npm ci
-          npm run build
-        
       - name: ⬇ Install tests dependencies
         working-directory: ./test/firestore_test
         run: npm install
 
       - name: 🧪 Run tests
-        run: firebase emulators:exec "cd test/firestore_test && npm test"
+        run: firebase emulators:exec --only firestore "cd test/firestore_test && npm test"

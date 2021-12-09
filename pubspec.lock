@@ -4,9 +4,11 @@ packages:
   algolia:
     dependency: "direct main"
     description:
-      name: algolia
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: a54e366060cc35bf5f9e2ec93888f267cd56b045
+      url: "git://github.com/aemelyanovff/dart_algolia.git"
+    source: git
     version: "1.0.4"
   archive:
     dependency: transitive
@@ -672,7 +674,7 @@ packages:
       name: platform
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.1.0"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -964,7 +966,7 @@ packages:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.3.0"
+    version: "7.5.0"
   wakelock:
     dependency: transitive
     description:

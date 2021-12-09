@@ -3,10 +3,12 @@ import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:rentool/misc/dialogs.dart';
+import 'package:rentool/misc/misc.dart';
 import 'package:rentool/models/checkout/error_response.dart';
 import 'package:rentool/screens/card_verification_screen.dart';
 import 'package:rentool/services/checkout_services.dart';
 import 'package:rentool/services/functions.dart';
+import 'package:rentool/widgets/note_box.dart';
 
 class CardInputScreen extends StatefulWidget {
   const CardInputScreen({Key? key}) : super(key: key);
@@ -33,6 +35,17 @@ class _CardInputScreenState extends State<CardInputScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: NoteBox(
+                  text: AppLocalizations.of(context)!.use_test_cards,
+                  icon: Icons.info_outline,
+                ),
+              ),
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.view_available_cards),
+                onPressed: () => launchUrl('https://www.checkout.com/docs/testing/test-card-numbers'),
+              ),
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 450),
                 child: Hero(
