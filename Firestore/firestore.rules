@@ -225,6 +225,7 @@ service cloud.firestore {
           && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['isAccepted', 'isRented']));
         }
 
+        allow read, write: if isAdmin();
         allow read: if isTheRenter() || isTheToolOwner();
         allow delete: if (isTheRenter() || isTheToolOwner()) && resource.data.isRented == false;
         
@@ -236,7 +237,6 @@ service cloud.firestore {
         
         // if the request is accepted the renter CAN'T update it
         allow update: if (resource.data.isAccepted == true) ? false : (isTheRenter() && isRequestUpdateValid());
-        allow read, write: if isAdmin();
 
         match /messages/{messageID}{
           function isTheRenterForMessage(){
