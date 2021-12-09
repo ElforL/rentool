@@ -1,0 +1,21 @@
+name: Deploy Firebase Functions 🔥
+on:
+  push:
+    paths:
+      - 'functions/**'
+    branches:
+      - master
+
+jobs:
+  deploy_functions:
+    name: Deploy Cloud Functions ☁.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v2
+
+      - name: Install Firebase CLI 🔥
+        run: npm install -g firebase-tools
+
+      - name: Deploy 🚀
+        run: firebase deploy --only functions
