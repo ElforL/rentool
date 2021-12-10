@@ -125,10 +125,19 @@ class FirestoreServices {
 
     const field = 'ownerUID';
 
-    final result =
-        await _toolsRef.where(field, isLessThanOrEqualTo: random).orderBy(field, descending: true).limit(1).get();
+    final result = await _toolsRef
+        .where('isAvailable', isEqualTo: true)
+        .where(field, isLessThanOrEqualTo: random)
+        .orderBy(field, descending: true)
+        .limit(1)
+        .get();
     if (result.docs.isEmpty) {
-      return _toolsRef.where(field, isGreaterThanOrEqualTo: random).orderBy(field).limit(1).get();
+      return _toolsRef
+          .where('isAvailable', isEqualTo: true)
+          .where(field, isGreaterThanOrEqualTo: random)
+          .orderBy(field)
+          .limit(1)
+          .get();
     } else {
       return result;
     }
