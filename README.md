@@ -8,8 +8,3 @@ A Tools Rental E-Commerce Platform. A mobile app and a website for users to post
 [Website](https://rentool.site),  
 [Permanent website link](rentool-5a78c.web.app),  
 [Android apk](https://github.com/ElforL/rentool/releases)
-
-## T471 (2021)
-This project is my graduation/final-year project in [AOU-KSA](https://www.arabou.edu.sa)
-
-For the report and TMA files check [ElforL/Graduation-Project](https://github.com/ElforL/Graduation-Project)
