@@ -35,7 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     setState(() => results.clear());
     const index = emulatorOn && !kReleaseMode ? 'tools_test' : 'tools';
-    var res = await algolia.index(index).query(searchKey).getObjects();
+    var res = await algolia.index(index).query(searchKey).facetFilter('isAvailable:true').getObjects();
     for (var item in res.hits) {
       final widget = _buildResultContainer(item);
       results.add(widget);
