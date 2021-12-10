@@ -1,11 +1,11 @@
 {
-    "name": "rentool",
+    "name": "Rentool",
     "short_name": "rentool",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Rent your tools and rent others'.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
