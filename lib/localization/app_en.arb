@@ -985,6 +985,9 @@
     "use_test_cards": "Rentool is currently in testing. So, it doesn't accept real credit cards. Use one of the test cards instead.",
     "view_available_cards": "View available cards",
 
+    "media_disabled_on_web": "Adding media on the web is temporarily disabled due to technical problems. Use the app instead.",
+    "learn_more": "Learn more",
+
     "someLocalizedString": "Localized part - {argument}",
     "@someLocalizedString": {
         "type": "text",
