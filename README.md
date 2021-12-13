@@ -7,5 +7,6 @@ A Tools Rental E-Commerce Platform. A mobile app and a website for users to post
 ## Links
 [Website](https://rentool.site)  
 [Permanent website link](rentool-5a78c.web.app)  
-[Google Play](https://play.google.com/store/apps/details?id=com.elfor.rentool)  
 [Android apk](https://github.com/ElforL/rentool/releases)  
+
+<a href='https://play.google.com/store/apps/details?id=com.elfor.rentool&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="200" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
