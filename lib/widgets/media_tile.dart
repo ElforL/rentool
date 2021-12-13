@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
 import 'package:rentool/widgets/media_container.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MediaTile extends StatefulWidget {
   const MediaTile({Key? key, required this.media, this.tool}) : super(key: key);
@@ -122,6 +124,18 @@ class _MediaTileState extends State<MediaTile> {
     );
   }
 
+  void showMediaDisabledSnackBar(context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.media_disabled_on_web),
+        action: SnackBarAction(
+          onPressed: () => launch('https://github.com/ElforL/rentool/issues/62'),
+          label: AppLocalizations.of(context)!.learn_more,
+        ),
+      ),
+    );
+  }
+
   Widget _buildAddTile() {
     return Container(
       decoration: BoxDecoration(
@@ -134,19 +148,25 @@ class _MediaTileState extends State<MediaTile> {
         children: [
           IconButton(
             icon: const Icon(Icons.library_add),
+            color: kIsWeb ? Colors.grey : null,
             onPressed: () {
+              if (kIsWeb) return showMediaDisabledSnackBar(context);
               _getMedia(MediaInput.gallery);
             },
           ),
           IconButton(
             icon: const Icon(Icons.camera_alt),
+            color: kIsWeb ? Colors.grey : null,
             onPressed: () {
+              if (kIsWeb) return showMediaDisabledSnackBar(context);
               _getMedia(MediaInput.cameraImage);
             },
           ),
           IconButton(
             icon: const Icon(Icons.videocam),
+            color: kIsWeb ? Colors.grey : null,
             onPressed: () {
+              if (kIsWeb) return showMediaDisabledSnackBar(context);
               _getMedia(MediaInput.cameraVideo);
             },
           ),
