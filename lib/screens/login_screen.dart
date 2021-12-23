@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (size2.width > 620)
+              if (size2.width > 620 && kIsWeb)
                 Flexible(
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxHeight: 600),
@@ -168,8 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    if (size2.width <= 620) ...[
-                      Divider(),
+                    if (size2.width <= 620 && kIsWeb) ...[
+                      const Divider(),
                       ..._useTheAppBadge(context, playBadge, false),
                     ]
                   ],
