@@ -8,8 +8,11 @@ class AuthProvidersContainer extends StatelessWidget {
   const AuthProvidersContainer({Key? key}) : super(key: key);
 
   Widget _buildHorizontalLine() {
-    return const Expanded(
-      child: Divider(
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: 100,
+      ),
+      child: const Divider(
         indent: 20,
         endIndent: 20,
         color: Colors.black26,
@@ -23,6 +26,7 @@ class AuthProvidersContainer extends StatelessWidget {
     return Column(
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             _buildHorizontalLine(),
             Text(

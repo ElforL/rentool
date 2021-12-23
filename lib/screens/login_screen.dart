@@ -86,56 +86,93 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String playBadge;
+    if (AppLocalizations.of(context)!.localeName == 'ar') {
+      playBadge = 'google-play-badge_ar.png';
+    } else {
+      playBadge = 'google-play-badge_en.png';
+    }
+    var size2 = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
           primary: false,
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  IconButton(
-                    color: Theme.of(context).colorScheme.primary,
-                    tooltip: AppLocalizations.of(context)!.language,
-                    icon: const Icon(Icons.language),
-                    onPressed: () {
-                      MyApp.of(context)?.nextLocale(context);
-                    },
-                  )
-                ],
-              ),
-              Container(
-                constraints: const BoxConstraints(maxWidth: 400),
-                padding: const EdgeInsets.only(left: 60, right: 60, top: 60),
-                child: LogoImage.primary(),
-              ),
-              const EmailSignContainer(),
-              const AuthProvidersContainer(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: AppLocalizations.of(context)!.by_use_u_agree_2,
-                    style: const TextStyle(color: Colors.black),
-                    children: [
-                      TextSpan(
-                        text: AppLocalizations.of(context)!.tos,
-                        style: TextStyle(color: Colors.blue.shade700),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => Navigator.of(context).pushNamed(TermsScreen.tosRouteName),
-                      ),
-                      TextSpan(text: ' ${AppLocalizations.of(context)!.and} '),
-                      TextSpan(
-                        text: AppLocalizations.of(context)!.privacy_policy,
-                        style: TextStyle(color: Colors.blue.shade700),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => Navigator.of(context).pushNamed(TermsScreen.privacyPolicyRouteName),
-                      ),
-                    ],
+              if (size2.width > 620 && kIsWeb)
+                Flexible(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 600),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Image.asset('assets/images/Pixel4_mock_photo.png'),
+                        ),
+                        ..._useTheAppBadge(context, playBadge),
+                      ],
+                    ),
                   ),
+                ),
+              Flexible(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          color: Theme.of(context).colorScheme.primary,
+                          tooltip: AppLocalizations.of(context)!.language,
+                          icon: const Icon(Icons.language),
+                          onPressed: () {
+                            MyApp.of(context)?.nextLocale(context);
+                          },
+                        )
+                      ],
+                    ),
+                    Container(
+                      constraints: const BoxConstraints(maxWidth: 400),
+                      padding: const EdgeInsets.only(left: 60, right: 60, top: 60),
+                      child: LogoImage.primary(),
+                    ),
+                    const EmailSignContainer(),
+                    const AuthProvidersContainer(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: AppLocalizations.of(context)!.by_use_u_agree_2,
+                          style: const TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                              text: AppLocalizations.of(context)!.tos,
+                              style: TextStyle(color: Colors.blue.shade700),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => Navigator.of(context).pushNamed(TermsScreen.tosRouteName),
+                            ),
+                            TextSpan(text: ' ${AppLocalizations.of(context)!.and} '),
+                            TextSpan(
+                              text: AppLocalizations.of(context)!.privacy_policy,
+                              style: TextStyle(color: Colors.blue.shade700),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => Navigator.of(context).pushNamed(TermsScreen.privacyPolicyRouteName),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (size2.width <= 620 && kIsWeb) ...[
+                      const Divider(),
+                      ..._useTheAppBadge(context, playBadge, false),
+                    ]
+                  ],
                 ),
               ),
             ],
@@ -143,5 +180,29 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  List<Widget> _useTheAppBadge(BuildContext context, String playBadge, [bool useFlex = true]) {
+    final local = AppLocalizations.of(context)!.localeName;
+    var constrainedBox = ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 200),
+      child: GestureDetector(
+        child: Image.asset('assets/images/$playBadge'),
+        onTap: () => launchUrl('https://play.google.com/store/apps/details?id=com.elfor.rentool&hl=$local'),
+      ),
+    );
+    return [
+      Text(
+        AppLocalizations.of(context)!.use_app_4_better,
+        style: Theme.of(context).textTheme.caption,
+        textAlign: TextAlign.center,
+      ),
+      if (useFlex)
+        Flexible(
+          child: constrainedBox,
+        )
+      else
+        constrainedBox,
+    ];
   }
 }
