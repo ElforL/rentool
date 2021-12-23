@@ -183,11 +183,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   List<Widget> _useTheAppBadge(BuildContext context, String playBadge, [bool useFlex = true]) {
+    final local = AppLocalizations.of(context)!.localeName;
     var constrainedBox = ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 200),
       child: GestureDetector(
         child: Image.asset('assets/images/$playBadge'),
-        onTap: () => launchUrl('https://play.google.com/store/apps/details?id=com.elfor.rentool'),
+        onTap: () => launchUrl('https://play.google.com/store/apps/details?id=com.elfor.rentool&hl=$local'),
       ),
     );
     return [
