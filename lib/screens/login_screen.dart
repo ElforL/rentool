@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
               title: Text(AppLocalizations.of(context)!.use_app_4_better),
               trailing: ElevatedButton(
                 style: buttonStyle(),
-                onPressed: () => launchUrl('$githubRepoUrl/releases'),
+                onPressed: () => launchUrl('https://play.google.com/store/apps/details?id=com.elfor.rentool'),
                 // child: Text(AppLocalizations.of(context)!.download),
                 child: Text(AppLocalizations.of(context)!.download.toUpperCase()),
               ),
