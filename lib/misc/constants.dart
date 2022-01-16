@@ -4,21 +4,21 @@
 const checkoutPublicKey = 'pk_test_30d3f3b2-9024-4f31-ba34-0dc393d9080d';
 
 /// The email address for reporting app issues.
-const reportIssueEmailAddress = 'issues@rentool.site';
+const reportIssueEmailAddress = 'rentool.sa+issues@gmail.com';
 
 /// Support email address.
-const supportEmailAddress = 'support@rentool.site';
+const supportEmailAddress = 'rentool.sa+support@gmail.com';
 
 /// DMCA email address.
 ///
 /// used to receive copyright infringements notices.
-const dmcaEmailAddress = 'dmca@rentool.site';
+const dmcaEmailAddress = 'rentool.sa+dmca@gmail.com';
 
 /// general help email address.
-const helpEmailAddress = 'help@rentool.site';
+const helpEmailAddress = 'rentool.sa+help@gmail.com';
 
 /// used for questions regarding Rentool (e.g, questions about terms of use).
-const termsEmailAddress = 'terms@rentool.site';
+const termsEmailAddress = 'rentool.sa+terms@gmail.com';
 
 const siteDomain = 'https://rentool.site';
 

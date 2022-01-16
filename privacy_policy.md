@@ -1,5 +1,5 @@
 # Privacy Policy
-Last updated: November 20th, 2021
+Last updated: January 16th, 2022
 
 Thank you for chosing Rentool. **Rentool is currently under development and so is the Privacy Policy**. We will update the privacy policy once development is finished. And we will send notice of these updates.
 
@@ -51,7 +51,7 @@ For the purposes of this Privacy Policy:
 - **Insurance amount** is an insurance deposit sent to the owner if the tool was damaged.
 
 ## Data Deletion
-If you want your data to be deleted contact us by email at support@rentool.site
+If you want your data to be deleted contact us by email at rentool.sa+support@gmail.com
 
 ## Contact Us
-If you have any questions about this Privacy Policy, You can contact us by email: terms@rentool.site
+If you have any questions about this Privacy Policy, You can contact us by email: rentool.sa+terms@gmail.com

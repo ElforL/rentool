@@ -1,5 +1,5 @@
 # Terms of Service
-Last updated: November 20th, 2021
+Last updated: January 16th, 2022
 
 Thank you for chosing Rentool. **Rentool is currently under development and so is the Terms of Service**. We will update the terms of service once development is finished. And we will send notice of these updates.
 
@@ -59,9 +59,9 @@ THE RENTOOL SERVICES AND ALL INFORMATION, CONTENT, MATERIALS, PRODUCTS (INCLUDIN
 RENTOOL WILL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES ARISING FROM THE USE OF ANY RENTOOL SERVICES OR ANY OTHER SERVICE AVAILABLE TO YOU THROUGH ANY RENTOOL SERVICE.
 
 ## Data Deletion
-If you want your data to be deleted contact us by email at support@rentool.site
+If you want your data to be deleted contact us by email at rentool.sa+support@gmail.com
 
 ## Contact Us
-If you have any questions about these Terms and Conditions, You can contact us by email: terms@rentool.site
+If you have any questions about these Terms and Conditions, You can contact us by email: rentool.sa+terms@gmail.com
 
-For infringements notices, contact us by email at dmca@rentool.site
+For infringements notices, contact us by email at rentool.sa+dmca@gmail.com
