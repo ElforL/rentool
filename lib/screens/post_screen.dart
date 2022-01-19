@@ -494,13 +494,7 @@ class _PostScreenState extends State<PostScreen> {
             scrollDirection: Axis.horizontal,
             children: [
               if (tool.media.isNotEmpty)
-                for (var url in tool.media)
-                  Center(
-                    child: MediaContainer(
-                      mediaURL: url,
-                      showDismiss: false,
-                    ),
-                  )
+                for (var url in tool.media) MediaContainerPage(url: url)
               else
                 Center(
                   child: Text(
@@ -539,4 +533,33 @@ class _PostScreenState extends State<PostScreen> {
       ),
     );
   }
+}
+
+class MediaContainerPage extends StatefulWidget {
+  const MediaContainerPage({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+
+  final String url;
+
+  @override
+  State<MediaContainerPage> createState() => _MediaContainerPageState();
+}
+
+class _MediaContainerPageState extends State<MediaContainerPage>
+    with AutomaticKeepAliveClientMixin<MediaContainerPage> {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Center(
+      child: MediaContainer(
+        mediaURL: widget.url,
+        showDismiss: false,
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
