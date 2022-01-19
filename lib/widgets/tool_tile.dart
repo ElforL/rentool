@@ -1,9 +1,7 @@
-import 'dart:typed_data';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class ToolTile extends StatelessWidget {
   const ToolTile({
@@ -23,18 +21,12 @@ class ToolTile extends StatelessWidget {
     if (tool.media.isNotEmpty) {
       image = ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: Image.network(
-          tool.media.first,
+        child: CachedNetworkImage(
+          imageUrl: tool.media.first,
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return FutureBuilder(
-              future: VideoThumbnail.thumbnailData(video: tool.media.first),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return Image.memory(snapshot.data as Uint8List);
-              },
+          errorWidget: (context, string, obj) {
+            return const Center(
+              child: Icon(Icons.error_outline),
             );
           },
         ),

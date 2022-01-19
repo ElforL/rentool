@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rentool/models/rentool/rentool_models.dart';
@@ -35,7 +36,7 @@ class RentoolCircleAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: user?.photoURL == null ? Colors.black12 : null,
-      backgroundImage: user?.photoURL != null ? NetworkImage(user!.photoURL!) : null,
+      backgroundImage: user?.photoURL != null ? CachedNetworkImageProvider(user!.photoURL!) : null,
       child: user?.photoURL == null
           ? const Icon(
               Icons.person,
