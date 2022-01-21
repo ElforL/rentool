@@ -7,8 +7,10 @@ class RentoolSearchBar extends StatefulWidget {
     Key? key,
     this.textFieldContoller,
     this.onSubmitted,
+    this.leading,
   }) : super(key: key);
 
+  final Widget? leading;
   final TextEditingController? textFieldContoller;
   final void Function(String)? onSubmitted;
 
@@ -72,7 +74,9 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
               onPressed: () {
                 Navigator.pop(context);
               },
-            ),
+            )
+          else if (widget.leading != null)
+            widget.leading!,
 
           Expanded(
             child: Padding(
@@ -138,8 +142,10 @@ class RentoolSearchAppBar extends AppBar {
     Key? key,
     this.textFieldContoller,
     this.onSubmitted,
+    this.leadingIcon,
   }) : super(key: key);
 
+  final Widget? leadingIcon;
   final TextEditingController? textFieldContoller;
   final void Function(String)? onSubmitted;
 
@@ -155,6 +161,7 @@ class _RentoolSearchAppBarState extends State<RentoolSearchAppBar> {
       title: RentoolSearchBar(
         textFieldContoller: widget.textFieldContoller,
         onSubmitted: widget.onSubmitted,
+        leading: widget.leadingIcon,
       ),
       centerTitle: true,
       automaticallyImplyLeading: false,
