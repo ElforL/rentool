@@ -3,8 +3,8 @@ import * as functions from 'firebase-functions';
 import { chargeCustomer, createCkoProblem, payOutCustomer, refundPayment } from './checkout_functions';
 import { addNotification } from './fcm';
 
-export const deliverMeetingUpdated = functions.region('europe-west3').firestore.document('Tools/{toolID}/deliver_meetings/{requestID}').onUpdate(deliverMeetingHandler);
-export const dMeetPaymendDocUpdated = functions.region('europe-west3').firestore.document('Tools/{toolID}/deliver_meetings/{requestID}/private/payments_processing').onUpdate(dMeetPaymendDocUpdatedHandler);
+export const deliverMeetingUpdated = functions.firestore.document('Tools/{toolID}/deliver_meetings/{requestID}').onUpdate(deliverMeetingHandler);
+export const dMeetPaymendDocUpdated = functions.firestore.document('Tools/{toolID}/deliver_meetings/{requestID}/private/payments_processing').onUpdate(dMeetPaymendDocUpdatedHandler);
 
 
 async function deliverMeetingHandler(change: functions.Change<functions.firestore.QueryDocumentSnapshot>, context: functions.EventContext) {

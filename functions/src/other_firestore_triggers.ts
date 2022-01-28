@@ -11,7 +11,7 @@ if (typeof env.algolia != 'undefined') {
   algoliIndex = algolia.default(env.algolia.appid, env.algolia.apikey).initIndex(index);
 }
 
-export const toolCreated = functions.region('europe-west3').firestore.document('Tools/{toolID}')
+export const toolCreated = functions.firestore.document('Tools/{toolID}')
   .onCreate((snapshot, context) => {
     const toolID = snapshot.id;
     const data = snapshot.data();
@@ -29,7 +29,7 @@ export const toolCreated = functions.region('europe-west3').firestore.document('
  * - if a new requst was added this function changes the request's `isAccepted` to true
  * - if `acceptedRequestID` changed to null this function changes the old request's `isAccepted` to false (if it still exist)
 */
-export const toolUpdated = functions.region('europe-west3').firestore.document('Tools/{toolID}')
+export const toolUpdated = functions.firestore.document('Tools/{toolID}')
   .onUpdate(async (change, context) => {
     const oldData = change.before.data();
     const newData = change.after.data();
@@ -106,7 +106,7 @@ export const toolUpdated = functions.region('europe-west3').firestore.document('
     }
   });
 
-export const toolDeleted = functions.region('europe-west3').firestore.document('Tools/{toolID}')
+export const toolDeleted = functions.firestore.document('Tools/{toolID}')
   .onDelete(async (snapshot, context) => {
     // When the tool is deleted, the requests need to be deleted as well.
     // deleteCollection() and deleteQueryBatch() are used to delete collection(Tools/${toolID}/requests)
@@ -162,7 +162,7 @@ export const toolDeleted = functions.region('europe-west3').firestore.document('
   });
 
 
-export const requestWrite = functions.region('europe-west3').firestore.document('Tools/{toolID}/requests/{requestID}')
+export const requestWrite = functions.firestore.document('Tools/{toolID}/requests/{requestID}')
   .onWrite(async (change, context) => {
     const toolDoc = admin.firestore().doc(`Tools/${context.params.toolID}`);
     var toolDocData;
@@ -235,7 +235,7 @@ export const requestWrite = functions.region('europe-west3').firestore.document(
   });
 
 // Creates an entry in db/idsList when the user sets thier ID number
-export const IdCreated = functions.region('europe-west3').firestore.document('Users/{uid}/private/ID')
+export const IdCreated = functions.firestore.document('Users/{uid}/private/ID')
   .onCreate(async (snapshot, context) => {
     const idNumber = snapshot.data().idNumber;
     const uid = snapshot.ref.parent.parent!.id;
@@ -250,7 +250,7 @@ export const IdCreated = functions.region('europe-west3').firestore.document('Us
     return batch.commit();
   });
 
-export const disagreementCaseUpdated = functions.region('europe-west3').firestore.document('/disagreementCases/{caseID}')
+export const disagreementCaseUpdated = functions.firestore.document('/disagreementCases/{caseID}')
   .onUpdate(async (change, context) => {
     const newData = change.after.data();
 

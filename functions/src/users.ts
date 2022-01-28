@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
-export const newUser = functions.region('europe-west3').auth.user().onCreate((user, context) => {
+export const newUser = functions.auth.user().onCreate((user, context) => {
   return admin.firestore().doc(`Users/${user.uid}`).set({
     'name': user.displayName,
     'photoURL': user.photoURL,
@@ -261,7 +261,7 @@ export const banUser = functions.https.onCall(async (data, context) => {
   return response;
 });
 
-export const reviewWrite = functions.region('europe-west3').firestore.document('Users/{userID}/reviews/{reviewerUID}')
+export const reviewWrite = functions.firestore.document('Users/{userID}/reviews/{reviewerUID}')
   .onWrite(async (change, context) => {
     const uid = context.params.userID;
     const reviewerUID = context.params.reviewerUID;
@@ -332,7 +332,7 @@ export const reviewWrite = functions.region('europe-west3').firestore.document('
     }
   });
 
-export const adminChange = functions.region('europe-west3').firestore.document('admins/{uid}')
+export const adminChange = functions.firestore.document('admins/{uid}')
   .onWrite(async (change, context) => {
     if (!change.after.exists) {
       // Deleted
