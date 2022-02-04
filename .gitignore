@@ -13,6 +13,8 @@ note.md
 # Firebase related
 .firebase/
 .runtimeconfig.json
+Firestore/
+FirebaseStorage/
 
 # IntelliJ related
 *.iml
