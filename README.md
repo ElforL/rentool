@@ -5,6 +5,8 @@ A Tools Rental E-Commerce Platform. A mobile app and a website for users to post
 [![CI_badge](https://github.com/ElforL/rentool/actions/workflows/ci.yml/badge.svg)](https://github.com/ElforL/rentool/actions/workflows/ci.yml)
 [![CD_badge](https://github.com/ElforL/rentool/actions/workflows/cd.yml/badge.svg)](https://github.com/ElforL/rentool/actions/workflows/cd.yml)
 ## Links
+Rentool does not actually process real money. The Checkout account used is a test account, and the credit/debit cards that can be used are predetermined [cards provided by Checkout](https://www.checkout.com/docs/testing/test-card-numbers).
+
 [Website](https://rentool.site)  
 [Permanent website link](rentool-5a78c.web.app)  
 [Android apk](https://github.com/ElforL/rentool/releases)  
