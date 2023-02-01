@@ -7,8 +7,10 @@ class RentoolSearchBar extends StatefulWidget {
     Key? key,
     this.textFieldContoller,
     this.onSubmitted,
+    this.leading,
   }) : super(key: key);
 
+  final Widget? leading;
   final TextEditingController? textFieldContoller;
   final void Function(String)? onSubmitted;
 
@@ -72,34 +74,39 @@ class _RentoolSearchBarState extends State<RentoolSearchBar> {
               onPressed: () {
                 Navigator.pop(context);
               },
-            ),
+            )
+          else if (widget.leading != null)
+            widget.leading!,
 
           Expanded(
-            child: TextField(
-              focusNode: _searchTfFocusNode,
-              controller: _searchController,
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: AppLocalizations.of(context)!.search,
-                contentPadding: EdgeInsets.zero,
-                label: (_searchController.text.isEmpty && !isFocused)
-                    ? Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _searchTfFocusNode.requestFocus();
-                            });
-                          },
-                          child: SizedBox(
-                            height: 13,
-                            child: LogoImage.primaryTypeface(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: TextField(
+                focusNode: _searchTfFocusNode,
+                controller: _searchController,
+                textInputAction: TextInputAction.search,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: AppLocalizations.of(context)!.search,
+                  contentPadding: EdgeInsets.zero,
+                  label: (_searchController.text.isEmpty && !isFocused)
+                      ? Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _searchTfFocusNode.requestFocus();
+                              });
+                            },
+                            child: SizedBox(
+                              height: 13,
+                              child: LogoImage.primaryTypeface(),
+                            ),
                           ),
-                        ),
-                      )
-                    : null,
+                        )
+                      : null,
+                ),
+                onSubmitted: widget.onSubmitted,
               ),
-              onSubmitted: widget.onSubmitted,
             ),
           ),
 
@@ -135,8 +142,10 @@ class RentoolSearchAppBar extends AppBar {
     Key? key,
     this.textFieldContoller,
     this.onSubmitted,
+    this.leadingIcon,
   }) : super(key: key);
 
+  final Widget? leadingIcon;
   final TextEditingController? textFieldContoller;
   final void Function(String)? onSubmitted;
 
@@ -152,6 +161,7 @@ class _RentoolSearchAppBarState extends State<RentoolSearchAppBar> {
       title: RentoolSearchBar(
         textFieldContoller: widget.textFieldContoller,
         onSubmitted: widget.onSubmitted,
+        leading: widget.leadingIcon,
       ),
       centerTitle: true,
       automaticallyImplyLeading: false,

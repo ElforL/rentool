@@ -18,7 +18,9 @@ import 'package:rentool/services/auth.dart';
 import 'package:rentool/services/firestore.dart';
 import 'package:rentool/widgets/compact_tool_tile.dart';
 import 'package:rentool/widgets/logo_image.dart';
+import 'package:rentool/widgets/rentool_circle_avatar.dart';
 import 'package:rentool/widgets/rentool_search_bar.dart';
+import 'package:rentool/widgets/retractable_tile.dart';
 import 'package:rentool/widgets/user_listtile.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,41 +51,51 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  bool compactDrawer = false;
+
+  void onTapUserDrawerTile() {
+    Navigator.pop(context);
+    Navigator.of(context).pushNamed(
+      UserScreen.routeName,
+      arguments: UserScreenArguments(uid: AuthServices.currentUid!),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: RentoolSearchAppBar(
-        textFieldContoller: _searchController,
-        onSubmitted: (value) async {
-          if (value.trim().isEmpty) return;
-          await Navigator.pushNamed(
-            context,
-            SearchScreen.routeName,
-            arguments: value.trim(),
-          );
-          setState(() {
-            _searchController.clear();
-          });
-        },
-      ),
-      // TODO invistigate opening the drawer causes auth stream to trigger
-      drawer: Drawer(
+    final size = MediaQuery.of(context).size;
+
+    bool showDrawer = size.width >= 850;
+
+    var drawer = SizedBox(
+      width: compactDrawer ? 70 : null,
+      child: Drawer(
+        elevation: showDrawer ? 0 : null,
         child: ListView(
           children: [
-            DrawerHeader(
-              child: LogoImage.primary(),
-              margin: EdgeInsets.zero,
-            ),
-            UserListTile(
-              user: AuthServices.auth.currentUser!,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).pushNamed(
-                  UserScreen.routeName,
-                  arguments: UserScreenArguments(uid: AuthServices.currentUid!),
-                );
-              },
-            ),
+            if (!showDrawer)
+              DrawerHeader(
+                child: LogoImage.primary(),
+                margin: EdgeInsets.zero,
+              )
+            else
+              const SizedBox(height: 20),
+
+            // User tile
+            if (compactDrawer)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RentoolCircleAvatar.firebaseUser(
+                  user: AuthServices.currentUser!,
+                ),
+              )
+            else
+              UserListTile(
+                user: AuthServices.auth.currentUser!,
+                onTap: onTapUserDrawerTile,
+              ),
+
+            // Admin panel
             FutureBuilder(
               future: AuthServices.getIdTokenResult(),
               builder: (context, AsyncSnapshot<IdTokenResult?> snapshot) {
@@ -102,24 +114,27 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             const Divider(height: 2),
-            ListTile(
-              leading: const Icon(Icons.notifications),
+            RetractableTile(
+              compact: compactDrawer,
+              icon: const Icon(Icons.notifications),
               title: Text(AppLocalizations.of(context)!.notifications),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).pushNamed(MyNotificationsScreen.routeName);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.send_rounded),
+            RetractableTile(
+              compact: compactDrawer,
+              icon: const Icon(Icons.send_rounded),
               title: Text(AppLocalizations.of(context)!.myRequests),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).pushNamed(MyRequestsScreen.routeName);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.build_circle),
+            RetractableTile(
+              compact: compactDrawer,
+              icon: const Icon(Icons.build_circle),
               title: Text(AppLocalizations.of(context)!.myTools),
               onTap: () {
                 Navigator.pop(context);
@@ -127,16 +142,18 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             const Divider(),
-            ListTile(
-              leading: const Icon(Icons.settings),
+            RetractableTile(
+              compact: compactDrawer,
+              icon: const Icon(Icons.settings),
               title: Text(AppLocalizations.of(context)!.settings),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).pushNamed(SettingsScreen.routeName);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.support),
+            RetractableTile(
+              compact: compactDrawer,
+              icon: const Icon(Icons.support),
               title: Text(AppLocalizations.of(context)!.support),
               onTap: () async {
                 Navigator.pop(context);
@@ -159,24 +176,60 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const WelcomeToRentool(),
-              const Divider(),
-              const SizedBox(height: 10),
-              Text(
-                AppLocalizations.of(context)!.random_tools.toUpperCase(),
-                style: Theme.of(context).textTheme.overline,
-              ),
-              const SizedBox(height: 7),
-              _buildRandomToolsWrap(),
-            ],
-          ),
+    );
+
+    return Scaffold(
+      appBar: RentoolSearchAppBar(
+        leadingIcon: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => setState(() {
+            compactDrawer = !compactDrawer;
+          }),
         ),
+        textFieldContoller: _searchController,
+        onSubmitted: (value) async {
+          if (value.trim().isEmpty) return;
+          await Navigator.pushNamed(
+            context,
+            SearchScreen.routeName,
+            arguments: value.trim(),
+          );
+          setState(() {
+            _searchController.clear();
+          });
+        },
+      ),
+      // TODO invistigate opening the drawer causes auth stream to trigger
+      drawer: showDrawer ? null : drawer,
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (showDrawer) ...[
+            drawer,
+            const VerticalDivider(width: 1),
+          ],
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const WelcomeToRentool(),
+                    const Divider(),
+                    const SizedBox(height: 10),
+                    Text(
+                      AppLocalizations.of(context)!.random_tools.toUpperCase(),
+                      style: Theme.of(context).textTheme.overline,
+                    ),
+                    const SizedBox(height: 7),
+                    _buildRandomToolsWrap(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

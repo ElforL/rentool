@@ -13,7 +13,7 @@
     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
   -->
   <base href="/">
-
+  <link rel="stylesheet" type="text/css" href="styles.css">
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="Rent your tools and rent others'.">
@@ -32,6 +32,15 @@
 </head>
 
 <body>
+  <img src="img\primary.png" alt="Logo" class="center">
+  <img src="img\spinner.gif" alt="spinner" style="margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    width: 5%;
+    transform: translate(-50%, 100%)" >
+
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
@@ -45,22 +54,22 @@
 
   <!-- Facebook -->
   <script>
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = function () {
       FB.init({
-        appId      : '1941987192620334',
-        xfbml      : true,
-        version    : 'v10.0'
+        appId: '1941987192620334',
+        xfbml: true,
+        version: 'v10.0'
       });
       FB.AppEvents.logPageView();
     };
-  
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   </script>
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -70,7 +79,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-messaging.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-functions.js"></script>
-  
+
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
 
   <script>
